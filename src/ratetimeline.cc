@@ -10,14 +10,11 @@ RateTimeline::RateTimeline() :
   cutoffPos_(0), 
   viewT1_(0.0), 
   viewT2_(1000), 
-  viewX1_(-100.0), 
+  viewX1_(-400.0), 
   viewX2_(100.0),
   zoomLevel_(1.0),
   s1fact_(2)
 {
-
-  rates_.reserve(1000000); 
-  ratesS1_.reserve(1000000/s1fact_); 
 
   Glib::RefPtr<Gdk::GL::Config> glconfig;
   
@@ -60,6 +57,11 @@ RateTimeline::~RateTimeline()
 {
 }
 
+
+void RateTimeline::appendRenderer(WaveDraw* wr)
+{
+  pWaveRenderers_.push_back(wr); 
+}
 
 void RateTimeline::on_realize()
 {
@@ -143,18 +145,6 @@ bool RateTimeline::on_configure_event(GdkEventConfigure* event)
   return true;
 }
 
-void RateTimeline::appendRate(GLWavePoint_t p)
-{
-  
-  rates_.push_back(p); 
-  // now, let's try and do something more advanced, like take 
-  // the max point or the min point... 
-
-  updateViewingWindow(); 
-  get_window()->invalidate_rect(get_allocation(), true);
-  
-}
-
 bool RateTimeline::on_expose_event(GdkEventExpose* event)
 {
 
@@ -168,8 +158,7 @@ bool RateTimeline::on_expose_event(GdkEventExpose* event)
   glClearColor(0.0, 0.0, 0.0, 1.0); 
   glClear(GL_COLOR_BUFFER_BIT | GL_ACCUM_BUFFER_BIT ); 
 
-  int N = rates_.size(); 
-  
+  int N = 10000000; 
   glLineWidth(1.0); 
   // draw minor ticks
   glColor4f(0.0, 0.0, 1.0, 0.5); 
@@ -196,82 +185,19 @@ bool RateTimeline::on_expose_event(GdkEventExpose* event)
       glEnd(); 
 	
     }
-
-  // draw actual primary line
-
-
-//   useGPUProgram(gpuProgGradient_); 
-//   // now draw filled segment gradient
-//   GLint vp = glGetUniformLocation(gpuProgGradient_, "rate"); 
-//   glUniform1f(vp, float(decayRange_)); 
-//   GLint vp2 = glGetUniformLocation(gpuProgGradient_, "cutoff"); 
-//   if (viewLatest_) {
-//     glUniform1f(vp2, float(rates_.size())); 
-//   } else {
-//     glUniform1f(vp2, float(cutoffPos_)); 
-//   }
-	       
-
-
-//   // primary polygons (filled)
-
-//   for (int i = 1; i < N ; i++)
-//     {
-
-//       glBegin(GL_POLYGON); 
-//       float ratel = rates_[i-1]; 
-//       float rater = rates_[i]; 
-//       glVertex2f(float(i-1), 0.0);
-//       glVertex2f(float(i-1), ratel); 
-//       glVertex2f(float(i), rater); 
-//       glVertex2f(float(i), 0.0); 
-//       glEnd(); 
-//     }
-
-//   glEnd(); 
-//   useGPUProgram(0); 
-
-  // main line
+  // configure matrices
+//   glMatrixMode(GL_MODELVIEW); 
+//   glLoadIdentity(); 
   
-//   float basealpha = 1.0; 
-//   if (zoomLevel_ > 20) {
-//     basealpha = 1 - (zoomLevel_ - 20)/20; 
-//    }
   
-  //  if (zoomLevel_ < 40 ) {
-    glColor4f(1.0, 1.0, 1.0, 1.0); 
-    glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
-		    &(rates_[0])); 
-    
-    glDrawArrays(GL_LINE_STRIP, 0, rates_.size()); 
+  std::list<WaveDraw*>::iterator pwd; 
+  int pixwidth = get_width(); 
+  for (pwd = pWaveRenderers_.begin(); pwd != pWaveRenderers_.end(); pwd++)
+    {
+      (*pwd)->draw(viewT1_, viewT2_, pixwidth); 
+      glTranslatef(0.0f, -100.0f, 0.0);
 
-//   }
-  
-//   float alphas1 = 0.0; 
-//   if (zoomLevel_ > 10) {
-//     alphas1 =  (zoomLevel_ - 10)/30; 
-//   }
-//   if (zoomLevel_ > 10) {
-//     glColor4f(1.0, 0.0, 0.0, 1.0); 
-//     glBegin(GL_LINE_STRIP); 
-//     for (int i = 0; i < ratesS1_.size() ; i++)
-//       {
-// 	glVertex2f(float(i)*s1fact_, ratesS1_[i]); 
-//       }
-//     glEnd(); 
-
-
-//     glColor4f(1.0, 1.0, 1.0, 1.0); 
-//     glPointSize(4.0); 
-//     glBegin(GL_POINTS); 
-//     for (int i = 0; i < ratesS1_.size() ; i++)
-//       {
-// 	glVertex2f(float(i)*s1fact_, ratesS1_[i]); 
-//       }
-//     glEnd(); 
-    
-    //  }
-
+    }
   // Swap buffers.
   gldrawable->swap_buffers();
   gldrawable->gl_end();

@@ -25,11 +25,7 @@
 #include "glconfig.h"
 #include "glspikes.h"
 
-struct GLWavePoint_t
-{
-  float t; 
-  float x; 
-}; 
+#include "wave.h" 
 
 class RateTimeline : public Gtk::GL::DrawingArea
 {
@@ -37,9 +33,6 @@ public:
   explicit RateTimeline(); 
 
   virtual ~RateTimeline();
-
-  void appendRate(GLWavePoint_t x); 
-
 
   // Invalidate whole window.
   void inv(); 
@@ -49,6 +42,7 @@ public:
     { 
       get_window()->process_updates(false); 
     }
+  void appendRenderer(WaveDraw * wd); 
 
 protected:
 
@@ -79,11 +73,11 @@ protected:
   bool viewLatest_; 
   float viewT1_, viewT2_, viewX1_, viewX2_; 
   float zoomLevel_; 
-  std::vector<GLWavePoint_t> rates_; 
-  std::vector<GLWavePoint_t> ratesS1_; 
+/*   std::vector<GLWavePoint_t> rates_;  */
+/*   std::vector<GLWavePoint_t> ratesS1_;  */
   int s1fact_; 
   GLuint gpuProgGradient_; 
-
+  std::list<WaveDraw*> pWaveRenderers_; 
 };
 
 #endif //RATETIMELINE_H

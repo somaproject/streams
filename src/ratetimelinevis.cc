@@ -24,6 +24,7 @@
 
 #include "glspikes.h"
 #include "ratetimeline.h"
+#include "wave.h"
 
 
 class Vis : public Gtk::Window
@@ -48,7 +49,7 @@ protected:
   void updateSpikePosFromAdj(); 
   sigc::connection m_ConnectionIdle;
   virtual bool on_key_press_event(GdkEventKey* event); 
-
+  WaveDraw wr1_, wr2_, wr3_, wr4_; 
 
 };
 
@@ -69,7 +70,7 @@ Vis::Vis(bool is_sync)
   //
   // Vis scene.
   //
-  rateTimeline_.set_size_request(1000, 300);
+  rateTimeline_.set_size_request(1000, 400);
 
 //   for (int i = 0; i < 10000; i++)
 //     {
@@ -92,6 +93,11 @@ Vis::Vis(bool is_sync)
   Glib::signal_idle().connect( sigc::mem_fun(*this, &Vis::on_idle) );
   timer_.start(); 
   dtimer_.start(); 
+  rateTimeline_.appendRenderer(&wr1_); 
+  rateTimeline_.appendRenderer(&wr2_); 
+  rateTimeline_.appendRenderer(&wr3_); 
+  rateTimeline_.appendRenderer(&wr4_); 
+
 }
 
 Vis::~Vis()
@@ -134,51 +140,7 @@ bool Vis::on_idle()
   
   if (seconds >= 1.00)
     {
-      // every second, read the next n-seconds of spike data in
-      // we assume 100 usec timestamps on this data
-      int N = 500000; 
-//       std::vector<float> x(N); 
-//       //rateTimeline_.appendRate(5.0); 
-//       for (int i = 0; i < N; i++) {
-// 	x[i] = float(rand())/RAND_MAX - 0.5; 
-// 	//x[i] = float(sin
-//       }
-
-//       std::vector<float> y(N); 
-//       int M = 20; 
-//       for (int i = M; i < N; i++) {
-// 	float sum = 0.0; 
-// 	for (int j = 0; j < M; j++) {
-// 	  sum += x[i -j]; 
-// 	}
-// 	y[i-M] = sum*10; 
-//       }
-      
-//       for (int i = 0; i < N-M; i++)
-// 	{
-// 	  GLWavePoint_t p; 
-// 	  p.t = i; 
-// 	  p.x = y[i];
-// 	  rateTimeline_.appendRate(p); 
-// 	}
-      for (int i = 0; i < N; i++) {
-	GLWavePoint_t p; 
-	p.t = i;
-	p.x= 0.0; 
-	if ((i % 200 ) == 0  )
-	  {
-	    p.x = 70.0; 
-	  }
-	
-	if ((i % 200 ) == 100  )
-	  {
-	    p.x = -70.0; 
-	  }
-	
-	rateTimeline_.appendRate(p); 
-      }
       timer_.reset();
-      timer_.stop(); 
     }
 
   

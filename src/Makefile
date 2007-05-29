@@ -7,7 +7,7 @@ LDFLAGS = `pkg-config --libs gtkmm-2.4 gdkmm-2.4 gtkglextmm-1.2` -g -lboost_thre
 all: ratetimelinevis
 
 
-ratetimelinevis: ratetimelinevis.o ratetimeline.o glconfig.o shaders.o 
+ratetimelinevis: ratetimelinevis.o ratetimeline.o glconfig.o shaders.o wave.o
 
 clean:
 	rm *.o test
