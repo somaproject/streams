@@ -60,13 +60,11 @@ protected:
 
   void updateViewingWindow(bool reset);
   void setZoom(float zoomval, float tcenter);
+  void renderTimeTicks(float T1, float T2);
 
   // primary data source
   
   // state variables
-  int majorTick_; 
-  int minorTick_; 
-  
   int lastX_; 
   int decayRange_; 
   int cutoffPos_; 

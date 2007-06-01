@@ -1,0 +1,16 @@
+Wavedraw.txt
+
+
+Now, the challenge here is "can we both take in data with arbitrary
+times and handle requests for new data?"
+
+
+We make the assumption that the temporal data we receive is
+monotonically increasing. We add it into a series of std::vectors, for
+different scales.
+
+to find our position we execute two binary searche, one for upper and
+one for lower.
+
+we use the compareTime() helper function for this
+

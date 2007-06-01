@@ -3,13 +3,11 @@
 #include "shaders.h"
 
 RateTimeline::RateTimeline() : 
-  majorTick_(40000), 
-  minorTick_(4000), 
   decayRange_(100), 
   viewLatest_(true), 
   cutoffPos_(0), 
   viewT1_(0.0), 
-  viewT2_(1000), 
+  viewT2_(1.0), 
   viewX1_(-400.0), 
   viewX2_(100.0),
   zoomLevel_(1.0),
@@ -106,7 +104,7 @@ void RateTimeline::updateViewingWindow(bool reset = false)
 
   if (reset ) {
     viewT1_ = 0.0; 
-    viewT2_ = get_width(); 
+    viewT2_ = 1.0; 
   }
   glOrtho(viewT1_, viewT2_, viewX1_, viewX2_, -3, 3); 
 
@@ -115,6 +113,60 @@ void RateTimeline::updateViewingWindow(bool reset = false)
   
 }
 
+void RateTimeline::renderTimeTicks(float T1, float T2)
+{
+  // render the necessary ticks for a window between T1 and T2
+
+  // compute tick scale major and minor
+  float majorScale = 0.0; 
+  float minorScale = 0.0; 
+  
+  float winSize = T2 - T1; 
+  if (winSize < 100e-3) {
+    minorScale = 1e-3; 
+    majorScale = 10e-3; 
+
+  } else if ( winSize < 1 ) {
+    minorScale = 10e-3; 
+    majorScale = 100e-3; 
+    
+  } else if ( winSize < 10 ) {
+    minorScale = 100e-3; 
+    majorScale = 1000e-3; 
+    
+  } else if ( winSize < 100) {
+    minorScale = 1; 
+    majorScale = 10; 
+
+  } else {
+    minorScale = 1e-3; 
+    majorScale = 10e-3; 
+
+  }
+  
+ 
+  glLineWidth(1.0); 
+  // draw minor ticks
+  glColor4f(0.0, 0.0, 1.0, 0.5); 
+
+  int minorN = int(round((T2 - T1)/ minorScale)) ;
+
+  std::cout << "minorN is " << minorN << " T1 = " 
+	    << T1 << " T2 = " << T2 <<  std::endl; 
+
+
+  for (int i = -1; i < minorN + 1; i++)
+    {
+      glBegin(GL_LINE_STRIP); 
+      glVertex2f(float(i*minorScale), viewX1_); 
+      glVertex2f(float(i*minorScale), viewX2_); 
+
+      glEnd(); 
+	
+    }
+
+
+}
 bool RateTimeline::on_configure_event(GdkEventConfigure* event)
 {
 
@@ -159,37 +211,13 @@ bool RateTimeline::on_expose_event(GdkEventExpose* event)
   glClear(GL_COLOR_BUFFER_BIT | GL_ACCUM_BUFFER_BIT ); 
 
   int N = 10000000; 
-  glLineWidth(1.0); 
-  // draw minor ticks
-  glColor4f(0.0, 0.0, 1.0, 0.5); 
-
-  for (int i = 0; i < (N / minorTick_ + 1); i++)
-    {
-      glBegin(GL_LINE_STRIP); 
-      glVertex2f(float(i*minorTick_), viewX1_); 
-      glVertex2f(float(i*minorTick_), viewX2_); 
-
-      glEnd(); 
-	
-    }
-
-  // draw major ticks
-  glColor4f(0.7, 0.7, 1.0, 0.9); 
-
-  for (int i = 0; i < (N / majorTick_ + 1); i++)
-    {
-      glBegin(GL_LINE_STRIP); 
-      glVertex2f(float(i*majorTick_), viewX1_); 
-      glVertex2f(float(i*majorTick_), viewX2_); 
-
-      glEnd(); 
-	
-    }
   // configure matrices
 //   glMatrixMode(GL_MODELVIEW); 
 //   glLoadIdentity(); 
   
   
+  renderTimeTicks(viewT1_, viewT2_); 
+
   std::list<WaveDraw*>::iterator pwd; 
   int pixwidth = get_width(); 
   for (pwd = pWaveRenderers_.begin(); pwd != pWaveRenderers_.end(); pwd++)
@@ -334,9 +362,14 @@ bool RateTimeline::on_motion_notify_event(GdkEventMotion* event)
   float x = event->x;
   float y = event->y;
 
-  float moveDelta = float(x) - float(lastX_); 
+  float movePixDelta = float(x) - float(lastX_); 
   
-  float windowDelta = moveDelta * zoomLevel_; 
+  
+  //float windowDelta = moveDelta * zoomLevel_; 
+  float pixWidth = (viewT2_ - viewT1_) / get_width(); 
+  float windowDelta = movePixDelta * pixWidth; 
+ 
+
 
   if (event->state & GDK_BUTTON1_MASK) {
     viewT1_ -= windowDelta; 
@@ -351,7 +384,8 @@ bool RateTimeline::on_motion_notify_event(GdkEventMotion* event)
     std::cout << "Button 4!" << std::endl; 
     
   }
-
+  std::cout << "viewT1_ = " << viewT1_
+	    << " viewT2_ = " << viewT2_ << std::endl; 
   // don't block
   return true;
 }

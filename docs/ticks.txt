@@ -1,0 +1,29 @@
+Timing ticks are an interesting challenge -- they need to be visible
+when you need them, and at the same time out of the way when you
+don't, so as to not obscure data. 
+
+We're looking at data over seven orders of temporal magnitude. In each
+case, it's going to be a little difficult to understand what our temporal sale is. 
+
+I propose the following temporal conventions:
+
+1. ticks are at the following resolutions: 
+
+10 ms
+100 ms
+1 sec
+10 sec
+1 min
+10 min
+1 hour
+
+2. There are "major" ticks and "minor" ticks. There is always at least
+   one major tick visible on the screen at a given time. As we
+   transition from one tick regime to another, the old ticks should
+   fade out and the new ones should become visible.
+
+3. only the "major" ticks should have their time indicated
+
+given a time window, [T1_, T2_] we should be able to compute the time range. 
+
+

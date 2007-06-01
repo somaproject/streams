@@ -16,11 +16,22 @@
 
 #include <map>
 
+
+
 struct GLWavePoint_t
 {
   float t; 
   float x; 
 }; 
+
+inline bool compareTime(const GLWavePoint_t x,
+			const GLWavePoint_t y)
+{
+  if (x.t < y.t) 
+    return true; 
+
+  return false; 
+}
 
 typedef std::map<float, int> timeindex_t; 
 

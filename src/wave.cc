@@ -4,7 +4,7 @@
 WaveDraw::WaveDraw()
 {
   
-  int N = 40000000; 
+  int N = 400000; 
   std::vector<float> x(N); 
   //rateTimeline_.appendRate(5.0); 
   for (int i = 0; i < N; i++) {
@@ -25,7 +25,7 @@ WaveDraw::WaveDraw()
   for (int i = 0; i < N-M; i++)
     {
       GLWavePoint_t p; 
-      p.t = i; 
+      p.t = float(i / 2000.0); 
       p.x = y[i];
       append(p); 
     }
@@ -70,93 +70,30 @@ void WaveDraw::draw(float t1, float t2, int pixels)
 {
 
   float scale = pixels / (t2 -t1); 
-  std::cout << scale << ' ' << ratesS2_.size() << ' ' << ratesS3_.size() << std::endl; 
-  if (scale > 0.1) 
-    {
-      int tpos1, tpos2; 
 
-      tpos1 = int(t1); 
-      tpos2 = int(t2); 
-      if (t1 < 0) {
-	t1 = 0; 
-      }
-      
-      if (t2 > rates_.size() - 1) {
-	
-	t2 = rates_.size() - 1; 
-      }
-      
-      glLineWidth(1.0); 
-      
-      glColor4f(1.0, 1.0, 1.0, 1.0); 
-      glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
-		      &(rates_[0])); 
-      
-      glDrawArrays(GL_LINE_STRIP, t1, t2 - t1); 
-      
-      
-    } 
-  else if (scale  > 0.01 )  
-    {
-      // now, convert
-      glLineWidth(1.0); 
-      glColor4f(1.0, 0.0, 0.0, 1.0); 
-      glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
-		      &(ratesS2_[0])); 
+  std::vector<GLWavePoint_t>::iterator  i1, i2;
+  GLWavePoint_t p1, p2; 
 
-      timeindex_t::iterator lower, upper; 
-      lower = indexS2_.lower_bound(t1); 
-      
-      upper = indexS2_.upper_bound(t2); 
-      int l = 0; 
-      
-      
-      if (lower != indexS2_.end()  and lower != indexS2_.begin())
-	{
-	  lower--; 
-	  l = lower->second; 
-	}
-      
-      int u = ratesS2_.size(); 
-      
-      if (upper != indexS2_.end() )
-	{
-	  u = upper->second; 
-	}
-      
-      glDrawArrays(GL_LINE_STRIP, l, u-l); 
+  p1.t = t1; 
+
+  i1 = lower_bound(rates_.begin(), rates_.end(), 
+		   p1, compareTime); 
   
-      } 
-  else 
-	{
-	  // now, convert
-      glLineWidth(1.0); 
-      glColor4f(0.0, 0.0, 1.0, 1.0); 
-      glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
-		      &(ratesS3_[0])); 
+  p2.t = t2; 
+  i2 = lower_bound(rates_.begin(), rates_.end(), 
+		   p2, compareTime); 
+  
+  glColor4f(1.0, 1.0, 1.0, 1.0); 
 
-      timeindex_t::iterator lower, upper; 
-      lower = indexS3_.lower_bound(t1); 
-      
-      upper = indexS3_.upper_bound(t2); 
-      int l = 0; 
-      
-      
-      if (lower != indexS3_.end()  and lower != indexS3_.begin())
-	{
-	  lower--; 
-	  l = lower->second; 
-	}
-      
-      int u = ratesS3_.size(); 
-      
-      if (upper != indexS3_.end() )
-	{
-	  u = upper->second; 
-	}
-      
-      glDrawArrays(GL_LINE_STRIP, l, u-l); 
-      std::cout << u-l << std::endl; 
-    }
+  //int pos1 = i1 - rates_.begin(); 
+  int len  = i2 - i1; 
 
+  glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
+		  &(*i1)); 
+
+  glDrawArrays(GL_LINE_STRIP, 0, len); 
+
+    
+
+  
 }

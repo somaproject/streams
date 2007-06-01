@@ -10,4 +10,4 @@ all: ratetimelinevis
 ratetimelinevis: ratetimelinevis.o ratetimeline.o glconfig.o shaders.o wave.o
 
 clean:
-	rm *.o test
+	rm *.o
