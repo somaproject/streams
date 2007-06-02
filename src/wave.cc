@@ -1,7 +1,7 @@
 #include <iostream> 
 #include "wave.h"
 
-WaveDraw::WaveDraw()
+WaveRenderer::WaveRenderer()
 {
   
   int N = 400000; 
@@ -33,16 +33,17 @@ WaveDraw::WaveDraw()
 }
 
 
-WaveDraw::~WaveDraw()
+WaveRenderer::~WaveRenderer()
 {
   
   
   
 }
 
-void WaveDraw::append(GLWavePoint_t p)
+void WaveRenderer::append(GLWavePoint_t p)
 {
   rates_.push_back(p); 
+
   if (rates_.size() % 8 == 0)
     {
       // every 100 points, insert a bookmark
@@ -66,7 +67,8 @@ void WaveDraw::append(GLWavePoint_t p)
     }
   
 }
-void WaveDraw::draw(float t1, float t2, int pixels)
+
+void WaveRenderer::draw(float t1, float t2, int pixels)
 {
 
   float scale = pixels / (t2 -t1); 
@@ -87,6 +89,26 @@ void WaveDraw::draw(float t1, float t2, int pixels)
 
   //int pos1 = i1 - rates_.begin(); 
   int len  = i2 - i1; 
+
+  glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
+		  &(*i1)); 
+
+  //glDrawArrays(GL_LINE_STRIP, 0, len); 
+
+    
+  p1.t = t1; 
+
+  i1 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
+		   p1, compareTime); 
+  
+  p2.t = t2; 
+  i2 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
+		   p2, compareTime); 
+  
+  glColor4f(1.0, 0.0, 0.0, 1.0); 
+
+  //int pos1 = i1 - rates_.begin(); 
+  len  = i2 - i1; 
 
   glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
 		  &(*i1)); 

@@ -42,7 +42,7 @@ public:
     { 
       get_window()->process_updates(false); 
     }
-  void appendRenderer(WaveDraw * wd); 
+  void appendRenderer(WaveRenderer * wd); 
 
 protected:
 
@@ -75,7 +75,7 @@ protected:
 /*   std::vector<GLWavePoint_t> ratesS1_;  */
   int s1fact_; 
   GLuint gpuProgGradient_; 
-  std::list<WaveDraw*> pWaveRenderers_; 
+  std::list<WaveRenderer*> pWaveRenderers_; 
 };
 
 #endif //RATETIMELINE_H

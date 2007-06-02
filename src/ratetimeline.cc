@@ -56,7 +56,7 @@ RateTimeline::~RateTimeline()
 }
 
 
-void RateTimeline::appendRenderer(WaveDraw* wr)
+void RateTimeline::appendRenderer(WaveRenderer* wr)
 {
   pWaveRenderers_.push_back(wr); 
 }
@@ -123,6 +123,7 @@ void RateTimeline::renderTimeTicks(float T1, float T2)
   
   float winSize = T2 - T1; 
   if (winSize < 100e-3) {
+    
     minorScale = 1e-3; 
     majorScale = 10e-3; 
 
@@ -135,31 +136,49 @@ void RateTimeline::renderTimeTicks(float T1, float T2)
     majorScale = 1000e-3; 
     
   } else if ( winSize < 100) {
-    minorScale = 1; 
-    majorScale = 10; 
+    minorScale = 1.0;
+    majorScale = 10.0; 
 
   } else {
-    minorScale = 1e-3; 
-    majorScale = 10e-3; 
+    minorScale = 10.0; 
+    majorScale = 100.0;  
 
   }
   
  
   glLineWidth(1.0); 
   // draw minor ticks
-  glColor4f(0.0, 0.0, 1.0, 0.5); 
+  float mAlpha = winSize / 100.0 / minorScale; 
+
+  glColor4f(0.0, 0.0, 1.0, 0.5 - mAlpha/2);
 
   int minorN = int(round((T2 - T1)/ minorScale)) ;
 
-  std::cout << "minorN is " << minorN << " T1 = " 
-	    << T1 << " T2 = " << T2 <<  std::endl; 
+  // compute lower bound
+  int T1n = round(T1 / minorScale); 
 
-
-  for (int i = -1; i < minorN + 1; i++)
+  for (int i = -1; i < (minorN+1) + 1; i++)
     {
       glBegin(GL_LINE_STRIP); 
-      glVertex2f(float(i*minorScale), viewX1_); 
-      glVertex2f(float(i*minorScale), viewX2_); 
+      glVertex2f(float((i+T1n)*minorScale), viewX1_); 
+      glVertex2f(float((i+T1n)*minorScale), viewX2_); 
+
+      glEnd(); 
+	
+    }
+
+  // draw major ticks
+  glColor4f(0.6, 0.6, 1.0, 0.7); 
+  glLineWidth(1.0); 
+
+  int majorN = int(round((T2 - T1)/ majorScale)) ;
+  int T1n2 = round(T1 / majorScale); 
+
+  for (int i = -1; i < (majorN+1) + 1; i++)
+    {
+      glBegin(GL_LINE_STRIP); 
+      glVertex2f(float( (i+T1n2) * majorScale), viewX1_); 
+      glVertex2f(float( (i+T1n2) * majorScale), viewX2_); 
 
       glEnd(); 
 	
@@ -218,7 +237,7 @@ bool RateTimeline::on_expose_event(GdkEventExpose* event)
   
   renderTimeTicks(viewT1_, viewT2_); 
 
-  std::list<WaveDraw*>::iterator pwd; 
+  std::list<WaveRenderer*>::iterator pwd; 
   int pixwidth = get_width(); 
   for (pwd = pWaveRenderers_.begin(); pwd != pWaveRenderers_.end(); pwd++)
     {
@@ -302,9 +321,6 @@ void RateTimeline::setZoom(float zoomval, float tcenter)
   */
 
 
-  std::cout << "zoomVal = " << zoomval 
-	    << " tcenter = " << tcenter
-	    << std::endl; 
   float oldviewwidth = (viewT2_ - viewT1_); 
   float oldZoom = zoomLevel_; 
   float zoomdelta = zoomval / zoomLevel_; 

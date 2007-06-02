@@ -35,11 +35,11 @@ inline bool compareTime(const GLWavePoint_t x,
 
 typedef std::map<float, int> timeindex_t; 
 
-class WaveDraw
+class WaveRenderer
 {
  public: 
-  WaveDraw(); 
-  ~WaveDraw(); 
+  WaveRenderer(); 
+  ~WaveRenderer(); 
   void draw(float t1, float t2, int pixels); 
   void append(GLWavePoint_t p);
 

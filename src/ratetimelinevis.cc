@@ -49,7 +49,7 @@ protected:
   void updateSpikePosFromAdj(); 
   sigc::connection m_ConnectionIdle;
   virtual bool on_key_press_event(GdkEventKey* event); 
-  WaveDraw wr1_, wr2_, wr3_, wr4_; 
+  WaveRenderer wr1_, wr2_, wr3_, wr4_; 
 
 };
 
