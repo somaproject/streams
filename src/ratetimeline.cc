@@ -2,14 +2,18 @@
 #include "glconfig.h"
 #include "shaders.h"
 
+#include <boost/format.hpp>
+
 RateTimeline::RateTimeline() : 
   decayRange_(100), 
   viewLatest_(true), 
   cutoffPos_(0), 
   viewT1_(0.0), 
   viewT2_(1.0), 
-  viewX1_(-400.0), 
+  viewX1_(-1000.0), 
   viewX2_(100.0),
+  selT1_(0.0), 
+  selT2_(1.0), 
   zoomLevel_(1.0),
   s1fact_(2)
 {
@@ -33,14 +37,16 @@ RateTimeline::RateTimeline() :
   // Add events.
   add_events(Gdk::BUTTON1_MOTION_MASK    |
 	     Gdk::BUTTON2_MOTION_MASK    |
+	     Gdk::BUTTON3_MOTION_MASK    | 
 	     Gdk::SCROLL_MASK |
 	     Gdk::BUTTON_PRESS_MASK      |
+	     Gdk::BUTTON_RELEASE_MASK  | 
 	     Gdk::VISIBILITY_NOTIFY_MASK);
   
 
   // View transformation signals.
-  signal_button_press_event().connect(sigc::mem_fun(*this, 
-						    &RateTimeline::on_button_press_event)); 
+//   signal_button_release_event().connect(sigc::mem_fun(*this, 
+//  						    &RateTimeline::on_button_release_event)); 
   
   signal_motion_notify_event().connect(sigc::mem_fun(*this, 
 						     &RateTimeline::on_motion_notify_event)); 
@@ -90,6 +96,23 @@ void RateTimeline::on_realize()
   shaders.push_back(fshdr); 
   gpuProgGradient_ = createGPUProgram(shaders); 
 
+  // create font display lists
+  fontListBase_ = glGenLists(128); 
+  Pango::FontDescription font_desc("bitstream vera sans mono"); 
+  Glib::RefPtr<Pango::Font> font =
+    Gdk::GL::Font::use_pango_font(font_desc, 0, 128, fontListBase_);
+  if (!font)
+    {
+      std::cerr << "*** Can't load font "
+                << std::endl;
+      Gtk::Main::quit();
+    }
+  
+  Pango::FontMetrics font_metrics = font->get_metrics();
+
+  fontHeight_ = font_metrics.get_ascent() + font_metrics.get_descent();
+  fontHeight_ = PANGO_PIXELS(fontHeight_);
+
   updateViewingWindow(true); 
 
   gldrawable->gl_end();
@@ -122,26 +145,39 @@ void RateTimeline::renderTimeTicks(float T1, float T2)
   float minorScale = 0.0; 
   
   float winSize = T2 - T1; 
+
+  boost::format timeformat ("%1% %2%"); 
+  std::string scaletext; 
+  float scaletextdiv = 1.0; 
   if (winSize < 100e-3) {
     
     minorScale = 1e-3; 
     majorScale = 10e-3; 
-
+    scaletext = "ms"; 
+    scaletextdiv = 1e-3; 
+    
   } else if ( winSize < 1 ) {
     minorScale = 10e-3; 
     majorScale = 100e-3; 
+    scaletext = "ms"; 
+    scaletextdiv = 1e-3; 
     
   } else if ( winSize < 10 ) {
     minorScale = 100e-3; 
     majorScale = 1000e-3; 
-    
+    scaletext = "sec"; 
+    scaletextdiv = 1.0;     
   } else if ( winSize < 100) {
     minorScale = 1.0;
     majorScale = 10.0; 
+    scaletext = "sec"; 
+    scaletextdiv = 1.0;     
 
   } else {
     minorScale = 10.0; 
-    majorScale = 100.0;  
+    majorScale = 60.0;  
+    scaletext = "min"; 
+    scaletextdiv = 60.0;     
 
   }
   
@@ -176,12 +212,24 @@ void RateTimeline::renderTimeTicks(float T1, float T2)
 
   for (int i = -1; i < (majorN+1) + 1; i++)
     {
-      glBegin(GL_LINE_STRIP); 
-      glVertex2f(float( (i+T1n2) * majorScale), viewX1_); 
-      glVertex2f(float( (i+T1n2) * majorScale), viewX2_); 
+      glColor4f(0.6, 0.6, 1.0, 0.7); 
+      GLfloat t =  (i+T1n2) * majorScale; 
 
+      glBegin(GL_LINE_STRIP); 
+      glVertex2f(t, viewX1_); 
+      glVertex2f(t, viewX2_); 
       glEnd(); 
-	
+      
+      // render associated text
+      glColor3f(1.0, 1.0, 1.0);
+      float pixx = (t - T1) / (T2-T1) * get_width(); 
+      glRasterPos2f(t, 70);
+      glListBase(fontListBase_);
+      
+      timeformat % (t / scaletextdiv) % scaletext; 
+      std::string timestr = timeformat.str(); 
+
+      glCallLists(timestr.size(), GL_UNSIGNED_BYTE, timestr.c_str()); 
     }
 
 
@@ -237,6 +285,18 @@ bool RateTimeline::on_expose_event(GdkEventExpose* event)
   
   renderTimeTicks(viewT1_, viewT2_); 
 
+
+  // render selection
+  glColor4f(0.2, 0.2, 1.0, 0.5); 
+
+  glBegin(GL_POLYGON); 
+  glVertex2f(selT1_, viewX1_); 
+  glVertex2f(selT1_, viewX2_); 
+  glVertex2f(selT2_, viewX2_); 
+  glVertex2f(selT2_, viewX1_); 
+  glEnd(); 
+
+
   std::list<WaveRenderer*>::iterator pwd; 
   int pixwidth = get_width(); 
   for (pwd = pWaveRenderers_.begin(); pwd != pWaveRenderers_.end(); pwd++)
@@ -245,6 +305,12 @@ bool RateTimeline::on_expose_event(GdkEventExpose* event)
       glTranslatef(0.0f, -100.0f, 0.0);
 
     }
+
+
+
+  // render text? 
+
+
   // Swap buffers.
   gldrawable->swap_buffers();
   gldrawable->gl_end();
@@ -302,11 +368,45 @@ bool RateTimeline::on_visibility_notify_event(GdkEventVisibility* event)
   return true;
 }
 
+void RateTimeline::setSelectionRegion(float t1, float t2)
+{
+  if (t1 < t2) {
+    selT1_ = t1; 
+    selT2_ = t2; 
+  } else {
+    selT1_ = t2; 
+    selT2_ = t1; 
+  }
+  get_window()->invalidate_rect(get_allocation(), true);
+
+}
+
 bool RateTimeline::on_button_press_event(GdkEventButton* event)
 {
 //   m_BeginX = event->x;
 //   m_BeginY = event->y;
-  lastX_ = event->x; 
+  if (event->type == GDK_BUTTON_PRESS)  
+    {
+      std::cout << "Setting lastX_ " << event->x << std::endl; 
+      lastX_ = event->x; 
+    } 
+
+  // don't block
+  return false;
+}
+
+bool RateTimeline::on_button_release_event(GdkEventButton* event)
+{
+  std::cout << "RELEASE ME " << std::endl; 
+  if (event->button == 3) {
+	// update the zoom selection 
+    viewT1_ = selT1_; 
+    viewT2_ = selT2_; 
+    selT2_ = selT1_; 
+    get_window()->invalidate_rect(get_allocation(), true);
+    
+    
+  }
 
   // don't block
   return false;
@@ -337,7 +437,6 @@ void RateTimeline::setZoom(float zoomval, float tcenter)
   zoomLevel_ = zoomval; 
 
   
-  //std::cout << newviewwidth/oldviewwidth - zoomval / oldZoom << std::endl; 
 }
 
 bool RateTimeline::on_scroll_event(GdkEventScroll* event)
@@ -346,9 +445,6 @@ bool RateTimeline::on_scroll_event(GdkEventScroll* event)
   float x = event->x;
   float y = event->y;
   
-  std::cout << "Scroll event" << x <<  y << event->direction <<  std::endl; 
-
-
   float centerPos = (x / get_width()) * (viewT2_ - viewT1_)  +  viewT1_; 
 
   float newzoom = 1.0; 
@@ -394,14 +490,22 @@ bool RateTimeline::on_motion_notify_event(GdkEventMotion* event)
     lastX_ = x; 
     //std::cout << " Moving..." << std::endl; 
     //invalidate(); 
+
     update();
   } 
-  else if (event->state & GDK_SCROLL_MASK) {
-    std::cout << "Button 4!" << std::endl; 
+
+  else if (event->state & GDK_BUTTON3_MASK) {
+
+    setSelectionRegion(viewT1_ + lastX_*pixWidth, viewT1_ + x*pixWidth); 
+    
     
   }
-  std::cout << "viewT1_ = " << viewT1_
-	    << " viewT2_ = " << viewT2_ << std::endl; 
+
+  else if (event->state & GDK_SCROLL_MASK) {
+    
+  }
+
+
   // don't block
   return true;
 }

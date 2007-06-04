@@ -53,7 +53,8 @@ protected:
   virtual bool on_map_event(GdkEventAny* event);
   virtual bool on_unmap_event(GdkEventAny* event);
   virtual bool on_visibility_notify_event(GdkEventVisibility* event);
-  bool on_button_press_event(GdkEventButton* event); 
+  virtual bool on_button_press_event(GdkEventButton* event); 
+  virtual bool on_button_release_event(GdkEventButton* event); 
   bool on_motion_notify_event(GdkEventMotion* event);
   bool on_scroll_event(GdkEventScroll* event);
 
@@ -61,6 +62,7 @@ protected:
   void updateViewingWindow(bool reset);
   void setZoom(float zoomval, float tcenter);
   void renderTimeTicks(float T1, float T2);
+  void setSelectionRegion(float t1, float t2); 
 
   // primary data source
   
@@ -70,12 +72,21 @@ protected:
   int cutoffPos_; 
   bool viewLatest_; 
   float viewT1_, viewT2_, viewX1_, viewX2_; 
+  float selT1_, selT2_; 
+
   float zoomLevel_; 
 /*   std::vector<GLWavePoint_t> rates_;  */
 /*   std::vector<GLWavePoint_t> ratesS1_;  */
   int s1fact_; 
+
+
   GLuint gpuProgGradient_; 
   std::list<WaveRenderer*> pWaveRenderers_; 
+  // font-associated crap
+  
+  GLuint fontListBase_; 
+  int fontHeight_; 
+
 };
 
 #endif //RATETIMELINE_H

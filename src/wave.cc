@@ -25,7 +25,7 @@ WaveRenderer::WaveRenderer()
   for (int i = 0; i < N-M; i++)
     {
       GLWavePoint_t p; 
-      p.t = float(i / 2000.0); 
+      p.t = float(i) / 2000.0; 
       p.x = y[i];
       append(p); 
     }
@@ -93,7 +93,7 @@ void WaveRenderer::draw(float t1, float t2, int pixels)
   glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
 		  &(*i1)); 
 
-  //glDrawArrays(GL_LINE_STRIP, 0, len); 
+  glDrawArrays(GL_LINE_STRIP, 0, len); 
 
     
   p1.t = t1; 

@@ -49,7 +49,7 @@ protected:
   void updateSpikePosFromAdj(); 
   sigc::connection m_ConnectionIdle;
   virtual bool on_key_press_event(GdkEventKey* event); 
-  WaveRenderer wr1_, wr2_, wr3_, wr4_; 
+  std::vector<WaveRenderer *>  wrs; 
 
 };
 
@@ -93,10 +93,14 @@ Vis::Vis(bool is_sync)
   Glib::signal_idle().connect( sigc::mem_fun(*this, &Vis::on_idle) );
   timer_.start(); 
   dtimer_.start(); 
-  rateTimeline_.appendRenderer(&wr1_); 
-  rateTimeline_.appendRenderer(&wr2_); 
-  rateTimeline_.appendRenderer(&wr3_); 
-  rateTimeline_.appendRenderer(&wr4_); 
+
+  // generate N wave renderers:
+  for (int i = 0; i < 10; i++)
+    {
+      WaveRenderer * pwr = new WaveRenderer(); 
+      wrs.push_back(pwr); 
+      rateTimeline_.appendRenderer(pwr); 
+    }
 
 }
 
