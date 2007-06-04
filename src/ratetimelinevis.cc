@@ -23,7 +23,7 @@
 #include <GL/glext.h>
 
 #include "glspikes.h"
-#include "ratetimeline.h"
+#include "wavewin.h"
 #include "wave.h"
 
 
@@ -44,7 +44,7 @@ protected:
   Glib::Timer timer_; 
   Glib::Timer dtimer_; 
   Gtk::Button m_ButtonQuit;
-  RateTimeline rateTimeline_; 
+  WaveWin waveWin_; 
   uint64_t lastSpikeTime_; 
   void updateSpikePosFromAdj(); 
   sigc::connection m_ConnectionIdle;
@@ -56,7 +56,7 @@ protected:
 Vis::Vis(bool is_sync)
   : m_VBox(false, 0), 
     m_ButtonQuit("Quit"), 
-    rateTimeline_(),
+    waveWin_(),
     lastSpikeTime_(0)
 {
 
@@ -70,14 +70,14 @@ Vis::Vis(bool is_sync)
   //
   // Vis scene.
   //
-  rateTimeline_.set_size_request(1000, 400);
+  waveWin_.set_size_request(1000, 400);
 
 //   for (int i = 0; i < 10000; i++)
 //     {
-//       rateTimeline_.appendRate(float(i)/1000.0); 
+//       waveWin_.appendRate(float(i)/1000.0); 
 //     }
   
-
+  
   //
   // Simple quit button.
   //
@@ -85,7 +85,7 @@ Vis::Vis(bool is_sync)
   m_ButtonQuit.signal_clicked().connect(
     sigc::mem_fun(*this, &Vis::on_button_quit_clicked));
   
-  m_VBox.pack_start(rateTimeline_); 
+  m_VBox.pack_start(waveWin_); 
   m_VBox.pack_start(m_ButtonQuit, Gtk::PACK_SHRINK, 0);
 
   show_all();
@@ -99,8 +99,15 @@ Vis::Vis(bool is_sync)
     {
       WaveRenderer * pwr = new WaveRenderer(); 
       wrs.push_back(pwr); 
-      rateTimeline_.appendRenderer(pwr); 
+      waveWin_.appendRenderer(pwr); 
+
+      pwr->newTriggers().connect(sigc::mem_fun(pwr, 
+					       &WaveRenderer::appendTriggers) ); 
+      pwr->generateFakeData(); 
     }
+
+  //Glib::signal_idle().connect( sigc::mem_fun(*this, &TSpikeWin::on_idle) );
+
 
 }
 

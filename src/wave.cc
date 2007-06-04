@@ -1,9 +1,24 @@
 #include <iostream> 
 #include "wave.h"
 
-WaveRenderer::WaveRenderer()
+WaveRenderer::WaveRenderer() :
+  triggerLevel_(7)
 {
   
+}
+
+
+
+WaveRenderer::~WaveRenderer()
+{
+  
+  
+  
+}
+
+
+void WaveRenderer::generateFakeData()
+{
   int N = 400000; 
   std::vector<float> x(N); 
   //rateTimeline_.appendRate(5.0); 
@@ -29,14 +44,6 @@ WaveRenderer::WaveRenderer()
       p.x = y[i];
       append(p); 
     }
-  
-}
-
-
-WaveRenderer::~WaveRenderer()
-{
-  
-  
   
 }
 
@@ -66,6 +73,17 @@ void WaveRenderer::append(GLWavePoint_t p)
       ratesS3_.push_back(p); 
     }
   
+  // check for triggers:
+  if (rates_.size() > 2) {
+    if (rates_.back().x > triggerLevel_ and 
+	rates_[rates_.size() - 2].x <= triggerLevel_)
+      {
+	
+	TriggerTimeList_t ttl; 
+	ttl.push_back(p.t); 
+	newTriggerSignal_.emit(ttl); 
+      }
+  }
 }
 
 void WaveRenderer::draw(float t1, float t2, int pixels)
@@ -115,7 +133,64 @@ void WaveRenderer::draw(float t1, float t2, int pixels)
 
   glDrawArrays(GL_LINE_STRIP, 0, len); 
 
-    
+
+  // stupid trigger rendering
+  std::vector<float>::iterator trigi1, trigi2; 
+  trigi1 = lower_bound(trigTimeList_.begin(), 
+		       trigTimeList_.end(), 
+		       t1); 
+
+  trigi2 = lower_bound(trigTimeList_.begin(), 
+		       trigTimeList_.end(), 
+		       t2); 
+
+  glColor4f(0.0, 1.0, 0.0, 1.0); 
+
+
+  for(std::vector<float>::iterator i = trigi1; 
+      i != trigi2; i++)
+    {
+      glBegin(GL_LINE_STRIP); 
+      glVertex2f(*i, -10); 
+      glVertex2f(*i, 10); 
+      glEnd(); 
+    }
+      
+
+}
+
+newTriggersSignal_t WaveRenderer::newTriggers()
+{
+
+  return newTriggerSignal_; 
+
+}
+
+invalidateTriggersSignal_t WaveRenderer::invalidateTriggers()
+{
+
+  return invalidateTriggersSignal_; 
+
+}
+
+
+void WaveRenderer::setTriggerLevel(float tv)
+{
 
   
+
+
+}
+
+void WaveRenderer::appendTriggers(const TriggerTimeList_t & ttl)
+{
+  // copy the waves
+
+  for (TriggerTimeList_t::const_iterator i = ttl.begin(); 
+       i != ttl.end(); i++)
+    {
+
+      trigTimeList_.push_back(*i);
+    }
+
 }

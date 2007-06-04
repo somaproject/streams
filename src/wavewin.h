@@ -1,5 +1,5 @@
-#ifndef RATETIMELINE_H
-#define RATETIMELINE_H
+#ifndef WAVEWIN_H
+#define WAVEWIN_H
 
 #include <iostream>
 #include <cstdlib>
@@ -27,12 +27,12 @@
 
 #include "wave.h" 
 
-class RateTimeline : public Gtk::GL::DrawingArea
+class WaveWin : public Gtk::GL::DrawingArea
 {
 public:
-  explicit RateTimeline(); 
+  explicit WaveWin(); 
 
-  virtual ~RateTimeline();
+  virtual ~WaveWin();
 
   // Invalidate whole window.
   void inv(); 

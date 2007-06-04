@@ -1,10 +1,10 @@
-#include "ratetimeline.h"
+#include "wavewin.h"
 #include "glconfig.h"
 #include "shaders.h"
 
 #include <boost/format.hpp>
 
-RateTimeline::RateTimeline() : 
+WaveWin::WaveWin() : 
   decayRange_(100), 
   viewLatest_(true), 
   cutoffPos_(0), 
@@ -46,28 +46,28 @@ RateTimeline::RateTimeline() :
 
   // View transformation signals.
 //   signal_button_release_event().connect(sigc::mem_fun(*this, 
-//  						    &RateTimeline::on_button_release_event)); 
+//  						    &WaveWin::on_button_release_event)); 
   
   signal_motion_notify_event().connect(sigc::mem_fun(*this, 
-						     &RateTimeline::on_motion_notify_event)); 
+						     &WaveWin::on_motion_notify_event)); 
 
   signal_scroll_event().connect(sigc::mem_fun(*this, 
-						     &RateTimeline::on_scroll_event)); 
+						     &WaveWin::on_scroll_event)); 
 
 
 }
 
-RateTimeline::~RateTimeline()
+WaveWin::~WaveWin()
 {
 }
 
 
-void RateTimeline::appendRenderer(WaveRenderer* wr)
+void WaveWin::appendRenderer(WaveRenderer* wr)
 {
   pWaveRenderers_.push_back(wr); 
 }
 
-void RateTimeline::on_realize()
+void WaveWin::on_realize()
 {
 
   // We need to call the base on_realize()
@@ -120,7 +120,7 @@ void RateTimeline::on_realize()
 
 }
 
-void RateTimeline::updateViewingWindow(bool reset = false)
+void WaveWin::updateViewingWindow(bool reset = false)
 
 {
   glLoadIdentity(); 
@@ -136,7 +136,7 @@ void RateTimeline::updateViewingWindow(bool reset = false)
   
 }
 
-void RateTimeline::renderTimeTicks(float T1, float T2)
+void WaveWin::renderTimeTicks(float T1, float T2)
 {
   // render the necessary ticks for a window between T1 and T2
 
@@ -234,7 +234,7 @@ void RateTimeline::renderTimeTicks(float T1, float T2)
 
 
 }
-bool RateTimeline::on_configure_event(GdkEventConfigure* event)
+bool WaveWin::on_configure_event(GdkEventConfigure* event)
 {
 
 
@@ -264,7 +264,7 @@ bool RateTimeline::on_configure_event(GdkEventConfigure* event)
   return true;
 }
 
-bool RateTimeline::on_expose_event(GdkEventExpose* event)
+bool WaveWin::on_expose_event(GdkEventExpose* event)
 {
 
   Glib::RefPtr<Gdk::GL::Drawable> gldrawable = get_gl_drawable();
@@ -318,7 +318,7 @@ bool RateTimeline::on_expose_event(GdkEventExpose* event)
   return true;
 }
 
-bool RateTimeline::on_map_event(GdkEventAny* event)
+bool WaveWin::on_map_event(GdkEventAny* event)
 {
 
   Glib::RefPtr<Gdk::GL::Drawable> gldrawable = get_gl_drawable();
@@ -341,13 +341,13 @@ bool RateTimeline::on_map_event(GdkEventAny* event)
   return true;
 }
 
-bool RateTimeline::on_unmap_event(GdkEventAny* event)
+bool WaveWin::on_unmap_event(GdkEventAny* event)
 {
 
   return true;
 }
 
-bool RateTimeline::on_visibility_notify_event(GdkEventVisibility* event)
+bool WaveWin::on_visibility_notify_event(GdkEventVisibility* event)
 {
 
   Glib::RefPtr<Gdk::GL::Drawable> gldrawable = get_gl_drawable();
@@ -368,7 +368,7 @@ bool RateTimeline::on_visibility_notify_event(GdkEventVisibility* event)
   return true;
 }
 
-void RateTimeline::setSelectionRegion(float t1, float t2)
+void WaveWin::setSelectionRegion(float t1, float t2)
 {
   if (t1 < t2) {
     selT1_ = t1; 
@@ -381,7 +381,7 @@ void RateTimeline::setSelectionRegion(float t1, float t2)
 
 }
 
-bool RateTimeline::on_button_press_event(GdkEventButton* event)
+bool WaveWin::on_button_press_event(GdkEventButton* event)
 {
 //   m_BeginX = event->x;
 //   m_BeginY = event->y;
@@ -395,7 +395,7 @@ bool RateTimeline::on_button_press_event(GdkEventButton* event)
   return false;
 }
 
-bool RateTimeline::on_button_release_event(GdkEventButton* event)
+bool WaveWin::on_button_release_event(GdkEventButton* event)
 {
   std::cout << "RELEASE ME " << std::endl; 
   if (event->button == 3) {
@@ -412,7 +412,7 @@ bool RateTimeline::on_button_release_event(GdkEventButton* event)
   return false;
 }
 
-void RateTimeline::setZoom(float zoomval, float tcenter)
+void WaveWin::setZoom(float zoomval, float tcenter)
 {
   /*
     tcenter == the position along the t axis under the cursor
@@ -439,7 +439,7 @@ void RateTimeline::setZoom(float zoomval, float tcenter)
   
 }
 
-bool RateTimeline::on_scroll_event(GdkEventScroll* event)
+bool WaveWin::on_scroll_event(GdkEventScroll* event)
 {
 
   float x = event->x;
@@ -468,7 +468,7 @@ bool RateTimeline::on_scroll_event(GdkEventScroll* event)
   
   return false; 
 }
-bool RateTimeline::on_motion_notify_event(GdkEventMotion* event)
+bool WaveWin::on_motion_notify_event(GdkEventMotion* event)
 {
 
   float x = event->x;
