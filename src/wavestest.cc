@@ -25,6 +25,7 @@
 #include "glspikes.h"
 #include "wavewin.h"
 #include "wave.h"
+#include "rendercontrol.h" 
 
 
 class WavesApp : public Gtk::Window
@@ -47,13 +48,13 @@ protected:
   Glib::Timer dtimer_; 
   Gtk::Button m_ButtonQuit;
   WaveWin waveWin_; 
-  Gtk::Frame testWin_; 
+
   uint64_t lastSpikeTime_; 
   void updateSpikePosFromAdj(); 
   sigc::connection m_ConnectionIdle;
   virtual bool on_key_press_event(GdkEventKey* event); 
   std::vector<WaveRenderer *>  wrs; 
-
+  std::vector<RenderControl*> prcs_; 
 };
 
 WavesApp::WavesApp(bool is_sync)
@@ -62,7 +63,6 @@ WavesApp::WavesApp(bool is_sync)
     vBoxControls_(false, 0), 
     m_ButtonQuit("Quit"), 
     waveWin_(),
-    testWin_(), 
     lastSpikeTime_(0)
 {
 
@@ -91,19 +91,11 @@ WavesApp::WavesApp(bool is_sync)
   m_ButtonQuit.signal_clicked().connect(
     sigc::mem_fun(*this, &WavesApp::on_button_quit_clicked));
   hBox_.pack_start(vBoxControls_); 
-  vBoxControls_.pack_start(testWin_); 
-  testWin_.set_size_request(100, 100);
-  Gdk::Color c; 
-  c.set_red(0); 
-  c.set_blue(2<<14); 
-  c.set_green(0); 
 
-  testWin_.modify_bg(Gtk::STATE_NORMAL, c); 
 
   hBox_.pack_start(waveWin_); 
   m_VBox.pack_start(m_ButtonQuit, Gtk::PACK_SHRINK, 0);
 
-  show_all();
 
   Glib::signal_idle().connect( sigc::mem_fun(*this, &WavesApp::on_idle) );
   timer_.start(); 
@@ -112,14 +104,24 @@ WavesApp::WavesApp(bool is_sync)
   // generate N wave renderers:
   for (int i = 0; i < 10; i++)
     {
-      WaveRenderer * pwr = new WaveRenderer(); 
-      wrs.push_back(pwr); 
-      waveWin_.appendRenderer(pwr); 
 
+
+      
+      RenderControl * wrc = new RenderControl(); 
+      prcs_.push_back(wrc); 
+      vBoxControls_.pack_start(wrc->getControlBin()); 
+
+      WaveRenderer * pwr = wrc->getWaveRendererPtr(); 
+      waveWin_.appendRenderer(pwr); 
+      
       pwr->newTriggers().connect(sigc::mem_fun(pwr, 
 					       &WaveRenderer::appendTriggers) ); 
       pwr->generateFakeData(); 
+
+
+
     }
+  show_all();
 
   //Glib::signal_idle().connect( sigc::mem_fun(*this, &TSpikeWin::on_idle) );
 

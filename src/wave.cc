@@ -19,7 +19,7 @@ WaveRenderer::~WaveRenderer()
 
 void WaveRenderer::generateFakeData()
 {
-  int N = 400000; 
+  int N = 4000000; 
   std::vector<float> x(N); 
   //rateTimeline_.appendRate(5.0); 
   for (int i = 0; i < N; i++) {
