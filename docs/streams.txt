@@ -1,0 +1,41 @@
+Okay, this is our stream data visualization design document and
+note. We want:
+
+StreamSources: a 1:1 mapping with filterlink sinks on the backplane,
+control the associated sink and other control interface, etc.
+
+StreamVisulaizers : looks at stream data; can generate triggers and
+render waves to the main wavewin, as well as render trigger data.
+
+There's the question of how dynamic this configuration should be. For
+example, say that we have an existing streamsource receiving data for
+continuous channel C1. It's been doing this for some time. We'd like
+to attach a _new_ StreamViewer to this source, and still be able to
+see the historical data.
+
+This unambiguously necessitates the StreamSource to contain a copy of
+all the data it ever received.
+
+At the same time, we need to notify the StreamVisualizers of the
+availability of new data. It would be optimal to do this via a
+signal. But then how do they do this? with a newData() signal? 
+
+okay, that's fine, but then how do they get at the new data? I really
+like the dataQueue interface, where they extract out references to the
+relevant data, and they can call reset() on. 
+   THis allows them to reacquire all the data, should they again need it for
+   internal caching and whatnot
+
+Our generality here is a bit specious as the three source types we're
+envisoning right now are so different. 
+
+Similarly, triggers are an instance of the queueview, because:
+
+each viewer has an internal set of triggers
+they are of some data type
+
+Triggers have semantics identical to those of the stream queeu interface:
+  new 
+  invalid
+  buffer()
+

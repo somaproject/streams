@@ -1,0 +1,21 @@
+How to use iterators to a STL:list to implement non-destructive queue behavior: 
+
+
+1. initialization:
+
+i = myContainer.begin(); 
+
+1a. initial data copy:
+while (i != i.end()) {
+   dosomething(*i)
+   i++; 
+}
+
+but then i points to one-past current max available data
+
+-------------------------------------------------------------------------
+Non-destructive queueView:
+
+A non-destructive queueView is a "view" of another stl container where
+the contents of the underlying queue can change
+

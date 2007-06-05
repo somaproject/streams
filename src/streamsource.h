@@ -10,7 +10,6 @@ struct WaveBuffer_t
   std::vector<float> data; 
 }; 
 
-
 class StreamSource
 {
  public:
@@ -24,6 +23,8 @@ class StreamSource
   
   // public data access
   std::list<WaveBuffer_t> data_; 
+  std::list<WaveBuffer_t> * getDataPointer() { return &data_ ; }; 
+
   void generateFakeData(); 
   // signal
   sigc::signal<void> newDataSignal() { return newDataSignal_;  }; 
