@@ -62,9 +62,13 @@ WaveWin::~WaveWin()
 }
 
 
-void WaveWin::appendRenderer(WaveRenderer* wr)
+void WaveWin::appendVis(WaveStreamVis * wv)
 {
-  pWaveRenderers_.push_back(wr); 
+  pWaveVis_.push_back(wv); 
+  // connect the invalidate signal 
+  wv->invalidateLastRenderSignal().connect(sigc::mem_fun(*this, 
+							 &WaveWin::invalidate)); 
+
 }
 
 void WaveWin::on_realize()
@@ -297,11 +301,11 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
   glEnd(); 
 
 
-  std::list<WaveRenderer*>::iterator pwd; 
+  std::list<WaveStreamVis*>::iterator pwd; 
   int pixwidth = get_width(); 
-  for (pwd = pWaveRenderers_.begin(); pwd != pWaveRenderers_.end(); pwd++)
+  for (pwd = pWaveVis_.begin(); pwd != pWaveVis_.end(); pwd++)
     {
-      (*pwd)->draw(viewT1_, viewT2_, pixwidth); 
+      (*pwd)->drawMainWave(viewT1_, viewT2_, pixwidth); 
       glTranslatef(0.0f, -100.0f, 0.0);
 
     }
@@ -377,7 +381,7 @@ void WaveWin::setSelectionRegion(float t1, float t2)
     selT1_ = t2; 
     selT2_ = t1; 
   }
-  get_window()->invalidate_rect(get_allocation(), true);
+  invalidate(); 
 
 }
 
@@ -403,7 +407,7 @@ bool WaveWin::on_button_release_event(GdkEventButton* event)
     viewT1_ = selT1_; 
     viewT2_ = selT2_; 
     selT2_ = selT1_; 
-    get_window()->invalidate_rect(get_allocation(), true);
+    invalidate(); 
     
     
   }
@@ -462,7 +466,7 @@ bool WaveWin::on_scroll_event(GdkEventScroll* event)
 
   updateViewingWindow(); 
 
-  get_window()->invalidate_rect(get_allocation(), true);
+  invalidate(); 
   
   update();
   
@@ -486,7 +490,7 @@ bool WaveWin::on_motion_notify_event(GdkEventMotion* event)
   if (event->state & GDK_BUTTON1_MASK) {
     viewT1_ -= windowDelta; 
     viewT2_ -= windowDelta;
-    get_window()->invalidate_rect(get_allocation(), true);
+    invalidate(); 
     lastX_ = x; 
     //std::cout << " Moving..." << std::endl; 
     //invalidate(); 

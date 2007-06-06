@@ -1,5 +1,5 @@
-How to use iterators to a STL:list to implement non-destructive queue behavior: 
-
+How to use iterators to a STL:list to implement non-destructive queue
+behavior:
 
 1. initialization:
 
@@ -13,9 +13,27 @@ while (i != i.end()) {
 
 but then i points to one-past current max available data
 
+This is always going to be a problem; 
+
 -------------------------------------------------------------------------
 Non-destructive queueView:
 
 A non-destructive queueView is a "view" of another stl container where
 the contents of the underlying queue can change
 
+queueView(std::list<foo> & data)
+{
+   std::list<foo>::iterator i = data.begin()
+   // now if the list is empty, 
+} 
+
+bool empty() {
+   if (data_.empty()) {
+   return true; 
+   }  
+   else {
+
+   // if we were created with an empty list, we should update
+   // our pointer
+
+}

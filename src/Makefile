@@ -1,8 +1,9 @@
 
 CXX =g++
-CXXFLAGS = -O2 `pkg-config gtkmm-2.4 gdkmm-2.4 gtkglextmm-1.2 --cflags` -g -msse3
+CXXFLAGS = -O2 `pkg-config gtkmm-2.4 gdkmm-2.4 gtkglextmm-1.2 sigc++-2.0 --cflags` -g -msse3
 
-LDFLAGS = `pkg-config --libs gtkmm-2.4 gdkmm-2.4 gtkglextmm-1.2` -g -lboost_thread -lboost_date_time -lboost_program_options -lboost_regex -lboost_unit_test_framework 
+LDFLAGS = `pkg-config --libs gtkmm-2.4 gdkmm-2.4 sigc++-2.0 gtkglextmm-1.2` -g -lboost_thread -lboost_date_time -lboost_program_options -lboost_regex 
+#-lboost_unit_test_framework
 
 all:  testrunner
 
@@ -10,7 +11,9 @@ streamsource.o: streamsource.cc
 
 bench: bench.o 
 
-wavestest: wavestest.o wavewin.o glconfig.o shaders.o wave.o rendercontrol.o
+wavestest: wavestest.o wavewin.o glconfig.o shaders.o wavestreamsource.o wavestreamvis.o wavestreamrenderer.o
+
+
 
 testrunner : testrunner.cc queueview_test.o
 

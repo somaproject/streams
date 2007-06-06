@@ -25,7 +25,8 @@
 #include "glconfig.h"
 #include "glspikes.h"
 
-#include "wave.h" 
+#include "wavestreamrenderer.h"
+#include "wavestreamvis.h"
 
 class WaveWin : public Gtk::GL::DrawingArea
 {
@@ -42,7 +43,16 @@ public:
     { 
       get_window()->process_updates(false); 
     }
-  void appendRenderer(WaveRenderer * wd); 
+
+  void invalidate() {
+    Glib::RefPtr<Gdk::Window> win = get_window();
+    Gdk::Rectangle r(0, 0, get_allocation().get_width(),
+                     get_allocation().get_height());
+    win->invalidate_rect(r, false);
+
+  }
+
+  void appendVis(WaveStreamVis * wv); 
 
 protected:
 
@@ -81,7 +91,7 @@ protected:
 
 
   GLuint gpuProgGradient_; 
-  std::list<WaveRenderer*> pWaveRenderers_; 
+  std::list<WaveStreamVis*> pWaveVis_; 
   // font-associated crap
   
   GLuint fontListBase_; 

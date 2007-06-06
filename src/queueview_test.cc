@@ -139,3 +139,69 @@ BOOST_AUTO_TEST_CASE(lateviews)
   
 
 }
+
+BOOST_AUTO_TEST_CASE(queueresets)
+{
+
+  std::list<int> myint; 
+  QueueView<int> view1(myint); 
+  
+  BOOST_CHECK(view1.empty()); 
+
+  for (int i = 0; i < 10; i++) {
+    myint.push_back(i); 
+  }
+  
+  BOOST_CHECK(! view1.empty()); 
+
+  for (int i = 0; i < 10; i++) {
+    view1.front() == i; 
+    view1.pop(); 
+  }
+
+  view1.reset(); 
+  BOOST_CHECK(! view1.empty()); 
+  
+  BOOST_CHECK_EQUAL(view1.front(), 0); 
+  view1.pop(); 
+  BOOST_CHECK_EQUAL(view1.front(), 1); 
+  view1.pop(); 
+
+}
+
+BOOST_AUTO_TEST_CASE(emptyresets)
+{
+
+  std::list<int> myint; 
+  QueueView<int> view1(myint); 
+  
+  BOOST_CHECK(view1.empty()); 
+
+  view1.reset(); 
+  BOOST_CHECK(view1.empty()); 
+
+}
+
+BOOST_AUTO_TEST_CASE(addmore)
+{
+
+  std::list<int> myint; 
+  QueueView<int> myView(myint); 
+  
+  // first, do things work as expected
+
+  BOOST_CHECK(myView.empty() == true); 
+
+  myint.push_back(0); 
+  myint.push_back(10); 
+
+  myView.pop(); 
+  myView.pop(); 
+  // now check for extra 
+  myint.push_back(100); 
+  
+
+  
+  BOOST_CHECK(myView.empty() == false); 
+  BOOST_CHECK_EQUAL(myView.front(),  100); 
+}

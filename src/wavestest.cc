@@ -24,8 +24,8 @@
 
 #include "glspikes.h"
 #include "wavewin.h"
-#include "wave.h"
-#include "rendercontrol.h" 
+#include "wavestreamsource.h"
+#include "wavestreamvis.h"
 
 
 class WavesApp : public Gtk::Window
@@ -53,8 +53,12 @@ protected:
   void updateSpikePosFromAdj(); 
   sigc::connection m_ConnectionIdle;
   virtual bool on_key_press_event(GdkEventKey* event); 
-  std::vector<WaveRenderer *>  wrs; 
-  std::vector<RenderControl*> prcs_; 
+  bool appendNewData(); 
+
+  // data elements
+  std::vector<WaveStreamSource * > wss_; 
+  std::vector<WaveStreamVis * > wsv_; 
+  sigc::connection conn_; 
 };
 
 WavesApp::WavesApp(bool is_sync)
@@ -101,31 +105,37 @@ WavesApp::WavesApp(bool is_sync)
   timer_.start(); 
   dtimer_.start(); 
 
-  // generate N wave renderers:
+
+  show_all();
+  WaveStreamSource * wss = new WaveStreamSource(); 
+  wss_.push_back(wss); 
+  //Glib::signal_idle().connect( sigc::mem_fun(*this, &TSpikeWin::on_idle) );
   for (int i = 0; i < 10; i++)
     {
 
-
-      
-      RenderControl * wrc = new RenderControl(); 
-      prcs_.push_back(wrc); 
-      vBoxControls_.pack_start(wrc->getControlBin()); 
-
-      WaveRenderer * pwr = wrc->getWaveRendererPtr(); 
-      waveWin_.appendRenderer(pwr); 
-      
-      pwr->newTriggers().connect(sigc::mem_fun(pwr, 
-					       &WaveRenderer::appendTriggers) ); 
-      pwr->generateFakeData(); 
+      // now we create the 
+      WaveStreamVis * wsv = new WaveStreamVis(wss); 
 
 
+      wsv_.push_back(wsv); 
 
+      waveWin_.appendVis(wsv); 
     }
-  show_all();
 
-  //Glib::signal_idle().connect( sigc::mem_fun(*this, &TSpikeWin::on_idle) );
+  wss_[0]->generateFakeData(1); 
+  
+  // setup fake data generation
+  
+   conn_ = Glib::signal_timeout().connect(sigc::mem_fun(*this, 
+ 						       &WavesApp::appendNewData), 
+ 					 30); 
+}
 
-
+bool WavesApp::appendNewData()
+{
+  wss_[0]->generateFakeData(1); 
+  return true; 
+  
 }
 
 WavesApp::~WavesApp()

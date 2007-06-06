@@ -3,6 +3,7 @@
 
 #include <list>
 #include <stdexcept>
+#include <iostream>
 
 template <typename T>
 class QueueView {
@@ -19,7 +20,7 @@ protected:
   std::list<T> &  lref_; 
   bool listWasEmpty_; 
   typename std::list<T>::iterator curItem_; 
-  bool pastEnd_; 
+  bool passedEnd_; 
   
 }; 
 
@@ -27,7 +28,7 @@ template <typename T>
 QueueView<T>::QueueView(std::list<T> & lref) :
   lref_(lref), 
   listWasEmpty_(false), 
-  pastEnd_(false)
+  passedEnd_(false)
   {
     if (lref_.empty()) {
       listWasEmpty_ = true; 
@@ -48,6 +49,8 @@ QueueView<T>::~QueueView()
 template <typename T>
 bool QueueView<T>::empty()
 {
+
+
   if (lref_.empty() )
     {
       listWasEmpty_ = true; 
@@ -58,13 +61,19 @@ bool QueueView<T>::empty()
       // the source used to be empty and now it's not; inc the pointer!
       curItem_ = lref_.begin(); 
       listWasEmpty_ = false; 
-      pastEnd_ = false; 
+      passedEnd_ = false; 
       return false; 
 
     } else {
       // this is the normal case; check to make sure that we're 
       // not past the end
-      if (pastEnd_) {
+      if (passedEnd_) {
+	if (curItem_ != --lref_.end()) {
+	  // if we're no longer at the end:
+	  passedEnd_ = false; 
+	  curItem_++; 
+	  return false; 
+	}
 	return true; 
       }
       return false; 
@@ -84,9 +93,9 @@ void QueueView<T>::pop()
   } else {
     if (curItem_ == --lref_.end() )
       {
-	pastEnd_ = true; 
+	passedEnd_ = true; 
       } else {
-	pastEnd_ = false; 
+	passedEnd_ = false; 
 	curItem_++; 
       }
 
@@ -103,8 +112,10 @@ T & QueueView<T>::front(){
 
 template <typename T>
 void QueueView<T>::reset(){
-  curItem_ = lref_.begin(); 
-  
+  listWasEmpty_ = true; 
+  passedEnd_ = false; 
+  empty(); 
+
 }
 
 

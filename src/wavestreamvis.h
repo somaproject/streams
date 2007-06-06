@@ -3,23 +3,28 @@
 
 #include <gtkmm.h>
 #include "wave.h"
+#include "wavestreamrenderer.h"
 
 class WaveStreamVis
-
 {
  public: 
-  WaveStreamVis(); 
+  WaveStreamVis(WaveStreamSource * ); 
   ~WaveStreamVis(); 
-  Gtk::Bin & getControlBin(); 
-  WaveStreamRenderer * getStreamRendererPtr() { return pwr_; }; 
-  void setStreamSource(StreamSource * ss); 
 
+  WaveStreamRenderer * getStreamRendererPtr() { return &streamRenderer_; }; 
+  void drawMainWave(float t1, float t2, int pixels);
+
+  sigc::signal<void> & invalidateLastRenderSignal()
+    { return streamRenderer_.invalidateLastRenderSignal(); 
+    }
+ 
  private:
-  Gtk::HBox hBox_; 
-  Gtk::Button button_; 
-  WaveStreamRenderer * pwr_; 
-  StreamSource_ * streamSource_; 
+  void newData(); 
+  void invalidateData(); 
 
+  WaveStreamRenderer streamRenderer_; 
+  WaveStreamSource * streamSource_; 
+  QueueView<WaveBuffer_t *> inDataQueue_; 
 };
 
 #endif // WAVESTREAMVIS_H

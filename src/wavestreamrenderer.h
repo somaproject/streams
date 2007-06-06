@@ -16,17 +16,9 @@
 
 #include <map>
 
-#include "streamsource.h"
+#include "wavestreamsource.h"
+#include "wave.h"
 
-typedef std::vector<float> TriggerTimeList_t; 
-typedef sigc::signal<void, const TriggerTimeList_t> newTriggersSignal_t; 
-typedef sigc::signal<void> invalidateTriggersSignal_t; 
-
-struct GLWavePoint_t
-{
-  float t; 
-  float x; 
-}; 
 
 inline bool compareTime(const GLWavePoint_t x,
 			const GLWavePoint_t y)
@@ -42,39 +34,43 @@ typedef std::map<float, int> timeindex_t;
 class WaveStreamRenderer
 {
  public: 
-  WaveStreamRenderer(StreamSource * ss ); 
+  WaveStreamRenderer(); 
   ~WaveStreamRenderer(); 
-  void generateFakeData(); 
+
   void draw(float t1, float t2, int pixels); 
+  void append(GLWavePoint_t); 
 
-  // triggering 
-  void resetTriggers(); 
-  void appendTriggers(const TriggerTimeList_t & ttl); 
+/*   // triggering  */
+/*   void resetTriggers();  */
+/*   void appendTriggers(const TriggerTimeList_t & ttl);  */
 
-  // and associated triggering signals
-  newTriggersSignal_t newTriggers(); 
-  invalidateTriggersSignal_t invalidateTriggers(); 
+/*   // and associated triggering signals */
+/*   newTriggersSignal_t newTriggers();  */
+/*   invalidateTriggersSignal_t invalidateTriggers();  */
   
   
-  void setTriggerLevel(float tv); 
-  
+/*   void setTriggerLevel(float tv);  */
+  sigc::signal<void> & invalidateLastRenderSignal()
+    { return invalidateLastRenderSignal_;
+    }
+
  protected: 
-  StreamSource * pStreamSource_; 
-  std::list<WaveBuffer_t>::iterator streamSourceDataBegin_;
-  std::list<WaveBuffer_t>::iterator streamSourceDataEnd_;
  
   std::vector<GLWavePoint_t> rates_; 
   std::vector<GLWavePoint_t> ratesS2_; 
   std::vector<GLWavePoint_t> ratesS3_; 
   timeindex_t indexS2_, indexS3_; 
 
-  TriggerTimeList_t trigTimeList_ ; 
+  float mostRecentRenderT1_, mostRecentRenderT2_; 
+  sigc::signal<void> invalidateLastRenderSignal_; 
 
-  // internal signals
-  newTriggersSignal_t newTriggerSignal_;
-  invalidateTriggersSignal_t invalidateTriggersSignal_; 
+/*   TriggerTimeList_t trigTimeList_ ;  */
+
+/*   // internal signals */
+/*   newTriggersSignal_t newTriggerSignal_; */
+/*   invalidateTriggersSignal_t invalidateTriggersSignal_;  */
   
-  float   triggerLevel_ ; 
+/*   float   triggerLevel_ ;  */
 
 };
 
