@@ -37,36 +37,28 @@ void WaveStreamRenderer::append(GLWavePoint_t p)
 
   int S1N = 10; 
 
-  if (ratesS2_.back().x[3] < p.x)
-    ratesS2_.back().x[3] = p.x; 
+  if (ratesS2_.back().xmax < p.x) {
+    ratesS2_.back().xmax = p.x; 
+    ratesS2_.back().tmax = p.t; 
+  }
+  if (ratesS2_.back().xmin > p.x){
+    ratesS2_.back().xmin = p.x; 
+    ratesS2_.back().tmin = p.t; 
+  }
 
-  if (ratesS2_.back().x[1] > p.x)
-    ratesS2_.back().x[1] = p.x; 
-  ratesS2_.back().x[0] = p.t; 
-  ratesS2_.back().x[2] = p.t; 
 
   if (rates_.size() % S1N == 0)
     {
 
       GLWaveQuadStrip_t s1poly = ratesS2_.back(); 
-      s1poly.x[1] = 100e6; 
-      s1poly.x[3] = -100e6; 
+      s1poly.xmin = 100e6; 
+      s1poly.xmax = -100e6; 
       
       ratesS2_.push_back(s1poly); 
     }
-
   
-//   // check for triggers:
-//   if (rates_.size() > 2) {
-//     if (rates_.back().x > triggerLevel_ and 
-// 	rates_[rates_.size() - 2].x <= triggerLevel_)
-//       {
-	
-// 	TriggerTimeList_t ttl; 
-// 	ttl.push_back(p.t); 
-// 	newTriggerSignal_.emit(ttl); 
-//       }
-//   }
+  
+
 
   if ( (mostRecentRenderT1_ <= p.t) and (mostRecentRenderT2_ >= p.t) )
     {
@@ -98,7 +90,6 @@ void WaveStreamRenderer::draw(float t1, float t2, int pixels)
   
   glColor4f(1.0, 1.0, 1.0, 1.0); 
 
-  //int pos1 = i1 - rates_.begin(); 
   int len  = i2 - i1; 
 
   if (scale > 100.0) {  
@@ -107,28 +98,34 @@ void WaveStreamRenderer::draw(float t1, float t2, int pixels)
     glDrawArrays(GL_LINE_STRIP, 0, len); 
   }
   
-  // scale 1 
+  // first scale 
+  std::vector<GLWaveQuadStrip_t>::iterator  qi1, qi2;
 
-//   p1.t = t1; 
+  GLWaveQuadStrip_t q1, q2; 
+  q1.tmax = t1; 
+  q1.tmin = t1; 
 
-//   i1 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
-// 		   p1, compareTime); 
   
-//   p2.t = t2; 
-//   i2 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
-//  		   p2, compareTime); 
+  qi1 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
+ 		   q1, &compareTime2); 
   
-  glColor4f(1.0, 1.0, 1.0, 1.0); 
+  q2.tmax = t2; 
+  q2.tmin = t2; 
 
-//   int pos1 = i1 - rates_.begin(); 
-//   len  = i2 - i1; 
+  qi2 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
+  		   q2, &compareTime2); 
+  
+  glColor4f(1.0, 0.0, 0.0, 0.5); 
 
 
-  if (scale <= 100.0){
+  len  = qi2 - qi1; 
+
+
+  //  if (scale <= 100.0){
     glVertexPointer(2, GL_FLOAT, sizeof(float)*2, 
-		    &ratesS2_[0]); 
-    glDrawArrays(GL_QUAD_STRIP, 0, ratesS2_.size()*2); 
-  }
+		    &(*qi1)); 
+    glDrawArrays(GL_QUAD_STRIP, 0, 2 * len); 
+    //}
 
   // stupid trigger rendering
   std::vector<float>::iterator trigi1, trigi2; 

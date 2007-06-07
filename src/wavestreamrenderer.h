@@ -30,6 +30,15 @@ inline bool compareTime(const GLWavePoint_t x,
   return false; 
 }
 
+inline bool compareTime2(const GLWaveQuadStrip_t x,
+			const GLWaveQuadStrip_t y)
+{
+  if (x.tmax < y.tmax) 
+    return true; 
+
+  return false; 
+}
+
 typedef std::map<float, int> timeindex_t; 
 
 class WaveStreamRenderer

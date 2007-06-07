@@ -28,7 +28,10 @@ struct GLWavePoint_t
 
 struct GLWaveQuadStrip_t
 {
-  float x[4]; 
+  float tmax; 
+  float xmax; 
+  float tmin; 
+  float xmin; 
 }; 
 
 #endif // WAVE_H

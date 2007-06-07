@@ -238,6 +238,7 @@ void WaveWin::renderTimeTicks(float T1, float T2)
 
 
 }
+
 bool WaveWin::on_configure_event(GdkEventConfigure* event)
 {
 
@@ -290,6 +291,19 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
   renderTimeTicks(viewT1_, viewT2_); 
 
 
+  std::list<WaveStreamVis*>::iterator pwd; 
+  int pixwidth = get_width(); 
+  for (pwd = pWaveVis_.begin(); pwd != pWaveVis_.end(); pwd++)
+    {
+      (*pwd)->drawMainWave(viewT1_, viewT2_, pixwidth); 
+      glTranslatef(0.0f, -120.0f, 0.0);
+
+    }
+  glTranslatef(0.0f, 120.0f * pWaveVis_.size(), 0.0);
+
+
+
+  
   // render selection
   glColor4f(0.2, 0.2, 1.0, 0.5); 
 
@@ -299,21 +313,6 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
   glVertex2f(selT2_, viewX2_); 
   glVertex2f(selT2_, viewX1_); 
   glEnd(); 
-
-
-  std::list<WaveStreamVis*>::iterator pwd; 
-  int pixwidth = get_width(); 
-  for (pwd = pWaveVis_.begin(); pwd != pWaveVis_.end(); pwd++)
-    {
-      (*pwd)->drawMainWave(viewT1_, viewT2_, pixwidth); 
-      glTranslatef(0.0f, -100.0f, 0.0);
-
-    }
-
-
-
-  // render text? 
-
 
   // Swap buffers.
   gldrawable->swap_buffers();
