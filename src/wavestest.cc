@@ -26,6 +26,7 @@
 #include "wavewin.h"
 #include "wavestreamsource.h"
 #include "wavestreamvis.h"
+#include "triggerwin.h"
 
 
 class WavesApp : public Gtk::Window
@@ -48,6 +49,7 @@ protected:
   Glib::Timer dtimer_; 
   Gtk::Button m_ButtonQuit;
   WaveWin waveWin_; 
+  TriggerWin triggerWin_; 
 
   uint64_t lastSpikeTime_; 
   void updateSpikePosFromAdj(); 
@@ -67,6 +69,7 @@ WavesApp::WavesApp(bool is_sync)
     vBoxControls_(false, 0), 
     m_ButtonQuit("Quit"), 
     waveWin_(),
+    triggerWin_(), 
     lastSpikeTime_(0)
 {
 
@@ -81,23 +84,15 @@ WavesApp::WavesApp(bool is_sync)
   // WavesApp scene.
   //
   waveWin_.set_size_request(1000, 400);
+  triggerWin_.set_size_request(100, 400);
 
-//   for (int i = 0; i < 10000; i++)
-//     {
-//       waveWin_.appendRate(float(i)/1000.0); 
-//     }
-  
-  
-  //
-  // Simple quit button.
-  //
 
-  m_ButtonQuit.signal_clicked().connect(
-    sigc::mem_fun(*this, &WavesApp::on_button_quit_clicked));
   hBox_.pack_start(vBoxControls_); 
 
 
   hBox_.pack_start(waveWin_); 
+  hBox_.pack_start(triggerWin_); 
+
   m_VBox.pack_start(m_ButtonQuit, Gtk::PACK_SHRINK, 0);
 
 
