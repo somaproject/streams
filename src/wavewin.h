@@ -44,14 +44,7 @@ public:
       get_window()->process_updates(false); 
     }
 
-  void invalidate() {
-    Glib::RefPtr<Gdk::Window> win = get_window();
-    Gdk::Rectangle r(0, 0, get_allocation().get_width(),
-                     get_allocation().get_height());
-    win->invalidate_rect(r, false);
-
-  }
-
+  void invalidate(); 
   void appendVis(WaveStreamVis * wv); 
 
 protected:

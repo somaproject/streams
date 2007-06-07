@@ -20,6 +20,7 @@
 #include "wave.h"
 
 
+
 inline bool compareTime(const GLWavePoint_t x,
 			const GLWavePoint_t y)
 {
@@ -39,10 +40,13 @@ class WaveStreamRenderer
 
   void draw(float t1, float t2, int pixels); 
   void append(GLWavePoint_t); 
-
+  
 /*   // triggering  */
-/*   void resetTriggers();  */
-/*   void appendTriggers(const TriggerTimeList_t & ttl);  */
+  void resetTriggers();  
+  void newTriggers(); 
+  void setTriggerSource(const QueueView<float> & tqv);
+
+    
 
 /*   // and associated triggering signals */
 /*   newTriggersSignal_t newTriggers();  */
@@ -50,21 +54,22 @@ class WaveStreamRenderer
   
   
 /*   void setTriggerLevel(float tv);  */
-  sigc::signal<void> & invalidateLastRenderSignal()
-    { return invalidateLastRenderSignal_;
-    }
+  sigc::signal<void> & invalidateLastRenderSignal();
 
  protected: 
  
   std::vector<GLWavePoint_t> rates_; 
-  std::vector<GLWavePoint_t> ratesS2_; 
-  std::vector<GLWavePoint_t> ratesS3_; 
+  std::vector<GLWaveQuadStrip_t> ratesS2_; 
   timeindex_t indexS2_, indexS3_; 
 
   float mostRecentRenderT1_, mostRecentRenderT2_; 
   sigc::signal<void> invalidateLastRenderSignal_; 
 
-/*   TriggerTimeList_t trigTimeList_ ;  */
+  std::list<float> emptyTriggerList_; 
+
+  QueueView<float> triggerQueueView_; 
+
+  TriggerTimeList_t trigTimeList_ ;
 
 /*   // internal signals */
 /*   newTriggersSignal_t newTriggerSignal_; */

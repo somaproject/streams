@@ -17,7 +17,7 @@
 #include <map>
 
 typedef std::vector<float> TriggerTimeList_t; 
-typedef sigc::signal<void, const TriggerTimeList_t> newTriggersSignal_t; 
+typedef sigc::signal<void> newTriggersSignal_t; 
 typedef sigc::signal<void> invalidateTriggersSignal_t; 
 
 struct GLWavePoint_t
@@ -26,5 +26,9 @@ struct GLWavePoint_t
   float x; 
 }; 
 
+struct GLWaveQuadStrip_t
+{
+  float x[4]; 
+}; 
 
 #endif // WAVE_H

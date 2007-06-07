@@ -12,7 +12,7 @@ WaveStreamVis::WaveStreamVis(WaveStreamSource * wss) :
 					     &WaveStreamVis::newData)); 
   streamSource_->invalidateDataSignal().connect(sigc::mem_fun(*this, 
 						    &WaveStreamVis::invalidateData)); 
-
+  
   
 
 }
@@ -48,6 +48,7 @@ void WaveStreamVis::newData()
 	  wp.x = pwb->data[i]; 
 	  
 	  streamRenderer_.append(wp); 
+	  streamTrigger_.append(wp); 
 	}
       
     }
@@ -59,4 +60,51 @@ void WaveStreamVis::invalidateData()
 {
 
 
+}
+
+newTriggersSignal_t & WaveStreamVis::newTriggersSignal()
+{
+  return streamTrigger_.newTriggersSignal(); 
+}
+
+invalidateTriggersSignal_t & WaveStreamVis::invalidateTriggersSignal() 
+{
+  return streamTrigger_.invalidateTriggersSignal(); 
+}
+
+QueueView<float>  WaveStreamVis::getTriggerQueueView() 
+{
+  return streamTrigger_.getTriggerQueueView(); 
+  
+}
+
+void WaveStreamVis::setTriggerValue(float level)
+{
+  streamTrigger_.setTriggerValue(level); 
+}
+
+void WaveStreamVis::enableTrigger(bool value)
+{
+
+  streamTrigger_.enableTrigger(value); 
+
+}
+
+
+void WaveStreamVis::resetTriggers()
+{
+  streamRenderer_.resetTriggers(); 
+}
+
+void WaveStreamVis::newTriggers()
+{
+
+  streamRenderer_.newTriggers(); 
+}
+
+void WaveStreamVis::setTriggerSource(const QueueView<float> & tqv)
+{
+
+  streamRenderer_.setTriggerSource(tqv);
+  
 }

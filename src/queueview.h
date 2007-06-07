@@ -9,15 +9,18 @@ template <typename T>
 class QueueView {
 public:
   QueueView(std::list<T> & lref); 
+  
   ~QueueView(); 
+  QueueView<T> & operator=(const QueueView<T>&); 
   bool empty(); 
   T & front(); 
   void pop(); 
   
   void reset(); 
+  std::list<T> * lref_; 
   
 protected: 
-  std::list<T> &  lref_; 
+
   bool listWasEmpty_; 
   typename std::list<T>::iterator curItem_; 
   bool passedEnd_; 
@@ -26,14 +29,14 @@ protected:
 
 template <typename T>
 QueueView<T>::QueueView(std::list<T> & lref) :
-  lref_(lref), 
+  lref_(&lref), 
   listWasEmpty_(false), 
   passedEnd_(false)
   {
-    if (lref_.empty()) {
+    if (lref_->empty()) {
       listWasEmpty_ = true; 
     } else {
-      curItem_ = lref_.begin(); 
+      curItem_ = lref_->begin(); 
       listWasEmpty_ = false; 
     }
     
@@ -51,7 +54,7 @@ bool QueueView<T>::empty()
 {
 
 
-  if (lref_.empty() )
+  if (lref_->empty() )
     {
       listWasEmpty_ = true; 
       return true; 
@@ -59,7 +62,7 @@ bool QueueView<T>::empty()
   else {
     if (listWasEmpty_) {
       // the source used to be empty and now it's not; inc the pointer!
-      curItem_ = lref_.begin(); 
+      curItem_ = lref_->begin(); 
       listWasEmpty_ = false; 
       passedEnd_ = false; 
       return false; 
@@ -68,7 +71,7 @@ bool QueueView<T>::empty()
       // this is the normal case; check to make sure that we're 
       // not past the end
       if (passedEnd_) {
-	if (curItem_ != --lref_.end()) {
+	if (curItem_ != --lref_->end()) {
 	  // if we're no longer at the end:
 	  passedEnd_ = false; 
 	  curItem_++; 
@@ -91,7 +94,7 @@ void QueueView<T>::pop()
     throw std::out_of_range("View is empty"); 
 
   } else {
-    if (curItem_ == --lref_.end() )
+    if (curItem_ == --(lref_->end()) )
       {
 	passedEnd_ = true; 
       } else {
@@ -115,6 +118,16 @@ void QueueView<T>::reset(){
   listWasEmpty_ = true; 
   passedEnd_ = false; 
   empty(); 
+
+}
+
+template <typename T>
+QueueView<T> &  QueueView<T>::operator=(const QueueView<T>& qv)
+{
+  lref_ = qv.lref_; 
+  listWasEmpty_ = qv.listWasEmpty_; 
+  curItem_ = qv.curItem_; 
+  passedEnd_ = qv.passedEnd_; 
 
 }
 
