@@ -31,6 +31,11 @@ WaveStreamVis::~WaveStreamVis()
 
 }
 
+void WaveStreamVis::drawTriggerWave(float tbefore, float tafter, float timepoint)
+{
+  streamTriggerRenderer_.drawTriggers(tbefore, tafter, timepoint); 
+  
+}
 
 void WaveStreamVis::newData()
 {
@@ -49,6 +54,7 @@ void WaveStreamVis::newData()
 	  
 	  streamRenderer_.append(wp); 
 	  streamTrigger_.append(wp); 
+	  streamTriggerRenderer_.append(wp); 
 	}
       
     }
@@ -100,11 +106,14 @@ void WaveStreamVis::newTriggers()
 {
 
   streamRenderer_.newTriggers(); 
+  streamTriggerRenderer_.newTriggers(); 
+
 }
 
 void WaveStreamVis::setTriggerSource(const QueueView<float> & tqv)
 {
 
   streamRenderer_.setTriggerSource(tqv);
-  
+  streamTriggerRenderer_.setTriggerSource(tqv); 
+
 }

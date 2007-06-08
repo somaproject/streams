@@ -11,10 +11,7 @@ streamsource.o: streamsource.cc
 
 bench: bench.o 
 
-wavestest: wavestest.o wavewin.o glconfig.o shaders.o wavestreamsource.o wavestreamvis.o wavestreamrenderer.o wavestreamtrigger.o triggerwin.o
-
-
-
+wavestest: wavestest.o wavewin.o glconfig.o shaders.o wavestreamsource.o wavestreamvis.o wavestreamrenderer.o wavestreamtrigger.o triggerwin.o wavestreamtriggerrenderer.o
 
 testrunner : testrunner.cc queueview_test.o
 

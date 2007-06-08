@@ -1,32 +1,25 @@
 #include <iostream> 
 #include "wavestreamsource.h"
 #include "wavestreamrenderer.h"
+#include "wavestreamtriggerrenderer.h"
+#include "wave.h"
 #include <assert.h>
 
 
-WaveStreamRenderer::WaveStreamRenderer() :
-  mostRecentRenderT1_(0.0), 
-  mostRecentRenderT2_(0.0),
+WaveStreamTriggerRenderer::WaveStreamTriggerRenderer() :
   emptyTriggerList_(), 
   triggerQueueView_(emptyTriggerList_)
 
 {
-  // initialize data from stream source buffer
-  GLWaveQuadStrip_t s1poly;
-  ratesS2_.push_back(s1poly); 
  
 }
 
-
-
-WaveStreamRenderer::~WaveStreamRenderer()
+WaveStreamTriggerRenderer::~WaveStreamTriggerRenderer()
 {
-  
-  
-  
+
 }
 
-void WaveStreamRenderer::append(GLWavePoint_t p)
+void WaveStreamTriggerRenderer::append(GLWavePoint_t p)
 {
 
   if (rates_.size() > 0) {
@@ -36,113 +29,75 @@ void WaveStreamRenderer::append(GLWavePoint_t p)
 
 }
 
-void WaveStreamRenderer::draw(float t1, float t2, int pixels)
+void WaveStreamTriggerRenderer::drawTriggers(float tbefore, float tafter, float timepoint)
 {
-  mostRecentRenderT1_ = t1; 
-  mostRecentRenderT2_ = t2; 
-
-  float scale = pixels / (t2 -t1); 
 
   std::vector<GLWavePoint_t>::iterator  i1, i2;
   GLWavePoint_t p1, p2; 
 
-  p1.t = t1; 
-
-  i1 = lower_bound(rates_.begin(), rates_.end(), 
-		   p1, compareTime); 
-  
-  p2.t = t2; 
-  i2 = lower_bound(rates_.begin(), rates_.end(), 
-		   p2, compareTime); 
-  
-  
-  glColor4f(1.0, 1.0, 1.0, 1.0); 
-
-  int len  = i2 - i1; 
-
-  if (scale > 100.0) {  
-    glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
-		    &(*i1)); 
-    glDrawArrays(GL_LINE_STRIP, 0, len); 
-  }
-  
-  // first scale 
-  std::vector<GLWaveQuadStrip_t>::iterator  qi1, qi2;
-
-  GLWaveQuadStrip_t q1, q2; 
-  q1.tmax = t1; 
-  q1.tmin = t1; 
 
   
-  qi1 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
- 		   q1, &compareTime2); 
-  
-  q2.tmax = t2; 
-  q2.tmin = t2; 
+  // right now, we just plot the head
+  if (not trigTimeList_.empty() )
+    {
+      float tx= trigTimeList_.back(); 
 
-  qi2 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
-  		   q2, &compareTime2); 
-  
-  glColor4f(1.0, 0.0, 0.0, 0.5); 
-
-
-  len  = qi2 - qi1; 
-
-
-  //  if (scale <= 100.0){
-    glVertexPointer(2, GL_FLOAT, sizeof(float)*2, 
-		    &(*qi1)); 
-    glDrawArrays(GL_QUAD_STRIP, 0, 2 * len); 
-    //}
-
-  // stupid trigger rendering
-  std::vector<float>::iterator trigi1, trigi2; 
-  trigi1 = lower_bound(trigTimeList_.begin(), 
- 		       trigTimeList_.end(), 
- 		       t1); 
-
-  trigi2 = lower_bound(trigTimeList_.begin(), 
- 		       trigTimeList_.end(), 
- 		       t2); 
-
-  glColor4f(0.0, 1.0, 0.0, 1.0); 
-
-  //std::cout << "Rendering triggers!" << trigTimeList_.size() << std::endl; 
-   for(std::vector<float>::iterator i = trigi1; 
-       i != trigi2; i++)
-     {
-
-       glBegin(GL_LINE_STRIP); 
-       glVertex2f(*i, -50); 
-       glVertex2f(*i, 50); 
-       glEnd(); 
-     }
+      p1.t = tx - tbefore;       
+      i1 = lower_bound(rates_.begin(), rates_.end(), 
+		       p1, compareTime); 
       
+      p2.t = tx + tafter + 0.01; 
+      i2 = lower_bound(rates_.begin(), rates_.end(), 
+		       p2, compareTime); 
+      if (i2 == rates_.end()) {
+	i2 == --rates_.end(); 
+      }
+      
+      
+      glColor4f(1.0, 1.0, 1.0, 1.0); 
+      
+      int len  = i2 - i1; 
 
+      std::cout << "i1->t = " << i1->t << " i2->t " << i2->t 
+		<< " rates.back().t = " << rates_.back().t 
+		<< std::endl; 
+
+      
+      glTranslatef(-tx, 0.0, 0.0); 
+
+      glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
+		      &(*i1)); 
+      glDrawArrays(GL_LINE_STRIP, 0, len); 
+      // restore -- i should really learn to push and pop
+
+      glTranslatef(tx, 0.0, 0.0); 
+      
+    }
 }
 
 
-sigc::signal<void> & WaveStreamRenderer::invalidateLastRenderSignal()
+sigc::signal<void> & WaveStreamTriggerRenderer::invalidateTriggerRenderSignal()
 {
-  return invalidateLastRenderSignal_;
+  return invalidateTriggerRenderSignal_;
 }
 
-void WaveStreamRenderer::resetTriggers()
+void WaveStreamTriggerRenderer::resetTriggers()
 {
 
   trigTimeList_.clear(); 
   triggerQueueView_.reset(); 
 }
-void WaveStreamRenderer::newTriggers()
+void WaveStreamTriggerRenderer::newTriggers()
 {
   while ( not triggerQueueView_.empty()) {
     trigTimeList_.push_back(triggerQueueView_.front()); 
     triggerQueueView_.pop(); 
   }
+  invalidateTriggerRenderSignal_.emit(); 
 
 }
 
-void WaveStreamRenderer::setTriggerSource(const QueueView<float> & tqv)
+void WaveStreamTriggerRenderer::setTriggerSource(const QueueView<float> & tqv)
 {
   triggerQueueView_ = tqv; 
 }

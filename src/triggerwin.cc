@@ -5,8 +5,8 @@
 #include <boost/format.hpp>
 
 TriggerWin::TriggerWin() : 
-  viewT1_(0.0), 
-  viewT2_(1.0), 
+  viewT1_(-0.01000), 
+  viewT2_(0.0100), 
   viewX1_(-1000.0), 
   viewX2_(100.0)
 {
@@ -47,9 +47,9 @@ TriggerWin::~TriggerWin()
 void TriggerWin::appendVis(WaveStreamVis * wv)
 {
   pWaveVis_.push_back(wv); 
-  // connect the invalidate signal 
-//   wv->invalidateLastRenderSignal().connect(sigc::mem_fun(*this, 
-// 							 &TriggerWin::invalidate)); 
+  //connect the invalidate signal 
+  wv->invalidateTriggerRendererSignal().connect(sigc::mem_fun(*this, 
+ 							 &TriggerWin::invalidate)); 
 
 }
 
@@ -89,8 +89,8 @@ void TriggerWin::updateViewingWindow(bool reset = false)
   glLoadIdentity(); 
 
   if (reset ) {
-    viewT1_ = 0.0; 
-    viewT2_ = 1.0; 
+    viewT1_ = -0.01; 
+    viewT2_ = 0.01; 
   }
   glOrtho(viewT1_, viewT2_, viewX1_, viewX2_, -3, 3); 
 
@@ -254,7 +254,7 @@ bool TriggerWin::on_expose_event(GdkEventExpose* event)
   int pixwidth = get_width(); 
   for (pwd = pWaveVis_.begin(); pwd != pWaveVis_.end(); pwd++)
     {
-//       (*pwd)->drawTriggerWave(viewT1_, viewT2_, pixwidth); 
+      (*pwd)->drawTriggerWave(0.01, 0.01, 0.0); 
       glTranslatef(0.0f, -120.0f, 0.0);
 
     }

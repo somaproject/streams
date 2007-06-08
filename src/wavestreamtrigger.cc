@@ -1,7 +1,7 @@
 #include "wavestreamtrigger.h"
 
 WaveStreamTrigger::WaveStreamTrigger() :
-  triggerLevel_(0.0), 
+  triggerLevel_(0.8), 
   triggerEnabled_(false) 
 {
 

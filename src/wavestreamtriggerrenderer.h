@@ -27,7 +27,7 @@ class WaveStreamTriggerRenderer
   WaveStreamTriggerRenderer(); 
   ~WaveStreamTriggerRenderer(); 
 
-  void draw(float t1, float t2, int pixels); 
+  void drawTriggers(float tbefore, float tafter, float timepoint); 
   void append(GLWavePoint_t); 
   
 /*   // triggering  */
@@ -37,13 +37,13 @@ class WaveStreamTriggerRenderer
 
     
 /*   void setTriggerLevel(float tv);  */
-  sigc::signal<void> & invalidateLastRenderSignal();
-
+  sigc::signal<void> & invalidateTriggerRenderSignal();
+  
  protected: 
- 
+  
   std::vector<GLWavePoint_t> rates_; 
-
-  sigc::signal<void> invalidateLastRenderSignal_; 
+  
+  sigc::signal<void> invalidateTriggerRenderSignal_; 
 
   std::list<float> emptyTriggerList_; 
 

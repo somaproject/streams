@@ -115,11 +115,12 @@ WavesApp::WavesApp(bool is_sync)
       wsv_.push_back(wsv); 
 
       waveWin_.appendVis(wsv); 
+      triggerWin_.appendVis(wsv); 
+
     }
 
-
   wsv_[0]->enableTrigger(true); 
-
+  wsv_[0]->setTriggerValue(30.0); 
   // now connect things up
   wsv_[0]->setTriggerSource(wsv_[0]->getTriggerQueueView()); 
   
