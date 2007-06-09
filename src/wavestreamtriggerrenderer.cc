@@ -58,9 +58,9 @@ void WaveStreamTriggerRenderer::drawTriggers(float tbefore, float tafter, float 
       
       int len  = i2 - i1; 
 
-      std::cout << "i1->t = " << i1->t << " i2->t " << i2->t 
-		<< " rates.back().t = " << rates_.back().t 
-		<< std::endl; 
+//       std::cout << "i1->t = " << i1->t << " i2->t " << i2->t 
+// 		<< " rates.back().t = " << rates_.back().t 
+// 		<< std::endl; 
 
       
       glTranslatef(-tx, 0.0, 0.0); 

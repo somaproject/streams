@@ -39,7 +39,7 @@ void WaveStreamSource::generateFakeData(int T = 100)
 	{
 	  float x; 
 	  x = (float)rand() /(RAND_MAX + 1.0) * 2.0 - 1.0; 
-	  wb->data.push_back(x*50); 
+	  wb->data.push_back(x*40); 
 
 	}
       data_.push_back(wb); 

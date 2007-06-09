@@ -87,12 +87,17 @@ void WaveStreamRenderer::draw(float t1, float t2, int pixels)
   i2 = lower_bound(rates_.begin(), rates_.end(), 
 		   p2, compareTime); 
   
-  
-  glColor4f(1.0, 1.0, 1.0, 1.0); 
 
   int len  = i2 - i1; 
+  int fadethold = 400.0; 
+  if (scale > fadethold) {
+    glColor4f(1.0, 1.0, 1.0, 1.0); 
+  } else {
+    glColor4f(1.0, 1.0, 1.0, 1.0 - (fadethold - scale)/200.0);
+  }
 
-  if (scale > 100.0) {  
+  std::cout << scale << std::endl;
+  if (scale > 200.0) {  
     glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
 		    &(*i1)); 
     glDrawArrays(GL_LINE_STRIP, 0, len); 
@@ -115,17 +120,17 @@ void WaveStreamRenderer::draw(float t1, float t2, int pixels)
   qi2 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
   		   q2, &compareTime2); 
   
-  glColor4f(1.0, 0.0, 0.0, 0.5); 
+
 
 
   len  = qi2 - qi1; 
 
-
-  //  if (scale <= 100.0){
+  glColor4f(1.0, 1.0, 1.0, fadethold-scale/200.0); 
+  if (scale <= 400.0){
     glVertexPointer(2, GL_FLOAT, sizeof(float)*2, 
-		    &(*qi1)); 
-    glDrawArrays(GL_QUAD_STRIP, 0, 2 * len); 
-    //}
+ 		    &(*qi1)); 
+     glDrawArrays(GL_QUAD_STRIP, 0, 2 * len); 
+  }
 
   // stupid trigger rendering
   std::vector<float>::iterator trigi1, trigi2; 
