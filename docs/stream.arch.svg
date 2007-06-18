@@ -9,7 +9,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="stream.arch.svg"
-   sodipodi:docbase="/home/jonas/waves/docs"
+   sodipodi:docbase="/home/jonas/soma/waves/docs"
    inkscape:version="0.45"
    sodipodi:version="0.32"
    id="svg1996"
@@ -431,24 +431,24 @@
        id="rect2243"
        width="84.375"
        height="46.875"
-       x="387.5"
+       x="350"
        y="474.375" />
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="403.125"
+       x="365.625"
        y="486.875"
        id="text2245"><tspan
          sodipodi:role="line"
          id="tspan2247"
-         x="403.125"
+         x="365.625"
          y="486.875">Primary</tspan><tspan
          sodipodi:role="line"
-         x="403.125"
+         x="365.625"
          y="501.875"
          id="tspan2249">Sample</tspan><tspan
          sodipodi:role="line"
-         x="403.125"
+         x="365.625"
          y="516.875"
          id="tspan2251">Buffer</tspan></text>
     <path
@@ -456,8 +456,8 @@
        d="M 187.5,505.625 L 318.75,421.25 L 353.125,421.25"
        id="path2253" />
     <path
-       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutM)"
-       d="M 428.125,446.25 L 428.125,471.25"
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 390.625,446.25 L 390.625,471.25"
        id="path3224" />
     <path
        style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:2.5, 1.25;stroke-dashoffset:0;stroke-opacity:1"
@@ -712,5 +712,58 @@
          x="383.95898"
          y="741.9563"
          id="tspan3337">sources allows viewing of all historical data</tspan></text>
+    <path
+       style="opacity:1;color:#000000;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible"
+       d="M 434.375,480.625 L 478.125,480.625 L 478.125,461.875 L 512.5,461.875"
+       id="path2978" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="171.875"
+       y="427.5"
+       id="text3949"><tspan
+         sodipodi:role="line"
+         id="tspan3951"
+         x="171.875"
+         y="427.5">Can only say &quot;new data&quot; </tspan><tspan
+         sodipodi:role="line"
+         x="171.875"
+         y="442.5"
+         id="tspan3953">and a QueueView. There's</tspan><tspan
+         sodipodi:role="line"
+         x="171.875"
+         y="457.5"
+         id="tspan3955">no concept of &quot;invalidate&quot;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="446.875"
+       y="490"
+       id="text3957"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3959"
+         x="446.875"
+         y="490">some sort of </tspan><tspan
+         sodipodi:role="line"
+         x="446.875"
+         y="497.5"
+         id="tspan3961">buffer reference</tspan><tspan
+         sodipodi:role="line"
+         x="446.875"
+         y="505"
+         id="tspan3963" /><tspan
+         sodipodi:role="line"
+         x="446.875"
+         y="512.5"
+         id="tspan3965">new sample update</tspan><tspan
+         sodipodi:role="line"
+         x="446.875"
+         y="520"
+         id="tspan3967" /><tspan
+         sodipodi:role="line"
+         x="446.875"
+         y="527.5"
+         id="tspan3969">invalidate</tspan></text>
   </g>
 </svg>
