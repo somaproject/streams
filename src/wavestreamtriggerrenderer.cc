@@ -6,7 +6,8 @@
 #include <assert.h>
 
 
-WaveStreamTriggerRenderer::WaveStreamTriggerRenderer() :
+WaveStreamTriggerRenderer::WaveStreamTriggerRenderer(std::vector<GLWavePoint_t> * pSamples):
+  pSamples_(pSamples),
   emptyTriggerList_(), 
   triggerQueueView_(emptyTriggerList_)
 
@@ -19,13 +20,8 @@ WaveStreamTriggerRenderer::~WaveStreamTriggerRenderer()
 
 }
 
-void WaveStreamTriggerRenderer::append(GLWavePoint_t p)
+void WaveStreamTriggerRenderer::newSample()
 {
-
-  if (rates_.size() > 0) {
-    assert(rates_.back().t < p.t ); 
-  }
-  rates_.push_back(p); 
 
 }
 
@@ -43,14 +39,14 @@ void WaveStreamTriggerRenderer::drawTriggers(float tbefore, float tafter, float 
       float tx= trigTimeList_.back(); 
 
       p1.t = tx - tbefore;       
-      i1 = lower_bound(rates_.begin(), rates_.end(), 
+      i1 = lower_bound(pSamples_->begin(), pSamples_->end(), 
 		       p1, compareTime); 
       
       p2.t = tx + tafter + 0.01; 
-      i2 = lower_bound(rates_.begin(), rates_.end(), 
+      i2 = lower_bound(pSamples_->begin(), pSamples_->end(), 
 		       p2, compareTime); 
-      if (i2 == rates_.end()) {
-	i2 == --rates_.end(); 
+      if (i2 == pSamples_->end()) {
+	i2 == --pSamples_->end(); 
       }
       
       
@@ -58,11 +54,6 @@ void WaveStreamTriggerRenderer::drawTriggers(float tbefore, float tafter, float 
       
       int len  = i2 - i1; 
 
-//       std::cout << "i1->t = " << i1->t << " i2->t " << i2->t 
-// 		<< " rates.back().t = " << rates_.back().t 
-// 		<< std::endl; 
-
-      
       glTranslatef(-tx, 0.0, 0.0); 
 
       glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
@@ -76,25 +67,27 @@ void WaveStreamTriggerRenderer::drawTriggers(float tbefore, float tafter, float 
 }
 
 
-sigc::signal<void> & WaveStreamTriggerRenderer::invalidateTriggerRenderSignal()
+sigc::signal<void> & WaveStreamTriggerRenderer::invWaveSignal()
 {
-  return invalidateTriggerRenderSignal_;
+  return invWaveSignal_;
 }
 
-void WaveStreamTriggerRenderer::resetTriggers()
+void WaveStreamTriggerRenderer::updateTriggers(bool reset)
 {
-
-  trigTimeList_.clear(); 
-  triggerQueueView_.reset(); 
-}
-void WaveStreamTriggerRenderer::newTriggers()
-{
-  while ( not triggerQueueView_.empty()) {
-    trigTimeList_.push_back(triggerQueueView_.front()); 
-    triggerQueueView_.pop(); 
-  }
-  invalidateTriggerRenderSignal_.emit(); 
-
+  if (reset)
+    {
+      
+      trigTimeList_.clear(); 
+      triggerQueueView_.reset(); 
+    }
+  else 
+    {
+      while ( not triggerQueueView_.empty()) {
+	trigTimeList_.push_back(triggerQueueView_.front()); 
+	triggerQueueView_.pop(); 
+      }
+      invWaveSignal_.emit(); 
+    }
 }
 
 void WaveStreamTriggerRenderer::setTriggerSource(const QueueView<float> & tqv)

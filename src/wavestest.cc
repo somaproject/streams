@@ -124,12 +124,8 @@ WavesApp::WavesApp(bool is_sync)
   // now connect things up
   wsv_[0]->setTriggerSource(wsv_[0]->getTriggerQueueView()); 
   
-  wsv_[0]->newTriggersSignal().connect(sigc::mem_fun(*(wsv_[0]),
-						     &WaveStreamVis::newTriggers)); 
-
-  wsv_[0]->invalidateTriggersSignal().connect(sigc::mem_fun(*(wsv_[0]),
-						     &WaveStreamVis::resetTriggers)); 
-
+  wsv_[0]->updateTriggersSignal().connect(sigc::mem_fun(*(wsv_[0]),
+						     &WaveStreamVis::updateTriggers)); 
 
 
   wss_[0]->generateFakeData(1);   

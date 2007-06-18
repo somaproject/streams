@@ -41,7 +41,7 @@ public:
     }
 
   void invalidate(); 
-  void appendVis(WaveStreamVis * wv); 
+  void appendVis(StreamVis * wv); 
 
 protected:
 
@@ -64,7 +64,7 @@ protected:
   int decayRange_; 
   float viewT1_, viewT2_, viewX1_, viewX2_; 
 
-  std::list<WaveStreamVis*> pWaveVis_; 
+  std::list<StreamVis*> pStreamVis_; 
 };
 
 #endif //TRIGGERWIN_H

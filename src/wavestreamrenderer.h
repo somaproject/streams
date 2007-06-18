@@ -39,52 +39,40 @@ inline bool compareTime2(const GLWaveQuadStrip_t x,
   return false; 
 }
 
-typedef std::map<float, int> timeindex_t; 
+typedef std::map<wavetime_t, int> timeindex_t; 
 
 class WaveStreamRenderer
 {
  public: 
-  WaveStreamRenderer(); 
+  WaveStreamRenderer(std::vector<GLWavePoint_t> * pSamples); 
+
   ~WaveStreamRenderer(); 
 
-  void draw(float t1, float t2, int pixels); 
-  void append(GLWavePoint_t); 
-  
-/*   // triggering  */
-  void resetTriggers();  
-  void newTriggers(); 
-  void setTriggerSource(const QueueView<float> & tqv);
+  void draw(wavetime_t t1, wavetime_t t2, int pixels); 
+  void newSample(void); 
+  void invalidateSamples(void); 
+
+  // triggering
+  void updateTriggers(bool); 
+  void setTriggerSource(const QueueView<wavetime_t> & tqv);
 
     
-
-/*   // and associated triggering signals */
-/*   newTriggersSignal_t newTriggers();  */
-/*   invalidateTriggersSignal_t invalidateTriggers();  */
-  
-  
 /*   void setTriggerLevel(float tv);  */
-  sigc::signal<void> & invalidateLastRenderSignal();
+  sigc::signal<void> & invWaveSignal();
 
  protected: 
- 
-  std::vector<GLWavePoint_t> rates_; 
+  std::vector<GLWavePoint_t> * pSamples_; 
   std::vector<GLWaveQuadStrip_t> ratesS2_; 
   timeindex_t indexS2_, indexS3_; 
 
-  float mostRecentRenderT1_, mostRecentRenderT2_; 
-  sigc::signal<void> invalidateLastRenderSignal_; 
+  wavetime_t mostRecentRenderT1_, mostRecentRenderT2_; 
+  sigc::signal<void> invWaveSignal_; 
 
-  std::list<float> emptyTriggerList_; 
+  std::list<wavetime_t> emptyTriggerList_; 
 
-  QueueView<float> triggerQueueView_; 
+  QueueView<wavetime_t> triggerQueueView_; 
 
   TriggerTimeList_t trigTimeList_ ;
-
-/*   // internal signals */
-/*   newTriggersSignal_t newTriggerSignal_; */
-/*   invalidateTriggersSignal_t invalidateTriggersSignal_;  */
-  
-/*   float   triggerLevel_ ;  */
 
 };
 

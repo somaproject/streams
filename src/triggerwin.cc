@@ -44,11 +44,11 @@ TriggerWin::~TriggerWin()
 }
 
 
-void TriggerWin::appendVis(WaveStreamVis * wv)
+void TriggerWin::appendVis(StreamVis * wv)
 {
-  pWaveVis_.push_back(wv); 
+  pStreamVis_.push_back(wv); 
   //connect the invalidate signal 
-  wv->invalidateTriggerRendererSignal().connect(sigc::mem_fun(*this, 
+  wv->invTriggerWaveSignal().connect(sigc::mem_fun(*this, 
  							 &TriggerWin::invalidate)); 
 
 }
@@ -250,15 +250,15 @@ bool TriggerWin::on_expose_event(GdkEventExpose* event)
   renderTimeTicks(viewT1_, viewT2_); 
 
 
-  std::list<WaveStreamVis*>::iterator pwd; 
+  std::list<StreamVis*>::iterator pwd; 
   int pixwidth = get_width(); 
-  for (pwd = pWaveVis_.begin(); pwd != pWaveVis_.end(); pwd++)
+  for (pwd = pStreamVis_.begin(); pwd != pStreamVis_.end(); pwd++)
     {
       (*pwd)->drawTriggerWave(0.01, 0.01, 0.0); 
       glTranslatef(0.0f, -120.0f, 0.0);
 
     }
-  glTranslatef(0.0f, 120.0f * pWaveVis_.size(), 0.0);
+  glTranslatef(0.0f, 120.0f * pStreamVis_.size(), 0.0);
 
   
   // Swap buffers.

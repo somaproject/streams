@@ -4,7 +4,8 @@
 #include <assert.h>
 
 
-WaveStreamRenderer::WaveStreamRenderer() :
+WaveStreamRenderer::WaveStreamRenderer(std::vector<GLWavePoint_t> * pSamples ) :
+  pSamples_(pSamples), 
   mostRecentRenderT1_(0.0), 
   mostRecentRenderT2_(0.0),
   emptyTriggerList_(), 
@@ -26,14 +27,11 @@ WaveStreamRenderer::~WaveStreamRenderer()
   
 }
 
-void WaveStreamRenderer::append(GLWavePoint_t p)
+void WaveStreamRenderer::newSample()
 {
   //std::cout << "Appending data" << p.t << ' ' << p.x <<  std::endl; 
-  if (rates_.size() > 0) {
-    assert(rates_.back().t < p.t ); 
-  }
-  rates_.push_back(p); 
-  
+  GLWavePoint_t p = pSamples_->back(); 
+    
 
   int S1N = 10; 
 
@@ -47,7 +45,7 @@ void WaveStreamRenderer::append(GLWavePoint_t p)
   }
 
 
-  if (rates_.size() % S1N == 0)
+  if (pSamples_->size() % S1N == 0)
     {
 
       GLWaveQuadStrip_t s1poly = ratesS2_.back(); 
@@ -62,29 +60,29 @@ void WaveStreamRenderer::append(GLWavePoint_t p)
 
   if ( (mostRecentRenderT1_ <= p.t) and (mostRecentRenderT2_ >= p.t) )
     {
-      invalidateLastRenderSignal_.emit(); 
+      invWaveSignal_.emit(); 
     }
 
 
 }
 
-void WaveStreamRenderer::draw(float t1, float t2, int pixels)
+void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
 {
   mostRecentRenderT1_ = t1; 
   mostRecentRenderT2_ = t2; 
 
-  float scale = pixels / (t2 -t1); 
+  wavetime_t scale = pixels / (t2 -t1); 
 
   std::vector<GLWavePoint_t>::iterator  i1, i2;
   GLWavePoint_t p1, p2; 
 
   p1.t = t1; 
 
-  i1 = lower_bound(rates_.begin(), rates_.end(), 
+  i1 = lower_bound(pSamples_->begin(), pSamples_->end(), 
 		   p1, compareTime); 
   
   p2.t = t2; 
-  i2 = lower_bound(rates_.begin(), rates_.end(), 
+  i2 = lower_bound(pSamples_->begin(), pSamples_->end(), 
 		   p2, compareTime); 
   
 
@@ -133,7 +131,7 @@ void WaveStreamRenderer::draw(float t1, float t2, int pixels)
   }
 
   // stupid trigger rendering
-  std::vector<float>::iterator trigi1, trigi2; 
+  std::vector<wavetime_t>::iterator trigi1, trigi2; 
   trigi1 = lower_bound(trigTimeList_.begin(), 
  		       trigTimeList_.end(), 
  		       t1); 
@@ -145,7 +143,7 @@ void WaveStreamRenderer::draw(float t1, float t2, int pixels)
   glColor4f(0.0, 1.0, 0.0, 1.0); 
 
   //std::cout << "Rendering triggers!" << trigTimeList_.size() << std::endl; 
-   for(std::vector<float>::iterator i = trigi1; 
+   for(std::vector<wavetime_t>::iterator i = trigi1; 
        i != trigi2; i++)
      {
 
@@ -158,63 +156,29 @@ void WaveStreamRenderer::draw(float t1, float t2, int pixels)
 
 }
 
-// newTriggersSignal_t WaveStreamRenderer::newTriggers()
-// {
-
-//   return newTriggerSignal_; 
-
-// }
-
-// invalidateTriggersSignal_t WaveStreamRenderer::invalidateTriggers()
-// {
-
-//   return invalidateTriggersSignal_; 
-
-// }
-
-
-// void WaveStreamRenderer::setTriggerLevel(float tv)
-// {
-
-  
-
-
-// }
-
-// void WaveStreamRenderer::appendTriggers(const TriggerTimeList_t & ttl)
-// {
-//   // copy the waves
-
-//   for (TriggerTimeList_t::const_iterator i = ttl.begin(); 
-//        i != ttl.end(); i++)
-//     {
-
-//       trigTimeList_.push_back(*i);
-//     }
-
-// }
-
-sigc::signal<void> & WaveStreamRenderer::invalidateLastRenderSignal()
+sigc::signal<void> & WaveStreamRenderer::invWaveSignal()
 {
-  return invalidateLastRenderSignal_;
+  return invWaveSignal_;
 }
 
-void WaveStreamRenderer::resetTriggers()
+void WaveStreamRenderer::updateTriggers(bool reset)
 {
+  if (reset) {
 
-  trigTimeList_.clear(); 
-  triggerQueueView_.reset(); 
-}
-void WaveStreamRenderer::newTriggers()
-{
-  while ( not triggerQueueView_.empty()) {
-    trigTimeList_.push_back(triggerQueueView_.front()); 
-    triggerQueueView_.pop(); 
+    trigTimeList_.clear(); 
+    triggerQueueView_.reset(); 
   }
-
+  else 
+    {
+      while ( not triggerQueueView_.empty()) {
+	trigTimeList_.push_back(triggerQueueView_.front()); 
+	triggerQueueView_.pop(); 
+      }
+      
+    }
 }
 
-void WaveStreamRenderer::setTriggerSource(const QueueView<float> & tqv)
+void WaveStreamRenderer::setTriggerSource(const QueueView<wavetime_t> & tqv)
 {
   triggerQueueView_ = tqv; 
 }

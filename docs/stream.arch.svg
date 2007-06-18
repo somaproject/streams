@@ -9,7 +9,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="stream.arch.svg"
-   sodipodi:docbase="/home/jonas/soma/waves/docs"
+   sodipodi:docbase="/home/jonas/waves/docs"
    inkscape:version="0.45"
    sodipodi:version="0.32"
    id="svg1996"
@@ -765,5 +765,63 @@
          x="446.875"
          y="527.5"
          id="tspan3969">invalidate</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="755.14136"
+       y="321.86624"
+       id="text2296"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.9709803,0.2391595,-0.2391595,0.9709803,0,0)"><tspan
+         sodipodi:role="line"
+         x="755.14136"
+         y="321.86624"
+         id="tspan2300">drawTriggerWave() command has</tspan><tspan
+         sodipodi:role="line"
+         x="755.14136"
+         y="330.61624"
+         id="tspan2307">TriggerRenderer directly manipulate TriggerWindow stack()</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6.99999714px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="785.50848"
+       y="335.63177"
+       id="text2309"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.9659258,0.2588191,-0.2588191,0.9659258,0,0)"><tspan
+         sodipodi:role="line"
+         x="785.50848"
+         y="335.63177"
+         id="tspan2311">new samples and changes</tspan><tspan
+         sodipodi:role="line"
+         x="785.50848"
+         y="344.38177"
+         id="tspan2313">in trigger values cause</tspan><tspan
+         sodipodi:role="line"
+         x="785.50848"
+         y="353.13177"
+         id="tspan2315">invalidate event</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6.81567621px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="618.75"
+       y="649.375"
+       id="text2321"><tspan
+         sodipodi:role="line"
+         x="618.75"
+         y="649.375"
+         id="tspan2335">triggerer() exposes a &quot;triggerUpdate&quot; signal</tspan><tspan
+         sodipodi:role="line"
+         x="618.75"
+         y="657.8946"
+         id="tspan2349">and a QueueView to an internal list</tspan><tspan
+         sodipodi:role="line"
+         x="618.75"
+         y="666.41419"
+         id="tspan2351">of trigger times</tspan><tspan
+         sodipodi:role="line"
+         x="618.75"
+         y="674.93379"
+         id="tspan2353" /></text>
   </g>
 </svg>

@@ -16,21 +16,21 @@
 
 #include <map>
 
+typedef float wavetime_t; 
+
 typedef std::vector<float> TriggerTimeList_t; 
-typedef sigc::signal<void> newTriggersSignal_t; 
-typedef sigc::signal<void> invalidateTriggersSignal_t; 
 
 struct GLWavePoint_t
 {
-  float t; 
+  wavetime_t t; 
   float x; 
 }; 
 
 struct GLWaveQuadStrip_t
 {
-  float tmax; 
+  wavetime_t tmax; 
   float xmax; 
-  float tmin; 
+  wavetime_t tmin; 
   float xmin; 
 }; 
 

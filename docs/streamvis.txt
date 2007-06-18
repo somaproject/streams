@@ -45,4 +45,29 @@ the historical streamsource data).
 Vis can also get historical trigger data
 
 
+-----------------------------------------------------------------------------
+Okay, we're going to create a generic "StreamVis" base class, and let
+the stream vis instances inherit from that; this will give us all the
+crucial functionality we care about, and let the gui interact/control
+them in a unified manner. 
+
+1. the constructor is source-type specific, so it is not specified in the ABC. 
+2. For main rendering, we have a:
+   drawMainWave() method which manipulates the GL stack
+   invMainWaveSignal()
+   
+3. for trigger rendering, we have:
+   drawTriggerWave() method, whcih manipulates the GL stack
+   invTriggerWave() signal
+
+4. For trigger input: 
+   triggerUpdate(bool reset); 
+   setTriggerSource(const QueueView<float> & tqv);
+
+5. for the trigger source:
+   get access to the trigger QueueView()
+   updateTriggerSignal(bool reset)
+
+
+   
 

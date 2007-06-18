@@ -19,35 +19,34 @@
 #include "wavestreamsource.h"
 #include "wave.h"
 
-typedef std::map<float, int> timeindex_t; 
+typedef std::map<wavetime_t, int> timeindex_t; 
 
 class WaveStreamTriggerRenderer
 {
  public: 
-  WaveStreamTriggerRenderer(); 
+  WaveStreamTriggerRenderer(  std::vector<GLWavePoint_t> * pSamples); 
   ~WaveStreamTriggerRenderer(); 
 
-  void drawTriggers(float tbefore, float tafter, float timepoint); 
-  void append(GLWavePoint_t); 
+  void drawTriggers(wavetime_t tbefore, wavetime_t tafter, wavetime_t timepoint); 
+  void newSample(); 
+  void invalidateSamples(); 
   
 /*   // triggering  */
-  void resetTriggers();  
-  void newTriggers(); 
-  void setTriggerSource(const QueueView<float> & tqv);
+  void updateTriggers(bool);
+  void setTriggerSource(const QueueView<wavetime_t> & tqv);
 
     
 /*   void setTriggerLevel(float tv);  */
-  sigc::signal<void> & invalidateTriggerRenderSignal();
+  sigc::signal<void> & invWaveSignal();
   
  protected: 
+  std::vector<GLWavePoint_t> * pSamples_; 
   
-  std::vector<GLWavePoint_t> rates_; 
-  
-  sigc::signal<void> invalidateTriggerRenderSignal_; 
+  sigc::signal<void> invWaveSignal_; 
 
-  std::list<float> emptyTriggerList_; 
+  std::list<wavetime_t> emptyTriggerList_; 
 
-  QueueView<float> triggerQueueView_; 
+  QueueView<wavetime_t> triggerQueueView_; 
 
   TriggerTimeList_t trigTimeList_ ;
 

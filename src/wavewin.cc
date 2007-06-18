@@ -62,12 +62,12 @@ WaveWin::~WaveWin()
 }
 
 
-void WaveWin::appendVis(WaveStreamVis * wv)
+void WaveWin::appendVis(StreamVis * wv)
 {
-  pWaveVis_.push_back(wv); 
+  pStreamVis_.push_back(wv); 
   // connect the invalidate signal 
-  wv->invalidateLastRenderSignal().connect(sigc::mem_fun(*this, 
-							 &WaveWin::invalidate)); 
+  wv->invMainWaveSignal().connect(sigc::mem_fun(*this, 
+						&WaveWin::invalidate)); 
 
 }
 
@@ -291,15 +291,15 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
   renderTimeTicks(viewT1_, viewT2_); 
 
 
-  std::list<WaveStreamVis*>::iterator pwd; 
+  std::list<StreamVis*>::iterator pwd; 
   int pixwidth = get_width(); 
-  for (pwd = pWaveVis_.begin(); pwd != pWaveVis_.end(); pwd++)
+  for (pwd = pStreamVis_.begin(); pwd != pStreamVis_.end(); pwd++)
     {
       (*pwd)->drawMainWave(viewT1_, viewT2_, pixwidth); 
       glTranslatef(0.0f, -120.0f, 0.0);
 
     }
-  glTranslatef(0.0f, 120.0f * pWaveVis_.size(), 0.0);
+  glTranslatef(0.0f, 120.0f * pStreamVis_.size(), 0.0);
 
 
 

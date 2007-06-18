@@ -26,7 +26,7 @@
 #include "glspikes.h"
 
 #include "wavestreamrenderer.h"
-#include "wavestreamvis.h"
+#include "streamvis.h"
 
 class WaveWin : public Gtk::GL::DrawingArea
 {
@@ -45,7 +45,7 @@ public:
     }
 
   void invalidate(); 
-  void appendVis(WaveStreamVis * wv); 
+  void appendVis(StreamVis * sv); 
 
 protected:
 
@@ -78,13 +78,11 @@ protected:
   float selT1_, selT2_; 
 
   float zoomLevel_; 
-/*   std::vector<GLWavePoint_t> rates_;  */
-/*   std::vector<GLWavePoint_t> ratesS1_;  */
   int s1fact_; 
 
 
   GLuint gpuProgGradient_; 
-  std::list<WaveStreamVis*> pWaveVis_; 
+  std::list<StreamVis*> pStreamVis_; 
   // font-associated crap
   
   GLuint fontListBase_; 

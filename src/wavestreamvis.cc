@@ -4,20 +4,24 @@
 
 WaveStreamVis::WaveStreamVis(WaveStreamSource * wss) :
   streamSource_ (wss), 
-  inDataQueue_(streamSource_->getQueueView())
+  inDataQueue_(streamSource_->getQueueView()),
+  streamRenderer_(&filteredSamples_), 
+  streamTrigger_(&filteredSamples_), 
+  streamTriggerRenderer_(&filteredSamples_)
+
 {
 
   // connect the signals
   streamSource_->newDataSignal().connect(sigc::mem_fun(*this, 
 					     &WaveStreamVis::newData)); 
-  streamSource_->invalidateDataSignal().connect(sigc::mem_fun(*this, 
-						    &WaveStreamVis::invalidateData)); 
+//   streamSource_->invalidateDataSignal().connect(sigc::mem_fun(*this, 
+// 						    &WaveStreamVis::invalidateData)); 
   
   
 
 }
 
-void WaveStreamVis::drawMainWave(float t1, float t2, int pixels)
+void WaveStreamVis::drawMainWave(wavetime_t t1, wavetime_t t2, int pixels)
 {
   // i really hate how this modifies the gloabl GL state
 
@@ -31,7 +35,7 @@ WaveStreamVis::~WaveStreamVis()
 
 }
 
-void WaveStreamVis::drawTriggerWave(float tbefore, float tafter, float timepoint)
+void WaveStreamVis::drawTriggerWave(wavetime_t tbefore, wavetime_t tafter, wavetime_t timepoint)
 {
   streamTriggerRenderer_.drawTriggers(tbefore, tafter, timepoint); 
   
@@ -51,10 +55,10 @@ void WaveStreamVis::newData()
 	  GLWavePoint_t wp; 
 	  wp.t = pwb->time + (i / pwb->samprate);
 	  wp.x = pwb->data[i]; 
-	  
-	  streamRenderer_.append(wp); 
-	  streamTrigger_.append(wp); 
-	  streamTriggerRenderer_.append(wp); 
+	  filteredSamples_.push_back(wp); 
+	  streamRenderer_.newSample(); 
+	  streamTrigger_.newSample(); 
+	  streamTriggerRenderer_.newSample(); 
 	}
       
     }
@@ -68,23 +72,20 @@ void WaveStreamVis::invalidateData()
 
 }
 
-newTriggersSignal_t & WaveStreamVis::newTriggersSignal()
+updateTriggersSignal_t & WaveStreamVis::updateTriggersSignal()
 {
-  return streamTrigger_.newTriggersSignal(); 
+  return streamTrigger_.updateTriggersSignal(); 
 }
 
-invalidateTriggersSignal_t & WaveStreamVis::invalidateTriggersSignal() 
-{
-  return streamTrigger_.invalidateTriggersSignal(); 
-}
 
-QueueView<float>  WaveStreamVis::getTriggerQueueView() 
+
+QueueView<wavetime_t>  WaveStreamVis::getTriggerQueueView() 
 {
   return streamTrigger_.getTriggerQueueView(); 
   
 }
 
-void WaveStreamVis::setTriggerValue(float level)
+void WaveStreamVis::setTriggerValue(wavetime_t level)
 {
   streamTrigger_.setTriggerValue(level); 
 }
@@ -97,20 +98,16 @@ void WaveStreamVis::enableTrigger(bool value)
 }
 
 
-void WaveStreamVis::resetTriggers()
-{
-  streamRenderer_.resetTriggers(); 
-}
 
-void WaveStreamVis::newTriggers()
+void WaveStreamVis::updateTriggers(bool reset)
 {
 
-  streamRenderer_.newTriggers(); 
-  streamTriggerRenderer_.newTriggers(); 
+  streamRenderer_.updateTriggers(reset); 
+  streamTriggerRenderer_.updateTriggers(reset); 
 
 }
 
-void WaveStreamVis::setTriggerSource(const QueueView<float> & tqv)
+void WaveStreamVis::setTriggerSource(const QueueView<wavetime_t> & tqv)
 {
 
   streamRenderer_.setTriggerSource(tqv);

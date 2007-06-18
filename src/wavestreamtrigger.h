@@ -1,42 +1,41 @@
 #ifndef WAVESTREAMTRIGGER_H
 #define WAVESTREAMTRIGGER_H
 
+#include <vector>
 #include <assert.h>
 #include "queueview.h"
+#include "streamvis.h"
 #include "wave.h"
-
 
 
 class WaveStreamTrigger
 {
   // right now we just have a simple threshold-crossing trigger
  public:
-  WaveStreamTrigger(); 
+  WaveStreamTrigger(std::vector<GLWavePoint_t> * pSamples); 
   ~WaveStreamTrigger(); 
   
-  void append(GLWavePoint_t); 
-
+  void newSample(); 
+  void invalidateSamples(); 
 
   // trigger control
   void setTriggerValue(float); 
   void enableTrigger(bool value); 
   
   // downstream update
-  newTriggersSignal_t & newTriggersSignal();  
-  invalidateTriggersSignal_t & invalidateTriggersSignal(); 
+  updateTriggersSignal_t & updateTriggersSignal(); 
+
   QueueView<float>  getTriggerQueueView(); 
 
  private:
-  std::vector<GLWavePoint_t> samples_; 
-  newTriggersSignal_t newTriggersSignal_;
-  invalidateTriggersSignal_t invalidateTriggersSignal_;  
+  std::vector<GLWavePoint_t> * pSamples_;
+  updateTriggersSignal_t updateTriggersSignal_;
   
   float   triggerLevel_ ;  
   bool triggerEnabled_; 
   std::list<float> triggers_; 
 
   bool triggerFunc(GLWavePoint_t p1,  GLWavePoint_t p2);
-
 
 
 };
