@@ -29,6 +29,9 @@ class StreamVis
   virtual updateTriggersSignal_t & updateTriggersSignal() = 0; 
   virtual QueueView<wavetime_t> getTriggerQueueView() = 0; 
 
+  // render position in the Y-axis, in pixels
+  virtual float getYOffset() = 0; 
+
 }; 
 
 

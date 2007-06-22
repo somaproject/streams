@@ -7,7 +7,9 @@ WaveStreamVis::WaveStreamVis(WaveStreamSource * wss) :
   inDataQueue_(streamSource_->getQueueView()),
   streamRenderer_(&filteredSamples_), 
   streamTrigger_(&filteredSamples_), 
-  streamTriggerRenderer_(&filteredSamples_)
+  streamTriggerRenderer_(&filteredSamples_),
+  yheight_(100),
+  verticalScale_(1.0) 
 
 {
 
@@ -114,3 +116,31 @@ void WaveStreamVis::setTriggerSource(const QueueView<wavetime_t> & tqv)
   streamTriggerRenderer_.setTriggerSource(tqv); 
 
 }
+
+float WaveStreamVis::getYOffset(){
+  return yoffset_; 
+}
+
+void WaveStreamVis::setYOffset(float x)
+{
+  yoffset_ = x; 
+}
+
+void WaveStreamVis::setYHeight(float x)
+{
+  yheight_ = x; 
+  streamRenderer_.setScale(verticalScale_* yheight_); 
+}
+
+void WaveStreamVis::setVerticalScale(float volts){
+
+  verticalScale_ = volts; 
+  
+  streamRenderer_.setScale(verticalScale_ * yheight_); 
+}
+
+float WaveStreamVis::getVerticalScale()
+{
+  return verticalScale_; 
+}
+

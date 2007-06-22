@@ -11,7 +11,7 @@ WaveWin::WaveWin() :
   viewT1_(0.0), 
   viewT2_(1.0), 
   viewX1_(-1000.0), 
-  viewX2_(100.0),
+  viewX2_(00.0),
   selT1_(0.0), 
   selT2_(1.0), 
   zoomLevel_(1.0),
@@ -133,6 +133,9 @@ void WaveWin::updateViewingWindow(bool reset = false)
     viewT1_ = 0.0; 
     viewT2_ = 1.0; 
   }
+  viewX1_ = 0; 
+  viewX2_ = get_height(); 
+
   glOrtho(viewT1_, viewT2_, viewX1_, viewX2_, -3, 3); 
 
   glViewport(0, 0, get_width(), get_height());
@@ -224,16 +227,16 @@ void WaveWin::renderTimeTicks(float T1, float T2)
       glVertex2f(t, viewX2_); 
       glEnd(); 
       
-      // render associated text
-      glColor3f(1.0, 1.0, 1.0);
-      float pixx = (t - T1) / (T2-T1) * get_width(); 
-      glRasterPos2f(t, 70);
-      glListBase(fontListBase_);
+//       // render associated text
+//       glColor3f(1.0, 1.0, 1.0);
+//       float pixx = (t - T1) / (T2-T1) * get_width(); 
+//       glRasterPos2f(t, 70);
+//       glListBase(fontListBase_);
       
-      timeformat % (t / scaletextdiv) % scaletext; 
-      std::string timestr = timeformat.str(); 
+//       timeformat % (t / scaletextdiv) % scaletext; 
+//       std::string timestr = timeformat.str(); 
 
-      glCallLists(timestr.size(), GL_UNSIGNED_BYTE, timestr.c_str()); 
+//       glCallLists(timestr.size(), GL_UNSIGNED_BYTE, timestr.c_str()); 
     }
 
 
@@ -293,15 +296,17 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
 
   std::list<StreamVis*>::iterator pwd; 
   int pixwidth = get_width(); 
+
   for (pwd = pStreamVis_.begin(); pwd != pStreamVis_.end(); pwd++)
     {
+      float pos = - (*pwd)->getYOffset() + get_height(); 
+      glPushMatrix(); 
+      glTranslatef(0.0f, pos, 0.0); 
+
       (*pwd)->drawMainWave(viewT1_, viewT2_, pixwidth); 
-      glTranslatef(0.0f, -120.0f, 0.0);
+      glPopMatrix(); 
 
     }
-  glTranslatef(0.0f, 120.0f * pStreamVis_.size(), 0.0);
-
-
 
   
   // render selection
@@ -509,7 +514,7 @@ bool WaveWin::on_motion_notify_event(GdkEventMotion* event)
   }
 
 
-  // don't block
+  // don't block propagation
   return true;
 }
 

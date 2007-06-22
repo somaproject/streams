@@ -43,7 +43,23 @@ class WaveStreamVis : public StreamVis
   void setTriggerValue(float); 
   void enableTrigger(bool value); 
 
+  // properties to control parameters:
 
+  void setVerticalScale(float);  
+  float getVerticalScale(); 
+  sigc::signal<void, float> & verticalScaleSignal() 
+    {
+      return verticalScaleSignal_; 
+    }
+
+
+  
+  // pixel render offiset
+  void setYOffset(float); 
+  float getYOffset(); 
+  void setYHeight(float); 
+
+  
  private:
   void newData(); 
   void invalidateData(); 
@@ -58,7 +74,12 @@ class WaveStreamVis : public StreamVis
   
   std::vector<GLWavePoint_t> filteredSamples_; 
   
-  
+  float yoffset_; 
+  float yheight_; 
+
+  float verticalScale_; 
+  sigc::signal<void, float> verticalScaleSignal_; 
+
 };
 
 #endif // WAVESTREAMVIS_H

@@ -56,9 +56,9 @@ class WaveStreamRenderer
   void updateTriggers(bool); 
   void setTriggerSource(const QueueView<wavetime_t> & tqv);
 
-    
-/*   void setTriggerLevel(float tv);  */
   sigc::signal<void> & invWaveSignal();
+  
+  void setScale(float); 
 
  protected: 
   std::vector<GLWavePoint_t> * pSamples_; 
@@ -73,7 +73,7 @@ class WaveStreamRenderer
   QueueView<wavetime_t> triggerQueueView_; 
 
   TriggerTimeList_t trigTimeList_ ;
-
+  float scale_;
 };
 
 #endif // WAVE_H

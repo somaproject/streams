@@ -1,0 +1,30 @@
+This is a Bin which will live in a different bin someplace, I'm not
+entirely sure where. 
+
+The idea here is that this lets you control some N of the
+WaveStreamVis components. All of these will have the same adjustable
+parameters, and you'll be able to set them individually or all
+together, as a function of how many you've selected. 
+
+There are hard questions like "how do we delete a wavestreamviewer
+when it's currently selected" that suggests we might want to use a
+shared_ptr or something like that for the actual references. But
+whatever.
+
+Whenever we "open" it, it is created anew. It must be able to handle
+the "empty" case, because it's possible for it to still be on the
+screen when there are no selected objects. 
+
+Do we pass it a pointer to a list with the relevant objects, or does
+it contain the selection and do we add and delete ? "Who owns the
+selection?" 
+
+In some sense, this is again simply a gui/control interface to some
+more abstract 'set' of objects. 
+
+So it gets the set of objects and gets an update every time there's an
+addition or deletion.
+
+We're going to do the gui via GLADE, which is great, but it means that
+we'll never actually be destroying the window. 
+

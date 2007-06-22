@@ -10,7 +10,7 @@ WaveStreamRenderer::WaveStreamRenderer(std::vector<GLWavePoint_t> * pSamples ) :
   mostRecentRenderT2_(0.0),
   emptyTriggerList_(), 
   triggerQueueView_(emptyTriggerList_)
-
+  
 {
   // initialize data from stream source buffer
   GLWaveQuadStrip_t s1poly;
@@ -73,6 +73,20 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
 
   wavetime_t scale = pixels / (t2 -t1); 
 
+
+  // perform scaling
+  glPushMatrix(); 
+  glScalef(1.0, scale_, 1.0); 
+  
+
+  // draw horizontal axis
+  glColor4f(1.0, 1.0, 0.0, 1.0); 
+
+  glBegin(GL_LINES);
+  glVertex2f(t1, 0.0); 
+  glVertex2f(t2, 0.0); 
+  glEnd(); 
+
   std::vector<GLWavePoint_t>::iterator  i1, i2;
   GLWavePoint_t p1, p2; 
 
@@ -94,7 +108,6 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
     glColor4f(1.0, 1.0, 1.0, 1.0 - (fadethold - scale)/200.0);
   }
 
-  std::cout << scale << std::endl;
   if (scale > 200.0) {  
     glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
 		    &(*i1)); 
@@ -153,6 +166,7 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
        glEnd(); 
      }
       
+  glPopMatrix(); 
 
 }
 
@@ -181,4 +195,9 @@ void WaveStreamRenderer::updateTriggers(bool reset)
 void WaveStreamRenderer::setTriggerSource(const QueueView<wavetime_t> & tqv)
 {
   triggerQueueView_ = tqv; 
+}
+
+void WaveStreamRenderer::setScale(float scale)
+{
+  scale_ = scale; 
 }

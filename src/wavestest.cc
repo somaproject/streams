@@ -3,6 +3,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
+#include <set>
 #include <assert.h>
 
 #include <stdlib.h>
@@ -26,7 +27,10 @@
 #include "wavewin.h"
 #include "wavestreamsource.h"
 #include "wavestreamvis.h"
+#include "wavestreamvisstatus.h"
 #include "triggerwin.h"
+
+typedef std::set<int> waveStreamVisStatusSet_t; 
 
 
 class WavesApp : public Gtk::Window
@@ -60,7 +64,12 @@ protected:
   // data elements
   std::vector<WaveStreamSource * > wss_; 
   std::vector<WaveStreamVis * > wsv_; 
+  std::vector<WaveStreamVisStatus *> wsvs_; 
+
   sigc::connection conn_; 
+  waveStreamVisStatusSet_t wsvsSelSet_; 
+  void wsvsSelSetModify(bool append, int num); 
+
 };
 
 WavesApp::WavesApp(bool is_sync)
@@ -94,12 +103,11 @@ WavesApp::WavesApp(bool is_sync)
   hBox_.pack_start(triggerWin_); 
 
   m_VBox.pack_start(m_ButtonQuit, Gtk::PACK_SHRINK, 0);
-
+  m_ButtonQuit.signal_clicked().connect( sigc::mem_fun(*this, &WavesApp::on_button_quit_clicked)); 
 
   Glib::signal_idle().connect( sigc::mem_fun(*this, &WavesApp::on_idle) );
   timer_.start(); 
   dtimer_.start(); 
-
 
   show_all();
   WaveStreamSource * wss = new WaveStreamSource(); 
@@ -110,15 +118,25 @@ WavesApp::WavesApp(bool is_sync)
 
       // now we create the 
       WaveStreamVis * wsv = new WaveStreamVis(wss); 
+      wsv->setYOffset(float(i)*100); 
+      WaveStreamVisStatus * wsvs = new WaveStreamVisStatus(wsv); 
 
+      vBoxControls_.pack_start(*wsvs); 
+      wsvs->show(); 
+      wsvs->clickedSignal().connect(sigc::bind(sigc::mem_fun(*this, 
+							     &WavesApp::wsvsSelSetModify), i));
+
+      
+      wsvs->show_all(); 
 
       wsv_.push_back(wsv); 
-
+      wsvs_.push_back(wsvs); 
+      
       waveWin_.appendVis(wsv); 
       triggerWin_.appendVis(wsv); 
 
     }
-
+  
   wsv_[0]->enableTrigger(true); 
   wsv_[0]->setTriggerValue(30.0); 
   // now connect things up
@@ -150,6 +168,15 @@ WavesApp::~WavesApp()
 void WavesApp::on_button_quit_clicked()
 {
   // we should quit
+
+  for (int i = 0; i < wsvs_.size(); i++)
+    {
+      int x, y; 
+      Gdk::Rectangle a = wsvs_[i]->get_allocation(); 
+
+      std::cout << "The position for " << i << " is " << a.get_y() << std::endl; 
+
+    }
 }
 
 bool WavesApp::on_key_press_event(GdkEventKey* event)
@@ -190,6 +217,43 @@ bool WavesApp::on_idle()
   return true;
 }
 
+
+void WavesApp::wsvsSelSetModify(bool append, int num)
+{
+  std::cout << "append = " << append << " num=" << num << std::endl; 
+  waveStreamVisStatusSet_t::iterator i = wsvsSelSet_.find(num); 
+  if (append) {
+    if (i == wsvsSelSet_.end()) {
+      // it's not in the set; add
+      wsvsSelSet_.insert(num); 
+    } else {
+      wsvsSelSet_.erase(i); 
+    }
+  } else {
+    // we're not appending
+    if (i == wsvsSelSet_.end()) {
+      // not currently in 
+      wsvsSelSet_.clear(); 
+      wsvsSelSet_.insert(num); 
+    } else {
+      wsvsSelSet_.clear(); 
+
+    }
+  }
+
+  // update
+  for (int j = 0; j < wsvs_.size(); j++)
+    {
+      wsvs_[j]->setSelected(false); 
+    }
+
+  for (i = wsvsSelSet_.begin(); i != wsvsSelSet_.end(); i++)
+    {
+      wsvs_[*i]->setSelected(true); 
+    }
+  
+  
+}
 
 void spikeWaves(void)
 {
