@@ -1,0 +1,22 @@
+Streamcontrol contains the lists that house both the sources and the
+vis, and controls creation and deletion of this. It can also return
+references to these. 
+
+Now, all of these elements have "deleted" signals that they emit in
+their destructors so any attached vis can auto-delete.
+
+If a vis attaches and doesn't auto-delete, boom! 
+
+But that's okay, because we'll use shared_pointers to get at the
+internal objects.  The shared_ptrs are basically GUID 'handles' to the
+objects, and they're very safe.
+
+.newSource("type") -- factory function that:
+  returns  a smart pointer to the requested source type
+
+.newVis(source, "type")
+  returns a smart pointer to the new vis
+
+
+
+
