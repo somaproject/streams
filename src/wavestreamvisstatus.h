@@ -2,13 +2,14 @@
 #define WAVESTREAMVISSTATUS_H
 
 #include <gtkmm.h>
-
+#include "streams.h"
 #include "wavestreamvis.h"
+
 
 class WaveStreamVisStatus : public Gtk::HBox
 {
  public: 
-  WaveStreamVisStatus(WaveStreamVis* wsv); 
+  WaveStreamVisStatus(streamVisPtr_t wsv); 
   ~WaveStreamVisStatus(); 
 
   // emit a selected signal
@@ -20,7 +21,7 @@ class WaveStreamVisStatus : public Gtk::HBox
 
   
  private:
-  WaveStreamVis * pWaveStreamVis_; 
+  waveStreamVisPtr_t pWaveStreamVis_; 
   Gtk::EventBox eventBox_; 
   Gtk::HBox hbox_; 
   Gtk::Label label_; 
@@ -31,7 +32,7 @@ class WaveStreamVisStatus : public Gtk::HBox
   sigc::signal<void, bool> clickedSignal_; 
   void toggleSelected(); 
   bool on_button_press_event(GdkEventButton* event); 
-
+  
 };
 
 

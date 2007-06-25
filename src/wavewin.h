@@ -27,11 +27,13 @@
 
 #include "wavestreamrenderer.h"
 #include "streamvis.h"
+#include "streamcontrol.h"
+
 
 class WaveWin : public Gtk::GL::DrawingArea
 {
 public:
-  explicit WaveWin(); 
+  explicit WaveWin(StreamControl* sc); 
 
   virtual ~WaveWin();
 
@@ -45,7 +47,6 @@ public:
     }
 
   void invalidate(); 
-  void appendVis(StreamVis * sv); 
 
 protected:
 
@@ -80,9 +81,10 @@ protected:
   float zoomLevel_; 
   int s1fact_; 
 
+  StreamControl* pStreamControl_; 
 
   GLuint gpuProgGradient_; 
-  std::list<StreamVis*> pStreamVis_; 
+
   // font-associated crap
   
   GLuint fontListBase_; 

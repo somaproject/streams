@@ -1,6 +1,8 @@
 #include <iostream>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 #include <vector>
+#include <list>
 
 class SimpleBase; 
 class SimpleA; 
@@ -36,7 +38,7 @@ private:
 };
 
 
-int main(void)
+int test(void)
 {
   
   std::vector<sharedSimpleBasePtr_t> slist; 
@@ -48,12 +50,19 @@ int main(void)
     slist.push_back(x); 
   }
   
+  sharedSimpleAPtr_t a1; 
   for (int i = 0; i < 100; i++) {
-    sharedSimpleAPtr_t a1(boost::dynamic_pointer_cast<SimpleA>(slist[i])); 
+    a1 = (boost::dynamic_pointer_cast<SimpleA>(slist[i])); 
     slista.push_back(a1); 
   }
   slist.clear(); 
   
   std::cout << "all smart pointers have been created" << std::endl; 
 
+}
+
+
+int main(void)
+{
+  test(); 
 }

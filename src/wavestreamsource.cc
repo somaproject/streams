@@ -1,11 +1,19 @@
 #include "wavestreamsource.h"
+#include "wavestreamvis.h" 
+
 #include <iostream>
+#include <gtkmm.h>
+
 
 WaveStreamSource::WaveStreamSource():
   lastT_(0.0)
 {
+  
+  timeoutConn_ = Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*this,
+									 &WaveStreamSource::generateFakeData), 100), 100); 
 
-
+  
+									 
 }
 
 WaveStreamSource::~WaveStreamSource()
@@ -20,7 +28,7 @@ QueueView<WaveBuffer_t *>  WaveStreamSource::getQueueView()
   
 }
 
-void WaveStreamSource::generateFakeData(int T = 100)
+bool WaveStreamSource::generateFakeData(int T = 100)
 {
 
   int bufsize = 256; 
@@ -47,4 +55,25 @@ void WaveStreamSource::generateFakeData(int T = 100)
   lastT_ += float(T) * bufsize / fs; 
   newDataSignal_.emit(); 
   
+  return true; 
+}
+
+streamVisPtr_t WaveStreamSource::newVisFactory(std::string name)
+{
+  
+  streamVisPtr_t x; 
+
+  if (name == "wave")
+    {
+      x = streamVisPtr_t(new WaveStreamVis(this)); 
+    }
+  
+  if (x) {
+    return x; 
+
+  } else {
+    throw std::range_error("Unknown vis type " + name); 
+
+  }
+
 }

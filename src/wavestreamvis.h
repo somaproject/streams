@@ -2,6 +2,8 @@
 #define WAVESTREAMVIS_H
 
 #include <gtkmm.h>
+#include <boost/shared_ptr.hpp>
+
 #include "streamvis.h" 
 
 #include "wave.h"
@@ -9,6 +11,9 @@
 #include "wavestreamrenderer.h"
 #include "wavestreamtriggerrenderer.h"
 
+class WaveStreamVis; 
+
+typedef boost::shared_ptr<WaveStreamVis> waveStreamVisPtr_t; 
 
 class WaveStreamVis : public StreamVis
 {

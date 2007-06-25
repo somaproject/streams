@@ -4,7 +4,7 @@
 
 #include <boost/format.hpp>
 
-WaveWin::WaveWin() : 
+WaveWin::WaveWin(StreamControl* sc) : 
   decayRange_(100), 
   viewLatest_(true), 
   cutoffPos_(0), 
@@ -15,7 +15,8 @@ WaveWin::WaveWin() :
   selT1_(0.0), 
   selT2_(1.0), 
   zoomLevel_(1.0),
-  s1fact_(2)
+  s1fact_(2), 
+  pStreamControl_(sc)
 {
 
   Glib::RefPtr<Gdk::GL::Config> glconfig;
@@ -62,14 +63,6 @@ WaveWin::~WaveWin()
 }
 
 
-void WaveWin::appendVis(StreamVis * wv)
-{
-  pStreamVis_.push_back(wv); 
-  // connect the invalidate signal 
-  wv->invMainWaveSignal().connect(sigc::mem_fun(*this, 
-						&WaveWin::invalidate)); 
-
-}
 
 void WaveWin::on_realize()
 {
@@ -294,10 +287,12 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
   renderTimeTicks(viewT1_, viewT2_); 
 
 
-  std::list<StreamVis*>::iterator pwd; 
+  std::list<streamVisPtr_t>::iterator pwd; 
+
   int pixwidth = get_width(); 
 
-  for (pwd = pStreamVis_.begin(); pwd != pStreamVis_.end(); pwd++)
+  for (pwd = pStreamControl_->visPtrList.begin(); 
+       pwd != pStreamControl_->visPtrList.end(); pwd++)
     {
       float pos = - (*pwd)->getYOffset() + get_height(); 
       glPushMatrix(); 

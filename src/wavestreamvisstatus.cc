@@ -1,15 +1,21 @@
 #include "wavestreamvisstatus.h"
 #include <iostream>
 #include "boost/format.hpp"
+
 using boost::format;
 
 
-WaveStreamVisStatus::WaveStreamVisStatus(WaveStreamVis* wsv) :
+WaveStreamVisStatus::WaveStreamVisStatus(streamVisPtr_t wsv) :
   
-  pWaveStreamVis_(wsv),
   hbox_(false, 5), 
   selected_(false)
 {
+
+  // dynamic downcast
+  pWaveStreamVis_ = boost::dynamic_pointer_cast<WaveStreamVis>(wsv); 
+  
+
+
   pack_start(eventBox_); 
   eventBox_.add(hbox_); 
 
@@ -17,11 +23,12 @@ WaveStreamVisStatus::WaveStreamVisStatus(WaveStreamVis* wsv) :
   hbox_.set_size_request(100, 50); 
   hbox_.pack_start(label_); 
   
+  // now the necessary downcast
   // connect primary signal
-  wsv->verticalScaleSignal().connect(sigc::mem_fun(*this, 
+  pWaveStreamVis_->verticalScaleSignal().connect(sigc::mem_fun(*this, 
 						   &WaveStreamVisStatus::updateVerticalScale)); 
   
-  updateVerticalScale(wsv->getVerticalScale()); 
+  updateVerticalScale(pWaveStreamVis_->getVerticalScale()); 
 
   add_events(Gdk::BUTTON_PRESS_MASK ); 
 	     
@@ -46,12 +53,13 @@ WaveStreamVisStatus::~WaveStreamVisStatus()
 void WaveStreamVisStatus::on_size_allocate(Gtk::Allocation& allocation)
 {
   Gtk::HBox::on_size_allocate(allocation); 
+
   pWaveStreamVis_->setYOffset(allocation.get_y() + allocation.get_height()/2); 
   pWaveStreamVis_->setYHeight(allocation.get_height()); 
 
 
-}
 
+}
 void WaveStreamVisStatus::setSelected(bool state)
 {
   if (state == selected_) {
@@ -85,3 +93,4 @@ bool WaveStreamVisStatus::on_button_press_event(GdkEventButton* event)
 
   return true; 
 }
+

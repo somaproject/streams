@@ -1,8 +1,14 @@
 #ifndef STREAMVIS_H
 #define STREAMVIS_H
+#include <boost/shared_ptr.hpp>
+#include <map>
+#include <iostream>
+
 
 #include "wave.h"
 #include "queueview.h"
+#include "streams.h"
+
 
 // this is where we typedef the relevent typedefs
 
@@ -31,6 +37,18 @@ class StreamVis
 
   // render position in the Y-axis, in pixels
   virtual float getYOffset() = 0; 
+
+  
+  // delete signal
+  sigc::signal<void> & disconnectSignal() { return del_; }; 
+  
+  void disconnect(){
+    // disconnect all objects monitoring this one
+    del_.emit(); 
+  }
+
+ private:
+  sigc::signal<void> del_; 
 
 }; 
 

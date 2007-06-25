@@ -4,6 +4,7 @@
 #include <vector>
 #include <sigc++/sigc++.h>
 #include "queueview.h"
+#include "streamsource.h"
 
 struct WaveBuffer_t
 {
@@ -12,7 +13,7 @@ struct WaveBuffer_t
   std::vector<float> data; 
 }; 
 
-class WaveStreamSource
+class WaveStreamSource : public StreamSource
 {
  public:
   // this is just a prototype source
@@ -30,14 +31,18 @@ class WaveStreamSource
   sigc::signal<void> newDataSignal() { return newDataSignal_;  }; 
   sigc::signal<void> invalidateDataSignal() { return invalidateDataSignal_; };
 
-  void generateFakeData(int T);   
+  bool generateFakeData(int T);   
   float lastT_; 
+
+  // our factory to produce our associated vis
+  streamVisPtr_t newVisFactory(std::string name); 
+  
 
  private:
 
   sigc::signal<void> newDataSignal_; 
   sigc::signal<void> invalidateDataSignal_; 
-
+  sigc::connection timeoutConn_; 
 };
 
 #endif // WAVESTREAMSOURCE_H

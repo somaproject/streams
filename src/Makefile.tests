@@ -2,11 +2,10 @@
 CXX =ccache g++
 CXXFLAGS = -O9 `pkg-config gtkmm-2.4 gdkmm-2.4 gtkglextmm-1.2 sigc++-2.0 --cflags` -g -msse3
 
-LDFLAGS = `pkg-config --libs gtkmm-2.4 gdkmm-2.4 sigc++-2.0 gtkglextmm-1.2` -g -lboost_thread -lboost_date_time -lboost_program_options -lboost_regex 
-# -lboost_unit_test_framework
+LDFLAGS = `pkg-config --libs gtkmm-2.4 gdkmm-2.4 sigc++-2.0 gtkglextmm-1.2` -g -lboost_thread -lboost_date_time -lboost_program_options -lboost_regex   -lboost_unit_test_framework
 
 
-all:  streamsmain
+all:  testrunner
 
 streamcontroltest: streamcontrol.o
 
@@ -16,7 +15,7 @@ bench: bench.o
 
 streamsmain: streamsmain.o streamsapp.o wavewin.o glconfig.o shaders.o wavestreamsource.o wavestreamvis.o wavestreamrenderer.o wavestreamtrigger.o triggerwin.o wavestreamtriggerrenderer.o wavestreamvisstatus.o wavestreamsourcestatus.o streamcontrol.o
 
-testrunner : testrunner.cc streamcontrol_test.o streamcontrol.o glconfig.o shaders.o  wavestreamsource.o wavestreamvis.o  wavestreamvis.o wavestreamrenderer.o wavestreamtrigger.o triggerwin.o wavestreamtriggerrenderer.o wavestreamvisstatus.o
+testrunner : testrunner.o streamcontrol_test.o streamcontrol.o glconfig.o shaders.o  wavestreamsource.o wavestreamvis.o  wavestreamvis.o wavestreamrenderer.o wavestreamtrigger.o triggerwin.o wavestreamtriggerrenderer.o wavestreamvisstatus.o
 
 
 
