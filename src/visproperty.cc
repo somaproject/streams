@@ -19,8 +19,8 @@ void VisProperty::updateSet()
   std::set<streamVisPtr_t>::iterator i;
   for(i = pSelSet_->begin(); i!= pSelSet_->end(); ++i)
     {
-     
+      
       
     }
-
+  
 }
