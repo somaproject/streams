@@ -11,12 +11,23 @@ But that's okay, because we'll use shared_pointers to get at the
 internal objects.  The shared_ptrs are basically GUID 'handles' to the
 objects, and they're very safe.
 
-.newSource("type") -- factory function that:
-  returns  a smart pointer to the requested source type
+.newSourceFactory("type") -- factory function that:
+  returns a shared pointer to the requested source type
 
-.newVis(source, "type")
+.newVisFactory(source, "type")
   returns a smart pointer to the new vis
+  
+now, these objects are also stored in two internal lists:
+
+.sources
+
+.streams
+
+which we need to expose somehow (?)
 
 
+Who needs to iterate through sources: 
+   no one? 
 
+Who needs to iterate through vis? Just the renderers
 
