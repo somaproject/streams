@@ -57,13 +57,21 @@ class WaveStreamVis : public StreamVis
       return verticalScaleSignal_; 
     }
 
-
+  
   
   // pixel render offiset
   void setYOffset(float); 
   float getYOffset(); 
   void setYHeight(float); 
-
+  
+  void setColor(WaveColor c); 
+  WaveColor getColor(); 
+  sigc::signal<void, WaveColor> & colorSignal() 
+    {
+      return colorSignal_; 
+    }
+  
+  
   
  private:
   void newData(); 
@@ -84,6 +92,9 @@ class WaveStreamVis : public StreamVis
 
   float verticalScale_; 
   sigc::signal<void, float> verticalScaleSignal_; 
+
+  WaveColor color_; 
+  sigc::signal<void, WaveColor> colorSignal_; 
 
 };
 

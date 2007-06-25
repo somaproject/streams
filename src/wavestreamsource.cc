@@ -10,7 +10,7 @@ WaveStreamSource::WaveStreamSource():
 {
   
   timeoutConn_ = Glib::signal_timeout().connect(sigc::bind(sigc::mem_fun(*this,
-									 &WaveStreamSource::generateFakeData), 100), 100); 
+									 &WaveStreamSource::generateFakeData), 1), 130); 
 
   
 									 
@@ -54,7 +54,7 @@ bool WaveStreamSource::generateFakeData(int T = 100)
     }
   lastT_ += float(T) * bufsize / fs; 
   newDataSignal_.emit(); 
-  
+
   return true; 
 }
 

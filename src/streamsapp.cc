@@ -44,9 +44,9 @@ StreamsApp::StreamsApp(bool is_sync) :
 //     vBoxControls_(false, 0), 
 //     m_ButtonQuit("Quit"), 
   waveWin_(&streamControl_),
-  triggerWin_()
+  triggerWin_(),
   //     lastSpikeTime_(0)
-
+  visProperty_(&streamVisSelSet_)
 {
 
   buildActions(); 
@@ -140,6 +140,10 @@ void StreamsApp::newStreamVis(SourceStatus* src, std::string name)
   
   // now we need to wrap this in a status object
   WaveStreamVisStatus * wvss = new WaveStreamVisStatus(sv); 
+  wvss->clickedSignal().connect(sigc::bind(sigc::mem_fun(*this, 
+							 &StreamsApp::svSelSetModify), sv)); 
+
+
   pVisStatusWidgets_.push_back(wvss); 
   
   vBoxStreamStatus_.pack_start(*wvss); 
@@ -147,7 +151,7 @@ void StreamsApp::newStreamVis(SourceStatus* src, std::string name)
   
   // how do we connect the vis to the waves? 
   sv->invMainWaveSignal().connect(sigc::mem_fun(waveWin_, &WaveWin::invalidate)); 
-  
+
 }
 
 //   set_title("StreamsApp");
@@ -287,42 +291,46 @@ StreamsApp::~StreamsApp()
 // }
 
 
-// void StreamsApp::wsvsSelSetModify(bool append, int num)
-// {
-//   std::cout << "append = " << append << " num=" << num << std::endl; 
-//   waveStreamVisStatusSet_t::iterator i = wsvsSelSet_.find(num); 
-//   if (append) {
-//     if (i == wsvsSelSet_.end()) {
-//       // it's not in the set; add
-//       wsvsSelSet_.insert(num); 
-//     } else {
-//       wsvsSelSet_.erase(i); 
-//     }
-//   } else {
-//     // we're not appending
-//     if (i == wsvsSelSet_.end()) {
-//       // not currently in 
-//       wsvsSelSet_.clear(); 
-//       wsvsSelSet_.insert(num); 
-//     } else {
-//       wsvsSelSet_.clear(); 
+void StreamsApp::svSelSetModify(bool append, streamVisPtr_t v)
+{
+  std::cout << "appending" << std::endl; 
 
-//     }
-//   }
+  std::set<streamVisPtr_t>::iterator i = streamVisSelSet_.find(v); 
 
-//   // update
-//   for (int j = 0; j < wsvs_.size(); j++)
-//     {
-//       wsvs_[j]->setSelected(false); 
-//     }
+  if (append) {
+    if (i == streamVisSelSet_.end()) {
+      // it's not in the set; add
+      streamVisSelSet_.insert(v); 
+    } else {
+      streamVisSelSet_.erase(i); 
+    }
+  } else {
+    // we're not appending
+    if (i == streamVisSelSet_.end()) {
+      // not currently in 
+      streamVisSelSet_.clear(); 
+      streamVisSelSet_.insert(v); 
+    } else {
+      streamVisSelSet_.clear(); 
 
-//   for (i = wsvsSelSet_.begin(); i != wsvsSelSet_.end(); i++)
-//     {
-//       wsvs_[*i]->setSelected(true); 
-//     }
-  
-  
-// }
+    }
+  }
+
+  // update
+  for (int j = 0; j < pVisStatusWidgets_.size(); j++)
+    {
+      i = streamVisSelSet_.find(pVisStatusWidgets_[j]->getVisPtr()); 
+      if (i != streamVisSelSet_.end()) {
+	pVisStatusWidgets_[j]->setSelected(true); 
+      } else {
+	pVisStatusWidgets_[j]->setSelected(false); 
+      }
+    }
+
+
+  visProperty_.show();
+
+}
 
 // void spikeWaves(void)
 // {

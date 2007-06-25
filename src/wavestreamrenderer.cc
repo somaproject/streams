@@ -9,8 +9,8 @@ WaveStreamRenderer::WaveStreamRenderer(std::vector<GLWavePoint_t> * pSamples ) :
   mostRecentRenderT1_(0.0), 
   mostRecentRenderT2_(0.0),
   emptyTriggerList_(), 
-  triggerQueueView_(emptyTriggerList_)
-  
+  triggerQueueView_(emptyTriggerList_),
+  color_(RED)
 {
   // initialize data from stream source buffer
   GLWaveQuadStrip_t s1poly;
@@ -101,11 +101,11 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
   
 
   int len  = i2 - i1; 
-  int fadethold = 400.0; 
+  float fadethold = 400.0; 
   if (scale > fadethold) {
-    glColor4f(1.0, 1.0, 1.0, 1.0); 
+    setGLColor(1.0); 
   } else {
-    glColor4f(1.0, 1.0, 1.0, 1.0 - (fadethold - scale)/200.0);
+    setGLColor(1.0 - (fadethold - scale)/200.0);
   }
 
   if (scale > 200.0) {  
@@ -136,7 +136,7 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
 
   len  = qi2 - qi1; 
 
-  glColor4f(1.0, 1.0, 1.0, fadethold-scale/200.0); 
+  setGLColor( fadethold-scale/200.0); 
   if (scale <= 400.0){
     glVertexPointer(2, GL_FLOAT, sizeof(float)*2, 
  		    &(*qi1)); 
@@ -152,6 +152,7 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
   trigi2 = lower_bound(trigTimeList_.begin(), 
  		       trigTimeList_.end(), 
  		       t2); 
+
 
   glColor4f(0.0, 1.0, 0.0, 1.0); 
 
@@ -200,4 +201,44 @@ void WaveStreamRenderer::setTriggerSource(const QueueView<wavetime_t> & tqv)
 void WaveStreamRenderer::setScale(float scale)
 {
   scale_ = scale; 
+}
+
+void WaveStreamRenderer::setColor(WaveColor c)
+{
+  color_ = c; 
+
+}
+
+void WaveStreamRenderer::setGLColor(float alpha)
+{
+
+
+  switch(color_) {
+    
+  case RED:
+    glColor4f(1.0, 0.0, 0.0, alpha); 
+    break;
+    
+  case GREEN:
+    glColor4f(0.0, 1.0, 0.0, alpha); 
+    break;
+    
+  case BLUE:
+    glColor4f(0.0, 0.0, 1.0, alpha); 
+    break;
+    
+  case YELLOW:
+    glColor4f(1.0, 1.0, 0.0, alpha); 
+    break;
+    
+  case PURPLE:
+    glColor4f(1.0, 0.0, 1.0, alpha); 
+    break;
+    
+  case WHITE:
+    glColor4f(1.0, 1.0, 1.0, alpha); 
+    break;
+  }
+
+
 }

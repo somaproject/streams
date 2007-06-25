@@ -4,9 +4,10 @@
 #include <gtkmm.h>
 #include "streams.h"
 #include "wavestreamvis.h"
+#include "visstatus.h"
+#include "visproperty.h"
 
-
-class WaveStreamVisStatus : public Gtk::HBox
+class WaveStreamVisStatus : public VisStatus
 {
  public: 
   WaveStreamVisStatus(streamVisPtr_t wsv); 
@@ -18,21 +19,25 @@ class WaveStreamVisStatus : public Gtk::HBox
   }
   
   void setSelected(bool state); 
-
+  
+  streamVisPtr_t getVisPtr() { return pWaveStreamVis_; }; 
   
  private:
   waveStreamVisPtr_t pWaveStreamVis_; 
   Gtk::EventBox eventBox_; 
-  Gtk::HBox hbox_; 
+  Gtk::VBox vbox_; 
   Gtk::Label label_; 
+  Gtk::Button colorVis_; 
+  
   void on_size_allocate(Gtk::Allocation& allocation);
   void updateVerticalScale(float volts); 
-
+  void updateColor(WaveColor c); 
+  
   bool selected_; 
   sigc::signal<void, bool> clickedSignal_; 
   void toggleSelected(); 
   bool on_button_press_event(GdkEventButton* event); 
-  
+
 };
 
 

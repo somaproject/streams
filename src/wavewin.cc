@@ -220,16 +220,16 @@ void WaveWin::renderTimeTicks(float T1, float T2)
       glVertex2f(t, viewX2_); 
       glEnd(); 
       
-//       // render associated text
-//       glColor3f(1.0, 1.0, 1.0);
-//       float pixx = (t - T1) / (T2-T1) * get_width(); 
-//       glRasterPos2f(t, 70);
-//       glListBase(fontListBase_);
+      // render associated text
+      glColor3f(1.0, 1.0, 1.0);
+      float pixx = (t - T1) / (T2-T1) * get_width(); 
+      glRasterPos2f(t, 70);
+      glListBase(fontListBase_);
       
-//       timeformat % (t / scaletextdiv) % scaletext; 
-//       std::string timestr = timeformat.str(); 
+      timeformat % (t / scaletextdiv) % scaletext; 
+      std::string timestr = timeformat.str(); 
 
-//       glCallLists(timestr.size(), GL_UNSIGNED_BYTE, timestr.c_str()); 
+      glCallLists(timestr.size(), GL_UNSIGNED_BYTE, timestr.c_str()); 
     }
 
 

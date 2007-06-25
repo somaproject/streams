@@ -9,7 +9,8 @@ WaveStreamVis::WaveStreamVis(WaveStreamSource * wss) :
   streamTrigger_(&filteredSamples_), 
   streamTriggerRenderer_(&filteredSamples_),
   yheight_(100),
-  verticalScale_(1.0) 
+  color_(RED),
+  verticalScale_(1.0)
 
 {
 
@@ -143,4 +144,18 @@ float WaveStreamVis::getVerticalScale()
 {
   return verticalScale_; 
 }
+
+void WaveStreamVis::setColor(WaveColor c)
+{
+  
+  color_ = c; 
+  streamRenderer_.setColor(c); 
+
+}
+
+WaveColor WaveStreamVis::getColor()
+{
+  return color_; 
+}
+
 

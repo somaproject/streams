@@ -7,7 +7,7 @@ using boost::format;
 
 WaveStreamVisStatus::WaveStreamVisStatus(streamVisPtr_t wsv) :
   
-  hbox_(false, 5), 
+  vbox_(false, 5), 
   selected_(false)
 {
 
@@ -17,11 +17,12 @@ WaveStreamVisStatus::WaveStreamVisStatus(streamVisPtr_t wsv) :
 
 
   pack_start(eventBox_); 
-  eventBox_.add(hbox_); 
+  eventBox_.add(vbox_); 
 
   
-  hbox_.set_size_request(100, 50); 
-  hbox_.pack_start(label_); 
+  vbox_.set_size_request(100, 50); 
+  vbox_.pack_start(label_); 
+  vbox_.pack_start(colorVis_); 
   
   // now the necessary downcast
   // connect primary signal
@@ -29,6 +30,13 @@ WaveStreamVisStatus::WaveStreamVisStatus(streamVisPtr_t wsv) :
 						   &WaveStreamVisStatus::updateVerticalScale)); 
   
   updateVerticalScale(pWaveStreamVis_->getVerticalScale()); 
+  
+  pWaveStreamVis_->colorSignal().connect(sigc::mem_fun(*this, 
+						   &WaveStreamVisStatus::updateColor)); 
+  
+  updateColor(pWaveStreamVis_->getColor()); 
+  
+
 
   add_events(Gdk::BUTTON_PRESS_MASK ); 
 	     
@@ -94,3 +102,26 @@ bool WaveStreamVisStatus::on_button_press_event(GdkEventButton* event)
   return true; 
 }
 
+void WaveStreamVisStatus::updateColor(WaveColor c)
+{
+  Gdk::Color gc; 
+  switch (c)
+    {
+    case RED:
+      gc.parse("red"); 
+      colorVis_.modify_bg(Gtk::STATE_NORMAL, gc); 
+      break; 
+
+    case BLUE:
+      gc.parse("blue"); 
+      colorVis_.modify_bg(Gtk::STATE_NORMAL, gc); 
+      break; 
+
+    case GREEN:
+      gc.parse("green"); 
+      colorVis_.modify_bg(Gtk::STATE_NORMAL, gc); 
+      break; 
+
+    }
+  
+}

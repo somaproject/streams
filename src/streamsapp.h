@@ -27,6 +27,8 @@
 #include "triggerwin.h"
 #include "streamcontrol.h" 
 #include "sourcestatus.h"
+#include "visproperty.h"
+
 
 class StreamsApp : public Gtk::Window
 {
@@ -49,7 +51,7 @@ protected:
    
    // stream source widgets
    std::vector<SourceStatus * >  pSourceStatusWidgets_; 
-   std::vector<Gtk::Widget* >  pVisStatusWidgets_; 
+   std::vector<VisStatus *  >  pVisStatusWidgets_; 
    
 
    void buildActions(); 
@@ -64,6 +66,7 @@ protected:
 
    StreamControl streamControl_; 
    
+   std::set<streamVisPtr_t> streamVisSelSet_; 
    
   // member widgets:
 /*   Gtk::VBox m_VBox; */
@@ -88,6 +91,8 @@ protected:
 
   //sigc::connection conn_; 
   //waveStreamVisStatusSet_t wsvsSelSet_; 
-  //void wsvsSelSetModify(bool append, int num); 
+   void svSelSetModify(bool append, streamVisPtr_t v); 
+   VisProperty visProperty_;
+
 
 };
