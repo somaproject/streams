@@ -86,12 +86,12 @@ void WaveWin::on_realize()
   
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-  GLuint vshdr = loadGPUShader("rtgrad.vert", GL_VERTEX_SHADER); 
-  GLuint fshdr = loadGPUShader("rtgrad.frag", GL_FRAGMENT_SHADER); 
-  std::list<GLuint> shaders; 
-  shaders.push_back(vshdr); 
-  shaders.push_back(fshdr); 
-  gpuProgGradient_ = createGPUProgram(shaders); 
+//   GLuint vshdr = loadGPUShader("rtgrad.vert", GL_VERTEX_SHADER); 
+//   GLuint fshdr = loadGPUShader("rtgrad.frag", GL_FRAGMENT_SHADER); 
+//   std::list<GLuint> shaders; 
+//   shaders.push_back(vshdr); 
+//   shaders.push_back(fshdr); 
+//   gpuProgGradient_ = createGPUProgram(shaders); 
 
   // create font display lists
   fontListBase_ = glGenLists(128); 

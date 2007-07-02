@@ -92,8 +92,8 @@ WavesApp::WavesApp(bool is_sync)
   //
   // WavesApp scene.
   //
-  waveWin_.set_size_request(1000, 400);
-  triggerWin_.set_size_request(100, 400);
+//   waveWin_.set_size_request(1000, 400);
+//   triggerWin_.set_size_request(100, 400);
 
 
   hBox_.pack_start(vBoxControls_); 

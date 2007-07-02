@@ -83,7 +83,7 @@ protected:
 
   StreamControl* pStreamControl_; 
 
-  GLuint gpuProgGradient_; 
+  //GLuint gpuProgGradient_; 
 
   // font-associated crap
   

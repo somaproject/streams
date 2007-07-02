@@ -61,8 +61,8 @@ StreamsApp::StreamsApp(bool is_sync) :
   hBoxMain_.pack_start(vBoxStreamStatus_); 
   hBoxMain_.pack_start(waveWin_); 
 
-  waveWin_.set_size_request(1000, 1000); 
-  triggerWin_.set_size_request(200, 1000); 
+  waveWin_.set_size_request(800, 700); 
+  triggerWin_.set_size_request(100, 700); 
 
   hBoxMain_.pack_start(triggerWin_); 
 
@@ -164,8 +164,6 @@ void StreamsApp::newStreamVis(SourceStatus* src, std::string name)
 //   //
 //   // StreamsApp scene.
 //   //
-//   waveWin_.set_size_request(1000, 400);
-//   triggerWin_.set_size_request(100, 400);
 
 
 //   hBox_.pack_start(vBoxControls_); 
