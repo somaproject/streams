@@ -75,12 +75,14 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
 
   wavetime_t scale = pixels / (t2 -t1); 
   
-  glLineWidth(10.0); 
+  // draw the little range indicator
+  setGLColor(0.8); 
+
   glBegin(GL_LINES); 
-  glVertex2f(t1+0.01, -100.0); 
-  glVertex2f(t1+0.01, 100.0); 
-  
+  glVertex2f(t1+1/scale, -float(pixheight_)/2); 
+  glVertex2f(t1+1/scale,  float(pixheight_)/2); 
   glEnd(); 
+  
 
   glLineWidth(1.0); 
    
@@ -90,7 +92,7 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
   
 
   // draw horizontal axis
-  glColor4f(1.0, 1.0, 0.0, 1.0); 
+  glColor4f(1.0, 1.0, 1.0, 1.0); 
 
   glBegin(GL_LINES);
   glVertex2f(t1, 0.0); 
@@ -164,7 +166,7 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
  		       t2); 
 
 
-  glColor4f(0.0, 1.0, 0.0, 1.0); 
+  //glColor4f(0.0, 1.0, 0.0, 1.0); 
 
   //std::cout << "Rendering triggers!" << trigTimeList_.size() << std::endl; 
    for(std::vector<wavetime_t>::iterator i = trigi1; 

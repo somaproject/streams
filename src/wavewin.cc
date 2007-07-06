@@ -290,11 +290,15 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
   std::list<streamVisPtr_t>::iterator pwd; 
 
   int pixwidth = get_width(); 
-
+  // get the windows own allocation and use that
+  
+  Gdk::Rectangle myalloc = get_allocation(); 
+  
   for (pwd = pStreamControl_->visPtrList.begin(); 
        pwd != pStreamControl_->visPtrList.end(); pwd++)
     {
-      float pos = - (*pwd)->getYOffset() + get_height(); 
+      float pos = - (*pwd)->getYOffset() + 
+	myalloc.get_height() + myalloc.get_y(); 
       glPushMatrix(); 
       glTranslatef(0.0f, pos, 0.0); 
 
