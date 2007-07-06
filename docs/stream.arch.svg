@@ -9,7 +9,7 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="stream.arch.svg"
-   sodipodi:docbase="/home/jonas/waves/docs"
+   sodipodi:docbase="/home/jonas/soma/waves/docs"
    inkscape:version="0.45"
    sodipodi:version="0.32"
    id="svg1996"
@@ -51,7 +51,7 @@
   <sodipodi:namedview
      inkscape:window-y="25"
      inkscape:window-x="0"
-     inkscape:window-height="1125"
+     inkscape:window-height="1129"
      inkscape:window-width="1600"
      guidetolerance="2.5000000pt"
      inkscape:grid-bbox="false"
@@ -64,8 +64,8 @@
      showgrid="true"
      inkscape:current-layer="layer1"
      inkscape:document-units="pt"
-     inkscape:cy="322.49188"
-     inkscape:cx="751.36976"
+     inkscape:cy="873.47434"
+     inkscape:cx="824.30211"
      inkscape:zoom="1"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
@@ -823,5 +823,32 @@
          x="618.75"
          y="674.93379"
          id="tspan2353" /></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2308"
+       width="156.25"
+       height="109.375"
+       x="406.25"
+       y="-72.5" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="421.875"
+       y="-41.25"
+       id="text2310"><tspan
+         sodipodi:role="line"
+         id="tspan2312"
+         x="421.875"
+         y="-41.25">Status Window</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="405"
+       y="78"
+       id="text2314"><tspan
+         sodipodi:role="line"
+         id="tspan2316"
+         x="405"
+         y="78">Receives &quot;property update&quot; signal from Vis</tspan></text>
   </g>
 </svg>
