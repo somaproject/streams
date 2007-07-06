@@ -27,4 +27,17 @@ There's no good way of both cross-channel triggering -and- having one waveform-p
 Do we want to combine waves and freqs? I mean, sure, but... NO, totally different temporal scales
 ---------------------------------------------------------------------------
 
+vis filtering: 
 
+I think the best way to populate / compute our filtering options is
+simply with an external file of options, that links into libdsp, and
+names the filters.
+
+So for example
+
+<theta> <fir> <params> </ > 
+
+etc. 
+
+How do we handle the "we just updated the scene, now we need to churn"
+problem? Continuations! Or... something not quite so complex. 

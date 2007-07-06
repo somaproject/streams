@@ -64,9 +64,9 @@ class WaveStreamVis : public StreamVis
   float getYOffset(); 
   void setYHeight(float); 
   
-  void setColor(WaveColor c); 
-  WaveColor getColor(); 
-  sigc::signal<void, WaveColor> & colorSignal() 
+  void setColor(Gdk::Color c); 
+  Gdk::Color getColor(); 
+  sigc::signal<void, Gdk::Color> & colorSignal() 
     {
       return colorSignal_; 
     }
@@ -93,8 +93,8 @@ class WaveStreamVis : public StreamVis
   float verticalScale_; 
   sigc::signal<void, float> verticalScaleSignal_; 
 
-  WaveColor color_; 
-  sigc::signal<void, WaveColor> colorSignal_; 
+  Gdk::Color color_; 
+  sigc::signal<void, Gdk::Color> colorSignal_; 
 
 };
 

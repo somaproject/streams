@@ -27,11 +27,10 @@ class WaveStreamVisStatus : public VisStatus
   Gtk::EventBox eventBox_; 
   Gtk::VBox vbox_; 
   Gtk::Label label_; 
-  Gtk::Button colorVis_; 
   
   void on_size_allocate(Gtk::Allocation& allocation);
   void updateVerticalScale(float volts); 
-  void updateColor(WaveColor c); 
+  void updateColor(Gdk::Color c); 
   
   bool selected_; 
   sigc::signal<void, bool> clickedSignal_; 

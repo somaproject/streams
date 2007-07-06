@@ -18,7 +18,9 @@ class VisProperty: public Gtk::Window
   Glib::RefPtr<Gnome::Glade::Xml> pGladeXml_;
   
   std::set<streamVisPtr_t> * pSelSet_; 
-
+  void colorSet(); 
+  Gtk::Adjustment hScaleAdj_; 
+  void  hScaleAdjValueChanged(); 
 };
 
 #endif // VISPROPERTY_H

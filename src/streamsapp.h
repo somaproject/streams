@@ -48,7 +48,8 @@ protected:
    Gtk::HBox  hBoxStatus_; 
    Gtk::VBox  vBoxStreamStatus_; 
    Gtk::Widget* pMenuBar_; 
-   
+   Gtk::Statusbar statusBar_; 
+
    // stream source widgets
    std::vector<SourceStatus * >  pSourceStatusWidgets_; 
    std::vector<VisStatus *  >  pVisStatusWidgets_; 

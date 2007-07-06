@@ -22,7 +22,6 @@ WaveStreamVisStatus::WaveStreamVisStatus(streamVisPtr_t wsv) :
   
   vbox_.set_size_request(100, 50); 
   vbox_.pack_start(label_); 
-  vbox_.pack_start(colorVis_); 
   
   // now the necessary downcast
   // connect primary signal
@@ -50,7 +49,9 @@ WaveStreamVisStatus::WaveStreamVisStatus(streamVisPtr_t wsv) :
 
 void WaveStreamVisStatus::updateVerticalScale(float volts)
 {
-  label_.set_text(str(format("full-scale: %d mV") % (volts * 1000))); 
+  label_.set_text(std::string("full-scale : ") + voltsToString(volts)); 
+
+
 }
 
 WaveStreamVisStatus::~WaveStreamVisStatus()
@@ -102,26 +103,7 @@ bool WaveStreamVisStatus::on_button_press_event(GdkEventButton* event)
   return true; 
 }
 
-void WaveStreamVisStatus::updateColor(WaveColor c)
+void WaveStreamVisStatus::updateColor(Gdk::Color c)
 {
-  Gdk::Color gc; 
-  switch (c)
-    {
-    case RED:
-      gc.parse("red"); 
-      colorVis_.modify_bg(Gtk::STATE_NORMAL, gc); 
-      break; 
-
-    case BLUE:
-      gc.parse("blue"); 
-      colorVis_.modify_bg(Gtk::STATE_NORMAL, gc); 
-      break; 
-
-    case GREEN:
-      gc.parse("green"); 
-      colorVis_.modify_bg(Gtk::STATE_NORMAL, gc); 
-      break; 
-
-    }
   
 }

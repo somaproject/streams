@@ -19,9 +19,6 @@
 #include "wavestreamsource.h"
 #include "wave.h"
 
-enum WaveColor {RED, GREEN, BLUE, YELLOW, PURPLE, WHITE}; 
-
-
 inline bool compareTime(const GLWavePoint_t x,
 			const GLWavePoint_t y)
 {
@@ -52,7 +49,7 @@ class WaveStreamRenderer
   void draw(wavetime_t t1, wavetime_t t2, int pixels); 
   void newSample(void); 
   void invalidateSamples(void); 
-  void setColor(WaveColor c); 
+  void setColor(Gdk::Color c); 
 
   // triggering
   void updateTriggers(bool); 
@@ -60,7 +57,7 @@ class WaveStreamRenderer
 
   sigc::signal<void> & invWaveSignal();
   
-  void setScale(float); 
+  void setScale(float scale, float pixheight); 
 
  protected: 
   std::vector<GLWavePoint_t> * pSamples_; 
@@ -76,7 +73,8 @@ class WaveStreamRenderer
 
   TriggerTimeList_t trigTimeList_ ;
   float scale_;
-  WaveColor color_; 
+  float pixheight_; 
+  Gdk::Color color_; 
   void setGLColor(float alpha); 
 
   

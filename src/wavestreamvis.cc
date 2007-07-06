@@ -9,7 +9,7 @@ WaveStreamVis::WaveStreamVis(WaveStreamSource * wss) :
   streamTrigger_(&filteredSamples_), 
   streamTriggerRenderer_(&filteredSamples_),
   yheight_(100),
-  color_(RED),
+  color_("red"),
   verticalScale_(1.0)
 
 {
@@ -130,14 +130,16 @@ void WaveStreamVis::setYOffset(float x)
 void WaveStreamVis::setYHeight(float x)
 {
   yheight_ = x; 
-  streamRenderer_.setScale(verticalScale_* yheight_); 
+  streamRenderer_.setScale(yheight_ / verticalScale_, yheight_); 
 }
 
 void WaveStreamVis::setVerticalScale(float volts){
 
   verticalScale_ = volts; 
   
-  streamRenderer_.setScale(verticalScale_ * yheight_); 
+  streamRenderer_.setScale(yheight_ / verticalScale_ , yheight_); 
+  verticalScaleSignal_.emit(volts); 
+
 }
 
 float WaveStreamVis::getVerticalScale()
@@ -145,15 +147,15 @@ float WaveStreamVis::getVerticalScale()
   return verticalScale_; 
 }
 
-void WaveStreamVis::setColor(WaveColor c)
+void WaveStreamVis::setColor(Gdk::Color c)
 {
   
   color_ = c; 
   streamRenderer_.setColor(c); 
-
+  colorSignal_.emit(c); 
 }
 
-WaveColor WaveStreamVis::getColor()
+Gdk::Color WaveStreamVis::getColor()
 {
   return color_; 
 }

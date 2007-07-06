@@ -14,11 +14,6 @@
 
 #include <gtkglmm.h>
 
-#ifdef G_OS_WIN32
-#define WIN32_LEAN_AND_MEAN 1
-#include <windows.h>
-#endif
-
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
@@ -39,13 +34,8 @@ typedef std::set<int> waveStreamVisStatusSet_t;
 
 
 StreamsApp::StreamsApp(bool is_sync) : 
-//   : m_VBox(false, 0), 
-//     hBox_(false, 0), 
-//     vBoxControls_(false, 0), 
-//     m_ButtonQuit("Quit"), 
   waveWin_(&streamControl_),
   triggerWin_(),
-  //     lastSpikeTime_(0)
   visProperty_(&streamVisSelSet_)
 {
 
@@ -61,11 +51,13 @@ StreamsApp::StreamsApp(bool is_sync) :
   hBoxMain_.pack_start(vBoxStreamStatus_); 
   hBoxMain_.pack_start(waveWin_); 
 
-  waveWin_.set_size_request(800, 700); 
-  triggerWin_.set_size_request(100, 700); 
+  waveWin_.set_size_request(700, 500); 
+  triggerWin_.set_size_request(70, 500); 
 
   hBoxMain_.pack_start(triggerWin_); 
-
+  
+  // status componnets
+  hBoxStatus_.pack_start(statusBar_); 
   
   show_all(); 
 
@@ -327,7 +319,7 @@ void StreamsApp::svSelSetModify(bool append, streamVisPtr_t v)
 
 
   visProperty_.show();
-
+  visProperty_.updateSet(); 
 }
 
 // void spikeWaves(void)

@@ -10,12 +10,12 @@ WaveStreamRenderer::WaveStreamRenderer(std::vector<GLWavePoint_t> * pSamples ) :
   mostRecentRenderT2_(0.0),
   emptyTriggerList_(), 
   triggerQueueView_(emptyTriggerList_),
-  color_(RED)
+  color_("red")
 {
   // initialize data from stream source buffer
   GLWaveQuadStrip_t s1poly;
   ratesS2_.push_back(s1poly); 
- 
+  
 }
 
 
@@ -68,12 +68,22 @@ void WaveStreamRenderer::newSample()
 
 void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
 {
+  // pixels is just a hint
+
   mostRecentRenderT1_ = t1; 
   mostRecentRenderT2_ = t2; 
 
   wavetime_t scale = pixels / (t2 -t1); 
+  
+  glLineWidth(10.0); 
+  glBegin(GL_LINES); 
+  glVertex2f(t1+0.01, -100.0); 
+  glVertex2f(t1+0.01, 100.0); 
+  
+  glEnd(); 
 
-
+  glLineWidth(1.0); 
+   
   // perform scaling
   glPushMatrix(); 
   glScalef(1.0, scale_, 1.0); 
@@ -198,47 +208,27 @@ void WaveStreamRenderer::setTriggerSource(const QueueView<wavetime_t> & tqv)
   triggerQueueView_ = tqv; 
 }
 
-void WaveStreamRenderer::setScale(float scale)
+void WaveStreamRenderer::setScale(float scale, float pixheight)
 {
   scale_ = scale; 
+  pixheight_ = pixheight; 
+  invWaveSignal_.emit(); 
+
 }
 
-void WaveStreamRenderer::setColor(WaveColor c)
+void WaveStreamRenderer::setColor(Gdk::Color c)
 {
   color_ = c; 
+  invWaveSignal_.emit(); 
 
 }
 
 void WaveStreamRenderer::setGLColor(float alpha)
 {
-
-
-  switch(color_) {
-    
-  case RED:
-    glColor4f(1.0, 0.0, 0.0, alpha); 
-    break;
-    
-  case GREEN:
-    glColor4f(0.0, 1.0, 0.0, alpha); 
-    break;
-    
-  case BLUE:
-    glColor4f(0.0, 0.0, 1.0, alpha); 
-    break;
-    
-  case YELLOW:
-    glColor4f(1.0, 1.0, 0.0, alpha); 
-    break;
-    
-  case PURPLE:
-    glColor4f(1.0, 0.0, 1.0, alpha); 
-    break;
-    
-  case WHITE:
-    glColor4f(1.0, 1.0, 1.0, alpha); 
-    break;
-  }
-
-
+  float div = 1.0;
+  glColor4f(color_.get_red_p()/div,
+	    color_.get_green_p()/div,
+	    color_.get_blue_p()/div, 
+	    alpha); 
+  
 }
