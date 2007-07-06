@@ -25,17 +25,10 @@ WaveStreamVisStatus::WaveStreamVisStatus(streamVisPtr_t wsv) :
   
   // now the necessary downcast
   // connect primary signal
-  pWaveStreamVis_->verticalScaleSignal().connect(sigc::mem_fun(*this, 
-						   &WaveStreamVisStatus::updateVerticalScale)); 
-  
-  updateVerticalScale(pWaveStreamVis_->getVerticalScale()); 
-  
-  pWaveStreamVis_->colorSignal().connect(sigc::mem_fun(*this, 
-						   &WaveStreamVisStatus::updateColor)); 
-  
-  updateColor(pWaveStreamVis_->getColor()); 
-  
+  pWaveStreamVis_->propertyUpdateSignal().connect(sigc::mem_fun(*this, 
+						   &WaveStreamVisStatus::updateProperties)); 
 
+  updateProperties(); 
 
   add_events(Gdk::BUTTON_PRESS_MASK ); 
 	     
@@ -106,4 +99,15 @@ bool WaveStreamVisStatus::on_button_press_event(GdkEventButton* event)
 void WaveStreamVisStatus::updateColor(Gdk::Color c)
 {
   
+}
+
+void WaveStreamVisStatus::updateProperties()
+{
+  
+  updateVerticalScale(pWaveStreamVis_->getVerticalScale()); 
+  
+  updateColor(pWaveStreamVis_->getColor()); 
+  
+
+
 }
