@@ -33,8 +33,8 @@
 class StreamsApp : public Gtk::Window
 {
 public:
-   explicit StreamsApp(bool is_sync = true); 
-   virtual ~StreamsApp(); 
+  explicit StreamsApp(NetworkInterface * ni); 
+  virtual ~StreamsApp(); 
 
 protected:
 
@@ -54,6 +54,7 @@ protected:
    // stream source widgets
    std::vector<SourceStatus * >  pSourceStatusWidgets_; 
    std::vector<VisStatus *  >  pVisStatusWidgets_; 
+   std::vector<Gtk::HPaned *> pSignalPairWidgets_; 
    
    
    void buildActions(); 

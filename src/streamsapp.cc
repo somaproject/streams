@@ -33,8 +33,9 @@
 typedef std::set<int> waveStreamVisStatusSet_t; 
 
 
-StreamsApp::StreamsApp(bool is_sync) : 
+StreamsApp::StreamsApp(NetworkInterface * ni) : 
   liveButton_("Live View"), 
+  streamControl_(ni), 
   waveWin_(&streamControl_),
   triggerWin_(),
   visProperty_(&streamVisSelSet_)
@@ -109,14 +110,17 @@ void StreamsApp::newStreamSource(std::string name)
   std::cout << "Creating a new source " << name << std::endl; 
   
   // first create the stream object
-  streamSourcePtr_t ss = streamControl_.newSourceFactory(name); 
+  streamSourcePtr_t ss = streamControl_.newSourceFactory(name, 0, TSPIKE); 
   
   // now we need to wrap this in a status object
   WaveStreamSourceStatus * wsss = new WaveStreamSourceStatus(ss); 
   pSourceStatusWidgets_.push_back(wsss); 
+  Gtk::HPaned * pHPane = new Gtk::HPaned(); 
+  pHPane->pack1(*wsss); 
+  vBoxStreamStatus_.pack_start(*pHPane); 
+  pSignalPairWidgets_.push_back(pHPane); 
   
-  vBoxStreamStatus_.pack_start(*wsss); 
-  wsss->show_all(); 
+  pHPane->show_all(); 
   
   
 }

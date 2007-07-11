@@ -17,10 +17,13 @@ class WaveStreamSource : public StreamSource
 {
  public:
   // this is just a prototype source
-  WaveStreamSource(); 
+  WaveStreamSource(datasource_t ds, datatype_t dt);
+
   ~WaveStreamSource(); 
 
   // emit updatedData
+  
+  void newDataPacket(DataPacket_t *  dp); 
   
   // public data access
   std::list<WaveBuffer_t *> data_; 
@@ -39,10 +42,11 @@ class WaveStreamSource : public StreamSource
   
 
  private:
-
+  datasource_t datasource_; 
+  datatype_t datatype_; 
   sigc::signal<void> newDataSignal_; 
   sigc::signal<void> invalidateDataSignal_; 
-  sigc::connection timeoutConn_; 
+
 };
 
 #endif // WAVESTREAMSOURCE_H

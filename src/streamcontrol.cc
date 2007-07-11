@@ -19,18 +19,29 @@ StreamControl::~StreamControl()
   
 }
 
-streamSourcePtr_t StreamControl::newSourceFactory(std::string name)
-{
+streamSourcePtr_t StreamControl::newSourceFactory(std::string name, 
+						  datasource_t ds, 
+						  datatype_t dt){
+
 
   streamSourcePtr_t x; 
-
+  
   if (name == "wave")
     {
-      x = streamSourcePtr_t(new WaveStreamSource); 
+      x = streamSourcePtr_t(new WaveStreamSource(ds, dt)); 
     }
 
   if (x) {
+    datapair_t dp(ds, dt); 
+
+    if (dataDispatchMap_.find(dp) != dataDispatchMap_.end() )
+      {
+	throw std::runtime_error("There is already a data source attched to that data pair"); 
+      }
+    
+    dataDispatchMap_[dp] = x; 
     sourceList_.push_back(x); 
+
     return x; 
   } else {
     throw std::range_error("Unknown source type " + name); 
@@ -76,7 +87,17 @@ void StreamControl::remove(streamSourcePtr_t source) {
     pVis = visMap_.find(source); 
 
   }
-  
+
+  // remove data dispatch
+  for (dataDispatchMap_t::iterator ddi = dataDispatchMap_.begin(); 
+       ddi !=  dataDispatchMap_.end(); ddi++) 
+    {
+      if (ddi->second == *i) {
+	dataDispatchMap_.erase(ddi); 
+      }
+      
+    }
+
   // delete self
   (*i)->disconnect(); 
   sourceList_.erase(i); 
@@ -97,6 +118,21 @@ void StreamControl::remove(streamVisPtr_t vis)
 
 }
 
+void StreamControl::dispatch(DataPacket_t * pdp )
+{
+  // We dispatch inbound packets to the appropraite stream 
+  // source by performing a  lookup in our map
+
+  datapair_t dp(pdp->src, pdp->typ); 
+  dataDispatchMap_t::iterator ddi = dataDispatchMap_.find(dp); 
+  if (ddi != dataDispatchMap_.end() )
+    {
+      ddi->second->newDataPacket(pdp); 
+    } else {
+      std::cerr << "Received a packet with an incorrect source/id" << std::endl; 
+    }
+
+}
   
 visPtrMap_t::iterator  StreamControl::findVis(streamVisPtr_t v)
 {

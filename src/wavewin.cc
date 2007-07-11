@@ -191,7 +191,7 @@ void WaveWin::renderTimeTicks(float T1, float T2)
   int minorN = int(round((T2 - T1)/ minorScale)) ;
 
   // compute lower bound
-  int T1n = round(T1 / minorScale); 
+ float T1n = round(T1 / minorScale); 
 
   for (int i = -1; i < (minorN+1) + 1; i++)
     {
@@ -208,7 +208,7 @@ void WaveWin::renderTimeTicks(float T1, float T2)
   glLineWidth(1.0); 
 
   int majorN = int(round((T2 - T1)/ majorScale)) ;
-  int T1n2 = round(T1 / majorScale); 
+  float T1n2 = round(T1 / majorScale); 
 
   for (int i = -1; i < (majorN+1) + 1; i++)
     {
@@ -535,7 +535,7 @@ void WaveWin::setLiveView(bool val)
 
 void WaveWin::setCurrentTime(float time)
 {
-  float twidth = viewT2_ - viewT1; 
+  float twidth = viewT2_ - viewT1_; 
   if (liveView_) {
     viewT2_ = time; 
     viewT1_ = time - twidth; 

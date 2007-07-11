@@ -6,11 +6,14 @@
 #include <somanetwork/network.h>
 
 #include <string>
-
+#include <map>
 #include "streams.h"
 #include "streamsource.h"
 
 #include "streamvis.h"
+typedef std::pair<datasource_t, datatype_t> datapair_t; 
+
+typedef std::map<datapair_t, streamSourcePtr_t> dataDispatchMap_t; 
 
 
 class StreamControl
@@ -22,7 +25,8 @@ class StreamControl
   ~StreamControl(); 
   
   
-  streamSourcePtr_t newSourceFactory(std::string name); 
+  streamSourcePtr_t newSourceFactory(std::string name, datasource_t ds, 
+				     datatype_t dt); 
   
   streamVisPtr_t newVisFactory(streamSourcePtr_t src, std::string name); 
 
@@ -31,15 +35,18 @@ class StreamControl
   void remove(streamVisPtr_t vis); 
   
   std::list<streamVisPtr_t> visPtrList; 
-
+  void dispatch(DataPacket_t * pdp ); 
+  
  private:
   sourcePtrList_t sourceList_; 
   visPtrMap_t visMap_; 
+  
+  dataDispatchMap_t dataDispatchMap_; 
 
   visPtrMap_t::iterator findVis(streamVisPtr_t v); 
   
   NetworkInterface * pNetworkInterface_; 
-
+  
 };
 
 #endif // STREAMCONTROL_H
