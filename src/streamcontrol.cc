@@ -2,9 +2,12 @@
 
 #include "wavestreamsource.h"
 
-StreamControl::StreamControl()
+StreamControl::StreamControl(NetworkInterface * pni) :
+  pNetworkInterface_(pni)
 {
-  
+  // do not cross the streams
+  // streamcontrol also handles the network interface? I'm not
+  // sure I like that...
   
   
 }

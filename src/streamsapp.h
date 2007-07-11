@@ -49,12 +49,13 @@ protected:
    Gtk::VBox  vBoxStreamStatus_; 
    Gtk::Widget* pMenuBar_; 
    Gtk::Statusbar statusBar_; 
-
+   Gtk::ToggleButton liveButton_; 
+   Gtk::ProgressBar statusProgressBar_; 
    // stream source widgets
    std::vector<SourceStatus * >  pSourceStatusWidgets_; 
    std::vector<VisStatus *  >  pVisStatusWidgets_; 
    
-
+   
    void buildActions(); 
    void newStreamSource(std::string name); 
    void newStreamVis(SourceStatus *, std::string name); 
@@ -68,27 +69,11 @@ protected:
    StreamControl streamControl_; 
    
    std::set<streamVisPtr_t> streamVisSelSet_; 
-   
-  // member widgets:
-/*   Gtk::VBox m_VBox; */
-/*   Gtk::HBox hBox_;  */
-/*   Gtk::VBox vBoxControls_; */
-/*   Glib::Timer timer_;  */
-/*   Glib::Timer dtimer_;  */
-/*   Gtk::Button m_ButtonQuit; */
+
+
    WaveWin waveWin_; 
    TriggerWin triggerWin_; 
 
-/*   uint64_t lastSpikeTime_;  */
-/*   void updateSpikePosFromAdj();  */
-/*   sigc::connection m_ConnectionIdle; */
-/*   virtual bool on_key_press_event(GdkEventKey* event);  */
-/*   bool appendNewData();  */
-
-  // data elements
-/*   std::vector<WaveStreamSource * > wss_;  */
-/*   std::vector<WaveStreamVis * > wsv_;  */
-/*   std::vector<WaveStreamVisStatus *> wsvs_;  */
 
   //sigc::connection conn_; 
   //waveStreamVisStatusSet_t wsvsSelSet_; 
@@ -97,3 +82,4 @@ protected:
 
 
 };
+

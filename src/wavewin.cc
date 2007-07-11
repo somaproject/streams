@@ -526,3 +526,20 @@ void WaveWin::invalidate() {
   
 }
 
+void WaveWin::setLiveView(bool val)
+{
+  liveView_ = val; 
+  invalidate(); 
+
+}
+
+void WaveWin::setCurrentTime(float time)
+{
+  float twidth = viewT2_ - viewT1; 
+  if (liveView_) {
+    viewT2_ = time; 
+    viewT1_ = time - twidth; 
+
+  }
+  
+}

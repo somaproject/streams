@@ -3,6 +3,8 @@
 
 
 #include <boost/shared_ptr.hpp>
+#include <somanetwork/network.h>
+
 #include <string>
 
 #include "streams.h"
@@ -15,7 +17,7 @@ class StreamControl
 {
  public:
   
-  StreamControl(); 
+  StreamControl(NetworkInterface *); 
   
   ~StreamControl(); 
   
@@ -36,6 +38,8 @@ class StreamControl
 
   visPtrMap_t::iterator findVis(streamVisPtr_t v); 
   
+  NetworkInterface * pNetworkInterface_; 
+
 };
 
 #endif // STREAMCONTROL_H
