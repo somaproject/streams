@@ -52,7 +52,8 @@ class StreamControl
   visPtrMap_t::iterator findVis(streamVisPtr_t v); 
   
   NetworkInterface * pNetworkInterface_; 
-  
+
+  sigc::signal<void, 
 };
 
 #endif // STREAMCONTROL_H

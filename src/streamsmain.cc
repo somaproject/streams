@@ -6,11 +6,12 @@ int main(int argc, char** argv)
 {
   Gtk::Main kit(argc, argv);
 
-  FakeNetwork network; 
+  Network network("127.0.0.1"); 
 
   Gtk::GL::init(argc, argv);
   
   StreamsApp vis(&network);
+  network.run(); 
 
   kit.run(vis);
 

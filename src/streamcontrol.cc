@@ -11,10 +11,13 @@ StreamControl::StreamControl(NetworkInterface * pni) :
   
   // wire up the network callbacks
 
-  Glib::signal_io().connect(sigc::mem_fun(*this, &StreamControl::dataRXCallback), 
-			    pni_->getDataFifoPipe(), Glib::IO_IN); 
-  Glib::signal_io().connect(sigc::mem_fun(*this, &StreamControl::eventRXCallback), 
-			    pni_->getEventFifoPipe(), Glib::IO_IN); 
+  Glib::signal_io().connect(sigc::mem_fun(*this, 
+					  &StreamControl::dataRXCallback), 
+			    pni->getDataFifoPipe(), Glib::IO_IN); 
+
+  Glib::signal_io().connect(sigc::mem_fun(*this, 
+					  &StreamControl::eventRXCallback), 
+			    pni->getEventFifoPipe(), Glib::IO_IN); 
   
   
 }
@@ -179,9 +182,10 @@ bool StreamControl::dataRXCallback(Glib::IOCondition io_condition)
       read(pNetworkInterface_->getDataFifoPipe(), &x, 1); 
       DataPacket_t * rdp = pNetworkInterface_->getNewData(); 
       // is this a spike? 
-      if (rdp->typ == WAVES)
+      if (rdp->typ == WAVE)
 	{
-	  dispatch(rdp)
+	  std::cout << "new data" << std::endl; 
+	  dispatch(rdp); 
 
 	}
       else 
@@ -222,7 +226,7 @@ bool StreamControl::eventRXCallback(Glib::IOCondition io_condition)
 	      time |= i->data[2]; 
 	      float ftime = float(time) / 50e3; 
 
-	      //setTime(ftime); 
+	      setTime(ftime); 
 	    }
 
 	}

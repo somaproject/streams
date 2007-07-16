@@ -110,7 +110,7 @@ void StreamsApp::newStreamSource(std::string name)
   std::cout << "Creating a new source " << name << std::endl; 
   
   // first create the stream object
-  streamSourcePtr_t ss = streamControl_.newSourceFactory(name, 0, TSPIKE); 
+  streamSourcePtr_t ss = streamControl_.newSourceFactory(name, 0, WAVE); 
   
   // now we need to wrap this in a status object
   WaveStreamSourceStatus * wsss = new WaveStreamSourceStatus(ss); 
