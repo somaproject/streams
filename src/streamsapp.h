@@ -81,6 +81,7 @@ protected:
    void svSelSetModify(bool append, streamVisPtr_t v); 
    VisProperty visProperty_;
 
+   void setTime(float time); 
 
 };
 

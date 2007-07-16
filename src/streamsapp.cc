@@ -67,6 +67,10 @@ StreamsApp::StreamsApp(NetworkInterface * ni) :
 
   show_all(); 
 
+  streamControl_.timeSignal().connect(sigc::mem_fun(*this,
+						   &StreamsApp::setTime)); 
+
+
 }
 void StreamsApp::buildActions()
 {
@@ -124,6 +128,7 @@ void StreamsApp::newStreamSource(std::string name)
   
   
 }
+
 void StreamsApp::newStreamVis1(std::string name)
 {
   newStreamVis(pSourceStatusWidgets_.front(), name); 
@@ -201,3 +206,10 @@ void StreamsApp::svSelSetModify(bool append, streamVisPtr_t v)
   visProperty_.updateSet(); 
 }
 
+
+void StreamsApp::setTime(float time)
+{
+  
+  waveWin_.setCurrentTime(time);  
+  
+}

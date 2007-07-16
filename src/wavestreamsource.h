@@ -3,6 +3,8 @@
 
 #include <vector>
 #include <sigc++/sigc++.h>
+#include <somanetwork/wave.h>
+
 #include "queueview.h"
 #include "streamsource.h"
 

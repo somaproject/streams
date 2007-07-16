@@ -41,6 +41,10 @@ class StreamControl
   
   bool dataRXCallback(Glib::IOCondition io_condition); 
   bool eventRXCallback(Glib::IOCondition io_condition); 
+  
+  sigc::signal<void, float> & timeSignal() {
+    return timeSignal_; 
+  }
 
  private:
   sourcePtrList_t sourceList_; 
@@ -53,7 +57,10 @@ class StreamControl
   
   NetworkInterface * pNetworkInterface_; 
 
-  sigc::signal<void, 
+  void setTime(float); 
+  
+  sigc::signal<void, float> timeSignal_; 
+
 };
 
 #endif // STREAMCONTROL_H

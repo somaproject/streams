@@ -181,10 +181,9 @@ bool StreamControl::dataRXCallback(Glib::IOCondition io_condition)
       char x; 
       read(pNetworkInterface_->getDataFifoPipe(), &x, 1); 
       DataPacket_t * rdp = pNetworkInterface_->getNewData(); 
-      // is this a spike? 
+      // is this a wave 
       if (rdp->typ == WAVE)
 	{
-	  std::cout << "new data" << std::endl; 
 	  dispatch(rdp); 
 
 	}
@@ -192,7 +191,8 @@ bool StreamControl::dataRXCallback(Glib::IOCondition io_condition)
 	{
 	  std::cout << "Not a wave packet?"  << std::endl; 
 	}
-    
+      delete rdp; 
+
     }
   return true; 
 }
@@ -234,3 +234,8 @@ bool StreamControl::eventRXCallback(Glib::IOCondition io_condition)
   return true; 
 }
 
+void StreamControl::setTime(float time)
+{
+
+  timeSignal_.emit(time); 
+}

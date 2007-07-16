@@ -64,6 +64,8 @@ protected:
   void renderTimeTicks(float T1, float T2);
   void setSelectionRegion(float t1, float t2); 
 
+  void renderCurrentTimeCursor(); 
+
   // primary data source
   
   // state variables
@@ -80,8 +82,8 @@ protected:
   bool liveView_; 
   StreamControl* pStreamControl_; 
 
-  //GLuint gpuProgGradient_; 
-
+  float currentTime_; 
+  
   // font-associated crap
   
   GLuint fontListBase_; 

@@ -279,10 +279,6 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
   glClear(GL_COLOR_BUFFER_BIT | GL_ACCUM_BUFFER_BIT ); 
 
   int N = 10000000; 
-  // configure matrices
-//   glMatrixMode(GL_MODELVIEW); 
-//   glLoadIdentity(); 
-  
   
   renderTimeTicks(viewT1_, viewT2_); 
 
@@ -317,6 +313,9 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
   glVertex2f(selT2_, viewX2_); 
   glVertex2f(selT2_, viewX1_); 
   glEnd(); 
+
+  // render current position
+  renderCurrentTimeCursor(); 
 
   // Swap buffers.
   gldrawable->swap_buffers();
@@ -396,6 +395,7 @@ bool WaveWin::on_button_press_event(GdkEventButton* event)
     {
       std::cout << "Setting lastX_ " << event->x << std::endl; 
       lastX_ = event->x; 
+      liveView_ = false; 
     } 
 
   // don't block
@@ -535,11 +535,35 @@ void WaveWin::setLiveView(bool val)
 
 void WaveWin::setCurrentTime(float time)
 {
+  currentTime_ = time; 
+  
   float twidth = viewT2_ - viewT1_; 
   if (liveView_) {
-    viewT2_ = time; 
-    viewT1_ = time - twidth; 
-
+    // this is the old liveview
+//     viewT2_ = time; 
+//     viewT1_ = time - twidth; 
+//     invalidate();
+    if (currentTime_ > viewT2_) {
+      // this is the sweep-view
+      viewT1_ += twidth; 
+      viewT2_ += twidth; 
+      invalidate();
+    }
   }
   
+}
+
+void WaveWin::renderCurrentTimeCursor()
+{
+
+  glLineWidth(4.0);
+  glColor4f(0.5, 0.5, 1.0, 1.0); 
+  glBegin(GL_LINES); 
+  glVertex2f(currentTime_, viewX1_); 
+  glVertex2f(currentTime_, viewX2_); 
+
+
+  glEnd(); 
+    
+
 }

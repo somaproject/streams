@@ -54,32 +54,26 @@ streamVisPtr_t WaveStreamSource::newVisFactory(std::string name)
 
 void WaveStreamSource::newDataPacket(DataPacket_t *  dp)
 {
-  // turn a DataPacket_t into a WaveBuffer_t
-  
-  // (right now we just generate fake data)
-  int bufsize = 256; 
-  
-  float t  = 0.0; 
-  float fs = 2000.0; 
-  int T = 100; 
+  // turn a DataPacket_t into a Wave_t, 
+  // which we then turn into a WaveBuffer_t
 
-  for (int i = 0 ; i < T; i++) 
+  Wave_t wave = rawToWave(dp); 
+  
+  WaveBuffer_t * pwb = new WaveBuffer_t; 
+  pwb->time = double(wave.time) / 50e3; 
+  pwb->samprate = wave.samprate; 
+  pwb->data.reserve(WAVEBUF_LEN); 
+
+  for (int i = 0; i < WAVEBUF_LEN; i++)
     {
-    
-      WaveBuffer_t * wb = new WaveBuffer_t; 
-      t = lastT_ + i * bufsize / fs; 
-      wb->time = t; 
-      wb->samprate = fs; 
-      for (int j = 0; j < bufsize; j++)
-	{
-	  float x; 
-	  x = (float)rand() /(RAND_MAX + 1.0) * 2.0 - 1.0; 
-	  wb->data.push_back(x/2.0 / 100.0); // -5 to 5 mV
-
-	}
-      data_.push_back(wb); 
+      pwb->data.push_back(double(wave.wave[i])/1e9);
+      
     }
-  lastT_ += float(T) * bufsize / fs; 
+  std::cout << pwb->time << std::endl; 
+  data_.push_back(pwb); 
+  
+
+  //lastT_ += float(T) * WAVEBUF_LEN / wb.samprate; 
 
   
   newDataSignal_.emit(); 
