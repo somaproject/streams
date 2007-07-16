@@ -9,6 +9,13 @@ StreamControl::StreamControl(NetworkInterface * pni) :
   // streamcontrol also handles the network interface? I'm not
   // sure I like that...
   
+  // wire up the network callbacks
+
+  Glib::signal_io().connect(sigc::mem_fun(*this, &StreamControl::dataRXCallback), 
+			    pni_->getDataFifoPipe(), Glib::IO_IN); 
+  Glib::signal_io().connect(sigc::mem_fun(*this, &StreamControl::eventRXCallback), 
+			    pni_->getEventFifoPipe(), Glib::IO_IN); 
+  
   
 }
 
@@ -40,6 +47,7 @@ streamSourcePtr_t StreamControl::newSourceFactory(std::string name,
       }
     
     dataDispatchMap_[dp] = x; 
+    pNetworkInterface_->enableDataRX(ds, dt); 
     sourceList_.push_back(x); 
 
     return x; 
@@ -93,10 +101,18 @@ void StreamControl::remove(streamSourcePtr_t source) {
        ddi !=  dataDispatchMap_.end(); ddi++) 
     {
       if (ddi->second == *i) {
+
+	
+	// delete RX from network
+	pNetworkInterface_->disableDataRX(ddi->first.first, ddi->first.second); 
+	
+	// remvoe from map
 	dataDispatchMap_.erase(ddi); 
       }
       
     }
+
+
 
   // delete self
   (*i)->disconnect(); 
@@ -148,3 +164,69 @@ visPtrMap_t::iterator  StreamControl::findVis(streamVisPtr_t v)
   return i; 
 
 }
+
+
+bool StreamControl::dataRXCallback(Glib::IOCondition io_condition)
+{
+  
+  if ((io_condition & Glib::IO_IN) == 0) {
+    std::cerr << "Invalid fifo response" << std::endl;
+    return false; 
+  }
+  else 
+    {
+      char x; 
+      read(pNetworkInterface_->getDataFifoPipe(), &x, 1); 
+      DataPacket_t * rdp = pNetworkInterface_->getNewData(); 
+      // is this a spike? 
+      if (rdp->typ == WAVES)
+	{
+	  dispatch(rdp)
+
+	}
+      else 
+	{
+	  std::cout << "Not a wave packet?"  << std::endl; 
+	}
+    
+    }
+  return true; 
+}
+
+bool StreamControl::eventRXCallback(Glib::IOCondition io_condition)
+{
+  
+  if ((io_condition & Glib::IO_IN) == 0) {
+    std::cerr << "Invalid fifo response" << std::endl;
+    return false; 
+  }
+  else 
+    {
+      char x; 
+      read(pNetworkInterface_->getEventFifoPipe(), &x, 1); 
+      EventList_t * pel = pNetworkInterface_->getNewEvents(); 
+      
+      EventList_t::iterator i; 
+      for (i = pel->begin(); i != pel->end(); i++)
+	{
+	  // we really need to figure out how to FACTOR THIS OUT
+	  
+	  if (i->src == 0x00 && i->cmd == 0x10 )
+	    {
+	      // this is the time
+	      uint64_t time = 0; 
+	      time = i->data[0]; 
+	      time = time << 16; 
+	      time |= i->data[1]; 
+	      time = time << 16; 
+	      time |= i->data[2]; 
+	      float ftime = float(time) / 50e3; 
+
+	      //setTime(ftime); 
+	    }
+
+	}
+    }
+  return true; 
+}
+

@@ -35,12 +35,18 @@ class StreamControl
   void remove(streamVisPtr_t vis); 
   
   std::list<streamVisPtr_t> visPtrList; 
-  void dispatch(DataPacket_t * pdp ); 
+
+  void datadispatch(DataPacket_t * pdp); 
+  void eventdispatch(EventList_t * pel); 
   
+  bool dataRXCallback(Glib::IOCondition io_condition); 
+  bool eventRXCallback(Glib::IOCondition io_condition); 
+
  private:
   sourcePtrList_t sourceList_; 
   visPtrMap_t visMap_; 
-  
+  void dispatch(DataPacket_t * pdp ); 
+
   dataDispatchMap_t dataDispatchMap_; 
 
   visPtrMap_t::iterator findVis(streamVisPtr_t v); 
