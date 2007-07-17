@@ -72,9 +72,6 @@ void WaveStreamSource::newDataPacket(DataPacket_t *  dp)
   std::cout << pwb->time << std::endl; 
   data_.push_back(pwb); 
   
-
-  //lastT_ += float(T) * WAVEBUF_LEN / wb.samprate; 
-
   
   newDataSignal_.emit(); 
   

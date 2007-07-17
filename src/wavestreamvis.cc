@@ -58,7 +58,9 @@ void WaveStreamVis::newData()
 	  GLWavePoint_t wp; 
 	  wp.t = pwb->time + (i / pwb->samprate);
 	  wp.x = pwb->data[i]; 
-	  filteredSamples_.push_back(wp); 
+	  
+	  GLWavePoint_t fwp = filterNextPoint(wp); 
+	  filteredSamples_.push_back(fwp); 
 	  streamRenderer_.newSample(); 
 	  streamTrigger_.newSample(); 
 	  streamTriggerRenderer_.newSample(); 
@@ -160,4 +162,14 @@ Gdk::Color WaveStreamVis::getColor()
   return color_; 
 }
 
+GLWavePoint_t WaveStreamVis::filterNextPoint(GLWavePoint_t wp)
+{
+  
+  //wp.t -= 0.1; // delay
+
+  return wp; 
+
+
+
+}
 

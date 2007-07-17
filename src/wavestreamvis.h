@@ -96,6 +96,8 @@ class WaveStreamVis : public StreamVis
   Gdk::Color color_; 
   sigc::signal<void, Gdk::Color> colorSignal_; 
 
+  GLWavePoint_t filterNextPoint(GLWavePoint_t wp);
+
 };
 
 #endif // WAVESTREAMVIS_H
