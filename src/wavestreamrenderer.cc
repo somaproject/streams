@@ -13,8 +13,6 @@ WaveStreamRenderer::WaveStreamRenderer(std::vector<GLWavePoint_t> * pSamples ) :
   color_("red")
 {
   // initialize data from stream source buffer
-  GLWaveQuadStrip_t s1poly;
-  //ratesS2_.push_back(s1poly); 
   
 }
 
@@ -33,7 +31,7 @@ void WaveStreamRenderer::newSample()
   GLWavePoint_t p = pSamples_->back(); 
     
 
-  int S1N = 20; 
+  int S1N = 10; 
   
   int N = pSamples_->size(); 
   
@@ -44,36 +42,41 @@ void WaveStreamRenderer::newSample()
     qs.tmin = p.t; 
     qs.tmax = p.t; 
     ratesS2_.push_back(qs); 
-  } else if (N > 5) {
-    GLWavePoint_t pmin, pmax; 
-    pmin.x = 100e6; 
-    pmax.x = -100e6; 
-
+  } else if (N % S1N == 0) {
+    // examine the last N points
+    GLWavePoint_t minpoint, maxpoint; 
+    minpoint.x = 100e6;
+    maxpoint.x = -100e6; 
     for(int i = 0; i < S1N; i++) {
-      GLWavePoint_t p1 = (*pSamples_)[N-i-1] ; 
-
-      if (pmin.x > p1.x) {
-	pmin.x = p1.x; 
-	pmin.t = p1.t; 
-      }
-      if (pmax.x < p1.x) {
-	pmax.x = p1.x; 
-	pmax.t = p1.t; 
-      }
+      int q =  N - i - 1; 
+      GLWavePoint_t wp = (*pSamples_)[q]; 
+      if (wp.x < minpoint.x)
+	minpoint.x = wp.x; 
+      
+      if (wp.x > maxpoint.x)
+	maxpoint.x = wp.x; 
     }
-    GLWaveQuadStrip_t qs; 
-    
-    qs.xmin = pmin.x; 
-    qs.xmax = pmax.x; 
-    qs.tmin = pmin.t; 
-    qs.tmax = pmax.t; 
 
-    if (ratesS2_.back().tmin != pmin.t
-	or ratesS2_.back().tmax != pmax.t) 
-      {
-	ratesS2_.push_back(qs); 
-      }
+    // now we add a rectangle
+    GLWaveQuadStrip_t pl, pr; 
     
+    // left points
+    pl.xmin = minpoint.x; 
+    pl.xmax = maxpoint.x; 
+    pl.tmin = (*pSamples_)[N-S1N].t; 
+    pl.tmax = (*pSamples_)[N-S1N].t; 
+
+    // right points
+    pr.xmin = minpoint.x; 
+    pr.xmax = maxpoint.x; 
+    pr.tmin = (*pSamples_)[N-1].t; 
+    pr.tmax = (*pSamples_)[N-1].t; 
+
+    ratesS2_.push_back(pl); 
+    ratesS2_.push_back(pr); 
+      
+    
+
   }
   
   if ( (mostRecentRenderT1_ <= p.t) and (mostRecentRenderT2_ >= p.t) )
@@ -86,6 +89,8 @@ void WaveStreamRenderer::newSample()
 
 void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
 {
+
+
   // pixels is just a hint
 
   mostRecentRenderT1_ = t1; 
@@ -144,7 +149,7 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
      glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
  		    &(*i1)); 
      glDrawArrays(GL_LINE_STRIP, 0, len); 
-     std::cout << "rendering with len1 = " << len << std::endl; 
+     //std::cout << "rendering with len1 = " << len << std::endl; 
 
   }
 
@@ -166,48 +171,40 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
 
 
   if (scale < fadethold) {
-    glColor4f(1.0, 1.0, 1.0, 0.4); 
+
+    setGLColor((fadethold - scale)/fadethold  + 0.5); 
     glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t), 
-		    &(*qi1)); 
+ 		    &(ratesS2_[0])); 
+   
     
-    
-    glDrawArrays(GL_QUAD_STRIP, 0, len2*2); 
-    
-    
-//     glVertexPointer(2, GL_FLOAT, sizeof(GLWaveQuadStrip_t), 
-// 		    &(*qi1)); 
-    
-//     glDrawArrays(GL_LINE_STRIP, 0, len2); 
-    
-//     glVertexPointer(2, GL_FLOAT, sizeof(GLWaveQuadStrip_t), 
-// 		    &(qi1->tmin)); 
-//     glDrawArrays(GL_LINE_STRIP, 0, len2); 
+    glDrawArrays(GL_QUAD_STRIP, 0, 2*ratesS2_.size()); 
+    glDrawArrays(GL_LINES, 0, 2*ratesS2_.size()); 
     
   }
   
-  // stupid trigger rendering
-  std::vector<wavetime_t>::iterator trigi1, trigi2; 
-  trigi1 = lower_bound(trigTimeList_.begin(), 
- 		       trigTimeList_.end(), 
- 		       t1); 
+//   // stupid trigger rendering
+//   std::vector<wavetime_t>::iterator trigi1, trigi2; 
+//   trigi1 = lower_bound(trigTimeList_.begin(), 
+//  		       trigTimeList_.end(), 
+//  		       t1); 
 
-  trigi2 = lower_bound(trigTimeList_.begin(), 
- 		       trigTimeList_.end(), 
- 		       t2); 
+//   trigi2 = lower_bound(trigTimeList_.begin(), 
+//  		       trigTimeList_.end(), 
+//  		       t2); 
 
 
-  //glColor4f(0.0, 1.0, 0.0, 1.0); 
-  printStatus();
-  //std::cout << "Rendering triggers!" << trigTimeList_.size() << std::endl; 
-   for(std::vector<wavetime_t>::iterator i = trigi1; 
-       i != trigi2; i++)
-     {
+//   //glColor4f(0.0, 1.0, 0.0, 1.0); 
+//   printStatus();
+//   //std::cout << "Rendering triggers!" << trigTimeList_.size() << std::endl; 
+//    for(std::vector<wavetime_t>::iterator i = trigi1; 
+//        i != trigi2; i++)
+//      {
 
-       glBegin(GL_LINE_STRIP); 
-       glVertex2f(*i, -50); 
-       glVertex2f(*i, 50); 
-       glEnd(); 
-     }
+//        glBegin(GL_LINE_STRIP); 
+//        glVertex2f(*i, -50); 
+//        glVertex2f(*i, 50); 
+//        glEnd(); 
+//      }
       
   glPopMatrix(); 
 

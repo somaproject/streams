@@ -80,7 +80,7 @@ void StreamsApp::on_realize()
 {
   Gtk::Widget::on_realize(); 
 
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 2; i++) {
     streamSourcePtr_t ssp = newStreamSource("wave", i);
     streamVisPtr_t svp = newStreamVis(ssp, "wave"); 
   }
