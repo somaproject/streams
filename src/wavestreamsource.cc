@@ -69,7 +69,6 @@ void WaveStreamSource::newDataPacket(DataPacket_t *  dp)
       pwb->data.push_back(double(wave.wave[i])/1e9);
       
     }
-  std::cout << pwb->time << std::endl; 
   data_.push_back(pwb); 
   
   

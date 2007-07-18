@@ -58,11 +58,14 @@ protected:
    
    
    void buildActions(); 
-   void newStreamSource(std::string name); 
-   void newStreamVis(SourceStatus *, std::string name); 
-   void newStreamVis1(std::string name); 
+   streamSourcePtr_t newStreamSource(std::string name, datasource_t); 
+   streamSourcePtr_t newStreamSource(std::string name); 
+   streamVisPtr_t  newStreamVis(SourceStatus *, std::string name); 
+   streamVisPtr_t  newStreamVis(streamSourcePtr_t, std::string name); 
+   streamVisPtr_t newStreamVis1(std::string name); 
    
-   
+   void on_realize(); 
+
   // signal handlers:
 /*   void on_button_quit_clicked(); */
 /*   virtual bool on_idle(); */

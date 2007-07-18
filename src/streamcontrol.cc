@@ -30,15 +30,15 @@ StreamControl::~StreamControl()
 }
 
 streamSourcePtr_t StreamControl::newSourceFactory(std::string name, 
-						  datasource_t ds, 
-						  datatype_t dt){
+						  datasource_t ds){
 
 
   streamSourcePtr_t x; 
-  
+  datatype_t dt = WAVE; 
   if (name == "wave")
     {
-      x = streamSourcePtr_t(new WaveStreamSource(ds, dt)); 
+      dt = WAVE; 
+      x = streamSourcePtr_t(new WaveStreamSource(ds, WAVE)); 
     }
 
   if (x) {
@@ -189,7 +189,7 @@ bool StreamControl::dataRXCallback(Glib::IOCondition io_condition)
 	}
       else 
 	{
-	  std::cout << "Not a wave packet?"  << std::endl; 
+	  std::cerr << "Not a wave packet?"  << std::endl; 
 	}
       delete rdp; 
 

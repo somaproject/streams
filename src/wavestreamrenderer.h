@@ -61,7 +61,7 @@ class WaveStreamRenderer
 
  protected: 
   std::vector<GLWavePoint_t> * pSamples_; 
-  std::vector<GLWaveQuadStrip_t> ratesS2_; 
+  std::vector<GLWavePoint_t> ratesS2_; 
   timeindex_t indexS2_, indexS3_; 
 
   wavetime_t mostRecentRenderT1_, mostRecentRenderT2_; 

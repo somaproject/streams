@@ -14,7 +14,7 @@ WaveStreamRenderer::WaveStreamRenderer(std::vector<GLWavePoint_t> * pSamples ) :
 {
   // initialize data from stream source buffer
   GLWaveQuadStrip_t s1poly;
-  ratesS2_.push_back(s1poly); 
+  //ratesS2_.push_back(s1poly); 
   
 }
 
@@ -33,31 +33,32 @@ void WaveStreamRenderer::newSample()
   GLWavePoint_t p = pSamples_->back(); 
     
 
-  int S1N = 10; 
+  int S1N = 100; 
+  
+  int N = pSamples_->size(); 
+  
+  if (ratesS2_.empty()) {
+    ratesS2_.push_back(p); 
+  } else if (N > 5) {
+    GLWavePoint_t pmin; 
+    pmin.x = 100e6; 
+    for(int i = 0; i < S1N; i++) {
+      GLWavePoint_t p1 = (*pSamples_)[N-i-1] ; 
 
-  if (ratesS2_.back().xmax < p.x) {
-    ratesS2_.back().xmax = p.x; 
-    ratesS2_.back().tmax = p.t; 
-  }
-  if (ratesS2_.back().xmin > p.x){
-    ratesS2_.back().xmin = p.x; 
-    ratesS2_.back().tmin = p.t; 
-  }
-
-
-  if (pSamples_->size() % S1N == 0)
-    {
-
-      GLWaveQuadStrip_t s1poly = ratesS2_.back(); 
-      s1poly.xmin = 100e6; 
-      s1poly.xmax = -100e6; 
+      if (pmin.x > p1.x) {
+	pmin.x = p1.x; 
+	pmin.t = p1.t; 
+      }
       
-      ratesS2_.push_back(s1poly); 
     }
-  
-  
 
-
+    if (ratesS2_.back().t != pmin.t) 
+      {
+	ratesS2_.push_back(pmin); 
+      }
+    
+  }
+  
   if ( (mostRecentRenderT1_ <= p.t) and (mostRecentRenderT2_ >= p.t) )
     {
       invWaveSignal_.emit(); 
@@ -115,48 +116,25 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
 
   int len  = i2 - i1; 
   float fadethold = 400.0; 
-  //  if (scale > fadethold) {
+  if (scale > fadethold) {
     setGLColor(1.0); 
-//   } else {
-//     setGLColor(1.0 - (fadethold - scale)/200.0);
-//   }
+   } else {
+     setGLColor(1.0 - (fadethold - scale)/200.0);
+   }
 
-  //if (scale > 200.0) {  
-    glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
-		    &(*i1)); 
-    glDrawArrays(GL_LINE_STRIP, 0, len); 
-    //}
+  if (scale > 200.0) {  
+     glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
+ 		    &(*i1)); 
+     glDrawArrays(GL_LINE_STRIP, 0, len); 
+  }
   
-  // first scale 
-//   std::vector<GLWaveQuadStrip_t>::iterator  qi1, qi2;
-
-//   GLWaveQuadStrip_t q1, q2; 
-//   q1.tmax = t1; 
-//   q1.tmin = t1; 
-
   
-//   qi1 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
-//  		   q1, &compareTime2); 
+//   glColor4f(1.0, 1.0, 1.0, 1.0);
+//   glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t), 
+//  		  &ratesS2_[0]); 
+//   glDrawArrays(GL_LINE_STRIP, 0, ratesS2_.size()); 
   
-//   q2.tmax = t2; 
-//   q2.tmin = t2; 
-
-//   qi2 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
-//   		   q2, &compareTime2); 
   
-
-
-
-//   len  = qi2 - qi1; 
-
-//   setGLColor( fadethold-scale/200.0); 
-//   if (scale <= 400.0){
-//     std::cout << "Drawing reduced-scale" << std::endl; 
-// //     glVertexPointer(2, GL_FLOAT, sizeof(float)*2, 
-// //  		    &(*qi1)); 
-// //      glDrawArrays(GL_QUAD_STRIP, 0, 2 * len); 
-//   }
-
   // stupid trigger rendering
   std::vector<wavetime_t>::iterator trigi1, trigi2; 
   trigi1 = lower_bound(trigTimeList_.begin(), 

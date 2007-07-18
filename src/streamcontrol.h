@@ -25,8 +25,7 @@ class StreamControl
   ~StreamControl(); 
   
   
-  streamSourcePtr_t newSourceFactory(std::string name, datasource_t ds, 
-				     datatype_t dt); 
+  streamSourcePtr_t newSourceFactory(std::string name, datasource_t ds); 
   
   streamVisPtr_t newVisFactory(streamSourcePtr_t src, std::string name); 
 

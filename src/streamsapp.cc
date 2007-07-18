@@ -69,23 +69,39 @@ StreamsApp::StreamsApp(NetworkInterface * ni) :
 
   streamControl_.timeSignal().connect(sigc::mem_fun(*this,
 						   &StreamsApp::setTime)); 
+  add_events (Gdk::ALL_EVENTS_MASK); 
+//   signal_realize().connect(sigc::mem_fun(*this, 
+// 					 &StreamsApp::on_realize_event)); 
 
 
 }
+
+void StreamsApp::on_realize()
+{
+  Gtk::Widget::on_realize(); 
+
+  for (int i = 0; i < 10; i++) {
+    streamSourcePtr_t ssp = newStreamSource("wave", i);
+    streamVisPtr_t svp = newStreamVis(ssp, "wave"); 
+  }
+  
+
+}
+
 void StreamsApp::buildActions()
 {
   
   pActionGroup_ = Gtk::ActionGroup::create(); 
   pActionGroup_->add( Gtk::Action::create("MenuFile", "_File") );
-  pActionGroup_->add( Gtk::Action::create("New WaveSource", "New WaveSource"),
-		      sigc::bind(
-				 sigc::mem_fun(*this, &StreamsApp::newStreamSource), 
-				 "wave")); 
+//   pActionGroup_->add( Gtk::Action::create("New WaveSource", "New WaveSource"),
+// 		      sigc::bind(
+// 				 sigc::mem_fun(*this, &StreamsApp::newStreamSource), 
+// 				 "wave")); 
 
-  pActionGroup_->add( Gtk::Action::create("New WaveVis", "New WaveVis"),
- 		      sigc::bind(
- 				 sigc::mem_fun(*this, &StreamsApp::newStreamVis1), 
-				 "wave")); 
+//   pActionGroup_->add( Gtk::Action::create("New WaveVis", "New WaveVis"),
+//  		      sigc::bindst(
+//  				 sigc::mem_fun(*this, &StreamsApp::newStreamVis1), 
+// 				 "wave")); 
 
 
   pUIManager_ = Gtk::UIManager::create();
@@ -106,15 +122,19 @@ void StreamsApp::buildActions()
 
   pUIManager_->add_ui_from_string(ui_info);
 
+
 }
 
-void StreamsApp::newStreamSource(std::string name)
+streamSourcePtr_t StreamsApp::newStreamSource(std::string name)
+{
+  return newStreamSource(name, 0); 
+}
+
+streamSourcePtr_t StreamsApp::newStreamSource(std::string name, datasource_t ds)
 {
   
-  std::cout << "Creating a new source " << name << std::endl; 
-  
   // first create the stream object
-  streamSourcePtr_t ss = streamControl_.newSourceFactory(name, 1, WAVE); 
+  streamSourcePtr_t ss = streamControl_.newSourceFactory(name, ds); 
   
   // now we need to wrap this in a status object
   WaveStreamSourceStatus * wsss = new WaveStreamSourceStatus(ss); 
@@ -126,20 +146,18 @@ void StreamsApp::newStreamSource(std::string name)
   
   pHPane->show_all(); 
   
-  
+  return ss; 
 }
 
-void StreamsApp::newStreamVis1(std::string name)
+streamVisPtr_t StreamsApp::newStreamVis1(std::string name)
 {
-  newStreamVis(pSourceStatusWidgets_.front(), name); 
+  return newStreamVis(pSourceStatusWidgets_.front(), name); 
 
 
 }
 
-void StreamsApp::newStreamVis(SourceStatus* src, std::string name)
+streamVisPtr_t StreamsApp::newStreamVis(SourceStatus* src, std::string name)
 {
-  
-  std::cout << "Creating a new vis" << name << std::endl; 
   
   // first create the stream object
   streamVisPtr_t sv = streamControl_.newVisFactory(src->getSourcePtr(), name); 
@@ -157,8 +175,32 @@ void StreamsApp::newStreamVis(SourceStatus* src, std::string name)
   
   // how do we connect the vis to the waves? 
   sv->invMainWaveSignal().connect(sigc::mem_fun(waveWin_, &WaveWin::invalidate)); 
+  return sv; 
 
 }
+
+streamVisPtr_t StreamsApp::newStreamVis(streamSourcePtr_t src, std::string name)
+{
+  
+  // first create the stream object
+  streamVisPtr_t sv = streamControl_.newVisFactory(src, name); 
+  
+  // now we need to wrap this in a status object
+  WaveStreamVisStatus * wvss = new WaveStreamVisStatus(sv); 
+  wvss->clickedSignal().connect(sigc::bind(sigc::mem_fun(*this, 
+							 &StreamsApp::svSelSetModify), sv)); 
+
+  pVisStatusWidgets_.push_back(wvss); 
+  
+  vBoxStreamStatus_.pack_start(*wvss); 
+  wvss->show_all(); 
+  
+  // how do we connect the vis to the waves? 
+  sv->invMainWaveSignal().connect(sigc::mem_fun(waveWin_, &WaveWin::invalidate)); 
+  return sv; 
+
+}
+
 
 StreamsApp::~StreamsApp()
  {
@@ -167,7 +209,6 @@ StreamsApp::~StreamsApp()
 
 void StreamsApp::svSelSetModify(bool append, streamVisPtr_t v)
 {
-  std::cout << "appending" << std::endl; 
 
   std::set<streamVisPtr_t>::iterator i = streamVisSelSet_.find(v); 
 

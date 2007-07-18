@@ -393,7 +393,6 @@ bool WaveWin::on_button_press_event(GdkEventButton* event)
 //   m_BeginY = event->y;
   if (event->type == GDK_BUTTON_PRESS)  
     {
-      std::cout << "Setting lastX_ " << event->x << std::endl; 
       lastX_ = event->x; 
       liveView_ = false; 
     } 
@@ -404,7 +403,7 @@ bool WaveWin::on_button_press_event(GdkEventButton* event)
 
 bool WaveWin::on_button_release_event(GdkEventButton* event)
 {
-  std::cout << "RELEASE ME " << std::endl; 
+
   if (event->button == 3) {
 	// update the zoom selection 
     viewT1_ = selT1_; 
@@ -495,7 +494,7 @@ bool WaveWin::on_motion_notify_event(GdkEventMotion* event)
     viewT2_ -= windowDelta;
     invalidate(); 
     lastX_ = x; 
-    //std::cout << " Moving..." << std::endl; 
+
     //invalidate(); 
 
     update();
