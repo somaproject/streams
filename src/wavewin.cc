@@ -82,6 +82,7 @@ void WaveWin::on_realize()
 
   glEnable(GL_LINE_SMOOTH); 
   glEnable(GL_POINT_SMOOTH); 
+  glEnable(GL_POLYGON_SMOOTH); 
   glEnableClientState(GL_VERTEX_ARRAY); 
   
   glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
