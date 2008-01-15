@@ -1,6 +1,6 @@
 #include "wavestreamsourcestatus.h"
 
-WaveStreamSourceStatus::WaveStreamSourceStatus(streamSourcePtr_t wsv) :
+WaveStreamSourceStatus::WaveStreamSourceStatus(pStreamSource_t wsv) :
   pStreamSource_(wsv), 
   label_("This is text")
 {

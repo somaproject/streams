@@ -29,16 +29,16 @@ StreamControl::~StreamControl()
   
 }
 
-streamSourcePtr_t StreamControl::newSourceFactory(std::string name, 
+pStreamSource_t StreamControl::newSourceFactory(std::string name, 
 						  datasource_t ds){
 
 
-  streamSourcePtr_t x; 
+  pStreamSource_t x; 
   datatype_t dt = WAVE; 
   if (name == "wave")
     {
       dt = WAVE; 
-      x = streamSourcePtr_t(new WaveStreamSource(ds, WAVE)); 
+      x = pStreamSource_t(new WaveStreamSource(ds, WAVE)); 
     }
 
   if (x) {
@@ -61,14 +61,14 @@ streamSourcePtr_t StreamControl::newSourceFactory(std::string name,
   
 }
 
-streamVisPtr_t StreamControl::newVisFactory(streamSourcePtr_t src, std::string name)
+pStreamVis_t StreamControl::newVisFactory(pStreamSource_t src, std::string name)
 {
 
-  streamVisPtr_t x; 
+  pStreamVis_t x; 
   x = src->newVisFactory(name); 
 
   if (x) {
-    visMap_.insert(std::pair<streamSourcePtr_t, streamVisPtr_t>(src, x)); 
+    visMap_.insert(std::pair<pStreamSource_t, pStreamVis_t>(src, x)); 
     visPtrList.push_back(x); 
 
     return x; 
@@ -81,7 +81,7 @@ streamVisPtr_t StreamControl::newVisFactory(streamSourcePtr_t src, std::string n
   
 }
 
-void StreamControl::remove(streamSourcePtr_t source) {
+void StreamControl::remove(pStreamSource_t source) {
 
   sourcePtrList_t::iterator i; 
   i = find(sourceList_.begin(), sourceList_.end(), source); 
@@ -125,19 +125,19 @@ void StreamControl::remove(streamSourcePtr_t source) {
 
 }
 
-void StreamControl::remove(streamVisPtr_t vis)
+void StreamControl::remove(pStreamVis_t vis)
 {
   visPtrMap_t::iterator v = findVis(vis); 
   vis->disconnect(); 
   visMap_.erase(v); 
   
-  std::list<streamVisPtr_t>::iterator i; 
+  std::list<pStreamVis_t>::iterator i; 
   i = find(visPtrList.begin(), visPtrList.end(), vis); 
   visPtrList.erase(i); 
 
 }
 
-void StreamControl::dispatch(DataPacket_t * pdp )
+void StreamControl::dispatch(pDataPacket_t pdp )
 {
   // We dispatch inbound packets to the appropraite stream 
   // source by performing a  lookup in our map
@@ -153,7 +153,7 @@ void StreamControl::dispatch(DataPacket_t * pdp )
 
 }
   
-visPtrMap_t::iterator  StreamControl::findVis(streamVisPtr_t v)
+visPtrMap_t::iterator  StreamControl::findVis(pStreamVis_t v)
 {
   // this is a stupid linear-time search
   visPtrMap_t::iterator i = visMap_.begin(); 
@@ -180,7 +180,7 @@ bool StreamControl::dataRXCallback(Glib::IOCondition io_condition)
     {
       char x; 
       read(pNetworkInterface_->getDataFifoPipe(), &x, 1); 
-      DataPacket_t * rdp = pNetworkInterface_->getNewData(); 
+      pDataPacket_t rdp = pNetworkInterface_->getNewData(); 
       // is this a wave 
       if (rdp->typ == WAVE)
 	{
@@ -191,7 +191,6 @@ bool StreamControl::dataRXCallback(Glib::IOCondition io_condition)
 	{
 	  std::cerr << "Not a wave packet?"  << std::endl; 
 	}
-      delete rdp; 
 
     }
   return true; 
@@ -208,7 +207,7 @@ bool StreamControl::eventRXCallback(Glib::IOCondition io_condition)
     {
       char x; 
       read(pNetworkInterface_->getEventFifoPipe(), &x, 1); 
-      EventList_t * pel = pNetworkInterface_->getNewEvents(); 
+      pEventList_t pel = pNetworkInterface_->getNewEvents(); 
       
       EventList_t::iterator i; 
       for (i = pel->begin(); i != pel->end(); i++)

@@ -13,7 +13,7 @@
 #include "streamvis.h"
 typedef std::pair<datasource_t, datatype_t> datapair_t; 
 
-typedef std::map<datapair_t, streamSourcePtr_t> dataDispatchMap_t; 
+typedef std::map<datapair_t, pStreamSource_t> dataDispatchMap_t; 
 
 
 class StreamControl
@@ -25,18 +25,18 @@ class StreamControl
   ~StreamControl(); 
   
   
-  streamSourcePtr_t newSourceFactory(std::string name, datasource_t ds); 
+  pStreamSource_t newSourceFactory(std::string name, datasource_t ds); 
   
-  streamVisPtr_t newVisFactory(streamSourcePtr_t src, std::string name); 
+  pStreamVis_t newVisFactory(pStreamSource_t src, std::string name); 
 
-  void remove(streamSourcePtr_t source); 
+  void remove(pStreamSource_t source); 
   
-  void remove(streamVisPtr_t vis); 
+  void remove(pStreamVis_t vis); 
   
-  std::list<streamVisPtr_t> visPtrList; 
+  std::list<pStreamVis_t> visPtrList; 
 
-  void datadispatch(DataPacket_t * pdp); 
-  void eventdispatch(EventList_t * pel); 
+  void datadispatch(pDataPacket_t pdp); 
+  void eventdispatch(pEventList_t pel); 
   
   bool dataRXCallback(Glib::IOCondition io_condition); 
   bool eventRXCallback(Glib::IOCondition io_condition); 
@@ -48,11 +48,11 @@ class StreamControl
  private:
   sourcePtrList_t sourceList_; 
   visPtrMap_t visMap_; 
-  void dispatch(DataPacket_t * pdp ); 
+  void dispatch(pDataPacket_t pdp ); 
 
   dataDispatchMap_t dataDispatchMap_; 
 
-  visPtrMap_t::iterator findVis(streamVisPtr_t v); 
+  visPtrMap_t::iterator findVis(pStreamVis_t v); 
   
   NetworkInterface * pNetworkInterface_; 
 

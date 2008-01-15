@@ -4,6 +4,7 @@
 #include <vector>
 #include <sigc++/sigc++.h>
 #include <somanetwork/wave.h>
+#include <boost/shared_ptr.hpp>
 
 #include "queueview.h"
 #include "streamsource.h"
@@ -15,6 +16,9 @@ struct WaveBuffer_t
   std::vector<float> data; 
 }; 
 
+typedef boost::shared_ptr<WaveBuffer_t> pWaveBuffer_t; 
+
+
 class WaveStreamSource : public StreamSource
 {
  public:
@@ -25,12 +29,12 @@ class WaveStreamSource : public StreamSource
 
   // emit updatedData
   
-  void newDataPacket(DataPacket_t *  dp); 
+  void newDataPacket(pDataPacket_t dp); 
   
   // public data access
-  std::list<WaveBuffer_t *> data_; 
+  std::list<pWaveBuffer_t> data_; 
   
-  QueueView<WaveBuffer_t *> getQueueView(); 
+  QueueView<pWaveBuffer_t> getQueueView(); 
 
   // signal
   sigc::signal<void> newDataSignal() { return newDataSignal_;  }; 
@@ -40,7 +44,7 @@ class WaveStreamSource : public StreamSource
   float lastT_; 
 
   // our factory to produce our associated vis
-  streamVisPtr_t newVisFactory(std::string name); 
+  pStreamVis_t newVisFactory(std::string name); 
   
 
  private:

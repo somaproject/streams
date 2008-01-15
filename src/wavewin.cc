@@ -284,7 +284,7 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
   renderTimeTicks(viewT1_, viewT2_); 
 
 
-  std::list<streamVisPtr_t>::iterator pwd; 
+  std::list<pStreamVis_t>::iterator pwd; 
 
   int pixwidth = get_width(); 
   // get the windows own allocation and use that

@@ -15,7 +15,7 @@ class VisStatus : public Gtk::HBox
     return clickedSignal_; 
   }
   
-  virtual streamVisPtr_t getVisPtr() = 0; 
+  virtual pStreamVis_t getVisPtr() = 0; 
   virtual void setSelected(bool state) = 0; 
 
  private:

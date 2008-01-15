@@ -10,7 +10,7 @@
 class WaveStreamVisStatus : public VisStatus
 {
  public: 
-  WaveStreamVisStatus(streamVisPtr_t wsv); 
+  WaveStreamVisStatus(pStreamVis_t wsv); 
   ~WaveStreamVisStatus(); 
 
   // emit a selected signal
@@ -20,10 +20,10 @@ class WaveStreamVisStatus : public VisStatus
   
   void setSelected(bool state); 
   
-  streamVisPtr_t getVisPtr() { return pWaveStreamVis_; }; 
+  pStreamVis_t getVisPtr() { return pWaveStreamVis_; }; 
   
  private:
-  waveStreamVisPtr_t pWaveStreamVis_; 
+  pWaveStreamVis_t pWaveStreamVis_; 
   Gtk::EventBox eventBox_; 
   Gtk::VBox vbox_; 
   Gtk::Label label_; 

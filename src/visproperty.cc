@@ -2,7 +2,7 @@
 
 #include "visproperty.h"
 
-VisProperty::VisProperty(std::set<streamVisPtr_t> * svp) :
+VisProperty::VisProperty(std::set<pStreamVis_t> * svp) :
   pSelSet_(svp), 
   hScaleAdj_(0.0, 0.0, 10.0)
 {
@@ -33,7 +33,7 @@ void VisProperty::updateSet()
   // for the time being we assume there's only wavevis
   Gdk::Color c; 
   // populate 
-  std::set<streamVisPtr_t>::iterator i;
+  std::set<pStreamVis_t>::iterator i;
   for(i = pSelSet_->begin(); i!= pSelSet_->end(); ++i)
     {
       waveStreamVisPtr_t p = boost::dynamic_pointer_cast<WaveStreamVis> (*i); 
@@ -53,7 +53,7 @@ void VisProperty::colorSet()
   pGladeXml_->get_widget("colorButton", cb); 
 
   std::cout << "Color set via signal" << std::endl ; 
-  std::set<streamVisPtr_t>::iterator i;
+  std::set<pStreamVis_t>::iterator i;
 
   for(i = pSelSet_->begin(); i!= pSelSet_->end(); ++i)
     {
@@ -105,7 +105,7 @@ void VisProperty::hScaleAdjValueChanged()
 
   hsl->set_text(voltsToString(hscale).c_str()); 
 
-  std::set<streamVisPtr_t>::iterator i;
+  std::set<pStreamVis_t>::iterator i;
   for(i = pSelSet_->begin(); i!= pSelSet_->end(); ++i)
     {
 

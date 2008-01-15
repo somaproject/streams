@@ -81,8 +81,8 @@ void StreamsApp::on_realize()
   Gtk::Widget::on_realize(); 
 
   for (int i = 0; i < 2; i++) {
-    streamSourcePtr_t ssp = newStreamSource("wave", i);
-    streamVisPtr_t svp = newStreamVis(ssp, "wave"); 
+    pStreamSource_t ssp(newStreamSource("wave", i));
+    pStreamVis_t svp = newStreamVis(ssp, "wave"); 
   }
   
 
@@ -125,16 +125,16 @@ void StreamsApp::buildActions()
 
 }
 
-streamSourcePtr_t StreamsApp::newStreamSource(std::string name)
+pStreamSource_t StreamsApp::newStreamSource(std::string name)
 {
   return newStreamSource(name, 0); 
 }
 
-streamSourcePtr_t StreamsApp::newStreamSource(std::string name, datasource_t ds)
+pStreamSource_t StreamsApp::newStreamSource(std::string name, datasource_t ds)
 {
   
   // first create the stream object
-  streamSourcePtr_t ss = streamControl_.newSourceFactory(name, ds); 
+  pStreamSource_t ss = streamControl_.newSourceFactory(name, ds); 
   
   // now we need to wrap this in a status object
   WaveStreamSourceStatus * wsss = new WaveStreamSourceStatus(ss); 
@@ -149,18 +149,18 @@ streamSourcePtr_t StreamsApp::newStreamSource(std::string name, datasource_t ds)
   return ss; 
 }
 
-streamVisPtr_t StreamsApp::newStreamVis1(std::string name)
+pStreamVis_t StreamsApp::newStreamVis1(std::string name)
 {
   return newStreamVis(pSourceStatusWidgets_.front(), name); 
 
 
 }
 
-streamVisPtr_t StreamsApp::newStreamVis(SourceStatus* src, std::string name)
+pStreamVis_t StreamsApp::newStreamVis(SourceStatus* src, std::string name)
 {
   
   // first create the stream object
-  streamVisPtr_t sv = streamControl_.newVisFactory(src->getSourcePtr(), name); 
+  pStreamVis_t sv = streamControl_.newVisFactory(src->getSourcePtr(), name); 
   
   // now we need to wrap this in a status object
   WaveStreamVisStatus * wvss = new WaveStreamVisStatus(sv); 
@@ -179,11 +179,11 @@ streamVisPtr_t StreamsApp::newStreamVis(SourceStatus* src, std::string name)
 
 }
 
-streamVisPtr_t StreamsApp::newStreamVis(streamSourcePtr_t src, std::string name)
+pStreamVis_t StreamsApp::newStreamVis(pStreamSource_t src, std::string name)
 {
   
   // first create the stream object
-  streamVisPtr_t sv = streamControl_.newVisFactory(src, name); 
+  pStreamVis_t sv = streamControl_.newVisFactory(src, name); 
   
   // now we need to wrap this in a status object
   WaveStreamVisStatus * wvss = new WaveStreamVisStatus(sv); 
@@ -207,10 +207,10 @@ StreamsApp::~StreamsApp()
 
  }
 
-void StreamsApp::svSelSetModify(bool append, streamVisPtr_t v)
+void StreamsApp::svSelSetModify(bool append, pStreamVis_t v)
 {
 
-  std::set<streamVisPtr_t>::iterator i = streamVisSelSet_.find(v); 
+  std::set<pStreamVis_t>::iterator i = streamVisSelSet_.find(v); 
 
   if (append) {
     if (i == streamVisSelSet_.end()) {

@@ -5,8 +5,7 @@
 using boost::format;
 
 
-WaveStreamVisStatus::WaveStreamVisStatus(streamVisPtr_t wsv) :
-  
+WaveStreamVisStatus::WaveStreamVisStatus(pStreamVis_t wsv) :
   vbox_(false, 5), 
   selected_(false)
 {

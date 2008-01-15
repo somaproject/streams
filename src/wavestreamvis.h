@@ -13,7 +13,7 @@
 
 class WaveStreamVis; 
 
-typedef boost::shared_ptr<WaveStreamVis> waveStreamVisPtr_t; 
+typedef boost::shared_ptr<WaveStreamVis> pWaveStreamVis_t; 
 
 class WaveStreamVis : public StreamVis
 {
@@ -83,7 +83,7 @@ class WaveStreamVis : public StreamVis
   WaveStreamTrigger  streamTrigger_; 
   WaveStreamTriggerRenderer streamTriggerRenderer_; 
 
-  QueueView<WaveBuffer_t *> inDataQueue_; 
+  QueueView<pWaveBuffer_t> inDataQueue_; 
   
   std::vector<GLWavePoint_t> filteredSamples_; 
   

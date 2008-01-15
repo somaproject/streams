@@ -20,9 +20,9 @@ WaveStreamSource::~WaveStreamSource()
 
 }
 
-QueueView<WaveBuffer_t *>  WaveStreamSource::getQueueView()
+QueueView<pWaveBuffer_t>  WaveStreamSource::getQueueView()
 {
-  return QueueView<WaveBuffer_t *>(data_); 
+  return QueueView<pWaveBuffer_t>(data_); 
   
 }
 
@@ -32,14 +32,14 @@ bool WaveStreamSource::generateFakeData(int T = 100)
   return true; 
 }
 
-streamVisPtr_t WaveStreamSource::newVisFactory(std::string name)
+pStreamVis_t WaveStreamSource::newVisFactory(std::string name)
 {
   
-  streamVisPtr_t x; 
+  pStreamVis_t x; 
 
   if (name == "wave")
     {
-      x = streamVisPtr_t(new WaveStreamVis(this)); 
+      x = pStreamVis_t(new WaveStreamVis(this)); 
     }
   
   if (x) {
@@ -52,14 +52,14 @@ streamVisPtr_t WaveStreamSource::newVisFactory(std::string name)
 
 }
 
-void WaveStreamSource::newDataPacket(DataPacket_t *  dp)
+void WaveStreamSource::newDataPacket(pDataPacket_t  dp)
 {
   // turn a DataPacket_t into a Wave_t, 
   // which we then turn into a WaveBuffer_t
 
   Wave_t wave = rawToWave(dp); 
   
-  WaveBuffer_t * pwb = new WaveBuffer_t; 
+  pWaveBuffer_t pwb(new WaveBuffer_t); 
   pwb->time = double(wave.time) / 50e3; 
   pwb->samprate = wave.samprate; 
   pwb->data.reserve(WAVEBUF_LEN); 

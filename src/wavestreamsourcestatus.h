@@ -10,7 +10,7 @@
 class WaveStreamSourceStatus : public SourceStatus
 {
  public: 
-  WaveStreamSourceStatus(streamSourcePtr_t wsv); 
+  WaveStreamSourceStatus(pStreamSource_t wsv); 
   ~WaveStreamSourceStatus(); 
 
   // emit a selected signal
@@ -19,7 +19,7 @@ class WaveStreamSourceStatus : public SourceStatus
 /*   } */
   
 /*   void setSelected(bool state);  */
-  streamSourcePtr_t getSourcePtr() { return pStreamSource_; }; 
+  pStreamSource_t getSourcePtr() { return pStreamSource_; }; 
   
  private:
 /*   WaveStreamVis * pWaveStreamVis_;  */
@@ -33,7 +33,7 @@ class WaveStreamSourceStatus : public SourceStatus
 /*   sigc::signal<void, bool> clickedSignal_;  */
 /*   void toggleSelected();  */
 /*   bool on_button_press_event(GdkEventButton* event);  */
-  streamSourcePtr_t pStreamSource_; 
+  pStreamSource_t pStreamSource_; 
 
 };
 

@@ -11,7 +11,6 @@ WaveStreamVis::WaveStreamVis(WaveStreamSource * wss) :
   yheight_(100),
   color_("red"),
   verticalScale_(1.0)
-
 {
 
   // connect the signals
@@ -51,7 +50,7 @@ void WaveStreamVis::newData()
     {
       // we're taking in WaveBuffer_t pointers
 
-      WaveBuffer_t * pwb = inDataQueue_.front(); 
+      pWaveBuffer_t pwb = inDataQueue_.front(); 
       inDataQueue_.pop(); 
       for (int i = 0; i < pwb->data.size(); i++)
 	{

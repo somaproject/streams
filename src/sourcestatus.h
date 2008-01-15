@@ -4,7 +4,7 @@
 class SourceStatus: public Gtk::HBox
 {
  public: 
-  virtual streamSourcePtr_t getSourcePtr() = 0; 
+  virtual pStreamSource_t getSourcePtr() = 0; 
 
 }; 
 

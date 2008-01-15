@@ -11,13 +11,13 @@ class VisProperty: public Gtk::Window
 {
 
  public:
-  VisProperty(std::set<streamVisPtr_t> *);
+  VisProperty(std::set<pStreamVis_t> *);
   void updateSet();
 
  private:
   Glib::RefPtr<Gnome::Glade::Xml> pGladeXml_;
   
-  std::set<streamVisPtr_t> * pSelSet_; 
+  std::set<pStreamVis_t> * pSelSet_; 
   void colorSet(); 
   Gtk::Adjustment hScaleAdj_; 
   void  hScaleAdjValueChanged(); 

@@ -57,23 +57,23 @@ protected:
    std::vector<Gtk::HPaned *> pSignalPairWidgets_; 
    
    
-   void buildActions(); 
-   streamSourcePtr_t newStreamSource(std::string name, datasource_t); 
-   streamSourcePtr_t newStreamSource(std::string name); 
-   streamVisPtr_t  newStreamVis(SourceStatus *, std::string name); 
-   streamVisPtr_t  newStreamVis(streamSourcePtr_t, std::string name); 
-   streamVisPtr_t newStreamVis1(std::string name); 
-   
-   void on_realize(); 
+  void buildActions(); 
+  pStreamSource_t newStreamSource(std::string name, datasource_t); 
+  pStreamSource_t newStreamSource(std::string name); 
+  pStreamVis_t  newStreamVis(SourceStatus *, std::string name); 
+  pStreamVis_t  newStreamVis(pStreamSource_t, std::string name); 
+  pStreamVis_t newStreamVis1(std::string name); 
+  
+  void on_realize(); 
 
   // signal handlers:
-/*   void on_button_quit_clicked(); */
-/*   virtual bool on_idle(); */
-
-   StreamControl streamControl_; 
-   
-   std::set<streamVisPtr_t> streamVisSelSet_; 
-
+  /*   void on_button_quit_clicked(); */
+  /*   virtual bool on_idle(); */
+  
+  StreamControl streamControl_; 
+  
+  std::set<pStreamVis_t> streamVisSelSet_; 
+  
 
    WaveWin waveWin_; 
    TriggerWin triggerWin_; 
@@ -81,7 +81,7 @@ protected:
 
   //sigc::connection conn_; 
   //waveStreamVisStatusSet_t wsvsSelSet_; 
-   void svSelSetModify(bool append, streamVisPtr_t v); 
+   void svSelSetModify(bool append, pStreamVis_t v); 
    VisProperty visProperty_;
 
    void setTime(float time); 

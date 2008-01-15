@@ -10,14 +10,12 @@
 #include "streamvis.h"
 
 
-
-
 class StreamSource
 {
 
  public:
-  virtual streamVisPtr_t newVisFactory(std::string name) = 0; 
-  virtual void newDataPacket(DataPacket_t *  dp) = 0; 
+  virtual pStreamVis_t newVisFactory(std::string name) = 0; 
+  virtual void newDataPacket(pDataPacket_t  dp) = 0; 
   
     // delete signal
   sigc::signal<void> & disconnectSignal() { return disconnectSignal_; };
