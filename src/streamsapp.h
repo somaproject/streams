@@ -35,56 +35,56 @@ class StreamsApp : public Gtk::Window
 public:
   explicit StreamsApp(NetworkInterface * ni); 
   virtual ~StreamsApp(); 
-
+  
 protected:
-
-   Glib::RefPtr<Gtk::ActionGroup> pActionGroup_;
-
-   Glib::RefPtr<Gtk::UIManager> pUIManager_;
-   
-   // widgets
-   Gtk::VBox  vBoxMain_; 
-   Gtk::HBox  hBoxMain_; 
-   Gtk::HBox  hBoxStatus_; 
-   Gtk::VBox  vBoxStreamStatus_; 
-   Gtk::Widget* pMenuBar_; 
-   Gtk::Statusbar statusBar_; 
-   Gtk::ToggleButton liveButton_; 
-   Gtk::ProgressBar statusProgressBar_; 
-   // stream source widgets
-   std::vector<SourceStatus * >  pSourceStatusWidgets_; 
-   std::vector<VisStatus *  >  pVisStatusWidgets_; 
-   std::vector<Gtk::HPaned *> pSignalPairWidgets_; 
-   
-   
+  
+  Glib::RefPtr<Gtk::ActionGroup> pActionGroup_;
+  
+  Glib::RefPtr<Gtk::UIManager> pUIManager_;
+  
+  // widgets
+  Gtk::VBox  vBoxMain_; 
+  Gtk::HBox  hBoxMain_; 
+  Gtk::HBox  hBoxStatus_; 
+  Gtk::VBox  vBoxStreamStatus_; 
+  Gtk::Widget* pMenuBar_; 
+  Gtk::Statusbar statusBar_; 
+  Gtk::ToggleButton liveButton_; 
+  Gtk::ProgressBar statusProgressBar_; 
+  // stream source widgets
+//   std::vector<SourceStatus * >  pSourceStatusWidgets_; 
+//   std::vector<VisStatus *  >  pVisStatusWidgets_; 
+  std::vector<Gtk::HPaned *> pSignalPairWidgets_; 
+  
+  
   void buildActions(); 
-  pStreamSource_t newStreamSource(std::string name, datasource_t); 
-  pStreamSource_t newStreamSource(std::string name); 
-  pStreamVis_t  newStreamVis(SourceStatus *, std::string name); 
-  pStreamVis_t  newStreamVis(pStreamSource_t, std::string name); 
-  pStreamVis_t newStreamVis1(std::string name); 
+//   pStreamSource_t newStreamSource(std::string name, datasource_t); 
+//   pStreamSource_t newStreamSource(std::string name); 
+//   pStreamVis_t  newStreamVis(SourceStatus *, std::string name); 
+//   pStreamVis_t  newStreamVis(pStreamSource_t, std::string name); 
+//   pStreamVis_t newStreamVis1(std::string name); 
   
   void on_realize(); 
-
+  
   // signal handlers:
   /*   void on_button_quit_clicked(); */
   /*   virtual bool on_idle(); */
   
   StreamControl streamControl_; 
   
-  std::set<pStreamVis_t> streamVisSelSet_; 
+  //std::set<pStreamVis_t> streamVisSelSet_; 
   
-
-   WaveWin waveWin_; 
-   TriggerWin triggerWin_; 
-
-
+  
+  WaveWin waveWin_; 
+  TriggerWin triggerWin_; 
+  
+  
   //sigc::connection conn_; 
   //waveStreamVisStatusSet_t wsvsSelSet_; 
-   void svSelSetModify(bool append, pStreamVis_t v); 
-   VisProperty visProperty_;
-
-   void setTime(float time); 
-
+//   void svSelSetModify(bool append, pStreamVis_t v); 
+//   VisProperty visProperty_;
+  
+  void setTime(float time); 
+  
 };
 

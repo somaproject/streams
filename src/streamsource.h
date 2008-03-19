@@ -7,28 +7,46 @@
 #include <list>
 
 #include "streams.h"
-#include "streamvis.h"
 
+#include <vector>
+#include <sigc++/sigc++.h>
+#include <somanetwork/wave.h>
+#include <boost/shared_ptr.hpp>
 
-class StreamSource
+#include "queueview.h"
+
+#include "streamsourcebase.h"
+
+template <class buffer_t>
+class StreamSource : public StreamSourceBase
 {
-
- public:
-  virtual pStreamVis_t newVisFactory(std::string name) = 0; 
-  virtual void newDataPacket(pDataPacket_t  dp) = 0; 
+public:
   
-    // delete signal
-  sigc::signal<void> & disconnectSignal() { return disconnectSignal_; };
-
-  void disconnect() {
-    disconnectSignal_.emit(); 
+  typedef buffer_t Buffer_t; 
+  typedef boost::shared_ptr<buffer_t> pBuffer_t; 
+  
+  // this is just a prototype source
+  StreamSource()   : lastT_(0.0){
+  } 
+  
+  virtual ~StreamSource() {}; 
+  
+  
+  // public data access
+  
+  QueueView<pBuffer_t> getQueueView() { 
+    return QueueView<pBuffer_t>(data_); 
   }
-
   
- private:
-  sigc::signal<void> disconnectSignal_; 
-
+  float lastT_; 
+  
+protected:
+  std::list<pBuffer_t> data_; 
+  
 };
+
+
+
 
 #endif // STREAMSOURCE_H
 

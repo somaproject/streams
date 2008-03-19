@@ -19,8 +19,8 @@ void deleted()
 // teststruct:
 struct testDelStruct
 {
-  streamSourcePtr_t s; 
-  streamVisPtr_t v; 
+  pStreamSource_t s; 
+  pStreamVis_t v; 
 }; 
 
 BOOST_AUTO_TEST_CASE(simpletest)
@@ -32,9 +32,9 @@ BOOST_AUTO_TEST_CASE(simpletest)
 
   StreamControl x; 
   
-  streamSourcePtr_t s = x.newSourceFactory("wave"); 
+  pStreamSource_t s = x.newSourceFactory("wave"); 
 
-  streamVisPtr_t v = x.newVisFactory(s, "wave"); 
+  pStreamVis_t v = x.newVisFactory(s, "wave"); 
   
   x.remove(s);
   
@@ -54,9 +54,9 @@ BOOST_AUTO_TEST_CASE(removevistest)
 
   StreamControl x; 
   
-  streamSourcePtr_t s = x.newSourceFactory("wave"); 
+  pStreamSource_t s = x.newSourceFactory("wave"); 
 
-  streamVisPtr_t v = x.newVisFactory(s, "wave"); 
+  pStreamVis_t v = x.newVisFactory(s, "wave"); 
   
   x.remove(v);
   

@@ -6,18 +6,16 @@
 #include <vector>
 #include <map>
 
-class StreamSource; 
-typedef boost::shared_ptr<StreamSource> pStreamSource_t; 
 //typedef boost::weak_ptr<StreamSource> streamSourceWPtr_t; 
 
 
-class StreamVis; 
-typedef boost::shared_ptr<StreamVis> pStreamVis_t; 
-//typedef boost::weak_ptr<StreamVis> streamVisWPtr_t; 
+// class StreamVis; 
+// typedef boost::shared_ptr<StreamVis> pStreamVis_t; 
+// //typedef boost::weak_ptr<StreamVis> streamVisWPtr_t; 
 
-typedef std::list<pStreamSource_t> sourcePtrList_t; 
+// typedef std::list<pStreamSource_t> sourcePtrList_t; 
 
-typedef std::multimap<pStreamSource_t, pStreamVis_t> visPtrMap_t; 
+// typedef std::multimap<pStreamSource_t, pStreamVis_t> visPtrMap_t; 
 
 
 #endif

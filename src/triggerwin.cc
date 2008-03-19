@@ -4,11 +4,12 @@
 
 #include <boost/format.hpp>
 
-TriggerWin::TriggerWin() : 
+TriggerWin::TriggerWin(pVisControl_t pvc) : 
   viewT1_(-0.01000), 
   viewT2_(0.0100), 
   viewX1_(-1000.0), 
-  viewX2_(100.0)
+  viewX2_(100.0), 
+  pVisControl_(pvc)
 {
 
   Glib::RefPtr<Gdk::GL::Config> glconfig;
@@ -43,15 +44,6 @@ TriggerWin::~TriggerWin()
 {
 }
 
-
-void TriggerWin::appendVis(StreamVis * wv)
-{
-  pStreamVis_.push_back(wv); 
-  //connect the invalidate signal 
-  wv->invTriggerWaveSignal().connect(sigc::mem_fun(*this, 
- 							 &TriggerWin::invalidate)); 
-
-}
 
 void TriggerWin::on_realize()
 {
@@ -250,15 +242,16 @@ bool TriggerWin::on_expose_event(GdkEventExpose* event)
   renderTimeTicks(viewT1_, viewT2_); 
 
 
-  std::list<StreamVis*>::iterator pwd; 
+  std::list<pStreamVisBase_t>::iterator pwd; 
   int pixwidth = get_width(); 
-  for (pwd = pStreamVis_.begin(); pwd != pStreamVis_.end(); pwd++)
+  for (pwd = pVisControl_->getVisList().begin(); 
+       pwd != pVisControl_->getVisList().end(); pwd++)
     {
       (*pwd)->drawTriggerWave(0.01, 0.01, 0.0); 
       glTranslatef(0.0f, -120.0f, 0.0);
 
     }
-  glTranslatef(0.0f, 120.0f * pStreamVis_.size(), 0.0);
+  //glTranslatef(0.0f, 120.0f * pStreamVis_.size(), 0.0);
 
   
   // Swap buffers.

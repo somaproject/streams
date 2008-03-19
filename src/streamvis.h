@@ -4,53 +4,39 @@
 #include <map>
 #include <iostream>
 
-
+#include "streamsourcebase.h"
+#include "streamvisbase.h"
+#include "streamsource.h"
 #include "wave.h"
 #include "queueview.h"
 #include "streams.h"
 
 
-// this is where we typedef the relevent typedefs
 
-typedef sigc::signal<void> invWaveSignal_t; 
-typedef sigc::signal<void, bool> updateTriggersSignal_t; 
-
-class StreamVis
+template<class buffer_t>
+class StreamVis : public StreamVisBase
 {
+  typedef buffer_t Buffer_t; 
+  typedef boost::shared_ptr<buffer_t> pBuffer_t; 
 
- public:
-  // main wave rendering
-  virtual void drawMainWave(wavetime_t t1, wavetime_t t2, int pixels) = 0;
-  virtual invWaveSignal_t & invMainWaveSignal() = 0;  
-
-  // trigger wave rendering
-  virtual void drawTriggerWave(wavetime_t tbefore, wavetime_t tafter, wavetime_t timepoint) = 0; 
-  virtual invWaveSignal_t & invTriggerWaveSignal() = 0; 
+protected: 
+  boost::shared_ptr<QueueView<pBuffer_t> > pInDataQueue_; 
   
-  // trigger inputs
-  virtual void updateTriggers(bool reset) = 0; 
-  virtual void setTriggerSource(const QueueView<wavetime_t> & tqv) = 0;
-  
-  // trigger outputs
-  virtual updateTriggersSignal_t & updateTriggersSignal() = 0; 
-  virtual QueueView<wavetime_t> getTriggerQueueView() = 0; 
-
-  // render position in the Y-axis, in pixels
-  virtual float getYOffset() = 0; 
-
-  
-  // delete signal
-  sigc::signal<void> & disconnectSignal() { return del_; }; 
-  
-  void disconnect(){
-    // disconnect all objects monitoring this one
-    del_.emit(); 
+public: 
+  void connectSource(boost::shared_ptr<StreamSourceBase> ssb) {
+    
+    connectSource(boost::dynamic_pointer_cast<StreamSource<buffer_t> >(ssb)); 
+    
   }
 
- private:
-  sigc::signal<void> del_; 
-
+  void connectSource(boost::shared_ptr<StreamSource<buffer_t> > ss) {
+    boost::shared_ptr<QueueView<pBuffer_t> > nsp(new QueueView<pBuffer_t>(ss->getQueueView())); 
+    pInDataQueue_ = nsp; //.reset(new QueueView<pBuffer_t>(ss->getQueueView())); 
+    
+    ss->newDataSignal().connect(sigc::mem_fun(*this, &StreamVis<buffer_t>::newData)); 
+    ss->invalidateDataSignal().connect(sigc::mem_fun(*this, &StreamVis<buffer_t>::invalidateData)); 
+  }
+  
 }; 
-
 
 #endif // STREAMVIS_H

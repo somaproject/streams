@@ -31,3 +31,5 @@ Who needs to iterate through sources:
 
 Who needs to iterate through vis? Just the renderers
 
+Okay, so if we've got multiple types here, how do we 
+

@@ -25,12 +25,13 @@
 #include "glconfig.h"
 #include "glspikes.h"
 
-#include "wavestreamvis.h" 
+#include "wavevis.h" 
+#include "viscontrol.h" 
 
 class TriggerWin : public Gtk::GL::DrawingArea
 {
 public:
-  explicit TriggerWin(); 
+  explicit TriggerWin(pVisControl_t pvc); 
 
   virtual ~TriggerWin();
 
@@ -41,7 +42,6 @@ public:
     }
 
   void invalidate(); 
-  void appendVis(StreamVis * wv); 
 
 protected:
 
@@ -64,7 +64,8 @@ protected:
   int decayRange_; 
   float viewT1_, viewT2_, viewX1_, viewX2_; 
 
-  std::list<StreamVis*> pStreamVis_; 
+  pVisControl_t pVisControl_; 
+
 };
 
 #endif //TRIGGERWIN_H

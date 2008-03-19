@@ -34,11 +34,7 @@ WaveStreamVisStatus::WaveStreamVisStatus(pStreamVis_t wsv) :
   
   updateColor(pWaveStreamVis_->getColor()); 
   
-
-
   add_events(Gdk::BUTTON_PRESS_MASK ); 
-	     
-  
 
   signal_button_press_event().connect( sigc::mem_fun(*this,
 						     &WaveStreamVisStatus::on_button_press_event)); 

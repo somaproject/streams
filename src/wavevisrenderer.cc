@@ -1,15 +1,15 @@
 #include <iostream> 
-#include "wavesource.h"
-#include "wavestreamrenderer.h"
+#include "wavevisrenderer.h"
 #include <assert.h>
 
 
-WaveStreamRenderer::WaveStreamRenderer(std::vector<GLWavePoint_t> * pSamples ) :
+WaveVisRenderer::WaveVisRenderer(std::vector<GLWavePoint_t> * pSamples ) :
   pSamples_(pSamples), 
   mostRecentRenderT1_(0.0), 
   mostRecentRenderT2_(0.0),
   emptyTriggerList_(), 
   triggerQueueView_(emptyTriggerList_),
+  scale_(1.0), 
   color_("red")
 {
   // initialize data from stream source buffer
@@ -18,16 +18,15 @@ WaveStreamRenderer::WaveStreamRenderer(std::vector<GLWavePoint_t> * pSamples ) :
 
 
 
-WaveStreamRenderer::~WaveStreamRenderer()
+WaveVisRenderer::~WaveVisRenderer()
 {
   
   
   
 }
 
-void WaveStreamRenderer::newSample()
+void WaveVisRenderer::newSample()
 {
-  //std::cout << "Appending data" << p.t << ' ' << p.x <<  std::endl; 
   GLWavePoint_t p = pSamples_->back(); 
     
 
@@ -56,7 +55,7 @@ void WaveStreamRenderer::newSample()
       if (wp.x > maxpoint.x)
 	maxpoint.x = wp.x; 
     }
-
+    
     // now we add a rectangle
     GLWaveQuadStrip_t pl, pr; 
     
@@ -75,8 +74,6 @@ void WaveStreamRenderer::newSample()
     ratesS2_.push_back(pl); 
     ratesS2_.push_back(pr); 
       
-    
-
   }
   
   if ( (mostRecentRenderT1_ <= p.t) and (mostRecentRenderT2_ >= p.t) )
@@ -87,10 +84,8 @@ void WaveStreamRenderer::newSample()
 
 }
 
-void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
+void WaveVisRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
 {
-
-
   // pixels is just a hint
 
   mostRecentRenderT1_ = t1; 
@@ -144,13 +139,11 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
      setGLColor(1.0 - (fadethold - scale)/200.0);
    }
   
-  
   if (scale > 200.0) {  
      glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
  		    &(*i1)); 
      glDrawArrays(GL_LINE_STRIP, 0, len); 
-     //std::cout << "rendering with len1 = " << len << std::endl; 
-
+     
   }
 
 
@@ -179,6 +172,7 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
     
     glDrawArrays(GL_QUAD_STRIP, 0, 2*ratesS2_.size()); 
     glDrawArrays(GL_LINES, 0, 2*ratesS2_.size()); 
+     
     
   }
   
@@ -210,12 +204,12 @@ void WaveStreamRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
 
 }
 
-sigc::signal<void> & WaveStreamRenderer::invWaveSignal()
+sigc::signal<void> & WaveVisRenderer::invWaveSignal()
 {
   return invWaveSignal_;
 }
 
-void WaveStreamRenderer::updateTriggers(bool reset)
+void WaveVisRenderer::updateTriggers(bool reset)
 {
   if (reset) {
 
@@ -232,12 +226,12 @@ void WaveStreamRenderer::updateTriggers(bool reset)
     }
 }
 
-void WaveStreamRenderer::setTriggerSource(const QueueView<wavetime_t> & tqv)
+void WaveVisRenderer::setTriggerSource(const QueueView<wavetime_t> & tqv)
 {
   triggerQueueView_ = tqv; 
 }
 
-void WaveStreamRenderer::setScale(float scale, float pixheight)
+void WaveVisRenderer::setScale(float scale, float pixheight)
 {
   scale_ = scale; 
   pixheight_ = pixheight; 
@@ -245,14 +239,14 @@ void WaveStreamRenderer::setScale(float scale, float pixheight)
 
 }
 
-void WaveStreamRenderer::setColor(Gdk::Color c)
+void WaveVisRenderer::setColor(Gdk::Color c)
 {
   color_ = c; 
   invWaveSignal_.emit(); 
 
 }
 
-void WaveStreamRenderer::setGLColor(float alpha)
+void WaveVisRenderer::setGLColor(float alpha)
 {
   float div = 1.0;
   glColor4f(color_.get_red_p()/div,
@@ -260,9 +254,11 @@ void WaveStreamRenderer::setGLColor(float alpha)
 	    color_.get_blue_p()/div, 
 	    alpha); 
   
+  glColor4f(1.0, 1.0, 1.0, 1.0); // FIXME
+  
 }
 
-void WaveStreamRenderer::printStatus()
+void WaveVisRenderer::printStatus()
 {
   std::cout << "samples size() =" << pSamples_->size() 
 	    << " S2 size = " << ratesS2_.size() << std::endl; 

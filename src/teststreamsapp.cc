@@ -20,117 +20,62 @@
 
 #include "glspikes.h"
 #include "wavewin.h"
-#include "wavestreamsource.h"
-#include "wavestreamsourcestatus.h"
+//#include "wavestreamsource.h"
+//#include "wavestreamsourcestatus.h"
 
-#include "wavestreamvis.h"
-#include "wavestreamvisstatus.h"
+#include "wavevis.h"
+//#include "wavestreamvisstatus.h"
 
 #include "triggerwin.h"
 
-#include "streamsapp.h"
-
-typedef std::set<int> waveStreamVisStatusSet_t; 
+#include "teststreamsapp.h"
 
 
-StreamsApp::StreamsApp(NetworkInterface * ni) : 
-  liveButton_("Live View"), 
-  streamControl_(ni), 
-  waveWin_(&streamControl_),
-  triggerWin_(),
-  //  visProperty_(&streamVisSelSet_)
-  
+
+TestStreamsApp::TestStreamsApp(pSourceControl_t psc, pVisControl_t pvc) :
+  pSourceControl_(psc), 
+  pVisControl_(pvc), 
+  waveWin_(pvc),
+  triggerWin_(pvc)  
 {
 
-  buildActions(); 
   
-  pMenuBar_ = pUIManager_->get_widget("/MenuBar");
-  
-  
-  add(vBoxMain_); 
-  vBoxMain_.pack_start(*pMenuBar_); 
-  vBoxMain_.pack_start(hBoxMain_, true, true); 
-  vBoxMain_.pack_start(hBoxStatus_); 
-  hBoxMain_.pack_start(vBoxStreamStatus_); 
-  
+  add(hBoxMain_); 
   hBoxMain_.pack_start(waveWin_, true, true); 
-  
   hBoxMain_.pack_start(triggerWin_, true, true); 
   waveWin_.set_size_request(1300, 1000); 
   triggerWin_.set_size_request(150, 1000); 
-  // status componnets
-  hBoxStatus_.pack_start(statusProgressBar_); 
-  statusProgressBar_.set_size_request(100, 0); 
-
-  hBoxStatus_.pack_start(statusBar_); 
-  hBoxStatus_.pack_start(liveButton_); 
 
   show_all(); 
 
-  streamControl_.timeSignal().connect(sigc::mem_fun(*this,
-						   &StreamsApp::setTime)); 
+//   streamControl_.timeSignal().connect(sigc::mem_fun(*this,
+// 						   &TestStreamsApp::setTime)); 
   add_events (Gdk::ALL_EVENTS_MASK); 
 //   signal_realize().connect(sigc::mem_fun(*this, 
-// 					 &StreamsApp::on_realize_event)); 
+// 					 &TestStreamsApp::on_realize_event)); 
 
 
 }
 
-void StreamsApp::on_realize()
+void TestStreamsApp::on_realize()
 {
   Gtk::Widget::on_realize(); 
 
-  for (int i = 0; i < 2; i++) {
-    pStreamSource_t ssp(newStreamSource("wave", i));
-    pStreamVis_t svp = newStreamVis(ssp, "wave"); 
-  }
+//    for (int i = 0; i < 2; i++) {
+//     pStreamSource_t ssp(newStreamSource("wave", i));
+//     pStreamVis_t svp = newStreamVis(ssp, "wave"); 
+//   }
   
 
 }
 
-void StreamsApp::buildActions()
-{
-  
-  pActionGroup_ = Gtk::ActionGroup::create(); 
-  pActionGroup_->add( Gtk::Action::create("MenuFile", "_File") );
-//   pActionGroup_->add( Gtk::Action::create("New WaveSource", "New WaveSource"),
-// 		      sigc::bind(
-// 				 sigc::mem_fun(*this, &StreamsApp::newStreamSource), 
-// 				 "wave")); 
 
-//   pActionGroup_->add( Gtk::Action::create("New WaveVis", "New WaveVis"),
-//  		      sigc::bindst(
-//  				 sigc::mem_fun(*this, &StreamsApp::newStreamVis1), 
-// 				 "wave")); 
-
-
-  pUIManager_ = Gtk::UIManager::create();
-  pUIManager_->insert_action_group(pActionGroup_);
-  add_accel_group(pUIManager_->get_accel_group());
-
-  Glib::ustring ui_info =
-    "<ui>"
-    "  <menubar name='MenuBar'>"
-    "    <menu action='MenuFile'>"
-    "      <menuitem action='New WaveSource'/>"
-    "      <menuitem action='New WaveVis'/>" 
-    "    </menu>"
-    "  </menubar>"
-    "  <toolbar  name='ToolBar'>"
-    "  </toolbar>"
-    "</ui>";
-
-  pUIManager_->add_ui_from_string(ui_info);
-
-
-}
-
-// pStreamSource_t StreamsApp::newStreamSource(std::string name)
+// pStreamSource_t TestStreamsApp::newStreamSource(std::string name)
 // {
 //   return newStreamSource(name, 0); 
 // }
 
-// pStreamSource_t StreamsApp::newStreamSource(std::string name, datasource_t ds)
+// pStreamSource_t TestStreamsApp::newStreamSource(std::string name, datasource_t ds)
 // {
   
 //   // first create the stream object
@@ -149,14 +94,14 @@ void StreamsApp::buildActions()
 //   return ss; 
 // }
 
-// pStreamVis_t StreamsApp::newStreamVis1(std::string name)
+// pStreamVis_t TestStreamsApp::newStreamVis1(std::string name)
 // {
 //   return newStreamVis(pSourceStatusWidgets_.front(), name); 
 
 
 // }
 
-// pStreamVis_t StreamsApp::newStreamVis(SourceStatus* src, std::string name)
+// pStreamVis_t TestStreamsApp::newStreamVis(SourceStatus* src, std::string name)
 // {
   
 //   // first create the stream object
@@ -165,7 +110,7 @@ void StreamsApp::buildActions()
 //   // now we need to wrap this in a status object
 //   WaveStreamVisStatus * wvss = new WaveStreamVisStatus(sv); 
 //   wvss->clickedSignal().connect(sigc::bind(sigc::mem_fun(*this, 
-// 							 &StreamsApp::svSelSetModify), sv)); 
+// 							 &TestStreamsApp::svSelSetModify), sv)); 
 
 
 //   pVisStatusWidgets_.push_back(wvss); 
@@ -179,7 +124,7 @@ void StreamsApp::buildActions()
 
 // }
 
-// pStreamVis_t StreamsApp::newStreamVis(pStreamSource_t src, std::string name)
+// pStreamVis_t TestStreamsApp::newStreamVis(pStreamSource_t src, std::string name)
 // {
   
 //   // first create the stream object
@@ -188,7 +133,7 @@ void StreamsApp::buildActions()
 //   // now we need to wrap this in a status object
 //   WaveStreamVisStatus * wvss = new WaveStreamVisStatus(sv); 
 //   wvss->clickedSignal().connect(sigc::bind(sigc::mem_fun(*this, 
-// 							 &StreamsApp::svSelSetModify), sv)); 
+// 							 &TestStreamsApp::svSelSetModify), sv)); 
 
 //   pVisStatusWidgets_.push_back(wvss); 
   
@@ -202,12 +147,12 @@ void StreamsApp::buildActions()
 // }
 
 
-StreamsApp::~StreamsApp()
+TestStreamsApp::~TestStreamsApp()
  {
 
  }
 
-// void StreamsApp::svSelSetModify(bool append, pStreamVis_t v)
+// void TestStreamsApp::svSelSetModify(bool append, pStreamVis_t v)
 // {
 
 //   std::set<pStreamVis_t>::iterator i = streamVisSelSet_.find(v); 
@@ -248,9 +193,9 @@ StreamsApp::~StreamsApp()
 // }
 
 
-void StreamsApp::setTime(float time)
+void TestStreamsApp::setTime(float time)
 {
   
-  waveWin_.setCurrentTime(time);  
+  //waveWin_.setCurrentTime(time);  
   
 }

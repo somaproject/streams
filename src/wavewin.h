@@ -20,15 +20,16 @@
 #include "glconfig.h"
 #include "glspikes.h"
 
-#include "wavestreamrenderer.h"
+#include "wavevisrenderer.h"
 #include "streamvis.h"
-#include "streamcontrol.h"
+
+#include "viscontrol.h"
 
 
 class WaveWin : public Gtk::GL::DrawingArea
 {
 public:
-  explicit WaveWin(StreamControl* sc); 
+  explicit WaveWin(pVisControl_t pvc); 
 
   virtual ~WaveWin();
 
@@ -80,7 +81,7 @@ protected:
   int s1fact_; 
 
   bool liveView_; 
-  StreamControl* pStreamControl_; 
+  pVisControl_t  pVisControl_; 
 
   float currentTime_; 
   

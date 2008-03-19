@@ -4,7 +4,7 @@
 
 #include <boost/format.hpp>
 
-WaveWin::WaveWin(StreamControl* sc) : 
+WaveWin::WaveWin(pVisControl_t pvc) : 
   decayRange_(100), 
   viewLatest_(true), 
   cutoffPos_(0), 
@@ -16,7 +16,7 @@ WaveWin::WaveWin(StreamControl* sc) :
   selT2_(1.0), 
   zoomLevel_(1.0),
   s1fact_(2), 
-  pStreamControl_(sc)
+  pVisControl_(pvc)
 {
 
   Glib::RefPtr<Gdk::GL::Config> glconfig;
@@ -44,6 +44,7 @@ WaveWin::WaveWin(StreamControl* sc) :
 	     Gdk::BUTTON_RELEASE_MASK  | 
 	     Gdk::VISIBILITY_NOTIFY_MASK);
   
+  pvc->invMainWaveSignal().connect(sigc::mem_fun(*this, &WaveWin::invalidate)); 
 
   // View transformation signals.
 //   signal_button_release_event().connect(sigc::mem_fun(*this, 
@@ -284,27 +285,36 @@ bool WaveWin::on_expose_event(GdkEventExpose* event)
   renderTimeTicks(viewT1_, viewT2_); 
 
 
-  std::list<pStreamVis_t>::iterator pwd; 
-
+  std::list<pStreamVisBase_t>::iterator pwd; 
+  
   int pixwidth = get_width(); 
   // get the windows own allocation and use that
   
   Gdk::Rectangle myalloc = get_allocation(); 
   
-  for (pwd = pStreamControl_->visPtrList.begin(); 
-       pwd != pStreamControl_->visPtrList.end(); pwd++)
+  for (pwd = pVisControl_->getVisList().begin(); 
+       pwd != pVisControl_->getVisList().end(); pwd++)
     {
       float pos = - (*pwd)->getYOffset() + 
 	myalloc.get_height() + myalloc.get_y(); 
       glPushMatrix(); 
       glTranslatef(0.0f, pos, 0.0); 
+      
 
       (*pwd)->drawMainWave(viewT1_, viewT2_, pixwidth); 
       glPopMatrix(); 
 
     }
 
-  
+    glColor4f(1.0, 1.0, 1.0, 1.0); 
+  glBegin(GL_LINE_LOOP); 
+  glVertex2f(0.0, 5.0); 
+  glVertex2f(1.0, 5.0); 
+  glVertex2f(1.0, 10.0); 
+  glVertex2f(0.0, 10.0); 
+
+  glEnd(); 
+
   // render selection
   glColor4f(0.2, 0.2, 1.0, 0.5); 
 

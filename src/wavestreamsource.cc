@@ -26,12 +26,6 @@ QueueView<pWaveBuffer_t>  WaveStreamSource::getQueueView()
   
 }
 
-bool WaveStreamSource::generateFakeData(int T = 100)
-{
-
-  return true; 
-}
-
 pStreamVis_t WaveStreamSource::newVisFactory(std::string name)
 {
   

@@ -36,7 +36,7 @@ void VisProperty::updateSet()
   std::set<pStreamVis_t>::iterator i;
   for(i = pSelSet_->begin(); i!= pSelSet_->end(); ++i)
     {
-      waveStreamVisPtr_t p = boost::dynamic_pointer_cast<WaveStreamVis> (*i); 
+      pWaveStreamVis_t p = boost::dynamic_pointer_cast<WaveStreamVis> (*i); 
       c = p->getColor(); 
       std::cout << "setting color " << std::endl; 
     }
@@ -58,7 +58,7 @@ void VisProperty::colorSet()
   for(i = pSelSet_->begin(); i!= pSelSet_->end(); ++i)
     {
 
-      waveStreamVisPtr_t p = boost::dynamic_pointer_cast<WaveStreamVis> (*i); 
+      pWaveStreamVis_t p = boost::dynamic_pointer_cast<WaveStreamVis> (*i); 
       p->setColor(cb->get_color()); 
     }
 
@@ -109,7 +109,7 @@ void VisProperty::hScaleAdjValueChanged()
   for(i = pSelSet_->begin(); i!= pSelSet_->end(); ++i)
     {
 
-      waveStreamVisPtr_t p = boost::dynamic_pointer_cast<WaveStreamVis> (*i); 
+      pWaveStreamVis_t p = boost::dynamic_pointer_cast<WaveStreamVis> (*i); 
       p->setVerticalScale(hscale); 
     }
 
