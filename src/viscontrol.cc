@@ -1,5 +1,6 @@
 #include "viscontrol.h"
 #include "wavevis.h" 
+#include "spectvis.h" 
 
 VisControl::VisControl()
 {
@@ -11,7 +12,7 @@ VisControl::VisControl()
 
 pStreamVisBase_t VisControl::createVis(std::string name)
 {
-  pStreamVisBase_t psvb(new WaveVis()); 
+  pStreamVisBase_t psvb(new SpectVis()); 
 
   visList_.push_back(psvb); 
   psvb->invMainWaveSignal().connect(sigc::mem_fun(*this, 

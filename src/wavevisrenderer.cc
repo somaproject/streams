@@ -132,7 +132,7 @@ void WaveVisRenderer::draw(wavetime_t t1, wavetime_t t2, int pixels)
   
 
   int len  = i2 - i1; 
-  float fadethold = 400.0; 
+  float fadethold = 50.0; 
   if (scale > fadethold) {
     setGLColor(1.0); 
    } else {

@@ -1,11 +1,11 @@
 #ifndef WAVES_H
 #define WAVES_H
 #include <boost/shared_ptr.hpp>
-
+#include "timer.h" 
 
 struct WaveBuffer_t
 {
-  float time; 
+  streamtime_t time; 
   float samprate; 
   std::vector<float> data; 
 }; 

@@ -33,11 +33,16 @@
 class StreamsApp : public Gtk::Window
 {
 public:
-  explicit StreamsApp(NetworkInterface * ni); 
+  explicit StreamsApp(pSourceControl_t psc, pVisControl_t pvc); 
   virtual ~StreamsApp(); 
   
+
 protected:
   
+  pVisControl_t pVisControl_; 
+  pSourceControl_t pSourceControl_; 
+  
+
   Glib::RefPtr<Gtk::ActionGroup> pActionGroup_;
   
   Glib::RefPtr<Gtk::UIManager> pUIManager_;

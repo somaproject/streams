@@ -28,7 +28,7 @@ class FakeWave : public StreamSource<WaveBuffer_t>
   double fs_;
   double variance_;
   pTimer_t pTimer_; 
-  void nextData(); 
+  void nextData(streamtime_t); 
   
   void timeUpdate(streamtime_t t); 
   streamtime_t lastTime_; 

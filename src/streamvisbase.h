@@ -39,6 +39,7 @@ class StreamVisBase
 
   // render position in the Y-axis, in pixels
   virtual float getYOffset() = 0; 
+  virtual void setYOffset(float) = 0; 
   
   // delete signal
   sigc::signal<void> & disconnectSignal() { return del_; }; 

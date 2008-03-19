@@ -57,10 +57,13 @@ streams_LDADD = $(LDADD)
 am__objects_1 = fakewave.$(OBJEXT)
 am_teststreams_OBJECTS = teststreams.$(OBJEXT) \
 	teststreamsapp.$(OBJEXT) $(am__objects_1) shaders.$(OBJEXT) \
-	wavewin.$(OBJEXT) triggerwin.$(OBJEXT) wavevis.$(OBJEXT) \
-	timer.$(OBJEXT) sourcecontrol.$(OBJEXT) viscontrol.$(OBJEXT) \
-	glconfig.$(OBJEXT) wavevisrenderer.$(OBJEXT) \
-	wavevistrigger.$(OBJEXT) wavevistriggerrenderer.$(OBJEXT)
+	wavewin.$(OBJEXT) triggerwin.$(OBJEXT) timer.$(OBJEXT) \
+	wavevis.$(OBJEXT) wavevisrenderer.$(OBJEXT) \
+	wavevistrigger.$(OBJEXT) wavevistriggerrenderer.$(OBJEXT) \
+	spectvis.$(OBJEXT) spectvisrenderer.$(OBJEXT) \
+	spectvistrigger.$(OBJEXT) spectvistriggerrenderer.$(OBJEXT) \
+	glconfig.$(OBJEXT) sourcecontrol.$(OBJEXT) \
+	viscontrol.$(OBJEXT)
 teststreams_OBJECTS = $(am_teststreams_OBJECTS)
 teststreams_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)@am__isrc@
@@ -238,10 +241,10 @@ source_sources = fakewave.cc
 
 #streams_SOURCES = $(cc_sources)
 teststreams_SOURCES = teststreams.cc teststreamsapp.cc \
-	$(source_sources) shaders.cc wavewin.cc triggerwin.cc \
-	wavevis.cc timer.cc sourcecontrol.cc viscontrol.cc \
-	glconfig.cc wavevisrenderer.cc wavevistrigger.cc \
-	wavevistriggerrenderer.cc
+	$(source_sources) shaders.cc wavewin.cc triggerwin.cc  timer.cc \
+	wavevis.cc wavevisrenderer.cc wavevistrigger.cc wavevistriggerrenderer.cc \
+	spectvis.cc spectvisrenderer.cc spectvistrigger.cc spectvistriggerrenderer.cc \
+	glconfig.cc sourcecontrol.cc viscontrol.cc 
 
 all: all-am
 
@@ -321,6 +324,10 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/glconfig.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/shaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sourcecontrol.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spectvis.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spectvisrenderer.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spectvistrigger.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spectvistriggerrenderer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/streams.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/teststreams.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/teststreamsapp.Po@am__quote@

@@ -57,10 +57,13 @@ streams_LDADD = $(LDADD)
 am__objects_1 = fakewave.$(OBJEXT)
 am_teststreams_OBJECTS = teststreams.$(OBJEXT) \
 	teststreamsapp.$(OBJEXT) $(am__objects_1) shaders.$(OBJEXT) \
-	wavewin.$(OBJEXT) triggerwin.$(OBJEXT) wavevis.$(OBJEXT) \
-	timer.$(OBJEXT) sourcecontrol.$(OBJEXT) viscontrol.$(OBJEXT) \
-	glconfig.$(OBJEXT) wavevisrenderer.$(OBJEXT) \
-	wavevistrigger.$(OBJEXT) wavevistriggerrenderer.$(OBJEXT)
+	wavewin.$(OBJEXT) triggerwin.$(OBJEXT) timer.$(OBJEXT) \
+	wavevis.$(OBJEXT) wavevisrenderer.$(OBJEXT) \
+	wavevistrigger.$(OBJEXT) wavevistriggerrenderer.$(OBJEXT) \
+	spectvis.$(OBJEXT) spectvisrenderer.$(OBJEXT) \
+	spectvistrigger.$(OBJEXT) spectvistriggerrenderer.$(OBJEXT) \
+	glconfig.$(OBJEXT) sourcecontrol.$(OBJEXT) \
+	viscontrol.$(OBJEXT)
 teststreams_OBJECTS = $(am_teststreams_OBJECTS)
 teststreams_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
@@ -153,8 +156,8 @@ RANLIB = ranlib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/bash
-SOMADEPS_CFLAGS = -I/usr/local/include/somanetwork-1.0 -I/usr/local/lib/somanetwork-1.0/include  
-SOMADEPS_LIBS = -L/usr/local/lib -lsomanetwork-1.0  
+SOMADEPS_CFLAGS = -I/usr/local/include/somanetwork-1.0 -I/usr/local/lib/somanetwork-1.0/include -I/usr/local/include  
+SOMADEPS_LIBS = -L/usr/local/lib -lsomanetwork-1.0 -lvsip_csl -lsvpp -lfftw3f -lfftw3 -lfftw3l -llapack  
 STRIP = strip
 VERSION = 1.0
 abs_builddir = /home/jonas/soma/software/waves/src
@@ -238,10 +241,10 @@ source_sources = fakewave.cc
 
 #streams_SOURCES = $(cc_sources)
 teststreams_SOURCES = teststreams.cc teststreamsapp.cc \
-	$(source_sources) shaders.cc wavewin.cc triggerwin.cc \
-	wavevis.cc timer.cc sourcecontrol.cc viscontrol.cc \
-	glconfig.cc wavevisrenderer.cc wavevistrigger.cc \
-	wavevistriggerrenderer.cc
+	$(source_sources) shaders.cc wavewin.cc triggerwin.cc  timer.cc \
+	wavevis.cc wavevisrenderer.cc wavevistrigger.cc wavevistriggerrenderer.cc \
+	spectvis.cc spectvisrenderer.cc spectvistrigger.cc spectvistriggerrenderer.cc \
+	glconfig.cc sourcecontrol.cc viscontrol.cc 
 
 all: all-am
 
@@ -321,6 +324,10 @@ include ./$(DEPDIR)/fakewave.Po
 include ./$(DEPDIR)/glconfig.Po
 include ./$(DEPDIR)/shaders.Po
 include ./$(DEPDIR)/sourcecontrol.Po
+include ./$(DEPDIR)/spectvis.Po
+include ./$(DEPDIR)/spectvisrenderer.Po
+include ./$(DEPDIR)/spectvistrigger.Po
+include ./$(DEPDIR)/spectvistriggerrenderer.Po
 include ./$(DEPDIR)/streams.Po
 include ./$(DEPDIR)/teststreams.Po
 include ./$(DEPDIR)/teststreamsapp.Po

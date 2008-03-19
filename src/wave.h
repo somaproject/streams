@@ -2,7 +2,8 @@
 #define WAVE_H
 
 #define GL_GLEXT_PROTOTYPES
-
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/weak_ptr.hpp>
 #include <gtkglmm.h>
 
 #include <GL/gl.h>
@@ -12,6 +13,8 @@
 #include <map>
 #include <boost/format.hpp>
 #include <math.h>
+#include "timer.h" 
+
 
 typedef float wavetime_t; 
 
@@ -30,6 +33,25 @@ struct GLWaveQuadStrip_t
   wavetime_t tmin; 
   float xmin; 
 }; 
+
+inline bool compareTime(const GLWavePoint_t x,
+			const GLWavePoint_t y)
+{
+  if (x.t < y.t) 
+    return true; 
+
+  return false; 
+}
+
+inline bool compareTime2(const GLWaveQuadStrip_t x,
+			const GLWaveQuadStrip_t y)
+{
+  if (x.tmax < y.tmax) 
+    return true; 
+
+  return false; 
+}
+
 
 // helper functions
 inline std::string voltsToString(float x)
@@ -58,6 +80,42 @@ inline std::string voltsToString(float x)
   }
     
   
+}
+
+class SpectBlock_t {
+public:
+  streamtime_t starttime; 
+  streamtime_t endtime; 
+  int width; 
+  int height; 
+  std::vector<unsigned char> data; 
+}; 
+
+typedef  boost::ptr_vector<SpectBlock_t> SpectBlockpVector_t; 
+
+
+struct SpectBlockTextureCacheItem_t {
+  bool hastexture; 
+  GLuint textureName;
+}; 
+
+
+inline bool compareStartTime(const SpectBlock_t x,
+			     const SpectBlock_t y)
+{
+  if (x.starttime < y.starttime) 
+    return true; 
+
+  return false; 
+}
+
+inline bool compareEndTime(const SpectBlock_t x,
+			     const SpectBlock_t y)
+{
+  if (x.endtime < y.endtime) 
+    return true; 
+
+  return false; 
 }
 
 #endif // WAVE_H

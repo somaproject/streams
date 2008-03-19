@@ -10,13 +10,6 @@ WaveVis::WaveVis() :
   color_("red"),
   verticalScale_(1.0)
 {
-
-  // connect the signals
-//   streamSource_->newDataSignal().connect(sigc::mem_fun(*this, 
-// 					     &WaveVis::newData)); 
-//   streamSource_->invalidateDataSignal().connect(sigc::mem_fun(*this, 
-// 						    &WaveVis::invalidateData)); 
-  
   
 
 }
@@ -42,14 +35,22 @@ void WaveVis::drawTriggerWave(wavetime_t tbefore, wavetime_t tafter, wavetime_t 
 
 void WaveVis::newData()
 {
-
-  
+  // our inputs are buffers of data, our filtered
+  // outputs are GLwavePoints
   while (not pInDataQueue_->empty())
     {
       // we're taking in WaveBuffer_t pointers
 
       pWaveBuffer_t pwb = pInDataQueue_->front(); 
       pInDataQueue_->pop(); 
+
+      // do the signal processing with VSIPL++
+
+      // things that will cause a sampling rate change
+      // will break this 
+      
+
+      // release the data
       for (int i = 0; i < pwb->data.size(); i++)
 	{
 	  GLWavePoint_t wp; 
@@ -161,7 +162,7 @@ Gdk::Color WaveVis::getColor()
 GLWavePoint_t WaveVis::filterNextPoint(GLWavePoint_t wp)
 {
   
-  //wp.t -= 0.1; // delay
+  wp.t -= 0.1; // delay
 
   return wp; 
 

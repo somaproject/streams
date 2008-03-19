@@ -33,13 +33,12 @@
 typedef std::set<int> waveStreamVisStatusSet_t; 
 
 
-StreamsApp::StreamsApp(NetworkInterface * ni) : 
+StreamsApp::StreamsApp(pSourceControl_t psc, pVisControl_t pvc) : 
+  pVisControl_(pvc), 
+  pSourceControl_(psc), 
   liveButton_("Live View"), 
-  streamControl_(ni), 
-  waveWin_(&streamControl_),
-  triggerWin_(),
-  //  visProperty_(&streamVisSelSet_)
-  
+  waveWin_(pvc),
+  triggerWin_(pvc)  
 {
 
   buildActions(); 
@@ -72,8 +71,8 @@ StreamsApp::StreamsApp(NetworkInterface * ni) :
   add_events (Gdk::ALL_EVENTS_MASK); 
 //   signal_realize().connect(sigc::mem_fun(*this, 
 // 					 &StreamsApp::on_realize_event)); 
-
-
+  
+  
 }
 
 void StreamsApp::on_realize()

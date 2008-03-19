@@ -39,7 +39,7 @@ bin_PROGRAMS = streams teststreams
 #streams_SOURCES = $(cc_sources)
 
 teststreams_SOURCES = teststreams.cc teststreamsapp.cc \
-	$(source_sources) shaders.cc wavewin.cc triggerwin.cc \
-	wavevis.cc timer.cc sourcecontrol.cc viscontrol.cc \
-	glconfig.cc wavevisrenderer.cc wavevistrigger.cc \
-	wavevistriggerrenderer.cc
+	$(source_sources) shaders.cc wavewin.cc triggerwin.cc  timer.cc \
+	wavevis.cc wavevisrenderer.cc wavevistrigger.cc wavevistriggerrenderer.cc \
+	spectvis.cc spectvisrenderer.cc spectvistrigger.cc spectvistriggerrenderer.cc \
+	glconfig.cc sourcecontrol.cc viscontrol.cc 
