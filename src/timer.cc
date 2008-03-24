@@ -5,8 +5,6 @@
 
 
 
-
-
 Timer::Timer(somatime_t starttime) :
   startSomaTime_(starttime)
 {

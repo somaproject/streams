@@ -11,24 +11,22 @@ h_sources = glconfig.h glspikes.h \
 	streams.h streamsource.h \
 	streamvis.h triggerwin.h \
 	visproperty.h visstatus.h \
-	wave.h wavestreamrenderer.h \
-	wavestreamsource.h wavestreamsourcestatus.h \
-	wavestreamtrigger.h wavestreamtriggerrenderer.h \
-	wavestreamviscontrol.h wavestreamvis.h \
-	wavestreamvisstatus.h wavewin.h \
+	wave.h wavevisrenderer.h \
+	wavevissource.h wavestreamsourcestatus.h \
+	wavevistrigger.h wavevistriggerrenderer.h \
+	wavevisviscontrol.h wavevisvis.h \
+	wavevisvisstatus.h wavewin.h \
 	streamsourcebase.h streamsource.h \
 	fakewave.h
 
 
-
-cc_sources = glconfig.cc \
-	shaders.cc streamcontrol.cc  \
-	streamsapp.cc streamsmain.cc \
-	triggerwin.cc visproperty.cc \
-	wavestreamrenderer.cc wavestreamsource.cc \
-	wavestreamsourcestatus.cc wavestreamtrigger.cc wavestreamtriggerrenderer.cc \
-	wavestreamvis.cc wavestreamvisstatus.cc wavewin.cc \
-	fakewave.cc
+cc_sources = glconfig.cc timer.cc viscontrol.cc \
+	shaders.cc streamsapp.cc streamsmain.cc \
+	triggerwin.cc wavewin.cc \
+	wavevisrenderer.cc wavevis.cc \
+	wavevistrigger.cc wavevistriggerrenderer.cc \
+	spectvis.cc spectvisrenderer.cc spectvistrigger.cc spectvistriggerrenderer.cc \
+	wavevisstatus.cc sourcecontrol.cc  $(source_sources)
 
 source_sources = fakewave.cc
 
@@ -36,7 +34,7 @@ source_sources = fakewave.cc
 bin_PROGRAMS = streams teststreams
 
 
-#streams_SOURCES = $(cc_sources)
+streams_SOURCES = $(cc_sources)
 
 teststreams_SOURCES = teststreams.cc teststreamsapp.cc \
 	$(source_sources) shaders.cc wavewin.cc triggerwin.cc  timer.cc \

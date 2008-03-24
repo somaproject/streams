@@ -51,10 +51,19 @@ CONFIG_CLEAN_FILES =
 am__installdirs = "$(DESTDIR)$(bindir)"
 binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
 PROGRAMS = $(bin_PROGRAMS)
-streams_SOURCES = streams.c
-streams_OBJECTS = streams.$(OBJEXT)
-streams_LDADD = $(LDADD)
 am__objects_1 = fakewave.$(OBJEXT)
+am__objects_2 = glconfig.$(OBJEXT) timer.$(OBJEXT) \
+	viscontrol.$(OBJEXT) shaders.$(OBJEXT) streamsapp.$(OBJEXT) \
+	streamsmain.$(OBJEXT) triggerwin.$(OBJEXT) wavewin.$(OBJEXT) \
+	wavevisrenderer.$(OBJEXT) wavevis.$(OBJEXT) \
+	wavevistrigger.$(OBJEXT) wavevistriggerrenderer.$(OBJEXT) \
+	spectvis.$(OBJEXT) spectvisrenderer.$(OBJEXT) \
+	spectvistrigger.$(OBJEXT) spectvistriggerrenderer.$(OBJEXT) \
+	wavevisstatus.$(OBJEXT) sourcecontrol.$(OBJEXT) \
+	$(am__objects_1)
+am_streams_OBJECTS = $(am__objects_2)
+streams_OBJECTS = $(am_streams_OBJECTS)
+streams_LDADD = $(LDADD)
 am_teststreams_OBJECTS = teststreams.$(OBJEXT) \
 	teststreamsapp.$(OBJEXT) $(am__objects_1) shaders.$(OBJEXT) \
 	wavewin.$(OBJEXT) triggerwin.$(OBJEXT) timer.$(OBJEXT) \
@@ -69,15 +78,6 @@ teststreams_LDADD = $(LDADD)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
-	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
-	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
-CCLD = $(CC)
-LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
-	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
-	$(LDFLAGS) -o $@
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
 LTCXXCOMPILE = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -87,8 +87,8 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = streams.c $(teststreams_SOURCES)
-DIST_SOURCES = streams.c $(teststreams_SOURCES)
+SOURCES = $(streams_SOURCES) $(teststreams_SOURCES)
+DIST_SOURCES = $(streams_SOURCES) $(teststreams_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
@@ -220,26 +220,24 @@ h_sources = glconfig.h glspikes.h \
 	streams.h streamsource.h \
 	streamvis.h triggerwin.h \
 	visproperty.h visstatus.h \
-	wave.h wavestreamrenderer.h \
-	wavestreamsource.h wavestreamsourcestatus.h \
-	wavestreamtrigger.h wavestreamtriggerrenderer.h \
-	wavestreamviscontrol.h wavestreamvis.h \
-	wavestreamvisstatus.h wavewin.h \
+	wave.h wavevisrenderer.h \
+	wavevissource.h wavestreamsourcestatus.h \
+	wavevistrigger.h wavevistriggerrenderer.h \
+	wavevisviscontrol.h wavevisvis.h \
+	wavevisvisstatus.h wavewin.h \
 	streamsourcebase.h streamsource.h \
 	fakewave.h
 
-cc_sources = glconfig.cc \
-	shaders.cc streamcontrol.cc  \
-	streamsapp.cc streamsmain.cc \
-	triggerwin.cc visproperty.cc \
-	wavestreamrenderer.cc wavestreamsource.cc \
-	wavestreamsourcestatus.cc wavestreamtrigger.cc wavestreamtriggerrenderer.cc \
-	wavestreamvis.cc wavestreamvisstatus.cc wavewin.cc \
-	fakewave.cc
+cc_sources = glconfig.cc timer.cc viscontrol.cc \
+	shaders.cc streamsapp.cc streamsmain.cc \
+	triggerwin.cc wavewin.cc \
+	wavevisrenderer.cc wavevis.cc \
+	wavevistrigger.cc wavevistriggerrenderer.cc \
+	spectvis.cc spectvisrenderer.cc spectvistrigger.cc spectvistriggerrenderer.cc \
+	wavevisstatus.cc sourcecontrol.cc  $(source_sources)
 
 source_sources = fakewave.cc
-
-#streams_SOURCES = $(cc_sources)
+streams_SOURCES = $(cc_sources)
 teststreams_SOURCES = teststreams.cc teststreamsapp.cc \
 	$(source_sources) shaders.cc wavewin.cc triggerwin.cc  timer.cc \
 	wavevis.cc wavevisrenderer.cc wavevistrigger.cc wavevistriggerrenderer.cc \
@@ -249,7 +247,7 @@ teststreams_SOURCES = teststreams.cc teststreamsapp.cc \
 all: all-am
 
 .SUFFIXES:
-.SUFFIXES: .c .cc .lo .o .obj
+.SUFFIXES: .cc .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am  $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -309,7 +307,7 @@ clean-binPROGRAMS:
 	done
 streams$(EXEEXT): $(streams_OBJECTS) $(streams_DEPENDENCIES) 
 	@rm -f streams$(EXEEXT)
-	$(LINK) $(streams_OBJECTS) $(streams_LDADD) $(LIBS)
+	$(CXXLINK) $(streams_OBJECTS) $(streams_LDADD) $(LIBS)
 teststreams$(EXEEXT): $(teststreams_OBJECTS) $(teststreams_DEPENDENCIES) 
 	@rm -f teststreams$(EXEEXT)
 	$(CXXLINK) $(teststreams_OBJECTS) $(teststreams_LDADD) $(LIBS)
@@ -328,7 +326,8 @@ include ./$(DEPDIR)/spectvis.Po
 include ./$(DEPDIR)/spectvisrenderer.Po
 include ./$(DEPDIR)/spectvistrigger.Po
 include ./$(DEPDIR)/spectvistriggerrenderer.Po
-include ./$(DEPDIR)/streams.Po
+include ./$(DEPDIR)/streamsapp.Po
+include ./$(DEPDIR)/streamsmain.Po
 include ./$(DEPDIR)/teststreams.Po
 include ./$(DEPDIR)/teststreamsapp.Po
 include ./$(DEPDIR)/timer.Po
@@ -336,30 +335,10 @@ include ./$(DEPDIR)/triggerwin.Po
 include ./$(DEPDIR)/viscontrol.Po
 include ./$(DEPDIR)/wavevis.Po
 include ./$(DEPDIR)/wavevisrenderer.Po
+include ./$(DEPDIR)/wavevisstatus.Po
 include ./$(DEPDIR)/wavevistrigger.Po
 include ./$(DEPDIR)/wavevistriggerrenderer.Po
 include ./$(DEPDIR)/wavewin.Po
-
-.c.o:
-	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-#	source='$<' object='$@' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(COMPILE) -c $<
-
-.c.obj:
-	$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
-#	source='$<' object='$@' libtool=no \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(COMPILE) -c `$(CYGPATH_W) '$<'`
-
-.c.lo:
-	$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-	mv -f $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
-#	source='$<' object='$@' libtool=yes \
-#	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) \
-#	$(LTCOMPILE) -c -o $@ $<
 
 .cc.o:
 	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<

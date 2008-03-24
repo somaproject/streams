@@ -405,7 +405,7 @@ bool WaveWin::on_button_press_event(GdkEventButton* event)
   if (event->type == GDK_BUTTON_PRESS)  
     {
       lastX_ = event->x; 
-      liveView_ = false; 
+      viewType_ = MANUAL; 
     } 
 
   // don't block
@@ -536,30 +536,29 @@ void WaveWin::invalidate() {
   
 }
 
-void WaveWin::setLiveView(bool val)
+void WaveWin::setViewType(ViewTypes val)
 {
-  liveView_ = val; 
+  viewType_ = val; 
   invalidate(); 
 
 }
 
-void WaveWin::setCurrentTime(float time)
+void WaveWin::setCurrentTime(streamtime_t time)
 {
   currentTime_ = time; 
   
   float twidth = viewT2_ - viewT1_; 
-  if (liveView_) {
-    // this is the old liveview
-//     viewT2_ = time; 
-//     viewT1_ = time - twidth; 
-//     invalidate();
+  if (viewType_ == LIVESCROLL) {
     if (currentTime_ > viewT2_) {
       // this is the sweep-view
       viewT1_ += twidth; 
       viewT2_ += twidth; 
       invalidate();
     }
-  }
+  } else if ((currentTime_ < viewT2_) and (currentTime_ > viewT1_)) {
+    invalidate(); 
+  } 
+  
   
 }
 
@@ -571,8 +570,6 @@ void WaveWin::renderCurrentTimeCursor()
   glBegin(GL_LINES); 
   glVertex2f(currentTime_, viewX1_); 
   glVertex2f(currentTime_, viewX2_); 
-
-
   glEnd(); 
     
 

@@ -43,7 +43,7 @@ class StreamControl
   
 //   sigc::signal<void, float> & timeSignal() {
 //     return timeSignal_; 
-  }
+//   }
 
  private:
 //   sourcePtrList_t sourceList_; 

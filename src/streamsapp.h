@@ -21,19 +21,20 @@
 
 #include "glspikes.h"
 #include "wavewin.h"
-#include "wavestreamsource.h"
-#include "wavestreamvis.h"
-#include "wavestreamvisstatus.h"
+#include "streamsource.h"
+#include "sourcecontrol.h"
+#include "wavevis.h"
+#include "wavevisstatus.h"
 #include "triggerwin.h"
 #include "streamcontrol.h" 
 #include "sourcestatus.h"
-#include "visproperty.h"
+//#include "visproperty.h"
 
 
 class StreamsApp : public Gtk::Window
 {
 public:
-  explicit StreamsApp(pSourceControl_t psc, pVisControl_t pvc); 
+  explicit StreamsApp(pTimer_t pt, pSourceControl_t psc, pVisControl_t pvc); 
   virtual ~StreamsApp(); 
   
 
@@ -75,7 +76,7 @@ protected:
   /*   void on_button_quit_clicked(); */
   /*   virtual bool on_idle(); */
   
-  StreamControl streamControl_; 
+  //StreamControl streamControl_; 
   
   //std::set<pStreamVis_t> streamVisSelSet_; 
   
@@ -89,7 +90,7 @@ protected:
 //   void svSelSetModify(bool append, pStreamVis_t v); 
 //   VisProperty visProperty_;
   
-  void setTime(float time); 
+  void setTime(streamtime_t time); 
   
 };
 

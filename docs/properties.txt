@@ -1,0 +1,10 @@
+Each of these elements can expose a property object. Not for
+performance-sensitive code.
+
+
+Property<valtype, READ/WRITE>: 
+    overrides =
+    has a notify-of-update() signal we can connect to and receive
+       notifications of state change
+
+

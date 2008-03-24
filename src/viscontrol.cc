@@ -20,7 +20,7 @@ pStreamVisBase_t VisControl::createVis(std::string name)
   psvb->invTriggerWaveSignal().connect(sigc::mem_fun(*this, 
 						  &VisControl::emitInvTriggerWaveSignal)); 
   return psvb; 
-
+  
 }
 
 invWaveSignal_t & VisControl::invMainWaveSignal()

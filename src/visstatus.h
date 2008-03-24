@@ -3,8 +3,7 @@
 
 #include <gtkmm.h>
 #include "streams.h"
-#include "wavestreamvis.h"
-
+#include "streamvis.h"
 
 class VisStatus : public Gtk::HBox
 {
@@ -15,7 +14,7 @@ class VisStatus : public Gtk::HBox
     return clickedSignal_; 
   }
   
-  virtual pStreamVis_t getVisPtr() = 0; 
+  virtual pStreamVisBase_t getVisPtr() = 0; 
   virtual void setSelected(bool state) = 0; 
 
  private:

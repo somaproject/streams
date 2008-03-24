@@ -1,0 +1,12 @@
+The timer is complex as there are several times it needs to be aware of: 
+
+somatime: the time it reads from the network
+walltime: seconds since epoch
+experiment time: time since some arbitrary starting point
+streamtime: seconds since the program started, used for internal math, display, etc. 
+
+
+Timer can run in a "fake" mode, but in general it takes
+in a pointer to a netcodec and queries it for time, and
+then gets newtimestamps from the network codec
+

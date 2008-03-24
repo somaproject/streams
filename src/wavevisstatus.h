@@ -1,17 +1,18 @@
-#ifndef WAVESTREAMVISSTATUS_H
-#define WAVESTREAMVISSTATUS_H
+#ifndef WAVEVISSTATUS_H
+#define WAVEVISSTATUS_H
 
 #include <gtkmm.h>
 #include "streams.h"
-#include "wavestreamvis.h"
+#include "streamvis.h"
+#include "wavevis.h"
 #include "visstatus.h"
-#include "visproperty.h"
+//#include "visproperty.h"
 
-class WaveStreamVisStatus : public VisStatus
+class WaveVisStatus : public VisStatus
 {
  public: 
-  WaveStreamVisStatus(pStreamVis_t wsv); 
-  ~WaveStreamVisStatus(); 
+  WaveVisStatus(pStreamVisBase_t wsv); 
+  ~WaveVisStatus(); 
 
   // emit a selected signal
   sigc::signal<void, bool> clickedSignal() {
@@ -20,10 +21,10 @@ class WaveStreamVisStatus : public VisStatus
   
   void setSelected(bool state); 
   
-  pStreamVis_t getVisPtr() { return pWaveStreamVis_; }; 
+  pStreamVisBase_t getVisPtr() { return pWaveVis_; }; 
   
  private:
-  pWaveStreamVis_t pWaveStreamVis_; 
+  pWaveVis_t pWaveVis_; 
   Gtk::EventBox eventBox_; 
   Gtk::VBox vbox_; 
   Gtk::Label label_; 
@@ -40,4 +41,4 @@ class WaveStreamVisStatus : public VisStatus
 };
 
 
-#endif // WAVESTREAMVISSTATUS_H
+#endif // WAVEVISSTATUS_H

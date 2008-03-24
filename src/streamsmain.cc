@@ -16,7 +16,7 @@ int main(int argc, char** argv)
   pVisControl_t pvc(new VisControl); 
 
 
-  StreamsApp vis(psc, pvc);
+  StreamsApp vis(ptimer, psc, pvc);
 
   kit.run(vis);
 

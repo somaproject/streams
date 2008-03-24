@@ -1,0 +1,13 @@
+QUEUE VIEW:
+
+The QueueView is designed to provide a standard unidirectional 
+queue interface to an underlying std::list<T> of objects. 
+
+This is meant to encapsulate the idea of multiple consumers
+wanting to consume "all new" data of a queue without 
+it mattering:
+   1. when they connected to the queue. That is, the queueview contains its
+      own internal state position data
+   2. abstracting away some fo the operations like pop, etc.
+
+

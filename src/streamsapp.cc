@@ -20,11 +20,9 @@
 
 #include "glspikes.h"
 #include "wavewin.h"
-#include "wavestreamsource.h"
-#include "wavestreamsourcestatus.h"
-
-#include "wavestreamvis.h"
-#include "wavestreamvisstatus.h"
+#include "streamsource.h"
+#include "wavevis.h"
+#include "wavevisstatus.h"
 
 #include "triggerwin.h"
 
@@ -33,7 +31,7 @@
 typedef std::set<int> waveStreamVisStatusSet_t; 
 
 
-StreamsApp::StreamsApp(pSourceControl_t psc, pVisControl_t pvc) : 
+StreamsApp::StreamsApp(pTimer_t pt, pSourceControl_t psc, pVisControl_t pvc) : 
   pVisControl_(pvc), 
   pSourceControl_(psc), 
   liveButton_("Live View"), 
@@ -66,8 +64,8 @@ StreamsApp::StreamsApp(pSourceControl_t psc, pVisControl_t pvc) :
 
   show_all(); 
 
-  streamControl_.timeSignal().connect(sigc::mem_fun(*this,
-						   &StreamsApp::setTime)); 
+  pt->streamTimeSignal().connect(sigc::mem_fun(*this,
+					      &StreamsApp::setTime)); 
   add_events (Gdk::ALL_EVENTS_MASK); 
 //   signal_realize().connect(sigc::mem_fun(*this, 
 // 					 &StreamsApp::on_realize_event)); 
@@ -79,10 +77,10 @@ void StreamsApp::on_realize()
 {
   Gtk::Widget::on_realize(); 
 
-  for (int i = 0; i < 2; i++) {
-    pStreamSource_t ssp(newStreamSource("wave", i));
-    pStreamVis_t svp = newStreamVis(ssp, "wave"); 
-  }
+//   for (int i = 0; i < 2; i++) {
+//     pStreamSource_t ssp(newStreamSource("wave", i));
+//     pStreamVis_t svp = newStreamVis(ssp, "wave"); 
+//   }
   
 
 }

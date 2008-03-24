@@ -1,11 +1,11 @@
-#include "wavestreamvisstatus.h"
+#include "wavevisstatus.h"
 #include <iostream>
 #include "boost/format.hpp"
 
 using boost::format;
 
 
-WaveVisStatus::WaveVisStatus(pStreamVis_t wsv) :
+WaveVisStatus::WaveVisStatus(pStreamVisBase_t wsv) :
   vbox_(false, 5), 
   selected_(false)
 {
@@ -13,6 +13,7 @@ WaveVisStatus::WaveVisStatus(pStreamVis_t wsv) :
   // dynamic downcast
   pWaveVis_ = boost::dynamic_pointer_cast<WaveVis>(wsv); 
   
+
 
   pack_start(eventBox_); 
   eventBox_.add(vbox_); 
@@ -59,6 +60,8 @@ void WaveVisStatus::on_size_allocate(Gtk::Allocation& allocation)
 
   pWaveVis_->setYOffset(allocation.get_y() + allocation.get_height()/2); 
   pWaveVis_->setYHeight(allocation.get_height()); 
+
+
 
 }
 void WaveVisStatus::setSelected(bool state)

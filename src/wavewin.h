@@ -25,6 +25,8 @@
 
 #include "viscontrol.h"
 
+enum ViewTypes {LIVESCROLL, LIVESTRIP, MANUAL}; 
+
 
 class WaveWin : public Gtk::GL::DrawingArea
 {
@@ -43,8 +45,8 @@ public:
     }
 
   void invalidate(); 
-  void setCurrentTime(float time); 
-  void setLiveView(bool val); 
+  void setCurrentTime(streamtime_t time); 
+  void setViewType(ViewTypes val); 
 protected:
 
   // signal handlers:
@@ -80,7 +82,7 @@ protected:
   float zoomLevel_; 
   int s1fact_; 
 
-  bool liveView_; 
+  ViewTypes viewType_; 
   pVisControl_t  pVisControl_; 
 
   float currentTime_; 

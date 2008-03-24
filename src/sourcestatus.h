@@ -1,10 +1,12 @@
 #ifndef SOURCESTATUS_H
 #define SOURCESTATUS_H
+#include "streamsource.h"
+
 
 class SourceStatus: public Gtk::HBox
 {
  public: 
-  virtual pStreamSource_t getSourcePtr() = 0; 
+  virtual pStreamSourceBase_t getSourcePtr() = 0; 
 
 }; 
 
