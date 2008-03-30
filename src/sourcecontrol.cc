@@ -1,18 +1,26 @@
 #include "fakewave.h" 
-
-
 #include "sourcecontrol.h"
 
-SourceControl::SourceControl(pTimer_t pt) :
-  pTimer_(pt)
+SourceControl::SourceControl(pSourceControlMonitor_t scm, pTimer_t pt) :
+  pTimer_(pt),
+  pMonitor_(scm)
 {
   // 
   
   
 }
 
-pStreamSourceBase_t SourceControl::createSource(std::string name)
+pWaveSource_t SourceControl::createWaveSource(std::string name)
 {
-  return pStreamSourceBase_t(new FakeWave(pTimer_)); 
+  if (name == "fake") {
+    pFakeWave_t pfw(new FakeWave(pTimer_));
+    pMonitor_->create(pfw); // notify the monitor
+    return pfw; 
+
+  } else {
+    // FIXME Throw error
+    std::cout << "THIS IS NOT A VALID SOURCE" << std::endl; 
+  }
+
   
 }

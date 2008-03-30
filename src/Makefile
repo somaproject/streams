@@ -55,6 +55,7 @@ am__objects_1 = fakewave.$(OBJEXT)
 am__objects_2 = glconfig.$(OBJEXT) timer.$(OBJEXT) \
 	viscontrol.$(OBJEXT) shaders.$(OBJEXT) streamsapp.$(OBJEXT) \
 	streamsmain.$(OBJEXT) triggerwin.$(OBJEXT) wavewin.$(OBJEXT) \
+	sourcecontrolmonitor.$(OBJEXT) viscontrolmonitor.$(OBJEXT) \
 	wavevisrenderer.$(OBJEXT) wavevis.$(OBJEXT) \
 	wavevistrigger.$(OBJEXT) wavevistriggerrenderer.$(OBJEXT) \
 	spectvis.$(OBJEXT) spectvisrenderer.$(OBJEXT) \
@@ -92,12 +93,12 @@ DIST_SOURCES = $(streams_SOURCES) $(teststreams_SOURCES)
 ETAGS = etags
 CTAGS = ctags
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/jonas/soma/software/waves/missing --run aclocal-1.10
-AMTAR = ${SHELL} /home/jonas/soma/software/waves/missing --run tar
+ACLOCAL = ${SHELL} /home/jonas/soma/software/streams/missing --run aclocal-1.10
+AMTAR = ${SHELL} /home/jonas/soma/software/streams/missing --run tar
 AR = ar
-AUTOCONF = ${SHELL} /home/jonas/soma/software/waves/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/jonas/soma/software/waves/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/jonas/soma/software/waves/missing --run automake-1.10
+AUTOCONF = ${SHELL} /home/jonas/soma/software/streams/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/jonas/soma/software/streams/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/jonas/soma/software/streams/missing --run automake-1.10
 AWK = gawk
 BOOST_CPPFLAGS = -pthread -I/usr/include
 BOOST_LDFLAGS = -L/usr/lib
@@ -128,8 +129,8 @@ GENERIC_API_VERSION = 1.0
 GENERIC_RELEASE = 1.3
 GENERIC_VERSION = 1.3.0
 GREP = /bin/grep
-GTKDEPS_CFLAGS = -DPNG_NO_MMX_CODE -I/usr/local/include/gtkglextmm-1.2 -I/usr/local/lib/gtkglextmm-1.2/include -I/usr/include/gtkmm-2.4 -I/usr/lib/gtkmm-2.4/include -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/gdkmm-2.4 -I/usr/lib/gdkmm-2.4/include -I/usr/include/pangomm-1.4 -I/usr/include/atkmm-1.6 -I/usr/include/gtk-2.0 -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib/gtk-2.0/include -I/usr/include/cairomm-1.0 -I/usr/include/pango-1.0 -I/usr/include/cairo -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/atk-1.0 -I/usr/include/gtkglext-1.0 -I/usr/lib/gtkglext-1.0/include -I/usr/include/libglademm-2.4 -I/usr/lib/libglademm-2.4/include -I/usr/include/libglade-2.0 -I/usr/include/libxml2  
-GTKDEPS_LIBS = -Wl,--export-dynamic -L/usr/local/lib -lgtkglextmm-x11-1.2 -lgdkglextmm-x11-1.2 -lgtkglext-x11-1.0 -lgdkglext-x11-1.0 -lGLU -lGL -lXmu -lXt -lSM -lICE -lpangox-1.0 -lglademm-2.4 -lgtkmm-2.4 -lglade-2.0 -lgdkmm-2.4 -latkmm-1.6 -lpangomm-1.4 -lcairomm-1.0 -lglibmm-2.4 -lsigc-2.0 -lgtk-x11-2.0 -lxml2 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangocairo-1.0 -lfontconfig -lXext -lXrender -lXinerama -lXi -lXrandr -lXcursor -lXcomposite -lXdamage -lpango-1.0 -lcairo -lX11 -lXfixes -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0  
+GTKDEPS_CFLAGS = -DPNG_NO_MMX_CODE -I/usr/local/include/gtkglext-1.0 -I/usr/local/lib/gtkglext-1.0/include -I/usr/local/include/gtkglextmm-1.2 -I/usr/local/lib/gtkglextmm-1.2/include -I/usr/include/gtkmm-2.4 -I/usr/lib/gtkmm-2.4/include -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/gdkmm-2.4 -I/usr/lib/gdkmm-2.4/include -I/usr/include/pangomm-1.4 -I/usr/include/atkmm-1.6 -I/usr/include/gtk-2.0 -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib/gtk-2.0/include -I/usr/include/cairomm-1.0 -I/usr/include/pango-1.0 -I/usr/include/cairo -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/atk-1.0 -I/usr/include/libglademm-2.4 -I/usr/lib/libglademm-2.4/include -I/usr/include/libglade-2.0 -I/usr/include/libxml2  
+GTKDEPS_LIBS = -Wl,--export-dynamic -L/usr/local/lib -lgtkglextmm-x11-1.2 -lgdkglextmm-x11-1.2 -lgtkglext-x11-1.0 -lgdkglext-x11-1.0 -lGLU -lGL -lpangox-1.0 -lglademm-2.4 -lgtkmm-2.4 -lglade-2.0 -lgdkmm-2.4 -latkmm-1.6 -lpangomm-1.4 -lcairomm-1.0 -lglibmm-2.4 -lsigc-2.0 -lgtk-x11-2.0 -lxml2 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangocairo-1.0 -lfontconfig -lXext -lXrender -lXinerama -lXi -lXrandr -lXcursor -lXcomposite -lXdamage -lpango-1.0 -lcairo -lX11 -lXfixes -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0  
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
@@ -141,7 +142,7 @@ LIBS =
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/jonas/soma/software/waves/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/jonas/soma/software/streams/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
 PACKAGE = streams
@@ -156,14 +157,14 @@ RANLIB = ranlib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/bash
-SOMADEPS_CFLAGS = -I/usr/local/include/somanetwork-1.0 -I/usr/local/lib/somanetwork-1.0/include -I/usr/local/include  
-SOMADEPS_LIBS = -L/usr/local/lib -lsomanetwork-1.0 -lvsip_csl -lsvpp -lfftw3f -lfftw3 -lfftw3l -llapack  
+SOMADEPS_CFLAGS = -I/home/jonas/soma.software/include/somanetwork-1.0 -I/home/jonas/soma.software/lib/somanetwork-1.0/include -I/home/jonas/soma.software//include  
+SOMADEPS_LIBS = -L/home/jonas/soma.software/lib -L/home/jonas/soma.software//lib -lsomanetwork-1.0 -lvsip_csl -lsvpp -lfftw3f -lfftw3 -lfftw3l -llapack-3 -lblas-3 -latlas -lg2c  
 STRIP = strip
 VERSION = 1.0
-abs_builddir = /home/jonas/soma/software/waves/src
-abs_srcdir = /home/jonas/soma/software/waves/src
-abs_top_builddir = /home/jonas/soma/software/waves
-abs_top_srcdir = /home/jonas/soma/software/waves
+abs_builddir = /home/jonas/soma/software/streams/src
+abs_srcdir = /home/jonas/soma/software/streams/src
+abs_top_builddir = /home/jonas/soma/software/streams
+abs_top_srcdir = /home/jonas/soma/software/streams
 ac_ct_CC = gcc
 ac_ct_CXX = g++
 ac_ct_F77 = g77
@@ -192,7 +193,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = $(SHELL) /home/jonas/soma/software/waves/install-sh
+install_sh = $(SHELL) /home/jonas/soma/software/streams/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -231,6 +232,7 @@ h_sources = glconfig.h glspikes.h \
 cc_sources = glconfig.cc timer.cc viscontrol.cc \
 	shaders.cc streamsapp.cc streamsmain.cc \
 	triggerwin.cc wavewin.cc \
+	sourcecontrolmonitor.cc viscontrolmonitor.cc \
 	wavevisrenderer.cc wavevis.cc \
 	wavevistrigger.cc wavevistriggerrenderer.cc \
 	spectvis.cc spectvisrenderer.cc spectvistrigger.cc spectvistriggerrenderer.cc \
@@ -322,6 +324,7 @@ include ./$(DEPDIR)/fakewave.Po
 include ./$(DEPDIR)/glconfig.Po
 include ./$(DEPDIR)/shaders.Po
 include ./$(DEPDIR)/sourcecontrol.Po
+include ./$(DEPDIR)/sourcecontrolmonitor.Po
 include ./$(DEPDIR)/spectvis.Po
 include ./$(DEPDIR)/spectvisrenderer.Po
 include ./$(DEPDIR)/spectvistrigger.Po
@@ -333,6 +336,7 @@ include ./$(DEPDIR)/teststreamsapp.Po
 include ./$(DEPDIR)/timer.Po
 include ./$(DEPDIR)/triggerwin.Po
 include ./$(DEPDIR)/viscontrol.Po
+include ./$(DEPDIR)/viscontrolmonitor.Po
 include ./$(DEPDIR)/wavevis.Po
 include ./$(DEPDIR)/wavevisrenderer.Po
 include ./$(DEPDIR)/wavevisstatus.Po

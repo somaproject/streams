@@ -56,7 +56,6 @@ void FakeWave::setVariance(double var) {
 void FakeWave::timeUpdate(streamtime_t time) {
   streamtime_t oldtime = lastTime_; 
   lastTime_ = pTimer_->getStreamTime(); 
-
   streamtime_t delta = lastTime_ - oldtime; 
   nextData(delta); 
   

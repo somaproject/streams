@@ -55,6 +55,7 @@ am__objects_1 = fakewave.$(OBJEXT)
 am__objects_2 = glconfig.$(OBJEXT) timer.$(OBJEXT) \
 	viscontrol.$(OBJEXT) shaders.$(OBJEXT) streamsapp.$(OBJEXT) \
 	streamsmain.$(OBJEXT) triggerwin.$(OBJEXT) wavewin.$(OBJEXT) \
+	sourcecontrolmonitor.$(OBJEXT) viscontrolmonitor.$(OBJEXT) \
 	wavevisrenderer.$(OBJEXT) wavevis.$(OBJEXT) \
 	wavevistrigger.$(OBJEXT) wavevistriggerrenderer.$(OBJEXT) \
 	spectvis.$(OBJEXT) spectvisrenderer.$(OBJEXT) \
@@ -231,6 +232,7 @@ h_sources = glconfig.h glspikes.h \
 cc_sources = glconfig.cc timer.cc viscontrol.cc \
 	shaders.cc streamsapp.cc streamsmain.cc \
 	triggerwin.cc wavewin.cc \
+	sourcecontrolmonitor.cc viscontrolmonitor.cc \
 	wavevisrenderer.cc wavevis.cc \
 	wavevistrigger.cc wavevistriggerrenderer.cc \
 	spectvis.cc spectvisrenderer.cc spectvistrigger.cc spectvistriggerrenderer.cc \
@@ -322,6 +324,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/glconfig.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/shaders.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sourcecontrol.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sourcecontrolmonitor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spectvis.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spectvisrenderer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/spectvistrigger.Po@am__quote@
@@ -333,6 +336,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/timer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/triggerwin.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viscontrol.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/viscontrolmonitor.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wavevis.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wavevisrenderer.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/wavevisstatus.Po@am__quote@

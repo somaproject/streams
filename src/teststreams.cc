@@ -1,5 +1,7 @@
 #include "teststreamsapp.h"
 #include "sourcecontrol.h"
+#include "sourcecontrolmonitor.h"
+#include "viscontrolmonitor.h"
 #include "viscontrol.h"
 
 
@@ -10,15 +12,15 @@ int main(int argc, char** argv)
   Gtk::GL::init(argc, argv);
   
   pTimer_t ptimer = Timer::createDummyTimer(); 
+  pSourceControlMonitor_t pscm(new SourceControlMonitor); 
+  pSourceControl_t psc(new SourceControl(pscm, ptimer)); 
+  pVisControlMonitor_t pvcm(new VisControlMonitor); 
+  pVisControl_t pvc(new VisControl(pvcm)); 
 
-  pSourceControl_t psc(new SourceControl(ptimer)); 
-  pVisControl_t pvc(new VisControl); 
+  pWaveSource_t fw = psc->createWaveSource("fake"); 
+  pStreamVisBase_t wv = pvc->createVis(fw, "wave"); 
 
-  pStreamSourceBase_t fw = psc->createSource("test"); 
-  pStreamVisBase_t wv = pvc->createVis("test"); 
   wv->setYOffset(100.0); 
-
-  wv->connectSource(fw); 
 
   TestStreamsApp teststreamsapp(psc, pvc); 
 

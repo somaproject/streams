@@ -2,7 +2,8 @@
 #include "wavevis.h" 
 #include "spectvis.h" 
 
-VisControl::VisControl()
+VisControl::VisControl(pVisControlMonitor_t pvcm) :
+  pMonitor_(pvcm)
 {
 
 
@@ -10,17 +11,26 @@ VisControl::VisControl()
 
 }
 
-pStreamVisBase_t VisControl::createVis(std::string name)
+pStreamVisBase_t VisControl::createVis(pWaveSource_t pws, std::string name)
 {
-  pStreamVisBase_t psvb(new SpectVis()); 
+  if (name == "wave") {
+    pWaveVis_t psv(new WaveVis()); 
+    
+    psv->connectSource(pws);
+    visList_.push_back(psv); 
+    psv->invMainWaveSignal().connect(sigc::mem_fun(*this, 
+						    &VisControl::emitInvMainWaveSignal)); 
+    psv->invTriggerWaveSignal().connect(sigc::mem_fun(*this, 
+						       &VisControl::emitInvTriggerWaveSignal)); 
+    
+    
+    pMonitor_->create(psv); 
+    return psv; 
 
-  visList_.push_back(psvb); 
-  psvb->invMainWaveSignal().connect(sigc::mem_fun(*this, 
-						  &VisControl::emitInvMainWaveSignal)); 
-  psvb->invTriggerWaveSignal().connect(sigc::mem_fun(*this, 
-						  &VisControl::emitInvTriggerWaveSignal)); 
-  return psvb; 
-  
+  } else {
+    std::cout << "NOT FOUND" << std::endl;  // FIXME
+
+  } 
 }
 
 invWaveSignal_t & VisControl::invMainWaveSignal()

@@ -35,4 +35,6 @@ class FakeWave : public StreamSource<WaveBuffer_t>
 
 };
 
+typedef boost::shared_ptr<FakeWave> pFakeWave_t; 
+
 #endif // FAKEWAVE_H

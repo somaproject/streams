@@ -1,16 +1,19 @@
 #ifndef SOURCECONTROL_H
 #define SOURCECONTROL_H
 
+#include "sourcecontrolmonitor.h"
+#include "wavesource.h"
 #include "timer.h"
 
 class SourceControl
 {
 public:
-  SourceControl(pTimer_t); 
-  pStreamSourceBase_t createSource(std::string); 
-
+  SourceControl(pSourceControlMonitor_t scm, pTimer_t); 
+  pWaveSource_t createWaveSource(std::string); 
+  
 private:
   pTimer_t pTimer_; 
+  pSourceControlMonitor_t pMonitor_; 
   std::list<pStreamSourceBase_t> sourceList_; 
 
 }; 

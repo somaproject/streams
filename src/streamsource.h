@@ -46,7 +46,5 @@ protected:
 };
 
 
-
-
 #endif // STREAMSOURCE_H
 

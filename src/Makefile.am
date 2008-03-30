@@ -23,6 +23,7 @@ h_sources = glconfig.h glspikes.h \
 cc_sources = glconfig.cc timer.cc viscontrol.cc \
 	shaders.cc streamsapp.cc streamsmain.cc \
 	triggerwin.cc wavewin.cc \
+	sourcecontrolmonitor.cc viscontrolmonitor.cc \
 	wavevisrenderer.cc wavevis.cc \
 	wavevistrigger.cc wavevistriggerrenderer.cc \
 	spectvis.cc spectvisrenderer.cc spectvistrigger.cc spectvistriggerrenderer.cc \

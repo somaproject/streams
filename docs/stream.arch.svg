@@ -9,12 +9,13 @@
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    sodipodi:docname="stream.arch.svg"
-   sodipodi:docbase="/home/jonas/soma/software/waves/docs"
-   inkscape:version="0.44.1"
+   sodipodi:docbase="/home/jonas/soma/software/streams/docs"
+   inkscape:version="0.45.1"
    sodipodi:version="0.32"
    id="svg1996"
    height="792.00000pt"
-   width="612.00000pt">
+   width="612.00000pt"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <defs
      id="defs3">
     <marker
@@ -236,7 +237,7 @@
          sodipodi:role="line"
          id="tspan2231"
          x="337.5"
-         y="561.875">Stream Vis</tspan></text>
+         y="561.875">WaveStreamVis</tspan></text>
     <rect
        style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect2235"
@@ -694,14 +695,14 @@
          id="tspan2321">handles data dispatch, and guarantees uniqueness in data rx. </tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
-       x="-781.25"
+       style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-718.75"
        y="255.625"
        id="text1991"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
          id="tspan1993"
-         x="-781.25"
+         x="-718.75"
          y="255.625">Class Hierarchy</tspan></text>
     <text
        xml:space="preserve"
@@ -857,5 +858,79 @@
          id="tspan2942"
          x="330.21887"
          y="682.40857">StreamControl aggregates </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-1015.625"
+       y="849.375"
+       id="text2311"><tspan
+         sodipodi:role="line"
+         id="tspan2314"
+         x="-1015.625"
+         y="849.375">SourceControl(pSourceControlMonitor)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-581.79553"
+       y="849.375"
+       id="text2316"><tspan
+         sodipodi:role="line"
+         id="tspan2318"
+         x="-581.79553"
+         y="849.375">VisControl(pStreamControl_t, pVisControlMontior)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-546.875"
+       y="866.83533"
+       id="text2320"><tspan
+         sodipodi:role="line"
+         id="tspan2322"
+         x="-546.875"
+         y="866.83533">.newVis(pSourceBase_t, VisName)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-984.375"
+       y="880.625"
+       id="text2324"><tspan
+         sodipodi:role="line"
+         id="tspan2326"
+         x="-984.375"
+         y="880.625">Internal list of sources, and </tspan><tspan
+         sodipodi:role="line"
+         x="-984.375"
+         y="895.625"
+         id="tspan2328">takes care of wiring them up</tspan><tspan
+         sodipodi:role="line"
+         x="-984.375"
+         y="910.625"
+         id="tspan2330" /><tspan
+         sodipodi:role="line"
+         x="-984.375"
+         y="925.625"
+         id="tspan2332">Has a lot of the messy glue logic</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-541.91534"
+       y="893.64514"
+       id="text2334"><tspan
+         sodipodi:role="line"
+         id="tspan2336"
+         x="-541.91534"
+         y="893.64514">Aggregates the relevant invalidate-window signals</tspan><tspan
+         sodipodi:role="line"
+         x="-541.91534"
+         y="908.64514"
+         id="tspan2338">such that a WaveWin and a triggerWin can be </tspan><tspan
+         sodipodi:role="line"
+         x="-541.91534"
+         y="923.64514"
+         id="tspan2340">passed a Vis control and will perform</tspan><tspan
+         sodipodi:role="line"
+         x="-541.91534"
+         y="938.64514"
+         id="tspan2342">the relevant updates</tspan></text>
   </g>
 </svg>
