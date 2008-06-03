@@ -1,0 +1,6 @@
+tspikes (1.0-1) unstable; urgency=low
+
+  * Initial release (Closes: #nnnn)  <nnnn is the bug number of your ITP>
+
+ -- Stuart Layton <slayton@mit.edu>  Wed, 06 Feb 2008 15:54:47 -0500
+

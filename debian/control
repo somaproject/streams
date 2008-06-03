@@ -1,0 +1,11 @@
+Source: streams
+Section: Soma Software
+Priority: extra
+Maintainer: Stuart Layton <slayton@mit.edu>
+Build-Depends: debhelper (>= 5), libgtkglextmm-x11-1.2, libsomanetwork
+Standards-Version: 3.7.2
+
+Package: streams
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgtkglextmm-x11-1.2
+Description: Soma vizualation software for streaming data (EEG)
