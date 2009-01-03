@@ -1,6 +1,6 @@
 # 
 
-AM_CXXFLAGS = $(GTKDEPS_CFLAGS)  $(BOOST_CPPFLAGS) $(SOMADEPS_CFLAGS) -I$(top_builddir)/src  -I$(top_builddir)ext/logging/src -pthread 
+AM_CXXFLAGS = $(GTKDEPS_CFLAGS)  $(BOOST_CPPFLAGS) $(SOMADEPS_CFLAGS) -I$(top_builddir)/src  -I$(top_builddir)/src/ext-common/  -I$(top_builddir)/src/logging/src -pthread 
 AM_LDFLAGS = $(GTKDEPS_LIBS) $(BOOST_LDFLAGS) $(SOMADEPS_LIBS) $(BOOST_THREAD_LIB)  $(BOOST_PROGRAM_OPTIONS_LIB)
 
 SUBDIRS = propwidgets

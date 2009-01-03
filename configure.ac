@@ -91,7 +91,7 @@ dnl -----------------------------------------------
 AC_CONFIG_FILES([Makefile src/Makefile unittest/Makefile src/sources/Makefile \
 			   src/vis/Makefile src/tests/Makefile app/Makefile
 			   app/propwidgets/Makefile
-			    src/filters/Makefile src/ext/logging/src/Makefile ])
+			    src/filters/Makefile src/logging/src/Makefile ])
 
 
 AC_OUTPUT

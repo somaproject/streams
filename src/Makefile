@@ -49,12 +49,12 @@ CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
 LTLIBRARIES = $(noinst_LTLIBRARIES)
 libstream_la_DEPENDENCIES = vis/libstreamvis.la \
-	sources/libstreamsources.la ext/logging/src/liblogging.la
+	sources/libstreamsources.la logging/src/liblogging.la
 am__objects_1 = glconfig.lo timer.lo testviscontrol.lo viscontrol.lo \
 	streamrenderwin.lo sourcebase.lo streampipeline.lo \
-	somanetcodec.lo glstring.lo shaders.lo networkdatacache.lo \
-	pipelinemanager.lo
-am_libstream_la_OBJECTS = $(am__objects_1)
+	somanetcodec.lo networkdatacache.lo pipelinemanager.lo
+am__objects_2 = glstring.lo shaders.lo
+am_libstream_la_OBJECTS = $(am__objects_1) $(am__objects_2)
 libstream_la_OBJECTS = $(am_libstream_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -83,12 +83,12 @@ ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
-ACLOCAL = ${SHELL} /home/jonas/soma/software/streams/missing --run aclocal-1.10
-AMTAR = ${SHELL} /home/jonas/soma/software/streams/missing --run tar
+ACLOCAL = ${SHELL} /home/jonas/soma/gitmigrate/software/streams/missing --run aclocal-1.10
+AMTAR = ${SHELL} /home/jonas/soma/gitmigrate/software/streams/missing --run tar
 AR = ar
-AUTOCONF = ${SHELL} /home/jonas/soma/software/streams/missing --run autoconf
-AUTOHEADER = ${SHELL} /home/jonas/soma/software/streams/missing --run autoheader
-AUTOMAKE = ${SHELL} /home/jonas/soma/software/streams/missing --run automake-1.10
+AUTOCONF = ${SHELL} /home/jonas/soma/gitmigrate/software/streams/missing --run autoconf
+AUTOHEADER = ${SHELL} /home/jonas/soma/gitmigrate/software/streams/missing --run autoheader
+AUTOMAKE = ${SHELL} /home/jonas/soma/gitmigrate/software/streams/missing --run automake-1.10
 AWK = gawk
 BOOST_CPPFLAGS = -pthread -I/usr/include
 BOOST_LDFLAGS = -L/usr/lib
@@ -132,7 +132,7 @@ LIBS =
 LIBTOOL = $(SHELL) $(top_builddir)/libtool
 LN_S = ln -s
 LTLIBOBJS = 
-MAKEINFO = ${SHELL} /home/jonas/soma/software/streams/missing --run makeinfo
+MAKEINFO = ${SHELL} /home/jonas/soma/gitmigrate/software/streams/missing --run makeinfo
 MKDIR_P = /bin/mkdir -p
 OBJEXT = o
 PACKAGE = streams
@@ -151,10 +151,10 @@ SOMADEPS_CFLAGS = -I/usr/local/include/somanetwork-1.0 -I/usr/local/lib/somanetw
 SOMADEPS_LIBS = -L/usr/local/lib -lsomanetwork-1.0 -lvsip_csl -lsvpp -lfftw3f -lfftw3 -lfftw3l -llapack -lsomadspio-1.0  
 STRIP = strip
 VERSION = 1.0
-abs_builddir = /home/jonas/soma/software/streams/src
-abs_srcdir = /home/jonas/soma/software/streams/src
-abs_top_builddir = /home/jonas/soma/software/streams
-abs_top_srcdir = /home/jonas/soma/software/streams
+abs_builddir = /home/jonas/soma/gitmigrate/software/streams/src
+abs_srcdir = /home/jonas/soma/gitmigrate/software/streams/src
+abs_top_builddir = /home/jonas/soma/gitmigrate/software/streams
+abs_top_srcdir = /home/jonas/soma/gitmigrate/software/streams
 ac_ct_CC = gcc
 ac_ct_CXX = g++
 ac_ct_F77 = g77
@@ -183,7 +183,7 @@ host_vendor = unknown
 htmldir = ${docdir}
 includedir = ${prefix}/include
 infodir = ${datarootdir}/info
-install_sh = $(SHELL) /home/jonas/soma/software/streams/install-sh
+install_sh = $(SHELL) /home/jonas/soma/gitmigrate/software/streams/install-sh
 libdir = ${exec_prefix}/lib
 libexecdir = ${exec_prefix}/libexec
 localedir = ${datarootdir}/locale
@@ -202,20 +202,20 @@ sysconfdir = ${prefix}/etc
 target_alias = 
 top_builddir = ..
 top_srcdir = ..
-AM_CXXFLAGS = $(GTKDEPS_CFLAGS)  $(BOOST_CPPFLAGS) $(SOMADEPS_CFLAGS) -Iext/logging/src -pthread 
+AM_CXXFLAGS = $(GTKDEPS_CFLAGS)  $(BOOST_CPPFLAGS) $(SOMADEPS_CFLAGS) -Ilogging/src -Iext-common/ -pthread 
 AM_LDFLAGS = $(GTKDEPS_LIBS) $(BOOST_LDFLAGS) $(SOMADEPS_LIBS) $(BOOST_THREAD_LIB)  $(BOOST_PROGRAM_OPTIONS_LIB)
-SUBDIRS = ext/logging/src vis sources 
+SUBDIRS = logging/src vis sources 
 logging_cc_sources = 
 cc_sources = glconfig.cc timer.cc testviscontrol.cc \
 	viscontrol.cc streamrenderwin.cc sourcebase.cc streampipeline.cc \
-	 somanetcodec.cc  cairogltext/glstring.cc shaders.cc \
-		 networkdatacache.cc pipelinemanager.cc
+	somanetcodec.cc  networkdatacache.cc pipelinemanager.cc
 
+ext_sources = ext-common/cairogltext/glstring.cc ext-common/shaderutil/shaders.cc
 noinst_LTLIBRARIES = libstream.la
 LIBADD = 
-libstream_la_SOURCES = $(cc_sources) $(source_sources)
+libstream_la_SOURCES = $(cc_sources) $(source_sources) $(ext_sources)
 libstream_la_CXXFALGS = $(AM_CXXFLAGS)
-libstream_la_LIBADD = vis/libstreamvis.la sources/libstreamsources.la ext/logging/src/liblogging.la
+libstream_la_LIBADD = vis/libstreamvis.la sources/libstreamsources.la logging/src/liblogging.la
 all: all-recursive
 
 .SUFFIXES:
@@ -301,12 +301,19 @@ include ./$(DEPDIR)/viscontrol.Plo
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(LTCXXCOMPILE) -c -o $@ $<
 
-glstring.lo: cairogltext/glstring.cc
-	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT glstring.lo -MD -MP -MF $(DEPDIR)/glstring.Tpo -c -o glstring.lo `test -f 'cairogltext/glstring.cc' || echo '$(srcdir)/'`cairogltext/glstring.cc
+glstring.lo: ext-common/cairogltext/glstring.cc
+	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT glstring.lo -MD -MP -MF $(DEPDIR)/glstring.Tpo -c -o glstring.lo `test -f 'ext-common/cairogltext/glstring.cc' || echo '$(srcdir)/'`ext-common/cairogltext/glstring.cc
 	mv -f $(DEPDIR)/glstring.Tpo $(DEPDIR)/glstring.Plo
-#	source='cairogltext/glstring.cc' object='glstring.lo' libtool=yes \
+#	source='ext-common/cairogltext/glstring.cc' object='glstring.lo' libtool=yes \
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
-#	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o glstring.lo `test -f 'cairogltext/glstring.cc' || echo '$(srcdir)/'`cairogltext/glstring.cc
+#	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o glstring.lo `test -f 'ext-common/cairogltext/glstring.cc' || echo '$(srcdir)/'`ext-common/cairogltext/glstring.cc
+
+shaders.lo: ext-common/shaderutil/shaders.cc
+	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT shaders.lo -MD -MP -MF $(DEPDIR)/shaders.Tpo -c -o shaders.lo `test -f 'ext-common/shaderutil/shaders.cc' || echo '$(srcdir)/'`ext-common/shaderutil/shaders.cc
+	mv -f $(DEPDIR)/shaders.Tpo $(DEPDIR)/shaders.Plo
+#	source='ext-common/shaderutil/shaders.cc' object='shaders.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o shaders.lo `test -f 'ext-common/shaderutil/shaders.cc' || echo '$(srcdir)/'`ext-common/shaderutil/shaders.cc
 
 mostlyclean-libtool:
 	-rm -f *.lo
