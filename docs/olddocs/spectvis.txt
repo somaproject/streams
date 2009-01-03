@@ -1,0 +1,42 @@
+
+
+SpectVis is the spectrogram visualization of the inbound wavebuffer_t data. 
+
+Hector recommended highly-overlapping STFTs, and using about 1 second duration
+
+That suggests that we need to take in the input buffers, append them
+to some circular buffer, and then do the relevant transforms.
+
+We're going to create our own datastructure, which contains
+
+
+GlSpect
+
+streamtime_t : start time, end time
+
+
+--------------------------------------------------------------------
+We use 2d textures and quads to visualize "spectBlocks", or roughly block-sized
+chunks of STFT data. 
+
+The GL subsystem has finite texture memory, so we create a structure
+
+GLSpectBlockTextCache[]
+
+which contains a 1-1 mapping to the original SpectBlockpVect_.
+This happens via:
+
+starttime_t : 
+pSpectBlock_t : a (weak) smart pointer to the spectBlock
+bool texture : is there currently a texture for this datum
+textureName : texture name
+
+On each render, we find the overlap with the previous render by
+keeping around an interval representing the previous-generation of
+texture conversions, as if it were a set. 
+
+Then 
+newset - oldset == the set we must generate textures for
+
+oldset - newset == the set we must delete textures for
+

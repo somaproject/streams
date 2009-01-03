@@ -1,0 +1,43 @@
+What do we want from waveform visualization? 
+
+We'd like to be able to look at 12+ waveforms on a single 1600x1200 screen
+
+Some sort of specgram visualization? 
+
+history, history, history -- but how to -use- that
+
+In some sense, the chronic visualization app is different from the short-term app
+
+How to trigger? How to interface with those triggers? 
+
+Ideally we have triggers across the data and it's easy to do things like "show me time-averaged waveform across all channels", etc. 
+
+On one level, we really want just a single app per channel. 
+
+Assume 2 kHz sampling rate for continuous data, we're looking at 30 MB/hr, or 8 kB/sec (per channel). that's 1.8 GB ram/hour
+
+at start-up we specify a history buffer size, which is 100% a function of the available ram and the sampling rate. 
+
+user-specified triggers? do we want them yet? 
+
+Remember, be AGILE...
+
+There's no good way of both cross-channel triggering -and- having one waveform-per-display
+
+Do we want to combine waves and freqs? I mean, sure, but... NO, totally different temporal scales
+---------------------------------------------------------------------------
+
+vis filtering: 
+
+I think the best way to populate / compute our filtering options is
+simply with an external file of options, that links into libdsp, and
+names the filters.
+
+So for example
+
+<theta> <fir> <params> </ > 
+
+etc. 
+
+How do we handle the "we just updated the scene, now we need to churn"
+problem? Continuations! Or... something not quite so complex. 

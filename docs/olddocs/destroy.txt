@@ -1,0 +1,11 @@
+Because the pointers are shared, we would set them to zero generally
+
+The object is guaranteed to be valid for the duration of
+the destroyed() callback, but not after. 
+
+Since in destroy() everyone will disclaim their pointers, we should 
+then have the reference count drop to zero, and be DELETED. 
+
+For GUI elements, remember that they generally have a naked pointer to
+the object; thus they need to be sure to properly modify their
+internal state when receiving the deleted signals.

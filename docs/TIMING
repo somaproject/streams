@@ -1,0 +1,6 @@
+Time is complicated. There are three notions of "time" here: 
+
+somatime_t : soma timestamps
+walltime_t : ntp-based seconds since epoch
+streamtime_t : internal float time
+

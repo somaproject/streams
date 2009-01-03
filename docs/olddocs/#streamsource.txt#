@@ -1,0 +1,3 @@
+StreamSource: The base class for all stream sources. 
+
+It's not entirely clear what functionality should go here. 

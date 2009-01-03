@@ -1,0 +1,8 @@
+
+
+Stream pipeline is constructed with an instance 
+of the visitor for new class creation. 
+
+Has a collection of "pipelines" 
+
+

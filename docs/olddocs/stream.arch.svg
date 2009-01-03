@@ -1,0 +1,963 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="stream.arch.svg"
+   sodipodi:docbase="/home/jonas/soma/software/streams/docs"
+   inkscape:version="0.46"
+   sodipodi:version="0.32"
+   id="svg1996"
+   height="792.00000pt"
+   width="612.00000pt"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs3">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 495 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="765 : 495 : 1"
+       inkscape:persp3d-origin="382.5 : 330 : 1"
+       id="perspective175" />
+    <marker
+       inkscape:stockid="TriangleInM"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="TriangleInM"
+       style="overflow:visible;">
+      <path
+         sodipodi:nodetypes="cccc"
+         id="path1545"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(-0.4)" />
+    </marker>
+    <marker
+       inkscape:stockid="TriangleOutM"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="TriangleOutM"
+       style="overflow:visible;">
+      <path
+         sodipodi:nodetypes="cccc"
+         id="path1698"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.4)" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     inkscape:window-y="0"
+     inkscape:window-x="1600"
+     inkscape:window-height="1179"
+     inkscape:window-width="1600"
+     guidetolerance="2.5000000pt"
+     inkscape:grid-bbox="false"
+     gridtolerance="10000"
+     inkscape:grid-points="true"
+     showgrid="true"
+     inkscape:current-layer="layer1"
+     inkscape:document-units="pt"
+     inkscape:cy="412.37644"
+     inkscape:cx="677.15496"
+     inkscape:zoom="1.4142136"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0.0"
+     borderopacity="1.0"
+     bordercolor="#666666"
+     pagecolor="#ffffff"
+     id="base"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:object-paths="false">
+    <inkscape:grid
+       id="GridFromPre046Settings"
+       type="xygrid"
+       originx="0px"
+       originy="0.0000000pt"
+       spacingx="2.5000000pt"
+       spacingy="2.5000000pt"
+       color="#0000ff"
+       empcolor="#0000ff"
+       opacity="0.2"
+       empopacity="0.4"
+       empspacing="5" />
+  </sodipodi:namedview>
+  <metadata
+     id="metadata4">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     id="layer1"
+     inkscape:groupmode="layer"
+     inkscape:label="Layer 1">
+    <path
+       id="path2889"
+       d="M 168.75000,43.125000 L 168.75000,43.125000"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;marker-end:none;stroke-opacity:1.0000000" />
+    <path
+       transform="matrix(-0.999935,1.145556e-2,-1.145556e-2,-0.999935,338.6632,134.3102)"
+       sodipodi:open="true"
+       d="M 180.21352,107.48374 A 12.5,12.5 0 1 1 168.62925,90.000583"
+       sodipodi:end="4.7027288"
+       sodipodi:start="0.41009825"
+       sodipodi:ry="12.5"
+       sodipodi:rx="12.5"
+       sodipodi:cy="102.5"
+       sodipodi:cx="168.75"
+       id="path3557"
+       style="fill:none;fill-opacity:0.75;fill-rule:evenodd;stroke:black;stroke-width:1.25;marker-start:url(#TriangleInM);marker-end:none"
+       sodipodi:type="arc" />
+    <text
+       sodipodi:linespacing="100.00000%"
+       id="text3558"
+       y="16.545723"
+       x="184.97278"
+       style="font-size:7.0000000;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:100.00000%;writing-mode:lr-tb;text-anchor:middle;stroke-width:1.2500000;font-family:Bitstream Vera Sans"
+       xml:space="preserve"><tspan
+         id="tspan3559">else</tspan></text>
+    <path
+       id="path1654"
+       d="M 168.75000,49.375000 L 225.00000,49.375000"
+       style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#TriangleOutM);stroke-opacity:1.0000000" />
+    <g
+       id="g2858"
+       transform="translate(9.375,90.625)">
+      <g
+         transform="translate(-75,0)"
+         id="g2851">
+        <rect
+           rx="11.607143"
+           style="fill:white;fill-opacity:1;fill-rule:evenodd;stroke:black;stroke-width:1.25;stroke-miterlimit:3.9000001;stroke-dasharray:none;stroke-opacity:1"
+           id="rect1974"
+           width="62.5"
+           height="37.5"
+           x="171.875"
+           y="-56.875"
+           ry="11.607143" />
+        <rect
+           style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.25;stroke-miterlimit:3.9000001;stroke-dasharray:none;stroke-opacity:1"
+           id="rect2849"
+           width="68.75"
+           height="43.75"
+           x="168.75"
+           y="-60" />
+      </g>
+      <text
+         sodipodi:linespacing="125%"
+         id="text1970"
+         y="-35"
+         x="127.87411"
+         style="font-size:10.19999981px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:center;line-height:125%;writing-mode:lr-tb;text-anchor:middle;fill:black;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="-35"
+           x="127.87411"
+           id="tspan1972"
+           sodipodi:role="line">STATE A</tspan></text>
+    </g>
+    <g
+       id="g2869"
+       transform="matrix(-0.5,0,0,0.5,212.5,51.25)">
+      <path
+         d="M 146.875 108.75 A 3.125 3.125 0 1 1  140.625,108.75 A 3.125 3.125 0 1 1  146.875 108.75 z"
+         sodipodi:ry="3.125"
+         sodipodi:rx="3.125"
+         sodipodi:cy="108.75"
+         sodipodi:cx="143.75"
+         id="path2865"
+         style="fill:black;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.25;stroke-miterlimit:3.9000001;stroke-dasharray:none;stroke-opacity:1"
+         sodipodi:type="arc" />
+      <rect
+         y="102.5"
+         x="137.5"
+         height="12.5"
+         width="12.5"
+         id="rect2867"
+         style="fill:none;fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:1.25;stroke-miterlimit:3.9000001;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2213"
+       width="109.375"
+       height="93.75"
+       x="78.125"
+       y="474.375" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="78.125"
+       y="471.25"
+       id="text2215"><tspan
+         sodipodi:role="line"
+         id="tspan2217"
+         x="78.125"
+         y="471.25">Stream Source</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="34.375"
+       y="596.25"
+       id="text2219"><tspan
+         sodipodi:role="line"
+         id="tspan2221"
+         x="34.375"
+         y="596.25">Takes in data from the network</tspan><tspan
+         sodipodi:role="line"
+         x="34.375"
+         y="611.25"
+         id="tspan2223">Stores all historical data</tspan><tspan
+         sodipodi:role="line"
+         x="34.375"
+         y="626.25"
+         id="tspan2225">Can have multiple consumers</tspan></text>
+    <rect
+       style="fill:white;fill-opacity:1;stroke:black;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:5,5;stroke-opacity:1;stroke-dashoffset:0"
+       id="rect2053"
+       width="343.75"
+       height="312.2785"
+       x="312.5"
+       y="380.84647" />
+    <path
+       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:2.5, 1.25;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 587.5,368.125 L 587.5,533.75"
+       id="path3261"
+       sodipodi:nodetypes="cc" />
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25000012;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2227"
+       width="296.875"
+       height="177.97116"
+       x="328.125"
+       y="390.07693" />
+    <text
+       xml:space="preserve"
+       style="font-size:23.89286613px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="337.5"
+       y="561.875"
+       id="text2229"><tspan
+         sodipodi:role="line"
+         id="tspan2231"
+         x="337.5"
+         y="561.875">WaveStreamVis</tspan></text>
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2235"
+       width="131.25"
+       height="50"
+       x="359.375"
+       y="396.25" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="371.875"
+       y="424.375"
+       id="text2237"><tspan
+         sodipodi:role="line"
+         id="tspan2239"
+         x="371.875"
+         y="424.375">Filter / Processing</tspan></text>
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2243"
+       width="84.375"
+       height="46.875"
+       x="350"
+       y="474.375" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="365.625"
+       y="486.875"
+       id="text2245"><tspan
+         sodipodi:role="line"
+         id="tspan2247"
+         x="365.625"
+         y="486.875">Primary</tspan><tspan
+         sodipodi:role="line"
+         x="365.625"
+         y="501.875"
+         id="tspan2249">Sample</tspan><tspan
+         sodipodi:role="line"
+         x="365.625"
+         y="516.875"
+         id="tspan2251">Buffer</tspan></text>
+    <path
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-end:url(#TriangleOutM)"
+       d="M 187.5,505.625 L 318.75,421.25 L 353.125,421.25"
+       id="path2253" />
+    <path
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="M 390.625,446.25 L 390.625,471.25"
+       id="path3224" />
+    <path
+       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:2.5, 1.25;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 562.5,368.125 L 562.5,486.875"
+       id="path3259"
+       sodipodi:nodetypes="cc" />
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3226"
+       width="109.375"
+       height="31.25"
+       x="515.625"
+       y="443.125" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="528.125"
+       y="465"
+       id="text3228"><tspan
+         sodipodi:role="line"
+         id="tspan3230"
+         x="528.125"
+         y="465">MainRenderer</tspan></text>
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3232"
+       width="109.375"
+       height="31.25"
+       x="515.625"
+       y="490" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="521.875"
+       y="511.875"
+       id="text3234"><tspan
+         sodipodi:role="line"
+         id="tspan3236"
+         x="521.875"
+         y="511.875">TriggerRenderer</tspan></text>
+    <rect
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect3238"
+       width="109.375"
+       height="31.25"
+       x="515.625"
+       y="536.875" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="528.125"
+       y="558.75"
+       id="text3240"><tspan
+         sodipodi:role="line"
+         id="tspan3242"
+         x="528.125"
+         y="558.75">Triggerer</tspan></text>
+    <g
+       id="g3250"
+       transform="translate(0,-6.25)">
+      <text
+         id="text3244"
+         y="366.34863"
+         x="442.35547"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           y="366.34863"
+           x="442.35547"
+           id="tspan3246"
+           sodipodi:role="line">GUI Control</tspan></text>
+      <rect
+         y="349.375"
+         x="328.125"
+         height="25"
+         width="296.875"
+         id="rect3248"
+         style="opacity:1;fill:none;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+    </g>
+    <path
+       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:2.5,1.25;stroke-opacity:1;marker-end:url(#TriangleOutM);stroke-dashoffset:0"
+       d="M 428.125,368.125 L 428.125,393.125"
+       id="path3255"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="opacity:1;fill:#ff0000;fill-opacity:1;stroke:#000000;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:2.5, 1.25;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 537.5,368.125 L 537.5,440"
+       id="path3257"
+       sodipodi:nodetypes="cc" />
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.25000012;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3263"
+       width="171.875"
+       height="124.6591"
+       x="796.875"
+       y="333.92047" />
+    <text
+       xml:space="preserve"
+       style="font-size:20.40651131px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="796.875"
+       y="327.38605"
+       id="text3265"><tspan
+         sodipodi:role="line"
+         id="tspan3267"
+         x="796.875"
+         y="327.38605">WaveWindow</tspan></text>
+    <rect
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:1.25000012;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect3269"
+       width="171.875"
+       height="124.6591"
+       x="796.875"
+       y="521.59088" />
+    <text
+       xml:space="preserve"
+       style="font-size:20.40651131px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="796.875"
+       y="515.05646"
+       id="text3271"><tspan
+         sodipodi:role="line"
+         id="tspan3273"
+         x="796.875"
+         y="515.05646">TriggerWindow</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="98.287842"
+       y="503.51053"
+       id="text3275"><tspan
+         sodipodi:role="line"
+         id="tspan3277"
+         x="98.287842"
+         y="503.51053">Set chan gain</tspan><tspan
+         sodipodi:role="line"
+         x="98.287842"
+         y="518.51053"
+         id="tspan3279">set chan filter</tspan></text>
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#0000ff;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutM)"
+       d="M 796.875,405.625 L 628.125,452.5"
+       id="path3281"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#0000ff;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutM)"
+       d="M 625,465 L 793.75,418.125"
+       id="path3283"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#0000ff;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 796.875,540 L 628.125,499.375"
+       id="path3285"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#0000ff;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 625,505.625 L 793.75,546.25"
+       id="path3287"
+       sodipodi:nodetypes="cc" />
+    <path
+       style="opacity:1;fill:#ffffff;fill-opacity:1;stroke:#ff0000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutM)"
+       d="M 625,555.625 L 643.75,555.625 C 643.75,555.625 653.125,555.625 653.125,565 C 653.125,574.375 653.125,605.625 653.125,605.625"
+       id="path3289" />
+    <path
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:1.25;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;marker-end:url(#TriangleOutM)"
+       d="M 653.125,565 L 653.125,524.375 C 653.125,524.375 653.125,515 643.75,515 C 634.375,515 628.125,515 628.125,515"
+       id="path3291"
+       sodipodi:nodetypes="ccsc" />
+    <path
+       style="opacity:1;fill:none;fill-opacity:1;stroke:#ff0000;stroke-width:1.25;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       d="M 653.125,524.375 L 653.125,477.5 C 653.125,477.5 653.125,468.125 643.75,468.125 C 634.375,468.125 628.125,468.125 628.125,468.125"
+       id="path3293"
+       sodipodi:nodetypes="ccsc" />
+    <text
+       xml:space="preserve"
+       style="font-size:6.81567621px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="484.375"
+       y="583.75"
+       id="text3295"><tspan
+         sodipodi:role="line"
+         id="tspan3297"
+         x="484.375"
+         y="583.75">MainRenderer</tspan><tspan
+         sodipodi:role="line"
+         x="484.375"
+         y="592.2696"
+         id="tspan3299">TriggerRenderer</tspan><tspan
+         sodipodi:role="line"
+         x="484.375"
+         y="600.78919"
+         id="tspan3301">Triggerer</tspan><tspan
+         sodipodi:role="line"
+         x="484.375"
+         y="609.30879"
+         id="tspan3303">all can make use of arbitrary</tspan><tspan
+         sodipodi:role="line"
+         x="484.375"
+         y="617.82838"
+         id="tspan3305">internal caching, but must</tspan><tspan
+         sodipodi:role="line"
+         x="484.375"
+         y="626.34798"
+         id="tspan3307">invalidate cache when primary sample</tspan><tspan
+         sodipodi:role="line"
+         x="484.375"
+         y="634.86757"
+         id="tspan3309">buffer is invalidated</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6.99999905px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="506.53351"
+       y="584.77625"
+       id="text3311"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.9659258,-0.258819,0.258819,0.9659258,0,0)"><tspan
+         sodipodi:role="line"
+         x="506.53351"
+         y="584.77625"
+         id="tspan3315">drawWave() command has MainRenderer</tspan><tspan
+         sodipodi:role="line"
+         x="506.53351"
+         y="593.52624"
+         id="tspan3319">directly manipulate waveWindow stack</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="542.32227"
+       y="620.24774"
+       id="text3321"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.9659258,-0.258819,0.258819,0.9659258,0,0)"><tspan
+         sodipodi:role="line"
+         x="542.32227"
+         y="620.24774"
+         id="tspan3325">new samples and changes</tspan><tspan
+         sodipodi:role="line"
+         x="542.32227"
+         y="628.99774"
+         id="tspan3329">in trigger values cause</tspan><tspan
+         sodipodi:role="line"
+         x="542.32227"
+         y="637.74774"
+         id="tspan3331">invalidate event</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="383.95898"
+       y="726.9563"
+       id="text3333"><tspan
+         sodipodi:role="line"
+         id="tspan3335"
+         x="383.95898"
+         y="726.9563">Attaching new stream visualizers to existing</tspan><tspan
+         sodipodi:role="line"
+         x="383.95898"
+         y="741.9563"
+         id="tspan3337">sources allows viewing of all historical data</tspan></text>
+    <path
+       style="opacity:1;color:#000000;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:1.25;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:url(#TriangleOutM);stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible"
+       d="M 434.375,480.625 L 478.125,480.625 L 478.125,461.875 L 512.5,461.875"
+       id="path2978" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="171.875"
+       y="427.5"
+       id="text3949"><tspan
+         sodipodi:role="line"
+         id="tspan3951"
+         x="171.875"
+         y="427.5">Can only say &quot;new data&quot; </tspan><tspan
+         sodipodi:role="line"
+         x="171.875"
+         y="442.5"
+         id="tspan3955">and a QueueView.</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="446.875"
+       y="490"
+       id="text3957"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan3959"
+         x="446.875"
+         y="490">some sort of </tspan><tspan
+         sodipodi:role="line"
+         x="446.875"
+         y="497.5"
+         id="tspan3961">buffer reference</tspan><tspan
+         sodipodi:role="line"
+         x="446.875"
+         y="505"
+         id="tspan3963" /><tspan
+         sodipodi:role="line"
+         x="446.875"
+         y="512.5"
+         id="tspan3965">new sample update</tspan><tspan
+         sodipodi:role="line"
+         x="446.875"
+         y="520"
+         id="tspan3967" /><tspan
+         sodipodi:role="line"
+         x="446.875"
+         y="527.5"
+         id="tspan3969">invalidate</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6.99999809px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="755.14136"
+       y="321.86624"
+       id="text2296"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.9709803,0.2391595,-0.2391595,0.9709803,0,0)"><tspan
+         sodipodi:role="line"
+         x="755.14136"
+         y="321.86624"
+         id="tspan2300">drawTriggerWave() command has</tspan><tspan
+         sodipodi:role="line"
+         x="755.14136"
+         y="330.61624"
+         id="tspan2307">TriggerRenderer directly manipulate TriggerWindow stack()</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6.99999714px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="785.50848"
+       y="335.63177"
+       id="text2309"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.9659258,0.2588191,-0.2588191,0.9659258,0,0)"><tspan
+         sodipodi:role="line"
+         x="785.50848"
+         y="335.63177"
+         id="tspan2311">new samples and changes</tspan><tspan
+         sodipodi:role="line"
+         x="785.50848"
+         y="344.38177"
+         id="tspan2313">in trigger values cause</tspan><tspan
+         sodipodi:role="line"
+         x="785.50848"
+         y="353.13177"
+         id="tspan2315">invalidate event</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:6.81567621px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="618.75"
+       y="649.375"
+       id="text2321"><tspan
+         sodipodi:role="line"
+         x="618.75"
+         y="649.375"
+         id="tspan2335">triggerer() exposes a &quot;triggerUpdate&quot; signal</tspan><tspan
+         sodipodi:role="line"
+         x="618.75"
+         y="657.8946"
+         id="tspan2349">and a QueueView to an internal list</tspan><tspan
+         sodipodi:role="line"
+         x="618.75"
+         y="666.41419"
+         id="tspan2351">of trigger times</tspan><tspan
+         sodipodi:role="line"
+         x="618.75"
+         y="674.93379"
+         id="tspan2353" /></text>
+    <rect
+       style="fill:none;fill-opacity:1;stroke:#000000;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect2308"
+       width="156.25"
+       height="109.375"
+       x="406.25"
+       y="-72.5" />
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="421.875"
+       y="-41.25"
+       id="text2310"><tspan
+         sodipodi:role="line"
+         id="tspan2312"
+         x="421.875"
+         y="-41.25">Status Window</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="405"
+       y="78"
+       id="text2314"><tspan
+         sodipodi:role="line"
+         id="tspan2316"
+         x="405"
+         y="78">Receives &quot;property update&quot; signal from Vis</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-139"
+       y="268"
+       id="text2313"><tspan
+         sodipodi:role="line"
+         id="tspan2317"
+         x="-139"
+         y="268">StreamControl: Handles the invocation of new stream sources. </tspan><tspan
+         sodipodi:role="line"
+         x="-139"
+         y="283"
+         id="tspan2319">A stream source must be associated with a data source. The streamcontrol</tspan><tspan
+         sodipodi:role="line"
+         x="-139"
+         y="298"
+         id="tspan2321">handles data dispatch, and guarantees uniqueness in data rx. </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:28px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:#000000;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-718.75"
+       y="255.625"
+       id="text1991"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan1993"
+         x="-718.75"
+         y="255.625">Class Hierarchy</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-890.625"
+       y="333.75"
+       id="text1995"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan1997"
+         x="-890.625"
+         y="333.75">StreamSourceBase</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-890.625"
+       y="411.875"
+       id="text1999"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2001"
+         x="-890.625"
+         y="411.875">StreamSource&lt;T&gt;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-1000"
+       y="505.625"
+       id="text2003"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2005"
+         x="-1000"
+         y="505.625">StreamSource&lt;wavebuffer_t&gt;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:red;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-1031.25"
+       y="474.375"
+       id="text2007"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2009"
+         x="-1031.25"
+         y="474.375">wavebuffer_t</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-953.125"
+       y="536.875"
+       id="text2011"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2013"
+         x="-953.125"
+         y="536.875">FakeWave</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-703.125"
+       y="505.625"
+       id="text2015"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2017"
+         x="-703.125"
+         y="505.625">StreamSource&lt;spike_t?&gt;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-953.125"
+       y="568.125"
+       id="text2019"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2021"
+         x="-953.125"
+         y="568.125">NetDataWave</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-953.125"
+       y="599.375"
+       id="text2023"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2025"
+         x="-953.125"
+         y="599.375">NetEventWave</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-421.875"
+       y="333.75"
+       id="text2027"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2029"
+         x="-421.875"
+         y="333.75">StreamVisBase</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-421.875"
+       y="411.875"
+       id="text2031"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2033"
+         x="-421.875"
+         y="411.875">StreamVis&lt;T&gt;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-406.25"
+       y="505.625"
+       id="text2035"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2037"
+         x="-406.25"
+         y="505.625">WaveVis&lt;wavbuffer_t&gt;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:red;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-437.5"
+       y="474.375"
+       id="text2039"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2041"
+         x="-437.5"
+         y="474.375">wavebuffer_t</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:16px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-406.25"
+       y="536.875"
+       id="text2047"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2049"
+         x="-406.25"
+         y="536.875">SpecVis&lt;wavebuffer_t&gt;</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:14;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:100%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr;text-anchor:start;opacity:1;color:black;fill:black;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="330.21887"
+       y="682.40857"
+       id="text2940"
+       sodipodi:linespacing="100%"><tspan
+         sodipodi:role="line"
+         id="tspan2942"
+         x="330.21887"
+         y="682.40857">StreamControl aggregates </tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-1015.625"
+       y="849.375"
+       id="text2311"><tspan
+         sodipodi:role="line"
+         id="tspan2314"
+         x="-1015.625"
+         y="849.375">SourceControl(pSourceControlMonitor)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-581.79553"
+       y="849.375"
+       id="text2316"><tspan
+         sodipodi:role="line"
+         id="tspan2318"
+         x="-581.79553"
+         y="849.375">VisControl(pStreamControl_t, pVisControlMontior)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-546.875"
+       y="866.83533"
+       id="text2320"><tspan
+         sodipodi:role="line"
+         id="tspan2322"
+         x="-546.875"
+         y="866.83533">.newVis(pSourceBase_t, VisName)</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-984.375"
+       y="880.625"
+       id="text2324"><tspan
+         sodipodi:role="line"
+         id="tspan2326"
+         x="-984.375"
+         y="880.625">Internal list of sources, and </tspan><tspan
+         sodipodi:role="line"
+         x="-984.375"
+         y="895.625"
+         id="tspan2328">takes care of wiring them up</tspan><tspan
+         sodipodi:role="line"
+         x="-984.375"
+         y="910.625"
+         id="tspan2330" /><tspan
+         sodipodi:role="line"
+         x="-984.375"
+         y="925.625"
+         id="tspan2332">Has a lot of the messy glue logic</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="-541.91534"
+       y="893.64514"
+       id="text2334"><tspan
+         sodipodi:role="line"
+         id="tspan2336"
+         x="-541.91534"
+         y="893.64514">Aggregates the relevant invalidate-window signals</tspan><tspan
+         sodipodi:role="line"
+         x="-541.91534"
+         y="908.64514"
+         id="tspan2338">such that a WaveWin and a triggerWin can be </tspan><tspan
+         sodipodi:role="line"
+         x="-541.91534"
+         y="923.64514"
+         id="tspan2340">passed a Vis control and will perform</tspan><tspan
+         sodipodi:role="line"
+         x="-541.91534"
+         y="938.64514"
+         id="tspan2342">the relevant updates</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-indent:0;text-align:start;text-decoration:none;line-height:125%;letter-spacing:normal;word-spacing:normal;text-transform:none;direction:ltr;block-progression:tb;writing-mode:lr-tb;text-anchor:start;opacity:1;fill:#000000;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;font-family:Bitstream Vera Sans"
+       x="-953.125"
+       y="630.625"
+       id="text2548"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan2550"
+         x="-953.125"
+         y="630.625">LocalAudioWave</tspan></text>
+  </g>
+</svg>

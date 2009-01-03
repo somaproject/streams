@@ -1,0 +1,76 @@
+\section{Elements And Pads}
+
+Pads represent ports on an element, and can be of two types:
+source pads and sink pads. To link two elements you call the
+type-overloaded connect function on the two pads. 
+
+Pads are specialized on type; that is, a Source<T> and a Sink<T>
+can be connected, but a Source<T1> and Sink<T2> cannot be connected. 
+
+Pads are ``owned'' by their containing element, but said element
+only has a pointer to the pad; at construction the element
+must create the pad with : 
+
+
+element::createSourcePad<type_x>("name")
+element::createSinkPad<type_x>("name")
+
+This has the advantage of allowing registration with the element, such
+that you can ask an element ``give me all your sources'' and ``give me
+all your sinks''. 
+
+\subsection{Output Pad Details}
+An output pad is created with a reference to a std::list<T>, which
+where T is the pad's specialized type. 
+
+then the elements themselves are accessable via: 
+
+getAvailableSources()
+
+getInput<type_x>(name)
+
+getAvailableOutputs()
+getOutput<type_x>(name)
+
+Now, each input pad exposes several signals such as newData() and invalidate()
+as well as providing a queueview-like interface where you can request chunks of
+data for the element. FOR THE ELEMENT. 
+
+------------------------------------------------------------------------------------
+The output pad, when connected to an input pad, creates a new queueview and
+points the input pad to that queueview. 
+
+Wow, this is going to be templated all to heck. 
+
+outputpad.connect(sinkpad) will: 
+   sinkpad.setConnection(newQueueView); 
+   outputpad.push_back(inputpad)
+   
+
+How do we say ``I have the name of output X, what type is it?''? 
+Element.getOutput(``name'').getPossibleChildren()
+
+The point is that this knowledge can live in a lot of places. 
+
+\subsection{Pipeline Details}
+
+Each pipeline has: 
+
+Four associated visitors
+A pointer to some central source state
+
+a collection of source, filter, sink, and trigger elements
+
+Exposed vis elements, and exposed triggers
+
+Now remember that vis elements are elements which also support the
+TriggerRender and StreamRender interfaces, as well as having
+a trigger sink named ``triggerSink''
+
+And Triggers are elements with a single source, ``triggerSource''
+
+pipeline::createSource(name)
+pipeline::createFilter(name)
+pipeline::createTrigger(name)
+pipeline::createSink(name)
+

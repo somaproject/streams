@@ -1,0 +1,34 @@
+Sources and Sinks
+
+Ultimately, what we really want on here are the equivalent of GST
+"pads", with each input pad supporting a single input and each output
+pad supporting multiple outputs. Pads are specialized on their buffer
+type, and are registered with the containing class? 
+
+
+
+element::createInputPad<type_x>("name")
+
+element::createOutputPad<type_x>("name")
+
+then the elements themselves are accessable via: 
+
+getAvailableInputs()
+
+getInput<type_x>(name)
+
+getAvailableOutputs()
+getOutput<type_x>(name)
+
+Now, each input pad exposes several signals such as newData() and
+invalidate() as well as providing a queueview-like interface where you
+can request chunks of data.
+
+------------------------------------------------------------------------------------
+The output pad, when connected to an input pad, creates a new queueview and
+points the input pad to that queueview. 
+
+Wow, this is going to be templated all to heck. 
+
+
+

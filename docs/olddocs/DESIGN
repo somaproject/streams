@@ -1,0 +1,21 @@
+Observations: 
+
+Let Sources and Vises be elements of a graph; the graph is independent
+of the GUI that controls it
+
+Note that sources will always need varying access to object internals for 
+configuraiton and manipulation. The big examples here are: 
+   Objects which read NetworkData will need access to the network
+	data object
+   Objects which read NetworkEvent will need access to the network
+	event object
+   Objects which read files might like access, but won't really need it
+
+
+So when you say CreateObjectType(X)
+
+
+VisControl() has its own internal mainwin/triggerwin signals which aggregate
+the internal signals
+
+then WaveWin() queries VisControl 

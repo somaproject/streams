@@ -1,0 +1,52 @@
+
+
+Namespace soma::streams
+
+Streams is an application for viewing continuous-time data. 
+
+data/
+   Buffers are data buffers that are passed around. Not
+   required to implement any particular interface
+
+sources/ 
+   stream sources that can provide data. Generally require access
+   to either the network, time, or audio objects. 
+
+   Required to implement the StreamSource<T> interface, which
+   provides getQueueView() to access the underlying data buffer, 
+   as well as invalidate() and newData() signals. 
+
+   Current sources: 
+      NoiseWave -- fake data source
+
+filters/ 
+   Technically stream sources, but can be combined / linked to
+   previous stream sources
+
+   Also required to implement the StreamSource<T> interface, where
+   T is the output datatype. 
+
+vis/ 
+   classes for visualizing a class of data. 
+  
+   required to implement the StreamRenderer and TriggerRenderer interfaces. 
+
+   Current vis: 
+      SineVis: A test vis. always plots a sine wave, regardless of input
+      WaveVis: primary continuous-time waveform viewer
+      SpectVis: spectrogram viewer
+      
+	    
+triggers/ 
+   Classes that are required to imlement the TriggerSource interface
+      	
+
+Other classes:
+
+streamwin: main stream window
+
+Both work by querying a given vis element as to its size in pixels
+and then performing a coordinate transform such that zero is in
+the center of that element
+
+triggerwin: main trigger window

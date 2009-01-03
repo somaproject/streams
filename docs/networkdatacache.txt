@@ -1,0 +1,11 @@
+The network data cache is the cache of all received network data. 
+
+It presents queueview-like interfaces for the data
+
+This isn't a "real" source in that it doesn't inherit from Element; instead
+it can be viewed as a single historical cache of all of the relevant
+data that's come over the wire, also worrying about caching and the like. 
+
+We have a "getQueueView" that returns a queueview for a particular
+set of data. 
+
