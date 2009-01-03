@@ -1,0 +1,6 @@
+[submodule "src/ext-common"]
+	path = src/ext-common
+	url = git://github.com/somaproject/software-common.git
+[submodule "src/logging"]
+	path = src/logging
+	url = git://github.com/somaproject/logging.git
