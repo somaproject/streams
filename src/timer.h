@@ -5,12 +5,9 @@
 #include <sigc++/sigc++.h>
 #include <gtkmm.h>
 
+#include "streamtime.h"
+
 #include "somanetcodec.h"
-
-
-typedef float streamtime_t; 
-typedef uint64_t walltime_t;  
-typedef uint64_t somatime_t; 
 
 class Timer; 
 
@@ -28,8 +25,8 @@ public:
 						 &Timer::dummytimeout), 
 				   100); 
     
-  return pt; 
-  
+    return pt; 
+    
   }
 
   static pTimer_t createNetworkTimer(pSomaNetCodec_t snc)
@@ -40,12 +37,15 @@ public:
     
     // 
     pTimer_t pt(new Timer(0)); 
+    snc->signalTimeUpdate().connect(sigc::mem_fun((*pt), 
+						  &Timer::updateSomaTime)); 
+    
     
     return pt; 
-  
+    
   }
-
-
+  
+  
   ~Timer(); 
   sigc::signal<void, streamtime_t>  & streamTimeSignal() { return streamTimeSignal_;} 
   streamtime_t getStreamTime(); 
@@ -54,12 +54,18 @@ public:
   
   
   streamtime_t time_; 
-
+  
   static const uint32_t SOMATIME_PER_SEC = 50000; 
+
+  // update and manipulation functions
+  walltime_t somaTimeToWallTime(somatime_t); 
+  streamtime_t somaTimeToStreamTime(somatime_t); 
+  streamtime_t somaTimeToExpTime(somatime_t); 
+  
 
 private:
   Timer(somatime_t);  // must create via methods
-
+  
   somatime_t startSomaTime_; // what was the soma time when the program started
   walltime_t startWallTime_; // what was the wall time when the program started
   streamtime_t expTimeOffset_; // how far is experiment time ahead/behind wall time
@@ -68,20 +74,15 @@ private:
   walltime_t currentWallTime_; 
   streamtime_t currentStreamTime_; 
   streamtime_t currentExpTime_; 
-
+  
   sigc::signal<void, streamtime_t> streamTimeSignal_; 
   pSomaNetCodec_t pSomaNetCodec_; 
-
-  // update and manipulation functions
-  walltime_t somaTimeToWallTime(somatime_t); 
-  streamtime_t somaTimeToStreamTime(somatime_t); 
-  streamtime_t somaTimeToExpTime(somatime_t); 
-
-
+  
+  
   void updateSomaTime(somatime_t) ; 
-
+  
   bool dummytimeout(); 
-
+  
 }; 
 
 

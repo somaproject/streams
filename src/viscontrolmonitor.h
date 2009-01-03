@@ -1,15 +1,15 @@
 #ifndef VISCONTROLMONITOR_H
 #define VISCONTROLMONITOR_H
 
-#include "wavevis.h"
-#include "spectvis.h"
-#include "streamvis.h"
+// #include "wavevis.h"
+// #include "spectvis.h"
+// #include "streamvis.h"
 
 class VisControlMonitor
 {
  public:
-  virtual void create(pWaveVis_t pv) {}; 
-  virtual void create(pSpectVis_t ps) {}; 
+//   virtual void create(pWaveVis_t pv) {}; 
+//   virtual void create(pSpectVis_t ps) {}; 
 
 }; 
 

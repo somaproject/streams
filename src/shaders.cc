@@ -4,28 +4,14 @@
 
 using namespace std; 
 
-
-
-GLuint loadGPUShader(const std::string & filename, GLuint shaderType)
+GLuint loadGPUShader(const std::string & shaderSrc, GLuint shaderType)
 {
   GLuint shdr = glCreateShader(shaderType); 
   
-  ifstream shaderFile; 
-  shaderFile.open(filename.c_str()); 
-
-  string shaderSrc = ""; 
-  string line = ""; 
-  while (shaderFile and not shaderFile.eof()) {
-    
-    getline(shaderFile, line); 
-    shaderSrc += line + '\n'; 
-  };
-
   char * program[1];
   program[0] = new char[shaderSrc.size() + 10];
   strcpy(program[0], shaderSrc.c_str()); 
 
-  shaderFile.close();
 
   glShaderSource(shdr, 1, (const GLchar**) program, NULL); 
   glCompileShader(shdr); 
@@ -43,6 +29,25 @@ GLuint loadGPUShader(const std::string & filename, GLuint shaderType)
     exit(1);
   }
   return shdr; 
+}
+
+
+
+GLuint loadGPUShaderFromFile(const std::string & filename, GLuint shaderType)
+{
+  ifstream shaderFile; 
+  shaderFile.open(filename.c_str()); 
+
+  string shaderSrc = ""; 
+  string line = ""; 
+  while (shaderFile and not shaderFile.eof()) {
+    
+    getline(shaderFile, line); 
+    shaderSrc += line + '\n'; 
+  };
+  shaderFile.close();
+
+  return loadGPUShader(shaderSrc, shaderType); 
 }
 
 GLuint createGPUProgram(const std::list<GLuint> & shaders)

@@ -13,6 +13,7 @@
 
 
 #include <gtkglmm.h>
+#include "logging.h"
 
 #ifdef G_OS_WIN32
 #define WIN32_LEAN_AND_MEAN 1
@@ -25,14 +26,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-
 struct GLConfigUtil
 {
-
-  static void print_gl_attrib(const Glib::RefPtr<const Gdk::GL::Config>& glconfig,
-                              const char* attrib_str,
-                              int attrib,
-                              bool is_boolean);
 
   static void examine_gl_attrib(const Glib::RefPtr<const Gdk::GL::Config>& glconfig);
 };

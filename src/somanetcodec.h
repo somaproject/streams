@@ -2,12 +2,47 @@
 #define SOMANETCODEC_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
+#include <somanetwork/networkinterface.h>
+#include <boost/enable_shared_from_this.hpp>
+#include <sigc++/sigc++.h>
+#include <somadspio/dspcontrol.h>
 
-class SomaNetCodec
+#include <gtkmm.h>
+#include "streamtime.h"
+class SomaNetCodec; 
+class DataWaveCodec;
+
+class SomaNetCodec :  public boost::enable_shared_from_this<SomaNetCodec>
 {
+public:
+  SomaNetCodec(pNetworkInterface_t pni); 
   
-  
+  sigc::signal<void, pDataPacket_t> & newDataSignal(); 
+  sigc::signal<void, somatime_t> & signalTimeUpdate(); 
 
+  void enableDataRX(datasource_t src, datatype_t typ); 
+  
+  dspiolib::StateProxy & getDSPStateProxy(datasource_t src); 
+
+private:
+  pNetworkInterface_t pNetwork_; 
+    
+  bool dataRXCallback(Glib::IOCondition io_condition);
+  bool eventRXCallback(Glib::IOCondition io_condition); 
+
+  void parseEvent(const Event_t & evt); 
+  void processNewEvents(pEventList_t pEventList);
+  void sendEvent(const EventTX_t & ); 
+
+  sigc::signal<void, pDataPacket_t> newDataSignal_; 
+  sigc::signal<void, somatime_t> signalTimeUpdate_;
+
+  // wave state caching
+  // ideally we'd fracture this out, but whatever, there are really only a few
+  // data types
+  
+  boost::ptr_vector<dspiolib::StateProxy> dspStateProxies_; 
 
 }; 
 

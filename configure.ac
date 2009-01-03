@@ -4,7 +4,7 @@
 # and 
 # Prelude . 
 AC_INIT([streams], [1.0], [bugs@soma.mit.edu])
-AC_CONFIG_SRCDIR([src/streamsmain.cc])
+AC_CONFIG_SRCDIR([src/sourcebase.cc])
 
 
 AM_CONFIG_HEADER(config.h)
@@ -63,11 +63,11 @@ AC_PROG_CXX
 AC_PROG_LIBTOOL
 
 # glib for benchmark
-PKG_CHECK_MODULES(GTKDEPS, gtkmm-2.4 >= 2.10 glibmm-2.4 >= 2.13.0 gtkglext-1.0 >= 1.2.0 gtkglextmm-1.2 >= 1.2.0 libglademm-2.4 >= 2.6 )
+PKG_CHECK_MODULES(GTKDEPS, gtkmm-2.4 >= 2.10 glibmm-2.4 >= 2.13.0 gtkglext-1.0 >= 1.2.0 gtkglextmm-1.2 >= 1.2.0 libglademm-2.4 >= 2.6 log4cpp >= 1.0)
 AC_SUBST(GTKDEPS_CFLAGS)
 AC_SUBST(GTKDEPS_LIBS)
 
-PKG_CHECK_MODULES(SOMADEPS,   somanetwork-1.0 >= 1.0 vsipl++ >= 1.4 )
+PKG_CHECK_MODULES(SOMADEPS,   somanetwork-1.0 >= 1.0 vsipl++ >= 1.4 somadspio-1.0 >= 1.0 )
 AC_SUBST(SOMADEPS_CFLAGS)
 AC_SUBST(SOMADEPS_LIBS)
 
@@ -88,7 +88,10 @@ dnl -----------------------------------------------
 dnl Generates Makefile's, configuration files and scripts
 dnl -----------------------------------------------
 
-AC_CONFIG_FILES([Makefile src/Makefile ])
+AC_CONFIG_FILES([Makefile src/Makefile unittest/Makefile src/sources/Makefile \
+			   src/vis/Makefile src/tests/Makefile app/Makefile
+			   app/propwidgets/Makefile
+			    src/filters/Makefile src/ext/logging/src/Makefile ])
 
 
 AC_OUTPUT

@@ -5,6 +5,7 @@
 
 
 
+
 Timer::Timer(somatime_t starttime) :
   startSomaTime_(starttime)
 {
@@ -14,7 +15,7 @@ Timer::Timer(somatime_t starttime) :
   startWallTime_ = starttimeval.tv_sec * 1000000;   
   
   currentStreamTime_ = 0.0; 
-
+  currentSomaTime_ = 0; 
   expTimeOffset_ = 0.0; 
 
 }

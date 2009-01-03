@@ -15,7 +15,7 @@ private:
   pTimer_t pTimer_; 
   pSourceControlMonitor_t pMonitor_; 
   std::list<pStreamSourceBase_t> sourceList_; 
-
+  
 }; 
 
 typedef boost::shared_ptr<SourceControl> pSourceControl_t; 

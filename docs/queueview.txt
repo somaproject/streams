@@ -7,7 +7,6 @@ This is meant to encapsulate the idea of multiple consumers
 wanting to consume "all new" data of a queue without 
 it mattering:
    1. when they connected to the queue. That is, the queueview contains its
-      own internal state position data
+      own internal state position data of some underlying queue
    2. abstracting away some fo the operations like pop, etc.
-
 

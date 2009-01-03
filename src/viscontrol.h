@@ -2,42 +2,36 @@
 #define VISCONTROL_H
 
 #include <boost/shared_ptr.hpp>
-#include "viscontrolmonitor.h"
+#include "istreamrenderer.h" 
+#include "itriggerrenderer.h" 
 
-#include "streamsourcebase.h" 
-#include "wavesource.h"
-#include "streamvis.h"
+#include "ivis.h"
 
 class VisControl
 {
 public:
-  VisControl(pVisControlMonitor_t pvcm); 
-	     
-
-  invWaveSignal_t & invMainWaveSignal(); 
-  invWaveSignal_t & invTriggerWaveSignal(); 
-
-  std::list<pStreamVisBase_t> & getVisList() {
-    return visList_; }
+  VisControl(); 
   
-  pStreamVisBase_t createVis(pWaveSource_t, std::string name); 
-
+  invStreamRenderSignal_t & invStreamRenderSignal(); 
+  invTriggerRenderSignal_t & invTriggerRenderSignal(); 
   
-
-private:
-
-  pVisControlMonitor_t pMonitor_; 
-  invWaveSignal_t invMainWaveSignal_; 
-  invWaveSignal_t invTriggerWaveSignal_; 
+  virtual std::list<pIVis_t> getVisList() {
+    
+  };  
   
-  std::list<pStreamVisBase_t> visList_; 
+protected: 
+  
+  //pVisControlMonitor_t pMonitor_; 
+  invStreamRenderSignal_t invStreamRenderSignal_; 
+  invTriggerRenderSignal_t invTriggerRenderSignal_; 
+  
+  void emitInvStreamRenderSignal(); 
+  void emitInvTriggerRenderSignal(); 
 
-
-  void emitInvMainWaveSignal(); 
-  void emitInvTriggerWaveSignal(); 
+  void connectVis(pIVis_t); 
+  
 }; 
 
 typedef boost::shared_ptr<VisControl> pVisControl_t; 
-
 
 #endif // VISCONTROL_H

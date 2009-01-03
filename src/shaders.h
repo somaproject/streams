@@ -9,7 +9,8 @@
 //
 // options are GL_VERTEX_SHADER and GL_FRAGMENT_SHADER
 
-GLuint loadGPUShader(const std::string & filename, GLuint shaderType); 
+GLuint loadGPUShader(const std::string & shaderSrc, GLuint shaderType); 
+GLuint loadGPUShaderFromFile(const std::string & filename, GLuint shaderType); 
 
 GLuint  createGPUProgram(const std::list<GLuint> &  shaders); 
 

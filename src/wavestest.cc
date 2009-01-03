@@ -1,4 +1,3 @@
-/* Conversion to gtkglextmm by Naofumi Yasufuku */
 
 #include <iostream>
 #include <cstdlib>

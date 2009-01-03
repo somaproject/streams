@@ -34,7 +34,6 @@ PRE_UNINSTALL = :
 POST_UNINSTALL = :
 build_triplet = x86_64-unknown-linux-gnu
 host_triplet = x86_64-unknown-linux-gnu
-bin_PROGRAMS = streams$(EXEEXT) teststreams$(EXEEXT)
 subdir = src
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -48,34 +47,15 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =
-am__installdirs = "$(DESTDIR)$(bindir)"
-binPROGRAMS_INSTALL = $(INSTALL_PROGRAM)
-PROGRAMS = $(bin_PROGRAMS)
-am__objects_1 = fakewave.$(OBJEXT)
-am__objects_2 = glconfig.$(OBJEXT) timer.$(OBJEXT) \
-	viscontrol.$(OBJEXT) shaders.$(OBJEXT) streamsapp.$(OBJEXT) \
-	streamsmain.$(OBJEXT) triggerwin.$(OBJEXT) wavewin.$(OBJEXT) \
-	sourcecontrolmonitor.$(OBJEXT) viscontrolmonitor.$(OBJEXT) \
-	wavevisrenderer.$(OBJEXT) wavevis.$(OBJEXT) \
-	wavevistrigger.$(OBJEXT) wavevistriggerrenderer.$(OBJEXT) \
-	spectvis.$(OBJEXT) spectvisrenderer.$(OBJEXT) \
-	spectvistrigger.$(OBJEXT) spectvistriggerrenderer.$(OBJEXT) \
-	wavevisstatus.$(OBJEXT) sourcecontrol.$(OBJEXT) \
-	$(am__objects_1)
-am_streams_OBJECTS = $(am__objects_2)
-streams_OBJECTS = $(am_streams_OBJECTS)
-streams_LDADD = $(LDADD)
-am_teststreams_OBJECTS = teststreams.$(OBJEXT) \
-	teststreamsapp.$(OBJEXT) $(am__objects_1) shaders.$(OBJEXT) \
-	wavewin.$(OBJEXT) triggerwin.$(OBJEXT) timer.$(OBJEXT) \
-	wavevis.$(OBJEXT) wavevisrenderer.$(OBJEXT) \
-	wavevistrigger.$(OBJEXT) wavevistriggerrenderer.$(OBJEXT) \
-	spectvis.$(OBJEXT) spectvisrenderer.$(OBJEXT) \
-	spectvistrigger.$(OBJEXT) spectvistriggerrenderer.$(OBJEXT) \
-	glconfig.$(OBJEXT) sourcecontrol.$(OBJEXT) \
-	viscontrol.$(OBJEXT)
-teststreams_OBJECTS = $(am_teststreams_OBJECTS)
-teststreams_LDADD = $(LDADD)
+LTLIBRARIES = $(noinst_LTLIBRARIES)
+libstream_la_DEPENDENCIES = vis/libstreamvis.la \
+	sources/libstreamsources.la ext/logging/src/liblogging.la
+am__objects_1 = glconfig.lo timer.lo testviscontrol.lo viscontrol.lo \
+	streamrenderwin.lo sourcebase.lo streampipeline.lo \
+	somanetcodec.lo glstring.lo shaders.lo networkdatacache.lo \
+	pipelinemanager.lo
+am_libstream_la_OBJECTS = $(am__objects_1)
+libstream_la_OBJECTS = $(am_libstream_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(top_builddir)
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
@@ -88,10 +68,20 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
-SOURCES = $(streams_SOURCES) $(teststreams_SOURCES)
-DIST_SOURCES = $(streams_SOURCES) $(teststreams_SOURCES)
+SOURCES = $(libstream_la_SOURCES)
+DIST_SOURCES = $(libstream_la_SOURCES)
+RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
+	html-recursive info-recursive install-data-recursive \
+	install-dvi-recursive install-exec-recursive \
+	install-html-recursive install-info-recursive \
+	install-pdf-recursive install-ps-recursive install-recursive \
+	installcheck-recursive installdirs-recursive pdf-recursive \
+	ps-recursive uninstall-recursive
+RECURSIVE_CLEAN_TARGETS = mostlyclean-recursive clean-recursive	\
+  distclean-recursive maintainer-clean-recursive
 ETAGS = etags
 CTAGS = ctags
+DIST_SUBDIRS = $(SUBDIRS)
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = ${SHELL} /home/jonas/soma/software/streams/missing --run aclocal-1.10
 AMTAR = ${SHELL} /home/jonas/soma/software/streams/missing --run tar
@@ -129,8 +119,8 @@ GENERIC_API_VERSION = 1.0
 GENERIC_RELEASE = 1.3
 GENERIC_VERSION = 1.3.0
 GREP = /bin/grep
-GTKDEPS_CFLAGS = -DPNG_NO_MMX_CODE -I/usr/local/include/gtkglext-1.0 -I/usr/local/lib/gtkglext-1.0/include -I/usr/local/include/gtkglextmm-1.2 -I/usr/local/lib/gtkglextmm-1.2/include -I/usr/include/gtkmm-2.4 -I/usr/lib/gtkmm-2.4/include -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/gdkmm-2.4 -I/usr/lib/gdkmm-2.4/include -I/usr/include/pangomm-1.4 -I/usr/include/atkmm-1.6 -I/usr/include/gtk-2.0 -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib/gtk-2.0/include -I/usr/include/cairomm-1.0 -I/usr/include/pango-1.0 -I/usr/include/cairo -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/atk-1.0 -I/usr/include/libglademm-2.4 -I/usr/lib/libglademm-2.4/include -I/usr/include/libglade-2.0 -I/usr/include/libxml2  
-GTKDEPS_LIBS = -Wl,--export-dynamic -L/usr/local/lib -lgtkglextmm-x11-1.2 -lgdkglextmm-x11-1.2 -lgtkglext-x11-1.0 -lgdkglext-x11-1.0 -lGLU -lGL -lpangox-1.0 -lglademm-2.4 -lgtkmm-2.4 -lglade-2.0 -lgdkmm-2.4 -latkmm-1.6 -lpangomm-1.4 -lcairomm-1.0 -lglibmm-2.4 -lsigc-2.0 -lgtk-x11-2.0 -lxml2 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangocairo-1.0 -lfontconfig -lXext -lXrender -lXinerama -lXi -lXrandr -lXcursor -lXcomposite -lXdamage -lpango-1.0 -lcairo -lX11 -lXfixes -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0  
+GTKDEPS_CFLAGS = -pthread -O2 -DNDEBUG -DPNG_NO_MMX_CODE -I/usr/local/include/gtkglextmm-1.2 -I/usr/local/lib/gtkglextmm-1.2/include -I/usr/local/include -I/usr/include/gtkmm-2.4 -I/usr/lib/gtkmm-2.4/include -I/usr/include/glibmm-2.4 -I/usr/lib/glibmm-2.4/include -I/usr/include/gdkmm-2.4 -I/usr/lib/gdkmm-2.4/include -I/usr/include/pangomm-1.4 -I/usr/include/atkmm-1.6 -I/usr/include/gtk-2.0 -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/lib/gtk-2.0/include -I/usr/include/cairomm-1.0 -I/usr/include/pango-1.0 -I/usr/include/cairo -I/usr/include/freetype2 -I/usr/include/libpng12 -I/usr/include/atk-1.0 -I/usr/include/gtkglext-1.0 -I/usr/lib/gtkglext-1.0/include -I/usr/include/libglademm-2.4 -I/usr/lib/libglademm-2.4/include -I/usr/include/libglade-2.0 -I/usr/include/libxml2  
+GTKDEPS_LIBS = -Wl,--export-dynamic -L/usr/local/lib -lgtkglextmm-x11-1.2 -lgdkglextmm-x11-1.2 -lgtkglext-x11-1.0 -lgdkglext-x11-1.0 -lGLU -lGL -lXmu -lXt -lSM -lICE -lpangox-1.0 -lglademm-2.4 -lgtkmm-2.4 -lglade-2.0 -lgdkmm-2.4 -latkmm-1.6 -lpangomm-1.4 -lcairomm-1.0 -lglibmm-2.4 -lsigc-2.0 -lgtk-x11-2.0 -lxml2 -lgdk-x11-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lm -lpangocairo-1.0 -lfontconfig -lXext -lXrender -lXinerama -lXi -lXrandr -lXcursor -lXcomposite -lXdamage -lpango-1.0 -lcairo -lX11 -lXfixes -lgobject-2.0 -lgmodule-2.0 -ldl -lglib-2.0 -llog4cpp -lnsl  
 INSTALL = /usr/bin/install -c
 INSTALL_DATA = ${INSTALL} -m 644
 INSTALL_PROGRAM = ${INSTALL}
@@ -157,8 +147,8 @@ RANLIB = ranlib
 SED = /bin/sed
 SET_MAKE = 
 SHELL = /bin/bash
-SOMADEPS_CFLAGS = -I/home/jonas/soma.software/include/somanetwork-1.0 -I/home/jonas/soma.software/lib/somanetwork-1.0/include -I/home/jonas/soma.software//include  
-SOMADEPS_LIBS = -L/home/jonas/soma.software/lib -L/home/jonas/soma.software//lib -lsomanetwork-1.0 -lvsip_csl -lsvpp -lfftw3f -lfftw3 -lfftw3l -llapack-3 -lblas-3 -latlas -lg2c  
+SOMADEPS_CFLAGS = -I/usr/local/include/somanetwork-1.0 -I/usr/local/lib/somanetwork-1.0/include -I/usr/local/include -I/usr/local/include/fftw3 -I/usr/local/include/somadspio-1.0 -I/usr/local/lib/somadspio-1.0/include  
+SOMADEPS_LIBS = -L/usr/local/lib -lsomanetwork-1.0 -lvsip_csl -lsvpp -lfftw3f -lfftw3 -lfftw3l -llapack -lsomadspio-1.0  
 STRIP = strip
 VERSION = 1.0
 abs_builddir = /home/jonas/soma/software/streams/src
@@ -212,41 +202,21 @@ sysconfdir = ${prefix}/etc
 target_alias = 
 top_builddir = ..
 top_srcdir = ..
-AM_CXXFLAGS = $(GTKDEPS_CFLAGS)  $(BOOST_CPPFLAGS) $(SOMADEPS_CFLAGS)  -pthread 
+AM_CXXFLAGS = $(GTKDEPS_CFLAGS)  $(BOOST_CPPFLAGS) $(SOMADEPS_CFLAGS) -Iext/logging/src -pthread 
 AM_LDFLAGS = $(GTKDEPS_LIBS) $(BOOST_LDFLAGS) $(SOMADEPS_LIBS) $(BOOST_THREAD_LIB)  $(BOOST_PROGRAM_OPTIONS_LIB)
-h_sources = glconfig.h glspikes.h \
-	queueview.2.h queueview.h \
-	shaders.h sourcestatus.h \
-	streamcontrol.h streamsapp.h \
-	streams.h streamsource.h \
-	streamvis.h triggerwin.h \
-	visproperty.h visstatus.h \
-	wave.h wavevisrenderer.h \
-	wavevissource.h wavestreamsourcestatus.h \
-	wavevistrigger.h wavevistriggerrenderer.h \
-	wavevisviscontrol.h wavevisvis.h \
-	wavevisvisstatus.h wavewin.h \
-	streamsourcebase.h streamsource.h \
-	fakewave.h
+SUBDIRS = ext/logging/src vis sources 
+logging_cc_sources = 
+cc_sources = glconfig.cc timer.cc testviscontrol.cc \
+	viscontrol.cc streamrenderwin.cc sourcebase.cc streampipeline.cc \
+	 somanetcodec.cc  cairogltext/glstring.cc shaders.cc \
+		 networkdatacache.cc pipelinemanager.cc
 
-cc_sources = glconfig.cc timer.cc viscontrol.cc \
-	shaders.cc streamsapp.cc streamsmain.cc \
-	triggerwin.cc wavewin.cc \
-	sourcecontrolmonitor.cc viscontrolmonitor.cc \
-	wavevisrenderer.cc wavevis.cc \
-	wavevistrigger.cc wavevistriggerrenderer.cc \
-	spectvis.cc spectvisrenderer.cc spectvistrigger.cc spectvistriggerrenderer.cc \
-	wavevisstatus.cc sourcecontrol.cc  $(source_sources)
-
-source_sources = fakewave.cc
-streams_SOURCES = $(cc_sources)
-teststreams_SOURCES = teststreams.cc teststreamsapp.cc \
-	$(source_sources) shaders.cc wavewin.cc triggerwin.cc  timer.cc \
-	wavevis.cc wavevisrenderer.cc wavevistrigger.cc wavevistriggerrenderer.cc \
-	spectvis.cc spectvisrenderer.cc spectvistrigger.cc spectvistriggerrenderer.cc \
-	glconfig.cc sourcecontrol.cc viscontrol.cc 
-
-all: all-am
+noinst_LTLIBRARIES = libstream.la
+LIBADD = 
+libstream_la_SOURCES = $(cc_sources) $(source_sources)
+libstream_la_CXXFALGS = $(AM_CXXFLAGS)
+libstream_la_LIBADD = vis/libstreamvis.la sources/libstreamsources.la ext/logging/src/liblogging.la
+all: all-recursive
 
 .SUFFIXES:
 .SUFFIXES: .cc .lo .o .obj
@@ -279,40 +249,17 @@ $(top_srcdir)/configure:  $(am__configure_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(ACLOCAL_M4):  $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
-install-binPROGRAMS: $(bin_PROGRAMS)
-	@$(NORMAL_INSTALL)
-	test -z "$(bindir)" || $(MKDIR_P) "$(DESTDIR)$(bindir)"
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  p1=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  if test -f $$p \
-	     || test -f $$p1 \
-	  ; then \
-	    f=`echo "$$p1" | sed 's,^.*/,,;$(transform);s/$$/$(EXEEXT)/'`; \
-	   echo " $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) '$$p' '$(DESTDIR)$(bindir)/$$f'"; \
-	   $(INSTALL_PROGRAM_ENV) $(LIBTOOL) --mode=install $(binPROGRAMS_INSTALL) "$$p" "$(DESTDIR)$(bindir)/$$f" || exit 1; \
-	  else :; fi; \
-	done
 
-uninstall-binPROGRAMS:
-	@$(NORMAL_UNINSTALL)
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo "$$p" | sed 's,^.*/,,;s/$(EXEEXT)$$//;$(transform);s/$$/$(EXEEXT)/'`; \
-	  echo " rm -f '$(DESTDIR)$(bindir)/$$f'"; \
-	  rm -f "$(DESTDIR)$(bindir)/$$f"; \
+clean-noinstLTLIBRARIES:
+	-test -z "$(noinst_LTLIBRARIES)" || rm -f $(noinst_LTLIBRARIES)
+	@list='$(noinst_LTLIBRARIES)'; for p in $$list; do \
+	  dir="`echo $$p | sed -e 's|/[^/]*$$||'`"; \
+	  test "$$dir" != "$$p" || dir=.; \
+	  echo "rm -f \"$${dir}/so_locations\""; \
+	  rm -f "$${dir}/so_locations"; \
 	done
-
-clean-binPROGRAMS:
-	@list='$(bin_PROGRAMS)'; for p in $$list; do \
-	  f=`echo $$p|sed 's/$(EXEEXT)$$//'`; \
-	  echo " rm -f $$p $$f"; \
-	  rm -f $$p $$f ; \
-	done
-streams$(EXEEXT): $(streams_OBJECTS) $(streams_DEPENDENCIES) 
-	@rm -f streams$(EXEEXT)
-	$(CXXLINK) $(streams_OBJECTS) $(streams_LDADD) $(LIBS)
-teststreams$(EXEEXT): $(teststreams_OBJECTS) $(teststreams_DEPENDENCIES) 
-	@rm -f teststreams$(EXEEXT)
-	$(CXXLINK) $(teststreams_OBJECTS) $(teststreams_LDADD) $(LIBS)
+libstream.la: $(libstream_la_OBJECTS) $(libstream_la_DEPENDENCIES) 
+	$(CXXLINK)  $(libstream_la_OBJECTS) $(libstream_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
@@ -320,29 +267,18 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-include ./$(DEPDIR)/fakewave.Po
-include ./$(DEPDIR)/glconfig.Po
-include ./$(DEPDIR)/shaders.Po
-include ./$(DEPDIR)/sourcecontrol.Po
-include ./$(DEPDIR)/sourcecontrolmonitor.Po
-include ./$(DEPDIR)/spectvis.Po
-include ./$(DEPDIR)/spectvisrenderer.Po
-include ./$(DEPDIR)/spectvistrigger.Po
-include ./$(DEPDIR)/spectvistriggerrenderer.Po
-include ./$(DEPDIR)/streamsapp.Po
-include ./$(DEPDIR)/streamsmain.Po
-include ./$(DEPDIR)/teststreams.Po
-include ./$(DEPDIR)/teststreamsapp.Po
-include ./$(DEPDIR)/timer.Po
-include ./$(DEPDIR)/triggerwin.Po
-include ./$(DEPDIR)/viscontrol.Po
-include ./$(DEPDIR)/viscontrolmonitor.Po
-include ./$(DEPDIR)/wavevis.Po
-include ./$(DEPDIR)/wavevisrenderer.Po
-include ./$(DEPDIR)/wavevisstatus.Po
-include ./$(DEPDIR)/wavevistrigger.Po
-include ./$(DEPDIR)/wavevistriggerrenderer.Po
-include ./$(DEPDIR)/wavewin.Po
+include ./$(DEPDIR)/glconfig.Plo
+include ./$(DEPDIR)/glstring.Plo
+include ./$(DEPDIR)/networkdatacache.Plo
+include ./$(DEPDIR)/pipelinemanager.Plo
+include ./$(DEPDIR)/shaders.Plo
+include ./$(DEPDIR)/somanetcodec.Plo
+include ./$(DEPDIR)/sourcebase.Plo
+include ./$(DEPDIR)/streampipeline.Plo
+include ./$(DEPDIR)/streamrenderwin.Plo
+include ./$(DEPDIR)/testviscontrol.Plo
+include ./$(DEPDIR)/timer.Plo
+include ./$(DEPDIR)/viscontrol.Plo
 
 .cc.o:
 	$(CXXCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
@@ -365,11 +301,88 @@ include ./$(DEPDIR)/wavewin.Po
 #	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
 #	$(LTCXXCOMPILE) -c -o $@ $<
 
+glstring.lo: cairogltext/glstring.cc
+	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -MT glstring.lo -MD -MP -MF $(DEPDIR)/glstring.Tpo -c -o glstring.lo `test -f 'cairogltext/glstring.cc' || echo '$(srcdir)/'`cairogltext/glstring.cc
+	mv -f $(DEPDIR)/glstring.Tpo $(DEPDIR)/glstring.Plo
+#	source='cairogltext/glstring.cc' object='glstring.lo' libtool=yes \
+#	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) \
+#	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS) -c -o glstring.lo `test -f 'cairogltext/glstring.cc' || echo '$(srcdir)/'`cairogltext/glstring.cc
+
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
+
+# This directory's subdirectories are mostly independent; you can cd
+# into them and run `make' without going through this Makefile.
+# To change the values of `make' variables: instead of editing Makefiles,
+# (1) if the variable is set in `config.status', edit `config.status'
+#     (which will cause the Makefiles to be regenerated when you run `make');
+# (2) otherwise, pass the desired values on the `make' command line.
+$(RECURSIVE_TARGETS):
+	@failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	target=`echo $@ | sed s/-recursive//`; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    dot_seen=yes; \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done; \
+	if test "$$dot_seen" = "no"; then \
+	  $(MAKE) $(AM_MAKEFLAGS) "$$target-am" || exit 1; \
+	fi; test -z "$$fail"
+
+$(RECURSIVE_CLEAN_TARGETS):
+	@failcom='exit 1'; \
+	for f in x $$MAKEFLAGS; do \
+	  case $$f in \
+	    *=* | --[!k]*);; \
+	    *k*) failcom='fail=yes';; \
+	  esac; \
+	done; \
+	dot_seen=no; \
+	case "$@" in \
+	  distclean-* | maintainer-clean-*) list='$(DIST_SUBDIRS)' ;; \
+	  *) list='$(SUBDIRS)' ;; \
+	esac; \
+	rev=''; for subdir in $$list; do \
+	  if test "$$subdir" = "."; then :; else \
+	    rev="$$subdir $$rev"; \
+	  fi; \
+	done; \
+	rev="$$rev ."; \
+	target=`echo $@ | sed s/-recursive//`; \
+	for subdir in $$rev; do \
+	  echo "Making $$target in $$subdir"; \
+	  if test "$$subdir" = "."; then \
+	    local_target="$$target-am"; \
+	  else \
+	    local_target="$$target"; \
+	  fi; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$local_target) \
+	  || eval $$failcom; \
+	done && test -z "$$fail"
+tags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) tags); \
+	done
+ctags-recursive:
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  test "$$subdir" = . || (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) ctags); \
+	done
 
 ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
@@ -381,10 +394,23 @@ ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
 	mkid -fID $$unique
 tags: TAGS
 
-TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+TAGS: tags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
+	if ($(ETAGS) --etags-include --version) >/dev/null 2>&1; then \
+	  include_option=--etags-include; \
+	  empty_fix=.; \
+	else \
+	  include_option=--include; \
+	  empty_fix=; \
+	fi; \
+	list='$(SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test ! -f $$subdir/TAGS || \
+	      tags="$$tags $$include_option=$$here/$$subdir/TAGS"; \
+	  fi; \
+	done; \
 	list='$(SOURCES) $(HEADERS)  $(LISP) $(TAGS_FILES)'; \
 	unique=`for i in $$list; do \
 	    if test -f "$$i"; then echo $$i; else echo $(srcdir)/$$i; fi; \
@@ -397,7 +423,7 @@ TAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 	    $$tags $$unique; \
 	fi
 ctags: CTAGS
-CTAGS:  $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
+CTAGS: ctags-recursive $(HEADERS) $(SOURCES)  $(TAGS_DEPENDENCIES) \
 		$(TAGS_FILES) $(LISP)
 	tags=; \
 	here=`pwd`; \
@@ -445,22 +471,37 @@ distdir: $(DISTFILES)
 	    || exit 1; \
 	  fi; \
 	done
-check-am: all-am
-check: check-am
-all-am: Makefile $(PROGRAMS)
-installdirs:
-	for dir in "$(DESTDIR)$(bindir)"; do \
-	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
+	list='$(DIST_SUBDIRS)'; for subdir in $$list; do \
+	  if test "$$subdir" = .; then :; else \
+	    test -d "$(distdir)/$$subdir" \
+	    || $(MKDIR_P) "$(distdir)/$$subdir" \
+	    || exit 1; \
+	    distdir=`$(am__cd) $(distdir) && pwd`; \
+	    top_distdir=`$(am__cd) $(top_distdir) && pwd`; \
+	    (cd $$subdir && \
+	      $(MAKE) $(AM_MAKEFLAGS) \
+	        top_distdir="$$top_distdir" \
+	        distdir="$$distdir/$$subdir" \
+		am__remove_distdir=: \
+		am__skip_length_check=: \
+	        distdir) \
+	      || exit 1; \
+	  fi; \
 	done
-install: install-am
-install-exec: install-exec-am
-install-data: install-data-am
-uninstall: uninstall-am
+check-am: all-am
+check: check-recursive
+all-am: Makefile $(LTLIBRARIES)
+installdirs: installdirs-recursive
+installdirs-am:
+install: install-recursive
+install-exec: install-exec-recursive
+install-data: install-data-recursive
+uninstall: uninstall-recursive
 
 install-am: all-am
 	@$(MAKE) $(AM_MAKEFLAGS) install-exec-am install-data-am
 
-installcheck: installcheck-am
+installcheck: installcheck-recursive
 install-strip:
 	$(MAKE) $(AM_MAKEFLAGS) INSTALL_PROGRAM="$(INSTALL_STRIP_PROGRAM)" \
 	  install_sh_PROGRAM="$(INSTALL_STRIP_PROGRAM)" INSTALL_STRIP_FLAG=-s \
@@ -476,79 +517,82 @@ distclean-generic:
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
 	@echo "it deletes files that may require special tools to rebuild."
-clean: clean-am
+clean: clean-recursive
 
-clean-am: clean-binPROGRAMS clean-generic clean-libtool mostlyclean-am
+clean-am: clean-generic clean-libtool clean-noinstLTLIBRARIES \
+	mostlyclean-am
 
-distclean: distclean-am
+distclean: distclean-recursive
 	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
 
-dvi: dvi-am
+dvi: dvi-recursive
 
 dvi-am:
 
-html: html-am
+html: html-recursive
 
-info: info-am
+info: info-recursive
 
 info-am:
 
 install-data-am:
 
-install-dvi: install-dvi-am
+install-dvi: install-dvi-recursive
 
-install-exec-am: install-binPROGRAMS
+install-exec-am:
 
-install-html: install-html-am
+install-html: install-html-recursive
 
-install-info: install-info-am
+install-info: install-info-recursive
 
 install-man:
 
-install-pdf: install-pdf-am
+install-pdf: install-pdf-recursive
 
-install-ps: install-ps-am
+install-ps: install-ps-recursive
 
 installcheck-am:
 
-maintainer-clean: maintainer-clean-am
+maintainer-clean: maintainer-clean-recursive
 	-rm -rf ./$(DEPDIR)
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
-mostlyclean: mostlyclean-am
+mostlyclean: mostlyclean-recursive
 
 mostlyclean-am: mostlyclean-compile mostlyclean-generic \
 	mostlyclean-libtool
 
-pdf: pdf-am
+pdf: pdf-recursive
 
 pdf-am:
 
-ps: ps-am
+ps: ps-recursive
 
 ps-am:
 
-uninstall-am: uninstall-binPROGRAMS
+uninstall-am:
 
-.MAKE: install-am install-strip
+.MAKE: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) install-am \
+	install-strip
 
-.PHONY: CTAGS GTAGS all all-am check check-am clean clean-binPROGRAMS \
-	clean-generic clean-libtool ctags distclean distclean-compile \
-	distclean-generic distclean-libtool distclean-tags distdir dvi \
-	dvi-am html html-am info info-am install install-am \
-	install-binPROGRAMS install-data install-data-am install-dvi \
+.PHONY: $(RECURSIVE_CLEAN_TARGETS) $(RECURSIVE_TARGETS) CTAGS GTAGS \
+	all all-am check check-am clean clean-generic clean-libtool \
+	clean-noinstLTLIBRARIES ctags ctags-recursive distclean \
+	distclean-compile distclean-generic distclean-libtool \
+	distclean-tags distdir dvi dvi-am html html-am info info-am \
+	install install-am install-data install-data-am install-dvi \
 	install-dvi-am install-exec install-exec-am install-html \
 	install-html-am install-info install-info-am install-man \
 	install-pdf install-pdf-am install-ps install-ps-am \
 	install-strip installcheck installcheck-am installdirs \
-	maintainer-clean maintainer-clean-generic mostlyclean \
-	mostlyclean-compile mostlyclean-generic mostlyclean-libtool \
-	pdf pdf-am ps ps-am tags uninstall uninstall-am \
-	uninstall-binPROGRAMS
+	installdirs-am maintainer-clean maintainer-clean-generic \
+	mostlyclean mostlyclean-compile mostlyclean-generic \
+	mostlyclean-libtool pdf pdf-am ps ps-am tags tags-recursive \
+	uninstall uninstall-am
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
