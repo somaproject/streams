@@ -1,0 +1,43 @@
+# BUILD OUTPUT
+*.o
+*.in
+Makefile
+*.o
+*.lo
+.dirstamp
+*.la
+.libs
+.deps
+#.*.swp
+
+# UNIT TEST
+testResults.xml
+
+# python compiled
+*.pyc
+
+# compiled po
+*.gmo
+
+# autogen files
+configure
+aclocal.m4
+Makefile.in
+ABOUT-NLS
+autom4te.cache/
+*.cache/
+
+benchmarks/eventrx
+benchmarks/semantic.cache
+benchmarks/soma-netbench
+benchmarks/soma-netbench-tx
+config.guess
+config.log
+config.status
+config.sub
+insta..-sh
+libtool
+missing
+ltmain.sh
+src/fakenetwork.loT
+*/semantic.cache
