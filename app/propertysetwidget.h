@@ -1,0 +1,12 @@
+#ifndef PROPERTYSETWIDGET_H
+#define PROPERTYSETWIDGET_H
+
+/*
+
+
+
+
+*/
+
+
+#endif // PROPERTYSETWIDGET_H
