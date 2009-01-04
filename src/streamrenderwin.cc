@@ -1,6 +1,6 @@
 #include "streamrenderwin.h"
 #include "glconfig.h"
-#include "shaders.h"
+#include "shaderutil/shaders.h"
 
 #include <boost/format.hpp>
 
