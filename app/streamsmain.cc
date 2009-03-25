@@ -14,6 +14,7 @@ std::string LOG_ROOT("soma.streams.streamsmain");
 
 #include "networkdatacache.h"
 #include "streamsapp.h"
+#include "somanetcodec.h"
 
 int main(int argc, char** argv)
 {
@@ -56,7 +57,7 @@ int main(int argc, char** argv)
 
 
   pNetworkInterface_t pnetwork(new Network(somaip)); 
-  pSomaNetCodec_t psnc(new SomaNetCodec(pnetwork)); 
+  pISomaNetCodec_t psnc(new SomaNetCodec(pnetwork)); 
   
   
   pTimer_t ptimer; 
@@ -80,7 +81,7 @@ int main(int argc, char** argv)
 
     pStreamPipeline_t pl = 
       pm->createPipeline(boost::str(boost::format("pipeline%d") % i));
-    pISource_t src = pl->createSource("NoiseWave",
+    pISource_t src = pl->createSource("NetDataWave",
 				      boost::str(boost::format("ns%d") % i)); 
 
     pIVis_t vis = pl->createVis("WaveVis", 

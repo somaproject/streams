@@ -15,6 +15,7 @@ SomaNetCodec::SomaNetCodec(pNetworkInterface_t pni) :
 							sigc::mem_fun(*this, 
 								      &SomaNetCodec::sendEvent))); 
   }
+  std::cout << "constructor this = " << this << std::endl; 
 
 }
 
@@ -27,7 +28,6 @@ dspiolib::StateProxy & SomaNetCodec::getDSPStateProxy(datasource_t src)
 
 void SomaNetCodec::sendEvent(const EventTX_t & evt)
 {
-  std::cout << "somaNetCodec send event " << std::endl; 
   EventTXList_t el;
   el.push_back(evt); 
   pNetwork_->sendEvents(el); 
@@ -42,11 +42,15 @@ bool SomaNetCodec::dataRXCallback(Glib::IOCondition io_condition)
   }
   else 
     {
+      std::cout << "HERE 1.5 this = " << this << std::endl; 
       char x; 
       read(pNetwork_->getDataFifoPipe(), &x, 1); 
+      std::cout << "HERE 2" << std::endl; 
       pDataPacket_t rdp = pNetwork_->getNewData(); 
+      std::cout << "HERE 3" << std::endl; 
       
       newDataSignal_.emit(rdp); 
+      std::cout << "HERE 4" << std::endl; 
       
     }
   return true; 

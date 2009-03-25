@@ -28,10 +28,11 @@ typedef std::set<int> waveStreamVisStatusSet_t;
 StreamsApp::StreamsApp(pSourceState_t pss) : 
   pSourceState_(pss), 
   pPipelineManager_(new PipelineManager()), 
+  pSomaConfig_(new SomaConfig), 
   liveButton_("Live View"), 
   streamWin_(pPipelineManager_), 
   ppm_(*this), 
-  pmg_(pPipelineManager_, vBoxPipelines_, ppm_), 
+  pmg_(pPipelineManager_, pSomaConfig_, vBoxPipelines_, ppm_), 
   testLabel_("Hello world")
   //triggerWin_(pPipelineManager_)  
 {

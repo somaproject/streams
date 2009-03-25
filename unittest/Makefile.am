@@ -12,7 +12,8 @@ check_PROGRAMS = runner
 
 test_sources = queueview_test.cc sourcepad_test.cc SinkPad.cc \
 	sourcesink_test.cc Element.cc StreamPipeline.cc \
-	PipelineManager.cc SomaNetCodec.cc NetworkDataCache.cc
+	PipelineManager.cc SomaNetCodec.cc NetworkDataCache.cc \
+	mocksomanetcodec.cc
 
 
 # Element.cc StreamPipeline.cc

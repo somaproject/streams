@@ -4,6 +4,7 @@
 #include "propertypane.h"
 #include <sources/netdatawave.h>
 #include <propwidgets/spinbutton.h>
+#include <propwidgets/combobox.h>
 
 class NetDataWaveProperty : public PropertyPane { 
 public:
@@ -16,6 +17,9 @@ public:
 private: 
   Gtk::Adjustment scaleadj_; 
   PropertyWidgets::SpinButton scaleSpin_; 
+  PropertyWidgets::ComboBox<datasource_t> sourceComboBox_; 
+
+  PropertyWidgets::ComboBox<NetDataWave::SourceType> sourceTypeComboBox_; 
 
 };
 

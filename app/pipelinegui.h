@@ -7,17 +7,20 @@
 #include "filtercreator.h"
 #include "streampipeline.h"
 #include "propertypanemanager.h" 
+#include "somaconfig.h"
 
 class PipelineGUI : public Gtk::VBox
 {
 public:
-  PipelineGUI(pStreamPipeline_t sp, PropertyPaneManager * ppm);
+  PipelineGUI(pStreamPipeline_t sp, pSomaConfig_t sc, 
+	      PropertyPaneManager * ppm);
   ~PipelineGUI(); 
   
   void addNewSource(Widget *  w); 
   void addNewVis(Widget *  w); 
   void show();
   PropertyPaneManager * getPropertyPaneManager(); 
+  pSomaConfig_t getSomaConfig(); 
   
 private:
   pStreamPipeline_t streamPipeline_; 
@@ -32,6 +35,7 @@ private:
   Gtk::Frame  sourceBin_; 
   Gtk::VBox visBox_; 
   Gtk::Label testLabel_; 
+  pSomaConfig_t pSomaConfig_; 
 }; 
 
 

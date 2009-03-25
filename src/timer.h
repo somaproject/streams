@@ -7,7 +7,7 @@
 
 #include "streamtime.h"
 
-#include "somanetcodec.h"
+#include "isomanetcodec.h"
 
 class Timer; 
 
@@ -29,7 +29,7 @@ public:
     
   }
 
-  static pTimer_t createNetworkTimer(pSomaNetCodec_t snc)
+  static pTimer_t createNetworkTimer(pISomaNetCodec_t snc)
   {
     // get current network time from the codec
     
@@ -76,7 +76,7 @@ private:
   streamtime_t currentExpTime_; 
   
   sigc::signal<void, streamtime_t> streamTimeSignal_; 
-  pSomaNetCodec_t pSomaNetCodec_; 
+  pISomaNetCodec_t pSomaNetCodec_; 
   
   
   void updateSomaTime(somatime_t) ; 

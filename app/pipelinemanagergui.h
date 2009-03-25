@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 #include <pipelinemanager.h>
 #include "propertypanemanager.h"
+#include "somaconfig.h"
 
 /* 
    Connect to the new-pipeline signal
@@ -14,18 +15,20 @@
 class PipelineManagerGUI 
 {
 public:
-  PipelineManagerGUI(pPipelineManager_t pm, Gtk::VBox & vBoxPipelines, 
+  PipelineManagerGUI(pPipelineManager_t pm, 
+		     pSomaConfig_t somaconfig, 
+		     Gtk::VBox & vBoxPipelines, 
 		     PropertyPaneManager & ppm); 
   ~PipelineManagerGUI();
   
-  
+
 private:
   Gtk::VBox &  vBoxPipelines_; 
   pPipelineManager_t pm_; 
   PropertyPaneManager & ppm_;
   void newPipeline(pStreamPipeline_t sp); 
   
-
+  pSomaConfig_t pSomaConfig_;
 };
 
 #endif // PIPELINEMANAGERGUI_H

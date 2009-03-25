@@ -35,7 +35,7 @@ void VisCreator::visit(SineVis* sv )
 void VisCreator::visit(WaveVis * pwv)
 {
   
-  WaveVisWidget * wv = new WaveVisWidget(pwv); 
+  WaveVisWidget * wv = new WaveVisWidget(pwv, pipelineGUI_.getSomaConfig()); 
   wv->setPropertyPaneManager(pipelineGUI_.getPropertyPaneManager()); 
   
   // tell pipeline gui that there's a new source, and let it

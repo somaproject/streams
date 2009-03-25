@@ -10,10 +10,14 @@
 
 #include <gtkmm.h>
 #include "streamtime.h"
+#include "isomanetcodec.h"
+
 class SomaNetCodec; 
 class DataWaveCodec;
 
-class SomaNetCodec :  public boost::enable_shared_from_this<SomaNetCodec>
+using namespace somanetwork; 
+class SomaNetCodec :  public ISomaNetCodec, 
+		      public boost::enable_shared_from_this<SomaNetCodec>
 {
 public:
   SomaNetCodec(pNetworkInterface_t pni); 

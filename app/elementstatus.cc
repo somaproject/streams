@@ -1,8 +1,9 @@
 #include "elementstatus.h"
 
-ElementStatus::ElementStatus() : 
+ElementStatus::ElementStatus(pSomaConfig_t sc) : 
   Gtk::EventBox(), 
-  selected_(false)
+  selected_(false), 
+  pSomaConfig_(sc)
 {
 
   add_events(Gdk::BUTTON_PRESS_MASK);

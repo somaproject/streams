@@ -5,7 +5,7 @@ using namespace dspiolib;
 
 NetDataWave::NetDataWave(std::string name, pTimer_t timer, 
 			 pNetworkDataCache_t ndc,
-			 pSomaNetCodec_t pnc) :
+			 pISomaNetCodec_t pnc) :
   SourceBase(name), 
   pTimer_(timer), 
   pNetDataCache_(ndc), 
@@ -22,6 +22,9 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
   pNetCodec_->getDSPStateProxy(src_).acqdatasrc.gain().connect
     (sigc::mem_fun(*this, &NetDataWave::gainFilter)); 
   reconnectPropertyProxies(); 
+
+  src.signal().connect(sigc::mem_fun(*this, 
+				     &NetDataWave::setSrc)); 
 
 }
 
@@ -43,10 +46,12 @@ NetDataWave::~NetDataWave()
 
 }
 
-bool NetDataWave::setSrc(datasource_t src)
+void NetDataWave::setSrc(datasource_t src)
 {
+  std::cout << "set src" << std::endl; 
+
   if (src == src_) {
-    return true; 
+    //return true; 
   } else { 
     //setSource(src);  FIXME
     
@@ -125,5 +130,16 @@ void NetDataWave::reconnectPropertyProxies()
  		  gainSignal_); 
     
 
+
+}
+
+std::list<datasource_t> NetDataWave::getAvailableSources()
+{
+  std::list<datasource_t> srcs; 
+  // FIXME : Dynamically read from soma
+  for(int i = 0; i < 64; i++) {
+    srcs.push_back(i); 
+  }
+  return srcs; 
 
 }

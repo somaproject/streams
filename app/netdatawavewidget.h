@@ -4,11 +4,12 @@
 #include <gtkmm.h>
 #include <sources/netdatawave.h>
 #include <elementstatus.h>
+#include <somaconfig.h>
 
 class NetDataWaveWidget : public ElementStatus
 {
 public:
-  NetDataWaveWidget(NetDataWave * ); 
+  NetDataWaveWidget(NetDataWave *, pSomaConfig_t ); 
   ~NetDataWaveWidget(); 
   
 
@@ -40,6 +41,7 @@ private:
   core::IElement * getElement() {
     return netDataWave_; 
   }
+
 }; 
 
 

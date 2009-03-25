@@ -1,8 +1,8 @@
 #include "waveviswidget.h"
 #include <boost/format.hpp>
 
-WaveVisWidget::WaveVisWidget(WaveVis * nw) :
-  ElementStatus(),
+WaveVisWidget::WaveVisWidget(WaveVis * nw, pSomaConfig_t sc) :
+  ElementStatus(sc),
   wavevis_(nw)
 {
   add(vbox_);

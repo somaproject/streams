@@ -8,7 +8,7 @@ SUBDIRS = propwidgets
 logging_cc_sources = 
 gui_cc_sources = streamsapp.cc pipelinemanagergui.cc pipelinegui.cc \
 	  filtercreator.c triggercreator.cc sourcecreator.cc viscreator.cc \
-	propertypanemanager.cc  elementstatus.cc
+	propertypanemanager.cc  elementstatus.cc somaconfig.cc
 widgets_cc_sources = noisewavewidget.cc waveviswidget.cc netdatawavewidget.cc
 props_cc_sources = noisewaveproperty.cc wavevisproperty.cc netdatawaveproperty.cc
 

@@ -8,7 +8,7 @@
 class NoiseWaveWidget : public ElementStatus
 {
 public:
-  NoiseWaveWidget(NoiseWave * ); 
+  NoiseWaveWidget(NoiseWave *, pSomaConfig_t sc ); 
   ~NoiseWaveWidget(); 
 
 

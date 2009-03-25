@@ -3,8 +3,8 @@
 #include "netdatawavewidget.h"
 
 
-NetDataWaveWidget::NetDataWaveWidget(NetDataWave * nw) :
-  ElementStatus(), 
+NetDataWaveWidget::NetDataWaveWidget(NetDataWave * nw, pSomaConfig_t sc) :
+  ElementStatus(sc), 
   netDataWave_(nw)
 {
   add(vboxMain_); 

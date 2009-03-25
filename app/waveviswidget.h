@@ -9,7 +9,7 @@
 class WaveVisWidget : public ElementStatus
 {
 public:
-  WaveVisWidget(WaveVis * ); 
+  WaveVisWidget(WaveVis *, pSomaConfig_t sc ); 
   ~WaveVisWidget(); 
 
 private:

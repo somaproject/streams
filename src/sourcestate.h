@@ -16,7 +16,7 @@
 struct SourceState {
   pTimer_t timer; 
   pNetworkDataCache_t netdatacache; 
-  pSomaNetCodec_t somanetcodec; 
+  pISomaNetCodec_t somanetcodec; 
 }; 
 
 typedef boost::shared_ptr<SourceState> pSourceState_t; 

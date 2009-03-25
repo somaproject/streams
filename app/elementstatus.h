@@ -3,6 +3,7 @@
 #include <gtkmm.h>
 #include <core/ielement.h>
 #include "propertypanemanager.h" 
+#include "somaconfig.h"
 
 /*
 base class for all element's status windows
@@ -12,7 +13,7 @@ base class for all element's status windows
 class ElementStatus : public Gtk::EventBox
 {
 public:
-  ElementStatus(); 
+  ElementStatus(pSomaConfig_t sc); 
   ~ElementStatus(); 
   void setPropertyPaneManager(PropertyPaneManager * ppm); 
 protected:
@@ -24,6 +25,7 @@ protected:
 
   void clearCallback(); 
   sigc::connection conn_; 
+  pSomaConfig_t pSomaConfig_; 
 
 }; 
 

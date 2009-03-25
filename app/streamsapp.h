@@ -27,6 +27,7 @@
 
 #include "pipelinemanagergui.h"
 #include "propertypanemanager.h" 
+#include "somaconfig.h"
 
 class StreamsApp : public Gtk::Window
 {
@@ -41,6 +42,7 @@ protected:
   pPipelineManager_t pPipelineManager_; 
   pSourceState_t pSourceState_; 
   
+  pSomaConfig_t pSomaConfig_; 
 
   Glib::RefPtr<Gtk::ActionGroup> pActionGroup_;
   
@@ -58,6 +60,7 @@ protected:
   Gtk::VBox vBoxPipelines_; 
   PropertyPaneManager ppm_; 
   PipelineManagerGUI pmg_; 
+
 
   void buildActions(); 
 //   pStreamSource_t newStreamSource(std::string name, datasource_t); 

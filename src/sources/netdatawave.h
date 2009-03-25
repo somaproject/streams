@@ -15,14 +15,14 @@
 
 #include "sourcebase.h"
 #include "networkdatacache.h"
-#include "somanetcodec.h"
+#include "isomanetcodec.h"
 
 class NetDataWave : public SourceBase
 {
 public:
   static const std::string TYPENAME; 
   NetDataWave(std::string, pTimer_t, pNetworkDataCache_t, 
-	      pSomaNetCodec_t); 
+	      pISomaNetCodec_t); 
   ~NetDataWave(); 
   
   
@@ -32,6 +32,11 @@ public:
 
   // primary property : data source
   Property<datasource_t> src; 
+  std::list<datasource_t> getAvailableSources(); 
+
+  enum SourceType {Wave, Raw}; 
+  Property<SourceType> srctype; 
+  
   // physical amplifier properties:
   PropertyProxy<int> gain; 
   std::list<int> getAvailableGains(); 
@@ -51,7 +56,7 @@ private:
   
   pTimer_t pTimer_; 
   pNetworkDataCache_t pNetDataCache_; 
-  pSomaNetCodec_t pNetCodec_; 
+  pISomaNetCodec_t pNetCodec_; 
   void nextData(); 
   void timeUpdate(streamtime_t t); 
 
@@ -59,7 +64,7 @@ private:
   
   core::QueueView<WaveBuffer_t> dataQueueView_; 
   
-  bool setSrc(datasource_t src); 
+  void setSrc(datasource_t src); 
   void setSource(datasource_t src); 
   datasource_t src_; 
 

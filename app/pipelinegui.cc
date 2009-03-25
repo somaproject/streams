@@ -1,6 +1,7 @@
 #include "pipelinegui.h"
 
-PipelineGUI::PipelineGUI(pStreamPipeline_t sp, PropertyPaneManager * ppm) :
+PipelineGUI::PipelineGUI(pStreamPipeline_t sp, pSomaConfig_t sc,
+			 PropertyPaneManager * ppm) :
   Gtk::VBox(),
   streamPipeline_(sp), 
   pVisCreator_(new VisCreator(*this)), 
@@ -8,7 +9,8 @@ PipelineGUI::PipelineGUI(pStreamPipeline_t sp, PropertyPaneManager * ppm) :
   pFilterCreator_(new FilterCreator(*this)), 
   pTriggerCreator_(new TriggerCreator(*this)), 
   testLabel_(sp->getName() + "Silly"), 
-  ppm_(ppm)
+  ppm_(ppm), 
+  pSomaConfig_(sc)
 {
 
   // create the new visitors for this element and save them
@@ -28,6 +30,11 @@ PipelineGUI::~PipelineGUI()
 
 
 
+}
+
+pSomaConfig_t PipelineGUI::getSomaConfig()
+{
+  return pSomaConfig_; 
 }
 
 PropertyPaneManager * PipelineGUI::getPropertyPaneManager() 
