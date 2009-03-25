@@ -1,12 +1,13 @@
 #include "noisewaveproperty.h"
 
 
-NoiseWaveProperty::NoiseWaveProperty() :
+NoiseWaveProperty::NoiseWaveProperty(pSomaConfig_t sc) :
   frame_("Fake Source"),
   amplitudeLabel_("amplitude:"), 
   adjustment_(1.0, 1.0, 102.0, 1.0, 5.0, 0.0),
   classLabel_("signal class:"), 
-  amplitudeSpinButton_(adjustment_)
+  amplitudeSpinButton_(adjustment_), 
+  pSomaConfig_(sc)
 {
 
   PropertyWidgets::ComboBox<NoiseWave::NoiseClass>::possiblevalues_t vals; 

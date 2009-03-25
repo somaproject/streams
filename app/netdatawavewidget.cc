@@ -8,26 +8,24 @@ NetDataWaveWidget::NetDataWaveWidget(NetDataWave * nw, pSomaConfig_t sc) :
   netDataWave_(nw)
 {
   add(vboxMain_); 
-  vboxMain_.pack_start(hboxAnalog_); 
+  vboxMain_.pack_start(labelSourceValue_); 
   
-  hboxAnalog_.pack_start(vboxSource_); 
+// //   hboxAnalog_.pack_start(vboxSource_); 
 
-  labelSource_.set_label("src"); 
-  vboxSource_.pack_start(labelSource_); 
   labelSourceValue_.set_use_markup(true); 
-  vboxSource_.pack_start(labelSourceValue_); 
+  //  vboxSource_.pack_start(labelSourceValue_); 
 
-  hboxAnalog_.pack_start(analogProps_); 
+//   hboxAnalog_.pack_start(analogProps_); 
 
-  analogProps_.pack_start(hboxGain_); 
-  hboxGain_.pack_start(labelGain_); 
-  labelGain_.set_label("gain:"); 
-  hboxGain_.pack_start(labelGainValue_); 
+//   analogProps_.pack_start(hboxGain_); 
+//   hboxGain_.pack_start(labelGain_); 
+//   labelGain_.set_label("gain:"); 
+//   hboxGain_.pack_start(labelGainValue_); 
 
-  analogProps_.pack_start(hboxHPF_); 
-  hboxHPF_.pack_start(labelHPF_); 
-  hboxHPF_.pack_start(labelHPFValue_); 
-  labelHPF_.set_label("HP Filter"); 
+//   analogProps_.pack_start(hboxHPF_); 
+//   hboxHPF_.pack_start(labelHPF_); 
+//   hboxHPF_.pack_start(labelHPFValue_); 
+//   labelHPF_.set_label("HP Filter"); 
 
   show_all(); 
 
@@ -53,7 +51,11 @@ NetDataWaveWidget::~NetDataWaveWidget()
 
 void NetDataWaveWidget::sourceCallback(int src)
 {
-  std::string txt = boost::str(boost::format("<big><big><big><big><big><big><big>%d</big></big></big></big></big></big></big>") % (int)netDataWave_->src); 
+  int ndssrc = (int)netDataWave_->src; 
+  std::string txt = 
+    boost::str(boost::format("<big><big><big><big><big>%s</big></big></big></big></big>") 
+	       % pSomaConfig_->getSourceName(ndssrc));
+
   labelSourceValue_.set_label(txt); 
 }
 

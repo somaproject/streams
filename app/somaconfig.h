@@ -27,7 +27,7 @@ public:
   std::vector<somanetwork::datasource_t> getAvailableSources(); 
   std::list<somanetwork::datatype_t> getSourceDataTypes(somanetwork::datasource_t ); 
   std::string getSourceName(somanetwork::datasource_t); 
-
+  
 }; 
 
 

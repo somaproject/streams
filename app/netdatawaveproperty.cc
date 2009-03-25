@@ -2,9 +2,10 @@
 #include "propwidgets/spinbutton.h"
 #include <boost/format.hpp>
 
-NetDataWaveProperty::NetDataWaveProperty() : 
+NetDataWaveProperty::NetDataWaveProperty(pSomaConfig_t sc) : 
   scaleadj_(1.0, 100.0, 1.0, 1.0, 1.0), 
-  scaleSpin_(scaleadj_)
+  scaleSpin_(scaleadj_), 
+  pSomaConfig_(sc)
 {
   pack_start(scaleSpin_);
   pack_start(sourceComboBox_);
@@ -31,16 +32,17 @@ bool NetDataWaveProperty::addElement(core::IElement * elt)
   if (ws == NULL) {
     return false; 
   }
-  sourceComboBox_.addProperty(&ws->src); 
 
   PropertyWidgets::ComboBox<datasource_t>::possiblevalues_t vals; 
   std::list<datasource_t> availablesrc = ws->getAvailableSources(); 
+
   for(  std::list<datasource_t>::iterator i = availablesrc.begin(); 
 	i != availablesrc.end(); i++) {
-    std::string s = boost::str(boost::format("source %1%") % (unsigned int)*i); 
+    std::string s = pSomaConfig_->getSourceName(*i); 
     vals.push_back( std::make_pair(s, *i)); 
   }
   sourceComboBox_.setPossibleValues(vals); 
+  sourceComboBox_.addProperty(&ws->src); 
   
 
   //scaleSpin_.addProperty(&ws->scale); 

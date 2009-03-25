@@ -5,10 +5,12 @@
 #include <sources/netdatawave.h>
 #include <propwidgets/spinbutton.h>
 #include <propwidgets/combobox.h>
+#include "somaconfig.h"
+
 
 class NetDataWaveProperty : public PropertyPane { 
 public:
-  NetDataWaveProperty(); 
+  NetDataWaveProperty(pSomaConfig_t sc); 
   ~NetDataWaveProperty(); 
   
   virtual bool addElement(core::IElement * elt); 
@@ -20,6 +22,7 @@ private:
   PropertyWidgets::ComboBox<datasource_t> sourceComboBox_; 
 
   PropertyWidgets::ComboBox<NetDataWave::SourceType> sourceTypeComboBox_; 
+  pSomaConfig_t pSomaConfig_; 
 
 };
 

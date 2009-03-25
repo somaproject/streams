@@ -5,11 +5,11 @@
 #include <sources/noisewave.h>
 #include "propwidgets/combobox.h"
 #include "propwidgets/spinbutton.h"
-
+#include "somaconfig.h"
 
 class NoiseWaveProperty : public PropertyPane { 
 public:
-  NoiseWaveProperty(); 
+  NoiseWaveProperty(pSomaConfig_t sc); 
   ~NoiseWaveProperty(); 
   
   virtual bool addElement(core::IElement * elt); 
@@ -31,8 +31,8 @@ private:
 
   PropertyWidgets::ComboBox<NoiseWave::NoiseClass> noiseClassComboBox_; 
 
-
-//  PropertyWidgets::SpinButton scaleSpin_; 
+  pSomaConfig_t pSomaConfig_; 
+  //  PropertyWidgets::SpinButton scaleSpin_; 
 
 };
 

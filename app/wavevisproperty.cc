@@ -2,10 +2,11 @@
 #include "propwidgets/spinbutton.h"
 
 
-WaveVisProperty::WaveVisProperty() : 
+WaveVisProperty::WaveVisProperty(pSomaConfig_t sc) : 
   scaleFrame_("Vertical Scale"), 
   scaleLabel_("per pixel"), 
-  scaleComboBox_()
+  scaleComboBox_(), 
+  pSomaConfig_(sc)
 {
   pack_start(scaleFrame_); 
   scaleFrame_.add(scaleHBox_); 

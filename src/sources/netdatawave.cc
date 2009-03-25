@@ -11,6 +11,7 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
   pNetDataCache_(ndc), 
   pSourcePad_(createSourcePad<WaveBuffer_t>(datalist_, "default")), 
   pNetCodec_(pnc), 
+  src(0), 
   src_(0)
 {
   
@@ -25,7 +26,7 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
 
   src.signal().connect(sigc::mem_fun(*this, 
 				     &NetDataWave::setSrc)); 
-
+  std::cout << "NetDataWave done constructing." << std::endl;
 }
 
 void NetDataWave::gainFilter(int chan, int gain) 
@@ -48,7 +49,7 @@ NetDataWave::~NetDataWave()
 
 void NetDataWave::setSrc(datasource_t src)
 {
-  std::cout << "set src" << std::endl; 
+  std::cout << "set src: " << src << std::endl; 
 
   if (src == src_) {
     //return true; 

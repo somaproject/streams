@@ -5,10 +5,12 @@
 #include "wavevisproperty.h"
 #include "netdatawaveproperty.h"
 
-PropertyPaneManager::PropertyPaneManager(Gtk::Window & parent) : 
+PropertyPaneManager::PropertyPaneManager(Gtk::Window & parent, 
+					 pSomaConfig_t sc) : 
   window_(), 
   inConflict_(false), 
-  proppane_(NULL)
+  proppane_(NULL), 
+  pSomaConfig_(sc)
 {
   window_.set_transient_for(parent); 
 }
@@ -125,11 +127,11 @@ PropertyPane * PropertyPaneManager::createPropPane(core::IElement * elt)
 {
   // TOTAL HORRIBLE HACK
   if (dynamic_cast<NoiseWave*>(elt)) {
-    return new NoiseWaveProperty(); 
+    return new NoiseWaveProperty(pSomaConfig_); 
   } else if (dynamic_cast<WaveVis*>(elt)) {
-    return new WaveVisProperty(); 
+    return new WaveVisProperty(pSomaConfig_); 
   } else if (dynamic_cast<NetDataWave*>(elt)) {
-    return new NetDataWaveProperty(); 
+    return new NetDataWaveProperty(pSomaConfig_); 
   } else {
     throw std::runtime_error("unkown element class for property pane creation");
   }

@@ -4,6 +4,8 @@
 #include <core/ielement.h>
 #include <set>
 #include "propertypane.h"
+#include "somaconfig.h"
+
 #include <gtkmm.h>
 
 /* must be able to handle all elements, with a giant-ass
@@ -29,7 +31,8 @@
 class PropertyPaneManager {
 
 public:
-  PropertyPaneManager(Gtk::Window & parent); 
+  PropertyPaneManager(Gtk::Window & parent, 
+		      pSomaConfig_t somaconfig); 
   ~PropertyPaneManager(); 
   void setElement(core::IElement *); 
   void appendElement(core::IElement *); 
@@ -49,6 +52,8 @@ private:
   
   PropertyPane * createPropPane(core::IElement* elt); 
   sigc::signal<void> signalClearAllElements_; 
+
+  pSomaConfig_t pSomaConfig_; 
 }; 
 
 

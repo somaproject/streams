@@ -179,11 +179,23 @@ void StreamRenderWin::renderTimeTicks(float T1, float T2)
     scaletext = "sec"; 
     scaletextdiv = 1.0;     
 
-  } else {
+  } else if (winSize < 1000)  {
     minorScale = 10.0; 
     majorScale = 60.0;  
     scaletext = "min"; 
     scaletextdiv = 60.0;     
+
+  } else if (winSize < 10000)  { 
+    minorScale = 60.0; 
+    majorScale = 600.0;  
+    scaletext = "min"; 
+    scaletextdiv = 60.0;     
+
+  } else { 
+    minorScale = 600.0; 
+    majorScale = 3600.0;  
+    scaletext = "hr"; 
+    scaletextdiv = 3600.0;     
 
   }
   

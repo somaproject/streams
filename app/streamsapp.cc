@@ -31,7 +31,7 @@ StreamsApp::StreamsApp(pSourceState_t pss) :
   pSomaConfig_(new SomaConfig), 
   liveButton_("Live View"), 
   streamWin_(pPipelineManager_), 
-  ppm_(*this), 
+  ppm_(*this, pSomaConfig_), 
   pmg_(pPipelineManager_, pSomaConfig_, vBoxPipelines_, ppm_), 
   testLabel_("Hello world")
   //triggerWin_(pPipelineManager_)  
