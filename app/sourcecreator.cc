@@ -2,6 +2,7 @@
 #include "noisewavewidget.h"
 #include "pipelinegui.h"
 #include "netdatawavewidget.h"
+#include "netdatarawwidget.h"
 
 
 SourceCreator::SourceCreator(PipelineGUI & pg) :
@@ -45,3 +46,15 @@ void SourceCreator::visit(NetDataWave * nd)
   
 
 }
+
+void SourceCreator::visit(NetDataRaw * nd)
+{
+
+  NetDataRawWidget * ndw(new NetDataRawWidget(nd, pipelineGUI_.getSomaConfig())); 
+  ndw->setPropertyPaneManager(pipelineGUI_.getPropertyPaneManager()); 
+
+  pipelineGUI_.addNewSource(ndw); 
+  
+
+}
+

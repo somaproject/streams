@@ -4,6 +4,7 @@
 #include "noisewaveproperty.h"
 #include "wavevisproperty.h"
 #include "netdatawaveproperty.h"
+#include "netdatarawproperty.h"
 
 PropertyPaneManager::PropertyPaneManager(Gtk::Window & parent, 
 					 pSomaConfig_t sc) : 
@@ -132,6 +133,8 @@ PropertyPane * PropertyPaneManager::createPropPane(core::IElement * elt)
     return new WaveVisProperty(pSomaConfig_); 
   } else if (dynamic_cast<NetDataWave*>(elt)) {
     return new NetDataWaveProperty(pSomaConfig_); 
+  } else if (dynamic_cast<NetDataRaw*>(elt)) {
+    return new NetDataRawProperty(pSomaConfig_); 
   } else {
     throw std::runtime_error("unkown element class for property pane creation");
   }

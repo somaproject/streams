@@ -6,7 +6,8 @@ AM_LDFLAGS = $(GTKDEPS_LIBS) $(BOOST_LDFLAGS) $(SOMADEPS_LIBS) $(BOOST_THREAD_LI
 
 
 h_sources =  noisewave.h
-cc_sources = noisewave.cc sourcefactory.cc netdatawave.cc
+cc_sources = noisewave.cc sourcefactory.cc netdatawave.cc netdataraw.cc
+
 
 noinst_LTLIBRARIES = libstreamsources.la
 

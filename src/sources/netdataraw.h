@@ -1,5 +1,5 @@
-#ifndef NETDATAWAVE_H
-#define NETDATAWAVE_H
+#ifndef NETDATARAW_H
+#define NETDATARAW_H
 #include <vector>
 #include <sigc++/sigc++.h>
 #include <boost/shared_ptr.hpp>
@@ -17,13 +17,13 @@
 #include "networkdatacache.h"
 #include "isomanetcodec.h"
 
-class NetDataWave : public SourceBase
+class NetDataRaw : public SourceBase
 {
 public:
   static const std::string TYPENAME; 
-  NetDataWave(std::string, pTimer_t, pNetworkDataCache_t, 
+  NetDataRaw(std::string, pTimer_t, pNetworkDataCache_t, 
 	      pISomaNetCodec_t); 
-  ~NetDataWave(); 
+  ~NetDataRaw(); 
   
   
   void accept(pISourceVisitor_t sv) { 
@@ -44,8 +44,6 @@ public:
   typedef std::pair<int, int> samprate_t; 
   Property<samprate_t>  sampratenum; 
   std::list<samprate_t> getAvailableSampRates(); 
-  Property<uint32_t> filterid; 
-  std::list<std::pair<uint32_t, std::string> > getAvailableFilterIDs(); 
   
 private:
   core::SourcePad<WaveBuffer_t> * pSourcePad_; 
@@ -73,7 +71,7 @@ private:
   static const int CONTCHANNEL = 4; 
 }; 
 
-typedef boost::shared_ptr<NetDataWave> pNetDataWave_t; 
+typedef boost::shared_ptr<NetDataRaw> pNetDataRaw_t; 
 
   
 #endif // NETDATWAVE

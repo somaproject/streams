@@ -77,11 +77,11 @@ int main(int argc, char** argv)
   StreamsApp sa(pSourceState); 
 
   pPipelineManager_t pm = sa.getPipelineManager();   
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 1; i++) {
 
     pStreamPipeline_t pl = 
       pm->createPipeline(boost::str(boost::format("pipeline%d") % i));
-    pISource_t src = pl->createSource("NetDataWave",
+    pISource_t src = pl->createSource("NetDataRaw",
 				      boost::str(boost::format("ns%d") % i)); 
 
     pIVis_t vis = pl->createVis("WaveVis", 
@@ -93,7 +93,11 @@ int main(int argc, char** argv)
       vis->getSinkPad("default"); 
     ps1->connect(ps2);
   }
+
+  pnetwork->run(); 
+
   kit.run(sa);
 
   return 0;
 }
+

@@ -1,8 +1,8 @@
-#include "netdatawaveproperty.h"
+#include "netdatarawproperty.h"
 #include "propwidgets/spinbutton.h"
 #include <boost/format.hpp>
 
-NetDataWaveProperty::NetDataWaveProperty(pSomaConfig_t sc) : 
+NetDataRawProperty::NetDataRawProperty(pSomaConfig_t sc) : 
   scaleadj_(1.0, 100.0, 1.0, 1.0, 1.0), 
   scaleSpin_(scaleadj_), 
   pSomaConfig_(sc)
@@ -13,16 +13,16 @@ NetDataWaveProperty::NetDataWaveProperty(pSomaConfig_t sc) :
   
 }
 
-NetDataWaveProperty::~NetDataWaveProperty()
+NetDataRawProperty::~NetDataRawProperty()
 {
 
 
 }
 
-bool NetDataWaveProperty::addElement(core::IElement * elt)
+bool NetDataRawProperty::addElement(core::IElement * elt)
 {
   // going to hell for this
-  NetDataWave * ws = dynamic_cast<NetDataWave*>(elt); 
+  NetDataRaw * ws = dynamic_cast<NetDataRaw*>(elt); 
   if (ws == NULL) {
     return false; 
   }
@@ -43,9 +43,9 @@ bool NetDataWaveProperty::addElement(core::IElement * elt)
   return true; 
 }
 
-bool NetDataWaveProperty::delElement(core::IElement * elt)
+bool NetDataRawProperty::delElement(core::IElement * elt)
 {
-  NetDataWave * ws = dynamic_cast<NetDataWave*>(elt); 
+  NetDataRaw * ws = dynamic_cast<NetDataRaw*>(elt); 
   if (ws == NULL) {
     return false; 
   }

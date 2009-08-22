@@ -1,9 +1,9 @@
-#include "netdatawave.h"
+#include "netdataraw.h"
 
-const std::string NetDataWave::TYPENAME = "NetDataWave"; 
+const std::string NetDataRaw::TYPENAME = "NetDataRaw"; 
 using namespace dspiolib; 
 
-NetDataWave::NetDataWave(std::string name, pTimer_t timer, 
+NetDataRaw::NetDataRaw(std::string name, pTimer_t timer, 
 			 pNetworkDataCache_t ndc,
 			 pISomaNetCodec_t pnc) :
   SourceBase(name), 
@@ -17,19 +17,21 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
   
   
   pTimer_->streamTimeSignal().connect(sigc::mem_fun(*this, 
-						    &NetDataWave::timeUpdate)); 
+						    &NetDataRaw::timeUpdate)); 
   
   pNetCodec_->getDSPStateProxy(src_); 
   pNetCodec_->getDSPStateProxy(src_).acqdatasrc.gain().connect
-    (sigc::mem_fun(*this, &NetDataWave::gainFilter)); 
+    (sigc::mem_fun(*this, &NetDataRaw::gainFilter)); 
   reconnectPropertyProxies(); 
 
   src.signal().connect(sigc::mem_fun(*this, 
-				     &NetDataWave::setSrc)); 
-  std::cout << "NetDataWave done constructing." << std::endl;
+				     &NetDataRaw::setSrc)); 
+  std::cout << "NetDataRaw done constructing." << std::endl;
+  reconnectSource(src_); 
+
 }
 
-void NetDataWave::gainFilter(int chan, int gain) 
+void NetDataRaw::gainFilter(int chan, int gain) 
   /* 
      The propertyProxy we use for gain expects a signal with a single
      gain, whereas the acqdatasource emits signals for all gain changes. 
@@ -42,12 +44,12 @@ void NetDataWave::gainFilter(int chan, int gain)
 }
 
 
-NetDataWave::~NetDataWave()
+NetDataRaw::~NetDataRaw()
 {
 
 }
 
-void NetDataWave::setSrc(datasource_t src)
+void NetDataRaw::setSrc(datasource_t src)
 {
 
   if (src == src_) {
@@ -58,7 +60,7 @@ void NetDataWave::setSrc(datasource_t src)
 
 }
 
-void NetDataWave::nextData()
+void NetDataRaw::nextData()
 {
   while(!dataQueueView_.empty()) {
     // We have to copy the buffer here; this is a wee bit unfortunate,
@@ -71,14 +73,14 @@ void NetDataWave::nextData()
 
 }
 
-void NetDataWave::timeUpdate(streamtime_t t)
+void NetDataRaw::timeUpdate(streamtime_t t)
 {
   
   
 
 }
 
-void NetDataWave::reconnectSource(datasource_t src)
+void NetDataRaw::reconnectSource(datasource_t src)
 {
   /*
     1. disconnect from current new data handler. 
@@ -95,7 +97,7 @@ void NetDataWave::reconnectSource(datasource_t src)
   src_ = src; 
 
   datalist_.clear(); 
-  dataQueueView_ = pNetDataCache_->getNetWaveSource(src_); 
+  dataQueueView_ = pNetDataCache_->getNetRawSource(src_); 
 
   while( !  dataQueueView_.empty() )
     {
@@ -107,11 +109,11 @@ void NetDataWave::reconnectSource(datasource_t src)
   pSourcePad_->invalidateData(); 
 
   dataConn_ = 
-    pNetDataCache_->waveSignals_[src_].connect(sigc::mem_fun(*this,
-							     &NetDataWave::nextData)); 
+    pNetDataCache_->rawSignals_[src_].connect(sigc::mem_fun(*this,
+							     &NetDataRaw::nextData)); 
 }
 
-void NetDataWave::reconnectPropertyProxies()
+void NetDataRaw::reconnectPropertyProxies()
 {
   sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc,
 		&AcqDataSource::setGain); 
@@ -125,7 +127,7 @@ void NetDataWave::reconnectPropertyProxies()
 
 }
 
-std::list<datasource_t> NetDataWave::getAvailableSources()
+std::list<datasource_t> NetDataRaw::getAvailableSources()
 {
   std::list<datasource_t> srcs; 
   // FIXME : Dynamically read from soma

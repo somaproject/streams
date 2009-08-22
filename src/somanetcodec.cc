@@ -9,6 +9,7 @@ SomaNetCodec::SomaNetCodec(pNetworkInterface_t pni) :
 
   Glib::signal_io().connect(sigc::mem_fun(*this, &SomaNetCodec::eventRXCallback), 
 			    pNetwork_->getEventFifoPipe(), Glib::IO_IN); 
+
   // create the data wave codecs
   for(int i = 0; i < 64; i++) { // FIXME : extract out constant
     dspStateProxies_.push_back(new dspiolib::StateProxy(datasource_t(i), 
@@ -42,15 +43,11 @@ bool SomaNetCodec::dataRXCallback(Glib::IOCondition io_condition)
   }
   else 
     {
-      std::cout << "HERE 1.5 this = " << this << std::endl; 
+
       char x; 
       read(pNetwork_->getDataFifoPipe(), &x, 1); 
-      std::cout << "HERE 2" << std::endl; 
       pDataPacket_t rdp = pNetwork_->getNewData(); 
-      std::cout << "HERE 3" << std::endl; 
-      
       newDataSignal_.emit(rdp); 
-      std::cout << "HERE 4" << std::endl; 
       
     }
   return true; 
@@ -74,7 +71,8 @@ sigc::signal<void, somatime_t> & SomaNetCodec::signalTimeUpdate()
 
 void SomaNetCodec::enableDataRX(datasource_t src, datatype_t typ)
 {
-
+  std::cout << "enable data source " << (int)src
+	    << " type = " << (int) typ << std::endl;
   pNetwork_->enableDataRX(src, typ); 
 
 }

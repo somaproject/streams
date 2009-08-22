@@ -1,17 +1,17 @@
-#ifndef NETDATAWAVEPROPERTY_H
-#define NETDATAWAVEPROPERTY_H
+#ifndef NETDATARAWPROPERTY_H
+#define NETDATARAWPROPERTY_H
 
 #include "propertypane.h"
-#include <sources/netdatawave.h>
+#include <sources/netdataraw.h>
 #include <propwidgets/spinbutton.h>
 #include <propwidgets/combobox.h>
 #include "somaconfig.h"
 
 
-class NetDataWaveProperty : public PropertyPane { 
+class NetDataRawProperty : public PropertyPane { 
 public:
-  NetDataWaveProperty(pSomaConfig_t sc); 
-  ~NetDataWaveProperty(); 
+  NetDataRawProperty(pSomaConfig_t sc); 
+  ~NetDataRawProperty(); 
   
   virtual bool addElement(core::IElement * elt); 
   virtual bool delElement(core::IElement * elt); 

@@ -45,7 +45,7 @@ core::QueueView<WaveBuffer_t> NetworkDataCache::getNetRawSource(datasource_t n)
   if (rawCache_[n] == 0) {
     // need to enable, create list! 
     rawCache_[n] = new core::QueueView<WaveBuffer_t>::dataContainer_t(); 
-
+    
     pNetCodec_->enableDataRX(n, RAW); 
     
   } 
@@ -76,16 +76,18 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
     if (rawCache_[newData->src] != 0) {
       int src = newData->src; 
       Raw_t  wp = rawToRaw(newData); 
-      WaveBuffer_t * wb = new WaveBuffer_t; 
-      wb->samprate = 32000.0; 
-      wb->time = pTimer_->somaTimeToStreamTime(wp.time); 
-      wb->data.reserve(WAVEBUF_LEN); 
-      for(int i = 0; i < RAWBUF_LEN; i++) {
-	wb->data.push_back(wp.data[i]); 
+      if (wp.chansrc == 0) {  // FIXME!!
+	WaveBuffer_t * wb = new WaveBuffer_t; 
+	wb->samprate = 32000.0; 
+	wb->time = pTimer_->somaTimeToStreamTime(wp.time); 
+	wb->data.reserve(WAVEBUF_LEN); 
+	for(int i = 0; i < RAWBUF_LEN; i++) {
+	  wb->data.push_back(float(wp.data[i])/2048000000.); 
+	}
+	
+	(*(rawCache_[src])).push_back(wb); 
+	rawSignals_[src].emit(); 
       }
-      
-      (*(rawCache_[src])).push_back(wb); 
-      rawSignals_[src].emit(); 
     }
     
   } 

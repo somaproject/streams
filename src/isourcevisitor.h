@@ -7,6 +7,7 @@
 class SourceBase; 
 class NoiseWave; 
 class NetDataWave; 
+class NetDataRaw; 
 
 class ISourceVisitor {
   
@@ -14,6 +15,7 @@ public:
   virtual void visit(SourceBase * ) = 0; 
   virtual void visit(NoiseWave * ) = 0; 
   virtual void visit(NetDataWave *) = 0; 
+  virtual void visit(NetDataRaw *) = 0; 
 
 }; 
 

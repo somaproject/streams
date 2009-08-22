@@ -193,13 +193,18 @@ void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2,
   streamtime_t dstartt, dendt; 
   //std::cout << "plotting from" << (*buffstart)->front().t << " to " << (*buffend)->back().t << std::endl;
   buffend++; 
+  int bufcnt = 0; 
   for (buff = buffstart; buff !=buffend; buff++) {
     glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
-		    &(*(*buff))[0]); 
-  glDrawArrays(GL_LINE_STRIP, 0, (*buff)->size()); 
-  
+ 		    &(*(*buff))[0]); 
+    glDrawArrays(GL_LINE_STRIP, 0, (*buff)->size()); 
+    if (bufcnt > 10) {
+      break; 
+    }
+    bufcnt += 1; 
   }
   //
+  std::cout << "plotted " << bufcnt << "buffers" << std::endl; 
 
   glPopMatrix(); 
 

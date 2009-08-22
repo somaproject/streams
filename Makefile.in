@@ -195,7 +195,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 ACLOCAL_AMFLAGS = -I m4
 SUBDIRS = src unittest app
-AM_CXXFLAGS = $(BOOST_CPPFLAGS) -pthread 
+AM_CXXFLAGS = $(BOOST_CPPFLAGS) -pthread -g 
 AM_LDFLAGS = $(BOOST_LDFLAGS) $(BOOST_THREAD_LIB) $(BOOST_PROGRAM_OPTIONS_LIB)
 all: config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
