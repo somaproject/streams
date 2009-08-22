@@ -23,7 +23,7 @@ public:
 
   virtual void enableDataRX(datasource_t src, datatype_t typ) = 0; 
   
-  virtual dspiolib::StateProxy & getDSPStateProxy(datasource_t src) = 0; 
+  virtual somadspio::StateProxy & getDSPStateProxy(datasource_t src) = 0; 
 
 private:
 }; 

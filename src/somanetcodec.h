@@ -27,7 +27,7 @@ public:
 
   void enableDataRX(datasource_t src, datatype_t typ); 
   
-  dspiolib::StateProxy & getDSPStateProxy(datasource_t src); 
+  somadspio::StateProxy & getDSPStateProxy(datasource_t src); 
 
 private:
   pNetworkInterface_t pNetwork_; 
@@ -37,7 +37,7 @@ private:
 
   void parseEvent(const Event_t & evt); 
   void processNewEvents(pEventList_t pEventList);
-  void sendEvent(const EventTX_t & ); 
+  void sendEvents(const EventTXList_t & ); 
 
   sigc::signal<void, pDataPacket_t> newDataSignal_; 
   sigc::signal<void, somatime_t> signalTimeUpdate_;
@@ -46,7 +46,7 @@ private:
   // ideally we'd fracture this out, but whatever, there are really only a few
   // data types
   
-  boost::ptr_vector<dspiolib::StateProxy> dspStateProxies_; 
+  boost::ptr_vector<somadspio::StateProxy> dspStateProxies_; 
 
 }; 
 

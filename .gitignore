@@ -27,17 +27,5 @@ ABOUT-NLS
 autom4te.cache/
 *.cache/
 
-benchmarks/eventrx
-benchmarks/semantic.cache
-benchmarks/soma-netbench
-benchmarks/soma-netbench-tx
-config.guess
-config.log
-config.status
-config.sub
-insta..-sh
-libtool
-missing
-ltmain.sh
-src/fakenetwork.loT
-*/semantic.cache
+
+build

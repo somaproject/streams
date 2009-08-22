@@ -12,26 +12,24 @@ SomaNetCodec::SomaNetCodec(pNetworkInterface_t pni) :
 
   // create the data wave codecs
   for(int i = 0; i < 64; i++) { // FIXME : extract out constant
-    dspStateProxies_.push_back(new dspiolib::StateProxy(datasource_t(i), 
+    dspStateProxies_.push_back(new somadspio::StateProxy(datasource_t(i), 
 							sigc::mem_fun(*this, 
-								      &SomaNetCodec::sendEvent))); 
+								      &SomaNetCodec::sendEvents), 5)); 
   }
   std::cout << "constructor this = " << this << std::endl; 
 
 }
 
-dspiolib::StateProxy & SomaNetCodec::getDSPStateProxy(datasource_t src)
+somadspio::StateProxy & SomaNetCodec::getDSPStateProxy(datasource_t src)
 {
   assert(src < 64); 
   return dspStateProxies_[src]; 
 
 }
 
-void SomaNetCodec::sendEvent(const EventTX_t & evt)
+void SomaNetCodec::sendEvents(const somanetwork::EventTXList_t & evt)
 {
-  EventTXList_t el;
-  el.push_back(evt); 
-  pNetwork_->sendEvents(el); 
+  pNetwork_->sendEvents(evt); 
 
 }
 
