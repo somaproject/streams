@@ -3,14 +3,19 @@
 #include <boost/format.hpp>
 
 NetDataWaveProperty::NetDataWaveProperty(pSomaConfig_t sc) : 
-  scaleadj_(1.0, 100.0, 1.0, 1.0, 1.0), 
-  scaleSpin_(scaleadj_), 
   pSomaConfig_(sc)
 {
-  pack_start(scaleSpin_);
   pack_start(sourceComboBox_);
+  pack_start(gainComboBox_);
 
+  // set possible values
   
+  PropertyWidgets::ComboBox<int>::possiblevalues_t vals; 
+  vals.push_back(std::make_pair("0", 0)); 
+  vals.push_back(std::make_pair("100", 100));
+
+  gainComboBox_.setPossibleValues(vals); 
+
 }
 
 NetDataWaveProperty::~NetDataWaveProperty()
@@ -35,8 +40,11 @@ bool NetDataWaveProperty::addElement(core::IElement * elt)
     std::string s = pSomaConfig_->getSourceName(*i); 
     vals.push_back( std::make_pair(s, *i)); 
   }
+
   sourceComboBox_.setPossibleValues(vals); 
   sourceComboBox_.addProperty(&ws->src); 
+
+  gainComboBox_.addProperty(&ws->gain); 
   
 
   //scaleSpin_.addProperty(&ws->scale); 
@@ -50,7 +58,7 @@ bool NetDataWaveProperty::delElement(core::IElement * elt)
     return false; 
   }
   sourceComboBox_.delProperty(&ws->src); 
-
+  gainComboBox_.delProperty(&ws->gain); 
   //scaleSpin_.delProperty(&ws->scale); 
   return true; 
 }

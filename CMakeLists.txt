@@ -29,5 +29,10 @@ pkg_check_modules(SOMADEPS REQUIRED
 ENABLE_TESTING()
 
 include_directories(src)
+include_directories(app)
+include_directories(src/ext-common/)
+
+
 add_subdirectory(src)
+add_subdirectory(app)
 

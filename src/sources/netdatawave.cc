@@ -1,7 +1,7 @@
 #include "netdatawave.h"
 
 const std::string NetDataWave::TYPENAME = "NetDataWave"; 
-using namespace dspiolib; 
+using namespace somadspio; 
 
 NetDataWave::NetDataWave(std::string name, pTimer_t timer, 
 			 pNetworkDataCache_t ndc,
@@ -27,6 +27,7 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
   src.signal().connect(sigc::mem_fun(*this, 
 				     &NetDataWave::setSrc)); 
   std::cout << "NetDataWave done constructing." << std::endl;
+  reconnectSource(src_); 
 }
 
 void NetDataWave::gainFilter(int chan, int gain) 
@@ -121,7 +122,7 @@ void NetDataWave::reconnectPropertyProxies()
  		  sigc::bind(sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc, 
 				&AcqDataSource::getGain), CONTCHANNEL), 
  		  gainSignal_); 
-    
+  
 
 }
 

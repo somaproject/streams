@@ -21,7 +21,7 @@ NetDataWaveWidget::NetDataWaveWidget(NetDataWave * nw, pSomaConfig_t sc) :
 //   hboxGain_.pack_start(labelGain_); 
 //   labelGain_.set_label("gain:"); 
 //   hboxGain_.pack_start(labelGainValue_); 
-
+  vboxMain_.pack_start(labelGainValue_); 
 //   analogProps_.pack_start(hboxHPF_); 
 //   hboxHPF_.pack_start(labelHPF_); 
 //   hboxHPF_.pack_start(labelHPFValue_); 

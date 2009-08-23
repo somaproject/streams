@@ -1,8 +1,8 @@
 #ifndef WAVEFILTERBASE_H
 #define WAVEFILTERBASE_H
 
-#include "filterbase.h"
-#include "data/wave.h"
+#include <filterbase.h>
+#include <data/wave.h>
 
 namespace soma { 
   namespace streams { 

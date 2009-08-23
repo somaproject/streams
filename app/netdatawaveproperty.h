@@ -17,9 +17,8 @@ public:
   virtual bool delElement(core::IElement * elt); 
 
 private: 
-  Gtk::Adjustment scaleadj_; 
-  PropertyWidgets::SpinButton scaleSpin_; 
   PropertyWidgets::ComboBox<datasource_t> sourceComboBox_; 
+  PropertyWidgets::ComboBox<int> gainComboBox_; 
 
   pSomaConfig_t pSomaConfig_; 
 

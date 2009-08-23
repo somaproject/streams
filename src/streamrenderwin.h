@@ -22,7 +22,7 @@
 
 #include "viscontrol.h"
 
-#include "cairogltext/glstring.h"
+#include <cairogltext/glstring.h>
 
 enum ViewTypes {LIVESCROLL, LIVESTRIP, MANUAL}; 
 

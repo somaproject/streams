@@ -2,15 +2,16 @@
 #include <boost/format.hpp>
 #include <somanetwork/fakenetwork.h>
 #include <somanetwork/network.h>
-
+#include <string>
 #include <sigc++/sigc++.h>
 
 namespace po = boost::program_options;
 
-std::string LOG_ROOT("soma.streams.streamsmain"); 
+//std::string LOG_ROOT("soma.streams.streamsmain"); 
 
-#include "logging.h"
+//#include "logging.h"
 
+using namespace std; 
 
 #include "networkdatacache.h"
 #include "streamsapp.h"
@@ -30,7 +31,7 @@ int main(int argc, char** argv)
     ("debug-timer", "debug: use internally-generated (non-network) timer")
     ; 
 
-  desc.add(logging_desc()); 
+//   desc.add(logging_desc()); 
     
   po::variables_map vm;
   po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -41,22 +42,22 @@ int main(int argc, char** argv)
     return 1;
   }
   
-  config_logging(vm, LOG_ROOT); 
+//   config_logging(vm, LOG_ROOT); 
 
-  // get logging objects
-  log4cpp::Category& logstreams = log4cpp::Category::getInstance(LOG_ROOT);
+//   // get logging objects
+//   log4cpp::Category& logstreams = log4cpp::Category::getInstance(LOG_ROOT);
   
   std::string somaip; 
   if (!vm.count("soma-ip")) {
-    logstreams.fatal("soma-ip was not specified, no way to get data"); 
+//     logstreams.fatal("soma-ip was not specified, no way to get data"); 
     return -1; 
   }
 
   somaip = vm["soma-ip"].as<string>(); 
-  logstreams.infoStream() << "soma hardware IP: " << somaip; 
+//   logstreams.infoStream() << "soma hardware IP: " << somaip; 
 
 
-  pNetworkInterface_t pnetwork(new Network(somaip)); 
+  pNetworkInterface_t pnetwork =  Network::createINet(somaip); 
   pISomaNetCodec_t psnc(new SomaNetCodec(pnetwork)); 
   
   
@@ -81,7 +82,7 @@ int main(int argc, char** argv)
 
     pStreamPipeline_t pl = 
       pm->createPipeline(boost::str(boost::format("pipeline%d") % i));
-    pISource_t src = pl->createSource("NetDataRaw",
+    pISource_t src = pl->createSource("NetDataWave", 
 				      boost::str(boost::format("ns%d") % i)); 
 
     pIVis_t vis = pl->createVis("WaveVis", 

@@ -26,6 +26,7 @@ NetworkDataCache::~NetworkDataCache()
 
 core::QueueView<WaveBuffer_t> NetworkDataCache::getNetWaveSource(datasource_t n)
 {
+  std::cout << "NetworkDataCache::getNetWaveSource " << n << std::endl;
   
   if (waveCache_[n] == 0) {
     // need to enable, create list! 

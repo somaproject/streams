@@ -204,7 +204,6 @@ void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2,
     bufcnt += 1; 
   }
   //
-  std::cout << "plotted " << bufcnt << "buffers" << std::endl; 
 
   glPopMatrix(); 
 

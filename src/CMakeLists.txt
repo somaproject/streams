@@ -10,27 +10,40 @@ include_directories(${SOMADEPS_INCLUDE_DIRS})
 include_directories(logging/src)
 include_directories(logging/boost)
 
-
 set(streams_SRCS
   glconfig.cc 
   timer.cc
-  sourcebase.cc
+  viscontrol.cc
+  streamrenderwin.cc
   streampipeline.cc
   somanetcodec.cc
   networkdatacache.cc
   pipelinemanager.cc)
 
-add_library(streams_core
-  ${streams_SRCS})
-
-target_link_libraries(streams_core
-    ${Boost_LIBRARIES} 
-  ${GUIDEPS_LIBRARIES}
-  ${SOMADEPS_LIBRARIES}
+set(ext_SRCS
+  ext-common/cairogltext/glstring.cc
+  ext-common/shaderutil/shaders.cc
 )
 
 set(logging_SRCS
-  ext-logging/src/logging.cc
+  logging/src/logging.cc
+)
+
+add_library(streams_core
+  ${streams_SRCS}
+  ${ext_SRCS}
+  ${logging_SRCS}
+)
+
+
+target_link_libraries(streams_core
+    ${Boost_LIBRARIES} 
+    ${GUIDEPS_LIBRARIES}
+    ${SOMADEPS_LIBRARIES}
+    sources
+    vis
+#    triggers
+#    filters
 )
 
 
@@ -39,3 +52,4 @@ add_subdirectory(core)
 add_subdirectory(sources)
 add_subdirectory(triggers)
 add_subdirectory(vis)
+#add_subdirectory(filters)

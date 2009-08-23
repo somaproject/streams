@@ -1,7 +1,7 @@
 #ifndef WAVEIDENTITY_H
 #define WAVEIDENTITY_H
 
-#include "wavefilterbase.h"
+#include "filters/wavefilterbase.h"
 #include "sourcebase.h" 
 
 namespace soma { 

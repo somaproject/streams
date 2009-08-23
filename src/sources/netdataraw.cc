@@ -1,7 +1,7 @@
 #include "netdataraw.h"
 
 const std::string NetDataRaw::TYPENAME = "NetDataRaw"; 
-using namespace dspiolib; 
+using namespace somadspio; 
 
 NetDataRaw::NetDataRaw(std::string name, pTimer_t timer, 
 			 pNetworkDataCache_t ndc,
@@ -118,11 +118,11 @@ void NetDataRaw::reconnectPropertyProxies()
   sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc,
 		&AcqDataSource::setGain); 
 
-  gain.resetProxy(sigc::bind(sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc,
-				&AcqDataSource::setGain), CONTCHANNEL), 
- 		  sigc::bind(sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc, 
-				&AcqDataSource::getGain), CONTCHANNEL), 
- 		  gainSignal_); 
+//   gain.resetProxy(sigc::bind(sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc,
+// 				&AcqDataSource::setGain), CONTCHANNEL), 
+//  		  sigc::bind(sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc, 
+// 				&AcqDataSource::getGain), CONTCHANNEL), 
+//  		  gainSignal_); 
     
 
 }
