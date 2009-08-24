@@ -159,9 +159,6 @@ void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2,
       iscale = i; 
     }
   }
-//   std::cout << "pixels=" << pixels 
-// 	    <<  " scale" << scale 
-// 	    << " iscale=" << iscale << std::endl; 
 
   // at our current scale, find the relevant buffer
   // FIXME: Right now linear! UGH! 
@@ -191,7 +188,7 @@ void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2,
   //std::cout << "t1 =" << t1 << "   t2=" << t2 << std::endl;
   // now we should be able to plot!
   streamtime_t dstartt, dendt; 
-  //std::cout << "plotting from" << (*buffstart)->front().t << " to " << (*buffend)->back().t << std::endl;
+
   buffend++; 
   int bufcnt = 0; 
   for (buff = buffstart; buff !=buffend; buff++) {

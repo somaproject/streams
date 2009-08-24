@@ -1,5 +1,5 @@
 #include "networkdatacache.h"
-
+#include <boost/format.hpp>
 
 NetworkDataCache::NetworkDataCache(pISomaNetCodec_t pnc, 
 				   pTimer_t ptime): 
@@ -26,7 +26,7 @@ NetworkDataCache::~NetworkDataCache()
 
 core::QueueView<WaveBuffer_t> NetworkDataCache::getNetWaveSource(datasource_t n)
 {
-  std::cout << "NetworkDataCache::getNetWaveSource " << n << std::endl;
+
   
   if (waveCache_[n] == 0) {
     // need to enable, create list! 
@@ -59,6 +59,7 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
 {
   if (newData->typ == WAVE) {
     if (waveCache_[newData->src] != 0) {
+
       int src = newData->src; 
       Wave_t  wp = rawToWave(newData); 
       WaveBuffer_t * wb = new WaveBuffer_t; 
@@ -66,9 +67,15 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
       wb->time = pTimer_->somaTimeToStreamTime(wp.time); 
       wb->data.reserve(WAVEBUF_LEN); 
       for(int i = 0; i < WAVEBUF_LEN; i++) {
-	wb->data.push_back(wp.wave[i]); 
+	float val = float(wp.wave[i]) / 1e9; 
+	float tsdelta =  1.0 / wb->samprate; 
+	float tval = (wb->time + float(i) * tsdelta); 
+	std::cout << tval << std::endl; 
+	std::cout << wb->samprate << " " << i << " "  << boost::format("%12.12f") % tval  << " " << val << std::endl; 
+	wb->data.push_back(val); 
       }
-      
+//       std::cout << "NetworkDataCache::appendNewData Wave " 
+// 		<< wb->data[0] << " " << wp.time << std::endl;
       (*(waveCache_[src])).push_back(wb); 
       waveSignals_[src].emit(); 
     }

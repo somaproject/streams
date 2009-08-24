@@ -29,7 +29,6 @@ somadspio::StateProxy & SomaNetCodec::getDSPStateProxy(datasource_t src)
 
 void SomaNetCodec::sendEvents(const somanetwork::EventTXList_t & evt)
 {
-  std::cout << "SomaNetCodec:: sendEvents " << evt << std::endl; 
   pNetwork_->sendEvents(evt); 
 
 }

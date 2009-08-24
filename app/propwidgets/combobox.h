@@ -34,6 +34,7 @@ namespace PropertyWidgets
     State state_; 
     valuetype_t value_; 
     void setState(State); 
+    bool inSetState_; 
     void on_my_value_changed(); 
 
     //Tree model columns:
@@ -106,6 +107,7 @@ namespace PropertyWidgets
   template<class valuetype_t> 
   void ComboBox<valuetype_t>::setPossibleValues(const possiblevalues_t & vals)
   {
+
   possibleValues_ = vals; 
   // add the values to the tree store; 
   refTreeModel_->clear(); 
@@ -173,7 +175,13 @@ namespace PropertyWidgets
   
   template <class valuetype_t> 
   void ComboBox<valuetype_t>::setState(State st) {
+    inSetState_ = true; 
+    std::string statestring; 
+    if (st == NORMAL) statestring = "NORMAL"; 
+    if (st == PENDING) statestring = "PENDING"; 
+    if (st == CONFLICTED) statestring = "CONFLICTED"; 
     
+
     if (st == NORMAL) {
       Gtk::TreeModel::Children c =  refTreeModel_->children(); 
       for(Gtk::TreeModel::Children::iterator ci = c.begin(); ci != c.end(); ci++) {
@@ -202,13 +210,17 @@ namespace PropertyWidgets
       set_active(-1); 
     }
     state_ = st; 
-    
+
+    inSetState_ = false; 
   }
   
   template <class valuetype_t> 
   void ComboBox<valuetype_t>::on_my_value_changed()
   {
-    
+    if (inSetState_) return;  // on_my_value_changed fires whenver the value changes, which can cause spurious triggerings. 
+
+
+
     Gtk::TreeModel::iterator iter = get_active();
     if(iter)
       {
@@ -223,6 +235,7 @@ namespace PropertyWidgets
 	    setState(PENDING); 
 	    for (typename propset_t::iterator  pi = propertySet_.begin(); 
 	     pi != propertySet_.end(); pi++) {
+
 	      *(*pi) = row[modelColumns_.colVal]; 
 	    }  
 	  }

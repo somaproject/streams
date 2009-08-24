@@ -37,7 +37,9 @@ void NetDataWave::gainFilter(int chan, int gain)
      Thus we must filter out for the continuous channel
   */
 {
+  std::cout << "NetDataWave::gainFilter " << chan << " " << gain << std::endl; 
   if (chan == CONTCHANNEL) {
+    std::cout << "emitting gain signal" << std::endl; 
     gainSignal_.emit(gain);     
   }
 }

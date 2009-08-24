@@ -35,7 +35,6 @@ void WaveVis::drawTriggerWave(wavetime_t tbefore, wavetime_t tafter, wavetime_t 
 
 void WaveVis::newData()
 {
-  std::cout << "WaveVis::newData()" << std::endl;
   // our inputs are buffers of data, our filtered
   // outputs are GLwavePoints
   while (not pInDataQueue_->empty())

@@ -50,7 +50,7 @@ public:
     return signal_; 
   }
 
-private:
+protected:
   ValueType value_; 
   virtual void setter(ValueType value) {
     value_ = value; 
@@ -142,17 +142,17 @@ public:
 		sigc::slot<ValueType> getter, 
 		sigc::signal<void, ValueType> & cbsignal) {
     cbconn_.disconnect(); 
-    cbconn_ = cbsignal_.connect(sigc::mem_fun(*this, 
+    cbconn_ = cbsignal.connect(sigc::mem_fun(*this, 
 					      &PropertyProxy<ValueType>::updateCallBack)); 
     setterSlot_ = setter; 
     getterSlot_ = getter; 
 
   }
-private:
+protected:
   sigc::slot<void, ValueType> setterSlot_; 
   sigc::slot<ValueType> getterSlot_; 
   
-  sigc::signal<void, ValueType> cbsignal_; 
+  //  sigc::signal<void, ValueType> cbsignal_; 
 
   sigc::connection cbconn_; 
 
@@ -167,7 +167,7 @@ private:
   
   void updateCallBack(ValueType value)
   {
-    cbsignal_.emit(value); 
+    this->signal_.emit(value); 
   }
   
 }; 
