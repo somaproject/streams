@@ -1,3 +1,4 @@
+#include <boost/foreach.hpp>
 #include "somanetcodec.h"
 
 SomaNetCodec::SomaNetCodec(pNetworkInterface_t pni) :
@@ -16,7 +17,6 @@ SomaNetCodec::SomaNetCodec(pNetworkInterface_t pni) :
 							sigc::mem_fun(*this, 
 								      &SomaNetCodec::sendEvents), 5)); 
   }
-  std::cout << "constructor this = " << this << std::endl; 
 
 }
 
@@ -29,6 +29,7 @@ somadspio::StateProxy & SomaNetCodec::getDSPStateProxy(datasource_t src)
 
 void SomaNetCodec::sendEvents(const somanetwork::EventTXList_t & evt)
 {
+  std::cout << "SomaNetCodec:: sendEvents " << evt << std::endl; 
   pNetwork_->sendEvents(evt); 
 
 }
@@ -106,7 +107,18 @@ void SomaNetCodec::parseEvent(const Event_t & evt)
       stime = stime << 16; 
       stime |= evt.data[2]; 
       signalTimeUpdate_.emit(stime); 
-    } 
+      BOOST_FOREACH(somadspio::StateProxy & sp, dspStateProxies_) 
+	{
+	  sp.setTime(stime); 
+	}
+      
+    } else {
+    // state-proxy-related event
+    if ((evt.src >= 8 and evt.src <= (64+8))) { 
+      dspStateProxies_[evt.src - 8].newEvent(evt); 
+    }
+    
+  }
   
 }
 

@@ -4,6 +4,7 @@
 #include <somanetwork/network.h>
 #include <string>
 #include <sigc++/sigc++.h>
+#include <somadspio/logging.h>
 
 namespace po = boost::program_options;
 
@@ -56,7 +57,7 @@ int main(int argc, char** argv)
   somaip = vm["soma-ip"].as<string>(); 
 //   logstreams.infoStream() << "soma hardware IP: " << somaip; 
 
-
+  somadspio::init_logs(boost::logging::level::fatal); 
   pNetworkInterface_t pnetwork =  Network::createINet(somaip); 
   pISomaNetCodec_t psnc(new SomaNetCodec(pnetwork)); 
   

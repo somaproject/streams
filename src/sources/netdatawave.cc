@@ -117,12 +117,33 @@ void NetDataWave::reconnectPropertyProxies()
   sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc,
 		&AcqDataSource::setGain); 
 
-  gain.resetProxy(sigc::bind(sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc,
-				&AcqDataSource::setGain), CONTCHANNEL), 
- 		  sigc::bind(sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc, 
-				&AcqDataSource::getGain), CONTCHANNEL), 
+  gain.resetProxy(sigc::mem_fun(*this, &NetDataWave::setGainProxy), 
+		  sigc::mem_fun(*this, &NetDataWave::getGainProxy), 
  		  gainSignal_); 
   
+
+}
+
+int NetDataWave::getGainProxy() 
+{
+
+  boost::optional<int> b = pNetCodec_->getDSPStateProxy(src_).acqdatasrc.getGain(CONTCHANNEL) ;
+  int val = 0; 
+
+  if (b) {
+    return val = *b; 
+  }; 
+  
+  std::cout << "NetDataWave::getGainProxy() " << val << std::endl;  
+  return val; 
+  
+}
+
+void NetDataWave::setGainProxy(int x)
+{
+  std::cout << "NetDataWave::setGainProxy() " << x  << std::endl;
+
+  pNetCodec_->getDSPStateProxy(src_).acqdatasrc.setGain(CONTCHANNEL, x);
 
 }
 

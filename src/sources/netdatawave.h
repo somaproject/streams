@@ -71,6 +71,10 @@ private:
   void reconnectPropertyProxies(); 
 
   static const int CONTCHANNEL = 4; 
+
+  int getGainProxy(); 
+  void setGainProxy(int x);
+
 }; 
 
 typedef boost::shared_ptr<NetDataWave> pNetDataWave_t; 

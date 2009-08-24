@@ -44,6 +44,7 @@ bool NetDataWaveProperty::addElement(core::IElement * elt)
   sourceComboBox_.setPossibleValues(vals); 
   sourceComboBox_.addProperty(&ws->src); 
 
+  std::cout << "Gain combo box adding property" << std::endl;
   gainComboBox_.addProperty(&ws->gain); 
   
 

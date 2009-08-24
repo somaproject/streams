@@ -20,8 +20,8 @@ namespace PropertyWidgets
 
   public:
     typedef Property<valuetype_t> *  pProperty_t; 
-    void addProperty(pProperty_t comgboProperty); 
-    void delProperty(pProperty_t  comboProperty); 
+    void addProperty(pProperty_t comboProperty); 
+    void delProperty(pProperty_t comboProperty); 
     void setPossibleValues(const possiblevalues_t & ); 
 
   private:
@@ -86,7 +86,7 @@ namespace PropertyWidgets
   template <class valuetype_t> 
   void ComboBox<valuetype_t>::addProperty(pProperty_t comboProperty) 
   {
-    
+
     if (propertySet_.find(comboProperty) == propertySet_.end()) {
       
       propertySet_.insert(comboProperty); 
