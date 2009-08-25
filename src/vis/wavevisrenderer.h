@@ -94,17 +94,15 @@ protected:
   //QueueView<_t> triggerQueueView_; 
 
   typedef std::vector<GLWavePoint_t> GLPointBuffer_t;
-  typedef std::list<GLPointBuffer_t * > pGLPointBufferList_t;  
+  typedef std::map<double, GLPointBuffer_t * > timeBufferMap_t;  
   static const int BUFFERN = 4096; 
   static const int SCALECNT = 10; 
   static const int SCALEFACTOR = 2; 
   
-  std::vector<pGLPointBufferList_t> bufferScales_; 
-  std::vector<int> bufferPos_; 
-  std::vector<int> bufferScaleThresholds_; 
+  timeBufferMap_t tbm_; 
+  double scale_; 
 
 //   TriggerTimeList_t trigTimeList_ ;
-  float scale_;
   float pixheight_; 
   Gdk::Color color_; 
   void setGLColor(float alpha); 

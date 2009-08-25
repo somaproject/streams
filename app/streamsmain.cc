@@ -83,7 +83,7 @@ int main(int argc, char** argv)
 
     pStreamPipeline_t pl = 
       pm->createPipeline(boost::str(boost::format("pipeline%d") % i));
-    pISource_t src = pl->createSource("NoiseWave", 
+    pISource_t src = pl->createSource("NetDataWave", 
 				      boost::str(boost::format("ns%d") % i)); 
 
     pIVis_t vis = pl->createVis("WaveVis", 

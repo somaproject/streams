@@ -69,8 +69,6 @@ sigc::signal<void, somatime_t> & SomaNetCodec::signalTimeUpdate()
 
 void SomaNetCodec::enableDataRX(datasource_t src, datatype_t typ)
 {
-  std::cout << "enable data source " << (int)src
-	    << " type = " << (int) typ << std::endl;
   pNetwork_->enableDataRX(src, typ); 
 
 }

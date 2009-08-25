@@ -26,7 +26,6 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
 
   src.signal().connect(sigc::mem_fun(*this, 
 				     &NetDataWave::setSrc)); 
-  std::cout << "NetDataWave done constructing." << std::endl;
   reconnectSource(src_); 
 }
 
@@ -37,9 +36,9 @@ void NetDataWave::gainFilter(int chan, int gain)
      Thus we must filter out for the continuous channel
   */
 {
-  std::cout << "NetDataWave::gainFilter " << chan << " " << gain << std::endl; 
+
   if (chan == CONTCHANNEL) {
-    std::cout << "emitting gain signal" << std::endl; 
+
     gainSignal_.emit(gain);     
   }
 }
@@ -136,14 +135,12 @@ int NetDataWave::getGainProxy()
     return val = *b; 
   }; 
   
-  std::cout << "NetDataWave::getGainProxy() " << val << std::endl;  
   return val; 
   
 }
 
 void NetDataWave::setGainProxy(int x)
 {
-  std::cout << "NetDataWave::setGainProxy() " << x  << std::endl;
 
   pNetCodec_->getDSPStateProxy(src_).acqdatasrc.setGain(CONTCHANNEL, x);
 

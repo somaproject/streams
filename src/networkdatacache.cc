@@ -70,8 +70,6 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
 	float val = float(wp.wave[i]) / 1e9; 
 	float tsdelta =  1.0 / wb->samprate; 
 	float tval = (wb->time + float(i) * tsdelta); 
-	std::cout << tval << std::endl; 
-	std::cout << wb->samprate << " " << i << " "  << boost::format("%12.12f") % tval  << " " << val << std::endl; 
 	wb->data.push_back(val); 
       }
 //       std::cout << "NetworkDataCache::appendNewData Wave " 
