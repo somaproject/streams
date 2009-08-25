@@ -134,8 +134,9 @@ void StreamRenderWin::updateViewingWindow(bool reset = false)
   }
   viewX1_ = 0; 
   viewX2_ = get_height(); 
-
-  glOrtho(viewT1_, viewT2_, viewX1_, viewX2_, -3, 3); 
+  std::cout << "viewingWindow = " << viewT1_
+	    << " " << viewT2_ << std::endl; 
+  glOrtho(0, viewT2_-viewT1_, viewX1_, viewX2_, -3, 3); 
 
   glViewport(0, 0, get_width(), get_height());
   //viewChanged_ = false; 
@@ -208,14 +209,16 @@ void StreamRenderWin::renderTimeTicks(float T1, float T2)
 
   int minorN = int(round((T2 - T1)/ minorScale)) ;
 
+  // now remember, T1 is zero 
+
   // compute lower bound
- float T1n = round(T1 / minorScale); 
+  float T1n = round(T1 / minorScale); 
 
   for (int i = -1; i < (minorN+1) + 1; i++)
     {
       glBegin(GL_LINE_STRIP); 
-      glVertex2f(float((i+T1n)*minorScale), viewX1_); 
-      glVertex2f(float((i+T1n)*minorScale), viewX2_); 
+      glVertex2f(float((i+T1n)*minorScale) - T1, viewX1_); 
+      glVertex2f(float((i+T1n)*minorScale) - T1, viewX2_); 
 
       glEnd(); 
 	
@@ -234,13 +237,13 @@ void StreamRenderWin::renderTimeTicks(float T1, float T2)
       GLfloat t =  (i+T1n2) * majorScale; 
 
       glBegin(GL_LINE_STRIP); 
-      glVertex2f(t, viewX1_); 
-      glVertex2f(t, viewX2_); 
+      glVertex2f(t-T1, viewX1_); 
+      glVertex2f(t-T1, viewX2_); 
       glEnd(); 
       
       timeformat % (t / scaletextdiv) % scaletext; 
       std::string timestr = timeformat.str(); 
-      timeGLstring_.drawWorldText(t, 10.0, timestr, 15.0); 
+      timeGLstring_.drawWorldText(t -  T1, 10.0, timestr, 15.0); 
 
       
     }
@@ -323,18 +326,18 @@ bool StreamRenderWin::on_expose_event(GdkEventExpose* event)
 
   glEnd(); 
 
-  // render selection
-  glColor4f(0.2, 0.2, 1.0, 0.5); 
+//   // render selection
+//   glColor4f(0.2, 0.2, 1.0, 0.5); 
 
-  glBegin(GL_POLYGON); 
-  glVertex2f(selT1_, viewX1_); 
-  glVertex2f(selT1_, viewX2_); 
-  glVertex2f(selT2_, viewX2_); 
-  glVertex2f(selT2_, viewX1_); 
-  glEnd(); 
+//   glBegin(GL_POLYGON); 
+//   glVertex2f(selT1_, viewX1_); 
+//   glVertex2f(selT1_, viewX2_); 
+//   glVertex2f(selT2_, viewX2_); 
+//   glVertex2f(selT2_, viewX1_); 
+//   glEnd(); 
 
-  // render current position
-  renderCurrentTimeCursor(); 
+//   // render current position
+//   renderCurrentTimeCursor(); 
   
   // Swap buffers.
   gldrawable->swap_buffers();

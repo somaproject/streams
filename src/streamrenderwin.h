@@ -29,6 +29,15 @@ enum ViewTypes {LIVESCROLL, LIVESTRIP, MANUAL};
 
 class StreamRenderWin : public Gtk::GL::DrawingArea
 {
+  /* 
+     
+     StreamRenderWin has a viewT1 and a viewT2 which 
+     define the time window we are looking at in streamtimes. 
+     
+     However, we are actually always plotting openGL starting with 
+     0. 
+
+   */ 
 public:
   explicit StreamRenderWin(pVisControl_t pvc); 
   

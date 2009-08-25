@@ -55,7 +55,7 @@ void WaveVisRenderer::newSample(const WaveBuffer_t & wb)
 	  bufferScales_[scale].push_back(new GLPointBuffer_t()); 
 	  bufferScales_[scale].back()->reserve(BUFFERN); 
 	  bufferPos_[scale] = 0; 
-	}
+}	
 	
       }
     }
@@ -132,8 +132,8 @@ void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2,
 
 
   glBegin(GL_LINES); 
-  glVertex2f(t1+1/scale, -float(pixheight_)/2); 
-  glVertex2f(t1+1/scale,  float(pixheight_)/2); 
+  glVertex2f(1/scale, -float(pixheight_)/2); 
+  glVertex2f(1/scale,  float(pixheight_)/2); 
   glEnd(); 
   
 
@@ -148,8 +148,8 @@ void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2,
   glColor4f(1.0, 1.0, 1.0, 1.0); 
 
   glBegin(GL_LINES);
-  glVertex2f(t1, 0.0); 
-  glVertex2f(t2, 0.0); 
+  glVertex2f(0, 0.0); 
+  glVertex2f(t2-t1, 0.0); 
   glEnd(); 
 
   
