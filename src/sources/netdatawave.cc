@@ -1,4 +1,5 @@
 #include "netdatawave.h"
+#include <boost/format.hpp>
 
 const std::string NetDataWave::TYPENAME = "NetDataWave"; 
 using namespace somadspio; 
@@ -66,6 +67,12 @@ void NetDataWave::nextData()
     // We have to copy the buffer here; this is a wee bit unfortunate,
     // but in general we'll be doing more than a pure copy. 
     WaveBuffer_t *  newbuf = new WaveBuffer_t(dataQueueView_.front()); 
+    for (int i = 0; i < newbuf->data.size(); i++) {
+      double val =  double(newbuf->time) + double(double(i)  * 1./newbuf->samprate); 
+//       std::cout << newbuf->time << " " << i << " " << newbuf->samprate << " " 
+// 		<< boost::format("%12.12g") % val
+// 		<< " " << newbuf->data[i] << std::endl; 
+    }
     datalist_.push_back(newbuf); 
     dataQueueView_.pop(); 
   } 

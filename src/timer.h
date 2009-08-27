@@ -17,10 +17,10 @@ class Timer
 {
 public:
 
-  static pTimer_t createDummyTimer() {
+  static pTimer_t createDummyTimer(somatime_t startexptime) {
     
     // get fake soma time -- noop
-    pTimer_t pt(new Timer(0)); 
+    pTimer_t pt(new Timer(startexptime)); 
     Glib::signal_timeout().connect(sigc::mem_fun(pt.get(), 
 						 &Timer::dummytimeout), 
 				   100); 
@@ -29,14 +29,14 @@ public:
     
   }
 
-  static pTimer_t createNetworkTimer(pISomaNetCodec_t snc)
+  static pTimer_t createNetworkTimer(pISomaNetCodec_t snc, somatime_t startexptime)
   {
     // get current network time from the codec
     
     // set the times
     
     // 
-    pTimer_t pt(new Timer(0)); 
+    pTimer_t pt(new Timer(startexptime)); 
     snc->signalTimeUpdate().connect(sigc::mem_fun((*pt), 
 						  &Timer::updateSomaTime)); 
     

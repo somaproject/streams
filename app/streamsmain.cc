@@ -4,13 +4,14 @@
 #include <somanetwork/network.h>
 #include <string>
 #include <sigc++/sigc++.h>
+#include <somanetwork/logging.h>
 #include <somadspio/logging.h>
 
 namespace po = boost::program_options;
 
 //std::string LOG_ROOT("soma.streams.streamsmain"); 
 
-//#include "logging.h"
+#include "logging.h"
 
 using namespace std; 
 
@@ -30,6 +31,9 @@ int main(int argc, char** argv)
     ("help", "produce help message")
     ("soma-ip", po::value<string>(), "The IP of the soma hardware")
     ("debug-timer", "debug: use internally-generated (non-network) timer")
+    ("enable-network-log", po::value<string>()->default_value("warning"), "Enable soma network debugging at this level")
+    ("enable-dspio-log", po::value<string>()->default_value("warning"), "Enable soma DSP IO debugging at this level")
+    ("force-reference-time", po::value<long>()->default_value(0), "Force the reference timestamp")
     ; 
 
 //   desc.add(logging_desc()); 
@@ -57,16 +61,39 @@ int main(int argc, char** argv)
   somaip = vm["soma-ip"].as<string>(); 
 //   logstreams.infoStream() << "soma hardware IP: " << somaip; 
 
-  somadspio::init_logs(boost::logging::level::fatal); 
+  if (vm.count("enable-network-log")) {
+    string logstr = vm["enable-network-log"].as<string>(); 
+    if (logstr == "") {
+      logstr = "warning"; 
+    }
+    boost::logging::level::type lt = log_level_parse(logstr); 
+    somanetwork::init_logs(lt);  
+  }
+
+  if (vm.count("enable-dspio-log")) {
+    string logstr = vm["enable-dspio-log"].as<string>(); 
+    if (logstr == "") {
+      logstr = "warning"; 
+    }
+    boost::logging::level::type lt = log_level_parse(logstr); 
+    somadspio::init_logs(lt);
+  }
+
+  somatime_t expStartTime = 0; 
+  
+  if(vm.count("force-reference-time")) {
+    expStartTime =  vm["force-reference-time"].as<long>(); 
+  }
+
   pNetworkInterface_t pnetwork =  Network::createINet(somaip); 
   pISomaNetCodec_t psnc(new SomaNetCodec(pnetwork)); 
   
   
   pTimer_t ptimer; 
   if(vm.count("debug-timer")) {
-    ptimer = Timer::createDummyTimer(); 
+    ptimer = Timer::createDummyTimer(expStartTime); 
   } else {
-    ptimer = Timer::createNetworkTimer(psnc); 
+    ptimer = Timer::createNetworkTimer(psnc, expStartTime); 
   }
   
   pNetworkDataCache_t pndc(new NetworkDataCache(psnc, ptimer)); 
