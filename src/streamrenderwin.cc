@@ -134,8 +134,6 @@ void StreamRenderWin::updateViewingWindow(bool reset = false)
   }
   viewX1_ = 0; 
   viewX2_ = get_height(); 
-  std::cout << "viewingWindow = " << viewT1_
-	    << " " << viewT2_ << std::endl; 
   glOrtho(0, viewT2_-viewT1_, viewX1_, viewX2_, -3, 3); 
 
   glViewport(0, 0, get_width(), get_height());

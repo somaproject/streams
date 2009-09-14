@@ -12,6 +12,7 @@ set(vis_SRCS
   sinevis.cc 
   wavevis.cc 
   wavevisrenderer.cc 
+  renderdownsample.cc
   visfactory.cc)
 
 

@@ -106,11 +106,11 @@ int main(int argc, char** argv)
   StreamsApp sa(pSourceState); 
 
   pPipelineManager_t pm = sa.getPipelineManager();   
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 2; i++) {
 
     pStreamPipeline_t pl = 
       pm->createPipeline(boost::str(boost::format("pipeline%d") % i));
-    pISource_t src = pl->createSource("NetDataWave", 
+    pISource_t src = pl->createSource("NoiseWave", 
 				      boost::str(boost::format("ns%d") % i)); 
 
     pIVis_t vis = pl->createVis("WaveVis", 

@@ -1,4 +1,5 @@
-#include <iostream> 
+#include <iostream>
+#include <boost/foreach.hpp> 
 #include "wavevisrenderer.h"
 #include <assert.h>
 
@@ -7,8 +8,15 @@ WaveVisRenderer::WaveVisRenderer() :
   scale_(1.0), 
   color_("red")
 {
-
+  // low value
   
+  renderers_[10.0] = (new RenderDownSample(0.0)); 
+  renderers_[20.0] = (new RenderDownSample(0.001)); 
+  renderers_[40.0] = (new RenderDownSample(0.002)); 
+  renderers_[80.0] = (new RenderDownSample(0.004)); 
+  renderers_[160.0] = (new RenderDownSample(0.008)); 
+  renderers_[320.0] = (new RenderDownSample(0.016)); 
+
 }
 
 
@@ -27,23 +35,11 @@ void WaveVisRenderer::newSample(const WaveBuffer_t & wb)
      
   */
   // construct and append new buffer
-  std::vector<float>::const_iterator pdatum; 
-  GLWavePoint_t p; 
-  streamtime_t bufferstart = wb.time; 
-
-  tbm_[bufferstart] = new GLPointBuffer_t; 
-  timeBufferMap_t::iterator tbmi = tbm_.find(bufferstart); 
-  
-  float T = 1.0 / wb.samprate; 
-  int pos = 0; 
-  for(pdatum = wb.data.begin();
-      pdatum != wb.data.end(); pdatum++) {
-    p.x = *pdatum; 
-    p.t = pos * T; 
-    tbmi->second->push_back(p); 
-    pos++; 
+  BOOST_FOREACH(rendermap_t::value_type & r, renderers_) { 
+    r.second->newSample(wb); 
   }
-
+  
+  
 }
 
 void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, 
@@ -84,22 +80,14 @@ void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2,
   // now we should be able to plot!
 
   // 
-  timeBufferMap_t::iterator lb= tbm_.lower_bound(t1); 
-  if (lb !=tbm_.begin()) 
-    lb--; 
-
-  while(lb->first < t2 and lb != tbm_.end()) { 
-    glPushMatrix();
-    glTranslatef(lb->first - t1, 0, 0); 
-
-    glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
- 		    &((*(lb->second))[0])); 
-    glDrawArrays(GL_LINE_STRIP, 0, lb->second->size()); 
-    glPopMatrix(); 
-    lb++; 
+  // pick the scale
+  streamtime_t windowsize = t2 - t1; 
+  
+  rendermap_t::iterator lb= renderers_.lower_bound(windowsize);
+  if (lb != renderers_.end()) { 
+    std::cout << "rendering with " << lb->first << std::endl; 
+    lb->second->renderStream(t1, t2, pixels); 
   }
-
-
   glPopMatrix(); 
 
 }

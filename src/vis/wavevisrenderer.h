@@ -13,6 +13,7 @@
 
 #include <data/wave.h>
 #include "core/sinkpad.h"
+#include "renderdownsample.h"
 
 
 //typedef std::map<wavetime_t, int> timeindex_t; 
@@ -23,22 +24,6 @@
   
   
 */
-
-typedef float wavetime_t; 
-
-struct GLWavePoint_t
-{
-  wavetime_t t; 
-  float x; 
-}; 
-
-struct GLWaveQuadStrip_t
-{
-  wavetime_t tmax; 
-  float xmax; 
-  wavetime_t tmin; 
-  float xmin; 
-}; 
 
 inline bool compareTime(const GLWavePoint_t x,
 			const GLWavePoint_t y)
@@ -93,13 +78,12 @@ protected:
   
   //QueueView<_t> triggerQueueView_; 
 
-  typedef std::vector<GLWavePoint_t> GLPointBuffer_t;
-  typedef std::map<double, GLPointBuffer_t * > timeBufferMap_t;  
+
   static const int BUFFERN = 4096; 
   static const int SCALECNT = 10; 
   static const int SCALEFACTOR = 2; 
   
-  timeBufferMap_t tbm_; 
+
   double scale_; 
 
 //   TriggerTimeList_t trigTimeList_ ;
@@ -109,6 +93,13 @@ protected:
 
   // debugging
   void printStatus(); 
+
+  // float value is the _largetst_ window size
+  // that this level should be used for rendering
+  typedef std::map<float, IRenderer*> rendermap_t; 
+  
+  rendermap_t renderers_; 
+
   
 };
 
