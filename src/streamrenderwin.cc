@@ -315,14 +315,6 @@ bool StreamRenderWin::on_expose_event(GdkEventExpose* event)
       posaccum += height; 
     }
 
-  glColor4f(1.0, 1.0, 1.0, 1.0); 
-  glBegin(GL_LINE_LOOP); 
-  glVertex2f(0.0, 5.0); 
-  glVertex2f(1.0, 5.0); 
-  glVertex2f(1.0, 10.0); 
-  glVertex2f(0.0, 10.0); 
-
-  glEnd(); 
 
 //   // render selection
 //   glColor4f(0.2, 0.2, 1.0, 0.5); 
