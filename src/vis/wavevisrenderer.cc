@@ -85,8 +85,13 @@ void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2,
   
   rendermap_t::iterator lb= renderers_.lower_bound(windowsize);
   if (lb != renderers_.end()) { 
-    std::cout << "rendering with " << lb->first << std::endl; 
+    //std::cout << "rendering with " << lb->first << std::endl; 
     lb->second->renderStream(t1, t2, pixels); 
+  } else {
+    // just render with the last one
+    lb--; 
+    lb->second->renderStream(t1, t2, pixels); 
+
   }
   glPopMatrix(); 
 
