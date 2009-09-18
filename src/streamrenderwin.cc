@@ -316,15 +316,15 @@ bool StreamRenderWin::on_expose_event(GdkEventExpose* event)
     }
 
 
-//   // render selection
-//   glColor4f(0.2, 0.2, 1.0, 0.5); 
+  // render selection
+  glColor4f(0.2, 0.2, 1.0, 0.5); 
 
-//   glBegin(GL_POLYGON); 
-//   glVertex2f(selT1_, viewX1_); 
-//   glVertex2f(selT1_, viewX2_); 
-//   glVertex2f(selT2_, viewX2_); 
-//   glVertex2f(selT2_, viewX1_); 
-//   glEnd(); 
+  glBegin(GL_POLYGON); 
+  glVertex2f(selT1_ - viewT1_, viewX1_); 
+  glVertex2f(selT1_ - viewT1_, viewX2_); 
+  glVertex2f(selT2_ - viewT1_, viewX2_); 
+  glVertex2f(selT2_ - viewT1_, viewX1_); 
+  glEnd(); 
 
 //   // render current position
 //   renderCurrentTimeCursor(); 
@@ -506,17 +506,15 @@ bool StreamRenderWin::on_motion_notify_event(GdkEventMotion* event)
     viewT2_ -= windowDelta;
     invalidate(); 
     lastX_ = x; 
-
+    std::cout << "setting lastX_ to " << x << std::endl; 
     //invalidate(); 
 
     update();
   } 
 
   else if (event->state & GDK_BUTTON3_MASK) {
-
+    std::cout << "Button 3 click, x = " << x << std::endl; 
     setSelectionRegion(viewT1_ + lastX_*pixWidth, viewT1_ + x*pixWidth); 
-    
-    
   }
 
   else if (event->state & GDK_SCROLL_MASK) {
