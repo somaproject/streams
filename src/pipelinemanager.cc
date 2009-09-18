@@ -1,6 +1,7 @@
 #include "pipelinemanager.h"
 
-PipelineManager::PipelineManager()
+PipelineManager::PipelineManager(bf::path scratchdir) :
+  scratchdir_(scratchdir)
 {
   
   
@@ -9,7 +10,7 @@ PipelineManager::PipelineManager()
 
 pStreamPipeline_t PipelineManager::createPipeline(std::string name)
 {
-  pStreamPipeline_t pipeline(new StreamPipeline(name, 
+  pStreamPipeline_t pipeline(new StreamPipeline(name, scratchdir_, 
 						pSourceState_, 
 						pSourceVisitor_, 
 						pFilterVisitor_, 

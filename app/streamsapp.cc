@@ -25,9 +25,9 @@
 typedef std::set<int> waveStreamVisStatusSet_t; 
 
 
-StreamsApp::StreamsApp(pSourceState_t pss) : 
+StreamsApp::StreamsApp(pSourceState_t pss, bf::path scratchdir) : 
   pSourceState_(pss), 
-  pPipelineManager_(new PipelineManager()), 
+  pPipelineManager_(new PipelineManager(scratchdir)), 
   pSomaConfig_(new SomaConfig), 
   liveButton_("Live View"), 
   streamWin_(pPipelineManager_), 

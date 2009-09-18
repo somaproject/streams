@@ -9,7 +9,7 @@ class PipelineManager : boost::noncopyable,
 			public VisControl
 {
 public: 
-  PipelineManager(); 
+  PipelineManager(bf::path scratchdir); 
   
   pSourceState_t pSourceState_; 
   // dependency injection! 
@@ -28,7 +28,7 @@ private:
   sigc::signal<void, pStreamPipeline_t> newPipeline_; 
   
   std::list<pStreamPipeline_t>  pipelines_; 
-
+  bf::path scratchdir_; 
 
 }; 
 

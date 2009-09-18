@@ -2,6 +2,8 @@
 #define STREAMPIPELINE_H
 
 #include <list>
+#include <boost/filesystem.hpp>
+
 #include "forward.h"
 
 #include "isource.h"
@@ -15,9 +17,12 @@
 #include "itriggervisitor.h"
 #include "ivisvisitor.h"
 
+namespace bf = boost::filesystem; 
+
 class StreamPipeline {
 public:
-  StreamPipeline(std::string name, pSourceState_t sourceState, 
+  StreamPipeline(std::string name, boost::filesystem::path scratchdir,
+		 pSourceState_t sourceState, 
 		 pISourceVisitor_t,  pIFilterVisitor_t, 
 		 pITriggerVisitor_t, pIVisVisitor_t ); 
   
@@ -60,6 +65,8 @@ private:
   void destroySource(); 
 
   std::string name_; 
+  bf::path scratchdir_; 
+
 }; 
 
 typedef boost::shared_ptr<StreamPipeline> pStreamPipeline_t; 

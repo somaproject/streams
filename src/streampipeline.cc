@@ -1,8 +1,11 @@
+#include <boost/format.hpp>
 #include "streampipeline.h"
 #include "sources/sourcefactory.h"
 #include "vis/visfactory.h"
 
-StreamPipeline::StreamPipeline(std::string name, pSourceState_t ss, 
+
+StreamPipeline::StreamPipeline(std::string name, bf::path scratchdir, 
+			       pSourceState_t ss, 
 			       pISourceVisitor_t isv, pIFilterVisitor_t ifv, 
 			       pITriggerVisitor_t itv,  pIVisVisitor_t  ivv) :
   name_(name),
@@ -12,7 +15,19 @@ StreamPipeline::StreamPipeline(std::string name, pSourceState_t ss,
   triggerVisitor_(itv), 
   visVisitor_(ivv)
 {
-
+  // set scratch dir
+  scratchdir_ = scratchdir / name; 
+  if (bf::exists(scratchdir_)) { 
+    bf::remove(scratchdir_); 
+  }
+  
+  if (bf::create_directory(scratchdir_)) { 
+    throw std::runtime_error(
+      boost::str(boost::format("Unable to create scratch directory %s" ) 
+		 % scratchdir_.string())); 
+    
+  }
+  
 
 }
 

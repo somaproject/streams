@@ -29,10 +29,12 @@
 #include "propertypanemanager.h" 
 #include "somaconfig.h"
 
+namespace bf = boost::filesystem; 
+
 class StreamsApp : public Gtk::Window
 {
 public:
-  explicit StreamsApp(pSourceState_t ss); 
+  explicit StreamsApp(pSourceState_t ss, bf::path scratchdir); 
   virtual ~StreamsApp(); 
 
   pPipelineManager_t getPipelineManager(); // to enable external loading

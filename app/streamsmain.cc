@@ -14,6 +14,7 @@ namespace po = boost::program_options;
 #include "logging.h"
 
 using namespace std; 
+namespace bf = boost::filesystem; 
 
 #include "networkdatacache.h"
 #include "streamsapp.h"
@@ -34,6 +35,7 @@ int main(int argc, char** argv)
     ("enable-network-log", po::value<string>()->default_value("warning"), "Enable soma network debugging at this level")
     ("enable-dspio-log", po::value<string>()->default_value("warning"), "Enable soma DSP IO debugging at this level")
     ("force-reference-time", po::value<long>()->default_value(0), "Force the reference timestamp")
+    ("scratch-dir", po::value<string>()->default_value("/tmp"), "Scratch directory for data cache")
     ; 
 
 //   desc.add(logging_desc()); 
@@ -103,7 +105,9 @@ int main(int argc, char** argv)
   pSourceState->netdatacache = pndc; 
   pSourceState->somanetcodec = psnc; 
 
-  StreamsApp sa(pSourceState); 
+  bf::path scratchdir_base(vm["scratch-dir"].as<string>()); 
+
+  StreamsApp sa(pSourceState, scratchdir_base); 
 
   pPipelineManager_t pm = sa.getPipelineManager();   
   for (int i = 0; i < 2; i++) {
