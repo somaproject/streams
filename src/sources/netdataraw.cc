@@ -4,8 +4,8 @@ const std::string NetDataRaw::TYPENAME = "NetDataRaw";
 using namespace somadspio; 
 
 NetDataRaw::NetDataRaw(std::string name, pTimer_t timer, 
-			 pNetworkDataCache_t ndc,
-			 pISomaNetCodec_t pnc) :
+		       pNetworkDataCache_t ndc,
+		       pISomaNetCodec_t pnc, bf::path scratch) :
   SourceBase(name), 
   pTimer_(timer), 
   pNetDataCache_(ndc), 

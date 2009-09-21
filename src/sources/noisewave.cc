@@ -7,7 +7,7 @@ using namespace soma::streams;
 
 const std::string NoiseWave::TYPENAME = "NoiseWave"; 
 
-NoiseWave::NoiseWave(std::string name, pTimer_t ptimer) :
+NoiseWave::NoiseWave(std::string name, pTimer_t ptimer, bf::path scratch) :
   SourceBase(name), 
   amplitude(1.0), 
   noiseclass(WhiteNoise),

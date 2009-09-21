@@ -3,6 +3,8 @@
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <iostream>
+#include <boost/filesystem.hpp>
+namespace bf = boost::filesystem; 
 
 #include "core/element.h"
 #include "ivis.h"

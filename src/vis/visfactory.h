@@ -11,7 +11,7 @@
 
 class VisFactory {
 public : 
-  static pIVis_t create(std::string name); 
+  static pIVis_t create(std::string name, bf::path scratchdir); 
 }; 
 
 

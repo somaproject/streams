@@ -9,10 +9,13 @@
 #include "isomanetcodec.h"
 #include "timer.h"
 
+#include <boost/filesystem.hpp>
+namespace bf = boost::filesystem; 
+
 class NetworkDataCache
 {
 public:
-  NetworkDataCache(pISomaNetCodec_t, pTimer_t);
+  NetworkDataCache(pISomaNetCodec_t, pTimer_t, bf::path scratcdir);
   ~NetworkDataCache(); 
 
   core::QueueView<WaveBuffer_t> getNetWaveSource(datasource_t n); 
@@ -26,9 +29,9 @@ public:
 private: 
   static const int MAXWAVE = 64; 
 
-  
   pISomaNetCodec_t pNetCodec_; 
   pTimer_t pTimer_; 
+  bf::path scratchdir_;
 
   bool dataRXCallback(Glib::IOCondition io_condition); 
   

@@ -13,6 +13,9 @@
 #include "isource.h"
 #include "isourcevisitor.h"
 
+#include <boost/filesystem.hpp>
+namespace bf = boost::filesystem; 
+
 class SourceBase : public core::Element, public ISource
 {
 public:

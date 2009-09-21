@@ -25,7 +25,7 @@ typedef boost::shared_ptr<WaveVis> pWaveVis_t;
 class WaveVis : public VisBase
 {
  public: 
-  WaveVis(std::string Name); 
+  WaveVis(std::string Name, bf::path scratchdir); 
   ~WaveVis(); 
 
   static const std::string TYPENAME; 
@@ -55,6 +55,7 @@ private:
   WaveVisRenderer streamRenderer_; 
   
   int pixelHeight_; 
+  bf::path scratchdir_; 
 };
 
 #endif // WAVESTREAMVIS_H

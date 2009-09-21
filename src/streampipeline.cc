@@ -18,10 +18,10 @@ StreamPipeline::StreamPipeline(std::string name, bf::path scratchdir,
   // set scratch dir
   scratchdir_ = scratchdir / name; 
   if (bf::exists(scratchdir_)) { 
-    bf::remove(scratchdir_); 
+    bf::remove_all(scratchdir_); 
   }
   
-  if (bf::create_directory(scratchdir_)) { 
+  if (!bf::create_directory(scratchdir_)) { 
     throw std::runtime_error(
       boost::str(boost::format("Unable to create scratch directory %s" ) 
 		 % scratchdir_.string())); 
@@ -49,7 +49,7 @@ pISource_t StreamPipeline::createSource(std::string type, std::string name)
     }
   }
   
-  pISource_t src = SourceFactory::create(type, pSourceState_); 
+  pISource_t src = SourceFactory::create(type, pSourceState_, scratchdir_ / "source"); 
   src->accept(sourceVisitor_); 
 
   src->setName(name); 
@@ -69,7 +69,7 @@ pIVis_t StreamPipeline::createVis(std::string type, std::string name)
       
     }
   }
-  pIVis_t vis = VisFactory::create(type); 
+  pIVis_t vis = VisFactory::create(type, scratchdir_ / "vis"); 
   vis->setName(name); 
 
   vis->accept(visVisitor_); 

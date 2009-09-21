@@ -2,9 +2,10 @@
 #include <boost/format.hpp>
 
 NetworkDataCache::NetworkDataCache(pISomaNetCodec_t pnc, 
-				   pTimer_t ptime): 
+				   pTimer_t ptime, bf::path scratchdir): 
   pNetCodec_(pnc), 
   pTimer_(ptime),
+  scratchdir_(scratchdir),
   waveCache_(MAXWAVE), 
   rawCache_(MAXWAVE), 
   waveSignals_(MAXWAVE),

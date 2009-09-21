@@ -2,7 +2,7 @@
 
 const std::string SineVis::TYPENAME = "SineVis"; 
 
-SineVis::SineVis(std::string name) :
+SineVis::SineVis(std::string name, bf::path scratchdir) :
   VisBase(name)
 {
   

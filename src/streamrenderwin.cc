@@ -506,14 +506,12 @@ bool StreamRenderWin::on_motion_notify_event(GdkEventMotion* event)
     viewT2_ -= windowDelta;
     invalidate(); 
     lastX_ = x; 
-    std::cout << "setting lastX_ to " << x << std::endl; 
     //invalidate(); 
 
     update();
   } 
 
   else if (event->state & GDK_BUTTON3_MASK) {
-    std::cout << "Button 3 click, x = " << x << std::endl; 
     setSelectionRegion(viewT1_ + lastX_*pixWidth, viewT1_ + x*pixWidth); 
   }
 

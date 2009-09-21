@@ -97,15 +97,18 @@ int main(int argc, char** argv)
   } else {
     ptimer = Timer::createNetworkTimer(psnc, expStartTime); 
   }
+
+  bf::path scratchdir_base(vm["scratch-dir"].as<string>()); 
   
-  pNetworkDataCache_t pndc(new NetworkDataCache(psnc, ptimer)); 
+  pNetworkDataCache_t pndc(new NetworkDataCache(psnc, ptimer, 
+						scratchdir_base / "netdata")); 
 
   pSourceState_t pSourceState(new SourceState); 
   pSourceState->timer = ptimer; 
   pSourceState->netdatacache = pndc; 
   pSourceState->somanetcodec = psnc; 
 
-  bf::path scratchdir_base(vm["scratch-dir"].as<string>()); 
+
 
   StreamsApp sa(pSourceState, scratchdir_base); 
 

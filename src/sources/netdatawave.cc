@@ -6,7 +6,7 @@ using namespace somadspio;
 
 NetDataWave::NetDataWave(std::string name, pTimer_t timer, 
 			 pNetworkDataCache_t ndc,
-			 pISomaNetCodec_t pnc) :
+			 pISomaNetCodec_t pnc, bf::path scratch) :
   SourceBase(name), 
   pTimer_(timer), 
   pNetDataCache_(ndc), 

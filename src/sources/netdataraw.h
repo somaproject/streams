@@ -22,7 +22,7 @@ class NetDataRaw : public SourceBase
 public:
   static const std::string TYPENAME; 
   NetDataRaw(std::string, pTimer_t, pNetworkDataCache_t, 
-	      pISomaNetCodec_t); 
+	     pISomaNetCodec_t, bf::path scratch); 
   ~NetDataRaw(); 
   
   

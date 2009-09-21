@@ -22,7 +22,7 @@
 class SineVis : public VisBase
 {
 public:
-  SineVis(std::string name); 
+  SineVis(std::string name, bf::path scratchdir); 
   ~SineVis(); 
   static const std::string TYPENAME; 
   

@@ -1,6 +1,9 @@
 #ifndef SOURCEFACTORY_H
 #define SOURCEFACTORY_H
 
+#include <boost/filesystem.hpp>
+namespace bf = boost::filesystem; 
+
 #include "sourcebase.h"
 #include "sourcestate.h"
 #include "isourcevisitor.h"
@@ -11,7 +14,7 @@
 
 class SourceFactory {
 public : 
-  static pISource_t create(std::string name, pSourceState_t ss); 
+  static pISource_t create(std::string name, pSourceState_t ss, bf::path scratchdir); 
   
 }; 
 
