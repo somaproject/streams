@@ -12,7 +12,7 @@ void MockSomaNetCodec::enableDataRX(datasource_t src, datatype_t typ)
 
 }
   
-dspiolib::StateProxy & MockSomaNetCodec::getDSPStateProxy(datasource_t src)
+somadspio::StateProxy & MockSomaNetCodec::getDSPStateProxy(datasource_t src)
 {
 
 

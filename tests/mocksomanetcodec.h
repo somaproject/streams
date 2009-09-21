@@ -35,7 +35,7 @@ public:
 
   void enableDataRX(datasource_t src, datatype_t typ); 
   
-  dspiolib::StateProxy & getDSPStateProxy(datasource_t src); 
+  somadspio::StateProxy & getDSPStateProxy(datasource_t src); 
 
   void newData(pDataPacket_t pdp); 
   void newTime(somatime_t); 
@@ -45,7 +45,7 @@ private:
   sigc::signal<void, pDataPacket_t> newDataSignal_; 
   sigc::signal<void, somatime_t> signalTimeUpdate_;
 
-  boost::ptr_vector<dspiolib::StateProxy> dspStateProxies_; 
+  boost::ptr_vector<somadspio::StateProxy> dspStateProxies_; 
 
 }; 
 

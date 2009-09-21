@@ -23,9 +23,10 @@ BOOST_AUTO_TEST_CASE(create)
 {
   pMockSomaNetCodec_t snc(new MockSomaNetCodec()); 
   
-  pTimer_t timer = Timer::createNetworkTimer(snc); 
+  pTimer_t timer = Timer::createNetworkTimer(snc, 0); 
   
-  NetworkDataCache ndc(snc, timer); 
+  bf::path scratchdir("/tmp"); 
+  NetworkDataCache ndc(snc, timer, scratchdir); 
   
 
   core::QueueView<WaveBuffer_t > wave0(ndc.getNetWaveSource(0)); 
