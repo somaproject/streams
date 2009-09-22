@@ -7,11 +7,11 @@
 
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_sequence_adapter.hpp>
-
+#include "iqueueview.h"
 
 namespace core {
     template <typename T>
-    class QueueView {
+    class QueueView : public IQueueView<T> {
     public:
       typedef typename boost::ptr_list<T> dataContainer_t; 
 

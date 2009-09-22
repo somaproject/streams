@@ -14,6 +14,10 @@ NetworkDataCache::NetworkDataCache(pISomaNetCodec_t pnc,
   pNetCodec_->newDataSignal().connect(sigc::mem_fun(*this, 
 						 &NetworkDataCache::appendNewData)); 
   
+  // create the db for each data type. Note that we don't put data
+  // in there until it has been expressly enabled. 
+  // 
+
 
 }
 

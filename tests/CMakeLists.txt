@@ -1,6 +1,7 @@
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${GUIDEPS_INCLUDE_DIRS})
 include_directories(${SOMADEPS_INCLUDE_DIRS})
+include_directories(${BDB_INCLUDE_DIR})
 
 link_directories(
   ${Boost_LIBRARY_DIRS}
@@ -33,6 +34,10 @@ add_executable(pipelinemanager_test
   pipelinemanager_test.cc
   runner.cc)
 
+add_executable(bdbqueueview_test
+  bdbqueueview_test.cc
+  runner.cc)
+
 
 set(testlist 
   queueview_test
@@ -40,7 +45,8 @@ set(testlist
   sourcesink_test
   element_test
   networkdatacache_test
-  pipelinemanager_test)
+  pipelinemanager_test
+  bdbqueueview_test)
 
 
 #SET(TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/tests)
@@ -58,6 +64,7 @@ foreach(testname ${testlist})
     ${Boost_LIBRARIES} 
     ${GUIDEPS_LIBRARIES}
     ${SOMADEPS_LIBRARIES}
+  ${BDB_LIBRARIES}
 
     )
   

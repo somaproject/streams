@@ -18,6 +18,8 @@ public:
   NetworkDataCache(pISomaNetCodec_t, pTimer_t, bf::path scratcdir);
   ~NetworkDataCache(); 
 
+  void preload(pDataPacket_t dp); 
+
   core::QueueView<WaveBuffer_t> getNetWaveSource(datasource_t n); 
   core::QueueView<WaveBuffer_t> getNetRawSource(datasource_t n); 
 

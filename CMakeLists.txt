@@ -3,12 +3,15 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 
 PROJECT(streams)
 
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/CMake)
+
 IF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
    SET(CMAKE_BUILD_TYPE RelWithDebInfo)
 ENDIF(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
 
 find_package(Boost 1.37.0 COMPONENTS thread unit_test_framework filesystem program_options system REQUIRED)
 find_package(PkgConfig)
+find_package(BerkeleyDB REQUIRED)
 
 # we should handle this with build/release distinctions, but I'm not that l33t. 
 
@@ -38,4 +41,4 @@ include_directories(src/logging/boost)
 add_subdirectory(src)
 add_subdirectory(app)
 add_subdirectory(tests)
-
+add_subdirectory(bench)
