@@ -4,18 +4,16 @@
 #include <assert.h>
 
 
-WaveVisRenderer::WaveVisRenderer() :
+WaveVisRenderer::WaveVisRenderer(bf::path scratch) :
   scale_(1.0), 
-  color_("red")
+  color_("red"),
+  scratchdir_(scratch)
 {
   // low value
   
-  renderers_[10.0] = (new RenderDownSample(0.0)); 
-  renderers_[20.0] = (new RenderDownSample(0.001)); 
-  renderers_[40.0] = (new RenderDownSample(0.002)); 
-  renderers_[80.0] = (new RenderDownSample(0.004)); 
-  renderers_[160.0] = (new RenderDownSample(0.008)); 
-  renderers_[320.0] = (new RenderDownSample(0.016)); 
+  for (int i = 0; i < 16; i++) {
+    renderers_[10.0 * (1<<i)] = new RenderDownSample(0.0005 * (1 << i), scratchdir_); 
+  }
 
 }
 
@@ -23,6 +21,10 @@ WaveVisRenderer::WaveVisRenderer() :
 
 WaveVisRenderer::~WaveVisRenderer()
 {
+
+  BOOST_FOREACH(rendermap_t::value_type & r, renderers_) { 
+    delete r.second;
+  }
   
   
   
@@ -71,10 +73,10 @@ void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2,
   //   // draw horizontal axis
   glColor4f(1.0, 1.0, 1.0, 1.0); 
 
-//   glBegin(GL_LINES);
-//   glVertex2f(0, 0.0); 
-//   glVertex2f(t2-t1, 0.0); 
-//   glEnd(); 
+  glBegin(GL_LINES);
+  glVertex2f(0, 0.0); 
+  glVertex2f(t2-t1, 0.0); 
+  glEnd(); 
 
   //std::cout << "t1 =" << t1 << "   t2=" << t2 << std::endl;
   // now we should be able to plot!
@@ -85,7 +87,7 @@ void WaveVisRenderer::renderStream(streamtime_t t1, streamtime_t t2,
   
   rendermap_t::iterator lb= renderers_.lower_bound(windowsize);
   if (lb != renderers_.end()) { 
-    //std::cout << "rendering with " << lb->first << std::endl; 
+//     std::cout << "rendering with " << lb->first << std::endl; 
     lb->second->renderStream(t1, t2, pixels); 
   } else {
     // just render with the last one

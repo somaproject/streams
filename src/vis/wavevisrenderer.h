@@ -15,6 +15,8 @@
 #include "core/sinkpad.h"
 #include "renderdownsample.h"
 
+#include <boost/filesystem.hpp>
+namespace bf = boost::filesystem; 
 
 //typedef std::map<wavetime_t, int> timeindex_t; 
 
@@ -49,7 +51,7 @@ class WaveVisRenderer
 {
 
  public: 
-  WaveVisRenderer(); 
+  WaveVisRenderer(bf::path scratchdir); 
 
   ~WaveVisRenderer(); 
   void renderStream(streamtime_t t1, streamtime_t t2, int pixels); 
@@ -100,7 +102,7 @@ protected:
   
   rendermap_t renderers_; 
 
-  
+  bf::path scratchdir_;
 };
 
 #endif // WAVE_H

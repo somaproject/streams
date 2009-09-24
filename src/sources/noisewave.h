@@ -18,7 +18,7 @@ class NoiseWave : public SourceBase
 public:
   static const std::string TYPENAME;
   // this is just a prototype source
-  NoiseWave(std::string, pTimer_t, bf::path); 
+  NoiseWave(std::string, pTimer_t, bf::path, float preload); 
   
   ~NoiseWave(); 
   

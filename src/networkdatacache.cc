@@ -19,14 +19,13 @@ NetworkDataCache::NetworkDataCache(pISomaNetCodec_t pnc,
   u_int32_t oFlags = DB_CREATE |  DB_TRUNCATE; // Open flags;
  
   boost::filesystem::remove_all(scratchdir_ );
-  boost::filesystem::create_directory(scratchdir_); 
+  boost::filesystem::create_directories(scratchdir_); 
   
 }
 
 
 NetworkDataCache::~NetworkDataCache()
 {
-  std::cout << "network data cache destructor" << std::endl;
   //boost::filesystem::remove_all(scratchdir_ );
 
 }
@@ -70,7 +69,6 @@ core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetRawSource(datasource
   dbmap_t::iterator pdb = rawCacheDBs_.find(n); 
   
   if (pdb == rawCacheDBs_.end()) {
-    std::cout << "Creating new database" << std::endl; 
     // open a new database
     Db * db = new Db(NULL, 0); 
     

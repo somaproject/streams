@@ -9,10 +9,15 @@
 #include <GL/glu.h>
 #include <GL/glext.h>
 
+#include <boost/filesystem.hpp>
+#include <db_cxx.h>
+
 #include <data/wave.h>
+
 #include "core/sinkpad.h"
 #include "irenderer.h"
 
+namespace bf = boost::filesystem; 
 
 typedef float wavetime_t; 
 
@@ -30,6 +35,18 @@ struct GLWaveQuadStrip_t
   float xmin; 
 }; 
 
+struct GLPointBuffer_t
+{
+  static const int BUFFERN = 2048; // Maximum size in data points of a buffer
+  size_t size; 
+  boost::array<GLWavePoint_t, BUFFERN> data; 
+  GLPointBuffer_t() : 
+    size(0)
+  {
+
+  }
+
+}; 
 
 class RenderDownSample : public IRenderer
 {
@@ -40,29 +57,35 @@ public:
 
   */
   
-  RenderDownSample(float detail);
+  RenderDownSample(float detail, bf::path scrachdir);
   ~RenderDownSample(); 
 
   void renderStream(streamtime_t t1, streamtime_t t2, int pixels); 
   void newSample(const WaveBuffer_t & ); 
 
 private:
-  typedef std::vector<GLWavePoint_t> GLPointBuffer_t;
-  typedef std::map<double, GLPointBuffer_t * > timeBufferMap_t;  
   
-  static const int BUFFERN = 4096; // Maximum size in data points of a buffer
+
+
+
+  //  typedef std::map<double, GLPointBuffer_t * > timeBufferMap_t;  
+
 
   float detail_; 
   const float NEWBUFTIME_; 
-
-  timeBufferMap_t tbm_; 
-
-  timeBufferMap_t::iterator currentTBiterator_; 
   
+//   timeBufferMap_t tbm_; 
+
+//   timeBufferMap_t::iterator currentTBiterator_; 
+  
+  GLPointBuffer_t buffer_; 
+  double bufstarttime_; 
+
   void newDataPoint(double streamtime, float data); 
 
-  
+  Db * pdb_; 
 
+  void renderGLPointBuffer(double origintime, GLPointBuffer_t  * buf); 
 }; 
 
 #endif 

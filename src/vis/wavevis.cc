@@ -7,10 +7,10 @@ const std::string WaveVis::TYPENAME = "WaveVis";
 WaveVis::WaveVis(std::string name, bf::path scratchdir):
   VisBase(name), 
   pSinkPad_(createSinkPad<WaveBuffer_t>( "default")),
-  streamRenderer_(), 
   pixelHeight_(100), 
   scale(0.0),
-  scratchdir_(scratchdir / name)
+  scratchdir_(scratchdir / name),
+  streamRenderer_(scratchdir_)
 {
   
   pSinkPad_->newDataSignal().connect(sigc::mem_fun(*this, 

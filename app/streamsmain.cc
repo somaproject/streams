@@ -113,7 +113,7 @@ int main(int argc, char** argv)
   StreamsApp sa(pSourceState, scratchdir_base); 
 
   pPipelineManager_t pm = sa.getPipelineManager();   
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < 4; i++) {
 
     pStreamPipeline_t pl = 
       pm->createPipeline(boost::str(boost::format("pipeline%d") % i));

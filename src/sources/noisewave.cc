@@ -7,18 +7,26 @@ using namespace soma::streams;
 
 const std::string NoiseWave::TYPENAME = "NoiseWave"; 
 
-NoiseWave::NoiseWave(std::string name, pTimer_t ptimer, bf::path scratch) :
+NoiseWave::NoiseWave(std::string name, pTimer_t ptimer, bf::path scratch, 
+		     float preload) :
   SourceBase(name), 
   amplitude(1.0), 
   noiseclass(WhiteNoise),
   pTimer_(ptimer), 
   fs_(1.0), 
+  
   pSourcePad_(createSourcePad<WaveBuffer_t>(dataList_, "default"))
 {
+
   lastTime_ = pTimer_->getStreamTime(); 
   pTimer_->streamTimeSignal().connect(sigc::mem_fun(*this, 
 					      &NoiseWave::timeUpdate)); 
   
+  for (double t = -preload; t < 0; t += 0.1) { 
+    lastTime_ = t; 
+    streamtime_t delta = 0.1; 
+    nextData(delta); 
+  }
 }
 
 NoiseWave::~NoiseWave()

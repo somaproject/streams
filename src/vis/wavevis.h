@@ -52,10 +52,10 @@ private:
   void newData(); 
   void invalidateData(); 
   
-  WaveVisRenderer streamRenderer_; 
   
   int pixelHeight_; 
   bf::path scratchdir_; 
+  WaveVisRenderer streamRenderer_; 
 };
 
 #endif // WAVESTREAMVIS_H

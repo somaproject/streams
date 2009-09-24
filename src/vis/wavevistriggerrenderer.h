@@ -13,11 +13,14 @@
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
+#include <boost/filesystem.hpp>
 
 #include <map>
 
 #include "streamsource.h"
 #include "wave.h"
+
+namespace bf = boost::filesystem; 
 
 typedef std::map<wavetime_t, int> timeindex_t; 
 
