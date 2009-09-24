@@ -20,14 +20,31 @@ BOOST_AUTO_TEST_SUITE(BDB_queue_view);
 
 const size_t benchbuf_n = 128; 
 
+
 struct benchbuff
+{
+  std::vector<float> x;
+  std::vector<float> t; 
+
+};
+
+struct benchbuff_disk
 {
   float x[benchbuf_n]; 
   float t[benchbuf_n]; 
+  void copy(benchbuff * bb) {
+    bb->x.resize(benchbuf_n); 
+    bb->t.resize(benchbuf_n); 
+    for (int i = 0; i < benchbuf_n; i++) {
+      bb->x[i] = x[i]; 
+      bb->t[i] = t[i]; 
+    }
+  }
 }; 
 
-void create_canonical(benchbuff * bb, size_t index)
+void create_canonical(benchbuff_disk * bb, size_t index)
 {
+  
   for(int i = 0; i < benchbuf_n; i++) {
     bb->x[i] = index + i; 
     bb->t[i] = index * 100 + i; 
@@ -49,7 +66,7 @@ BOOST_AUTO_TEST_CASE(simpletest) {
     // Open the database
     db.set_pagesize(1<<16); 
     db.set_flags(DB_INORDER); 
-    db.set_re_len(sizeof(benchbuff)); 
+    db.set_re_len(sizeof(benchbuff_disk)); 
     db.open(NULL,                // Transaction pointer
             dbname.c_str(),          // Database file name
             NULL,                // Optional logical database name
@@ -59,14 +76,14 @@ BOOST_AUTO_TEST_CASE(simpletest) {
     // DbException is not subclassed from std::exception, so
     // need to catch both of these.
 
-    BDBQueueView<benchbuff> qv1(&db); 
-    BDBQueueView<benchbuff> qv2(&db); 
+    BDBQueueView<benchbuff, benchbuff_disk> qv1(&db); 
+    BDBQueueView<benchbuff, benchbuff_disk> qv2(&db); 
 
     BOOST_CHECK_EQUAL(qv1.empty(), true); 
 
     db_recno_t rid; 
     
-    benchbuff bufdata; 
+    benchbuff_disk bufdata; 
     create_canonical(&bufdata, 0); 
       
     Dbt key(&rid, sizeof(rid));
@@ -80,7 +97,7 @@ BOOST_AUTO_TEST_CASE(simpletest) {
     BOOST_CHECK_EQUAL(qv1.front().x[5], bufdata.x[5]);
     
     for (int j = 1; j < 10; j++) {
-      benchbuff bufdata; 
+      benchbuff_disk bufdata; 
       create_canonical(&bufdata, j); 
       
       Dbt key(&rid, sizeof(rid));
@@ -91,7 +108,7 @@ BOOST_AUTO_TEST_CASE(simpletest) {
 
     int pos = 0; 
     while (!qv1.empty() ) { 
-      benchbuff canonical; 
+      benchbuff_disk canonical; 
       create_canonical(&canonical, pos); 
       BOOST_CHECK_EQUAL(qv1.front().x[5], canonical.x[5]);
       BOOST_CHECK_EQUAL(qv1.front().x[20], canonical.x[20]);
@@ -105,7 +122,7 @@ BOOST_AUTO_TEST_CASE(simpletest) {
     qv1.reset(); 
     pos = 0; 
     while (!qv1.empty() ) { 
-      benchbuff canonical; 
+      benchbuff_disk canonical; 
       create_canonical(&canonical, pos); 
       BOOST_CHECK_EQUAL(qv1.front().x[5], canonical.x[5]);
       BOOST_CHECK_EQUAL(qv1.front().x[20], canonical.x[20]);

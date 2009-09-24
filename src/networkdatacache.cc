@@ -43,7 +43,7 @@ core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetWaveSource(datasourc
 
     db->set_pagesize(1<<16); 
     db->set_flags(DB_INORDER); 
-    db->set_re_len(sizeof(WaveBuffer_t)); 
+    db->set_re_len(sizeof(WaveBufferDisk_t<WAVEBUF_LEN>)); 
     db->open(NULL,                // Transaction pointer
 	     wavedb_path.string().c_str(),          // Database file name
 	     NULL, 
@@ -60,7 +60,7 @@ core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetWaveSource(datasourc
   } 
 
   return core::IQueueView<WaveBuffer_t>::ptr(
-					     new BDBQueueView<WaveBuffer_t>(pdb->second)); 
+					     new BDBQueueView<WaveBuffer_t, WaveBufferDisk_t<WAVEBUF_LEN> >(pdb->second)); 
   
 }
 
@@ -79,7 +79,7 @@ core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetRawSource(datasource
     
     db->set_pagesize(1<<16); 
     db->set_flags(DB_INORDER); 
-    db->set_re_len(sizeof(WaveBuffer_t)); 
+    db->set_re_len(sizeof(WaveBufferDisk_t<RAWBUF_LEN>)); 
     db->open(NULL,                // Transaction pointer
 	     rawdb_path.string().c_str(),          // Database file name
 	     NULL, 
@@ -93,8 +93,8 @@ core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetRawSource(datasource
     pNetCodec_->enableDataRX(n, RAW); 
     
   } 
-  std::cout << "The ptr is " << pdb->second << std::endl; 
-  core::IQueueView<WaveBuffer_t>::ptr p(new BDBQueueView<WaveBuffer_t>(pdb->second)); 
+
+    core::IQueueView<WaveBuffer_t>::ptr p(new BDBQueueView<WaveBuffer_t, WaveBufferDisk_t<RAWBUF_LEN> >(pdb->second)); 
   return p; 
 
 }
@@ -107,21 +107,20 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
 
       int src = newData->src; 
       Wave_t  wp = rawToWave(newData); 
-      WaveBuffer_t * wb = new WaveBuffer_t; 
-      wb->samprate = wp.sampratenum / float(wp.samprateden); 
-      wb->time = pTimer_->somaTimeToStreamTime(wp.time); 
-      wb->data.reserve(WAVEBUF_LEN); 
+      WaveBufferDisk_t<WAVEBUF_LEN>  wb; 
+      wb.samprate = wp.sampratenum / float(wp.samprateden); 
+      wb.time = pTimer_->somaTimeToStreamTime(wp.time); 
       for(int i = 0; i < WAVEBUF_LEN; i++) {
 	float val = float(wp.wave[i]) / 1e9; 
-	float tsdelta =  1.0 / wb->samprate; 
-	float tval = (wb->time + float(i) * tsdelta); 
-	wb->data.push_back(val); 
+	float tsdelta =  1.0 / wb.samprate; 
+	float tval = (wb.time + float(i) * tsdelta); 
+	wb.data[i] = val; 
       }
 
       db_recno_t rid; 
     
       Dbt key(&rid, sizeof(rid));
-      Dbt data(wb, sizeof(WaveBuffer_t)); 
+      Dbt data(&wb, sizeof(WaveBufferDisk_t<WAVEBUF_LEN> )); 
       
       int ret = pdb->second->put(NULL, &key, &data, DB_APPEND); // FIXME check return
       assert(ret == 0); 
@@ -135,25 +134,24 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
     if (pdb != rawCacheDBs_.end() ) {
       int src = newData->src; 
       Raw_t  wp = rawToRaw(newData); 
-      //if (wp.chansrc == 0) {  // FIXME!!
-	WaveBuffer_t * wb = new WaveBuffer_t; 
-	wb->samprate = 32000.0; 
-	wb->time = pTimer_->somaTimeToStreamTime(wp.time); 
-	wb->data.reserve(WAVEBUF_LEN); 
-	for(int i = 0; i < RAWBUF_LEN; i++) {
-	  wb->data.push_back(float(wp.data[i])/1e9); 
-	}
-	
-	db_recno_t rid; 
-    
-	Dbt key(&rid, sizeof(rid));
-	Dbt data(wb, sizeof(WaveBuffer_t)); 
-      
-	int ret = pdb->second->put(NULL, &key, &data, DB_APPEND); // FIXME check return
+      WaveBufferDisk_t<RAWBUF_LEN> wb; 
+      wb.samprate = 32000.0; 
+      wb.time = pTimer_->somaTimeToStreamTime(wp.time); 
 
-	assert(ret == 0); 
-	rawSignals_[src].emit(); 
-	//}
+      for(int i = 0; i < RAWBUF_LEN; i++) {
+	wb.data[i] = (float(wp.data[i])/1e9); 
+      }
+      
+      db_recno_t rid; 
+      
+      Dbt key(&rid, sizeof(rid));
+      Dbt data(&wb, sizeof(WaveBufferDisk_t<RAWBUF_LEN>)); 
+      
+      int ret = pdb->second->put(NULL, &key, &data, DB_APPEND); // FIXME check return
+      
+      assert(ret == 0); 
+      rawSignals_[src].emit(); 
+      //}
     }
     
   } 

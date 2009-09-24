@@ -40,16 +40,19 @@ BOOST_AUTO_TEST_CASE(create)
   }
 
   pDataPacket_t pdp = rawFromRaw(raw); 
-  
+
   snc->newData(pdp); 
+
+  
+  BOOST_CHECK_EQUAL(raw.time, raw0->front().time); 
+
   for(int i = 0; i < RAWBUF_LEN; i++) {
     BOOST_CHECK_CLOSE(float(raw.data[i])/1e9, (double)(raw0->front().data[i]), 0.00001); 
   }
   
   
-  WaveBuffer_t & wb = raw1->front(); 
   for(int i = 0; i < RAWBUF_LEN; i++) {
-    BOOST_CHECK_CLOSE(raw.data[i]/1e9,(double) wb.data[i], 0.0001); 
+    BOOST_CHECK_CLOSE(raw.data[i]/1e9,(double) raw0->front().data[i], 0.0001); 
   }
 }
 
