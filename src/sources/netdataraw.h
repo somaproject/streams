@@ -57,7 +57,7 @@ private:
 
   sigc::connection dataConn_; 
   
-  core::QueueView<WaveBuffer_t> dataQueueView_; 
+  core::IQueueView<WaveBuffer_t>::ptr pDataQueueView_; 
   
   void setSrc(datasource_t src); 
   void reconnectSource(datasource_t src); 

@@ -59,8 +59,8 @@ BOOST_AUTO_TEST_CASE(simpletest) {
     // DbException is not subclassed from std::exception, so
     // need to catch both of these.
 
-    BDBQueueView<benchbuff> qv1(db); 
-    BDBQueueView<benchbuff> qv2(db); 
+    BDBQueueView<benchbuff> qv1(&db); 
+    BDBQueueView<benchbuff> qv2(&db); 
 
     BOOST_CHECK_EQUAL(qv1.empty(), true); 
 

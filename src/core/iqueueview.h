@@ -8,7 +8,7 @@
 
 #include <boost/ptr_container/ptr_list.hpp>
 #include <boost/ptr_container/ptr_sequence_adapter.hpp>
-
+#include <boost/shared_ptr.hpp>
 
 namespace core {
 
@@ -22,7 +22,10 @@ namespace core {
     virtual void pop() = 0; 
     
     virtual void reset() = 0; 
+
+    typedef boost::shared_ptr<IQueueView <T> > ptr; 
   }; 
+
 
 }
 

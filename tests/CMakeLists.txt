@@ -38,6 +38,21 @@ add_executable(bdbqueueview_test
   bdbqueueview_test.cc
   runner.cc)
 
+add_executable(runtest
+  runtest.cc
+  mocksomanetcodec.cc
+
+)
+  target_link_libraries(runtest
+    streams_core
+    ${Boost_LIBRARIES} 
+    ${GUIDEPS_LIBRARIES}
+    ${SOMADEPS_LIBRARIES}
+  ${BDB_LIBRARIES}
+    )
+  
+
+
 
 set(testlist 
   queueview_test

@@ -63,10 +63,10 @@ void NetDataWave::setSrc(datasource_t src)
 
 void NetDataWave::nextData()
 {
-  while(!dataQueueView_.empty()) {
+  while(!pDataQueueView_->empty()) {
     // We have to copy the buffer here; this is a wee bit unfortunate,
     // but in general we'll be doing more than a pure copy. 
-    WaveBuffer_t *  newbuf = new WaveBuffer_t(dataQueueView_.front()); 
+    WaveBuffer_t *  newbuf = new WaveBuffer_t(pDataQueueView_->front()); 
     for (int i = 0; i < newbuf->data.size(); i++) {
       double val =  double(newbuf->time) + double(double(i)  * 1./newbuf->samprate); 
 //       std::cout << newbuf->time << " " << i << " " << newbuf->samprate << " " 
@@ -74,7 +74,7 @@ void NetDataWave::nextData()
 // 		<< " " << newbuf->data[i] << std::endl; 
     }
     datalist_.push_back(newbuf); 
-    dataQueueView_.pop(); 
+    pDataQueueView_->pop(); 
   } 
   pSourcePad_->newData(); 
 
@@ -104,13 +104,13 @@ void NetDataWave::reconnectSource(datasource_t src)
   src_ = src; 
 
   datalist_.clear(); 
-  dataQueueView_ = pNetDataCache_->getNetWaveSource(src_); 
+  pDataQueueView_ = pNetDataCache_->getNetWaveSource(src_); 
 
-  while( !  dataQueueView_.empty() )
+  while( !  pDataQueueView_->empty() )
     {
-      WaveBuffer_t *  newbuf = new WaveBuffer_t(dataQueueView_.front()); 
+      WaveBuffer_t *  newbuf = new WaveBuffer_t(pDataQueueView_->front()); 
       datalist_.push_back(newbuf); 
-      dataQueueView_.pop(); 
+      pDataQueueView_->pop(); 
     }
   
   pSourcePad_->invalidateData(); 

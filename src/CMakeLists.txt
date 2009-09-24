@@ -7,6 +7,7 @@ link_directories(
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${GUIDEPS_INCLUDE_DIRS})
 include_directories(${SOMADEPS_INCLUDE_DIRS})
+include_directories(${BDB_INCLUDE_DIR})
 include_directories(logging/src)
 include_directories(logging/boost)
 
@@ -40,6 +41,7 @@ target_link_libraries(streams_core
     ${Boost_LIBRARIES} 
     ${GUIDEPS_LIBRARIES}
     ${SOMADEPS_LIBRARIES}
+    ${BDB_LIBRARIES}
     sources
     vis
 #    triggers

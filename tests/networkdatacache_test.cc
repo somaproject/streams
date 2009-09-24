@@ -28,9 +28,9 @@ BOOST_AUTO_TEST_CASE(create)
   bf::path scratchdir("/tmp"); 
   NetworkDataCache ndc(snc, timer, scratchdir); 
   
-
-  core::QueueView<WaveBuffer_t > wave0(ndc.getNetWaveSource(0)); 
-  core::QueueView<WaveBuffer_t > raw0(ndc.getNetRawSource(0)); 
+  
+  core::IQueueView<WaveBuffer_t >::ptr raw0(ndc.getNetRawSource(0)); 
+  core::IQueueView<WaveBuffer_t >::ptr raw1(ndc.getNetRawSource(0)); 
 
   Raw_t raw; 
   raw.src = 0;
@@ -42,19 +42,15 @@ BOOST_AUTO_TEST_CASE(create)
   pDataPacket_t pdp = rawFromRaw(raw); 
   
   snc->newData(pdp); 
-  BOOST_CHECK_EQUAL(wave0.empty(), true); 
-  BOOST_CHECK_EQUAL(raw0.empty(), false); 
-
   for(int i = 0; i < RAWBUF_LEN; i++) {
-    BOOST_CHECK_EQUAL(raw.data[i], raw0.front().data[i]); 
+    BOOST_CHECK_CLOSE(float(raw.data[i])/1e9, (double)(raw0->front().data[i]), 0.00001); 
   }
-
-  core::QueueView<WaveBuffer_t > raw1(ndc.getNetRawSource(0)); 
-  for(int i = 0; i < RAWBUF_LEN; i++) {
-    BOOST_CHECK_EQUAL(raw.data[i], raw1.front().data[i]); 
-  }
-
   
+  
+  WaveBuffer_t & wb = raw1->front(); 
+  for(int i = 0; i < RAWBUF_LEN; i++) {
+    BOOST_CHECK_CLOSE(raw.data[i]/1e9,(double) wb.data[i], 0.0001); 
+  }
 }
 
 

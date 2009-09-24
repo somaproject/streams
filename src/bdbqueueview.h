@@ -17,24 +17,24 @@ class BDBQueueView : public core::IQueueView<T>
 {
   
 public:
-  BDBQueueView(Db & db) 
+  BDBQueueView(Db * db) 
   {
-    db.cursor(NULL, &cursor_, 0); 
-    Dbt found_data; 
-    Dbt search_key; 
+//     db->cursor(NULL, &cursor_, 0); 
+//     Dbt found_data; 
+//     Dbt search_key; 
 
-    int ret = cursor_->get(&search_key, &found_data, DB_FIRST); 
+//     int ret = cursor_->get(&search_key, &found_data, DB_FIRST); 
 
-    if (ret == DB_NOTFOUND) {
-      empty_= true; 
-    } else { 
-      empty_ = false; 
-      memcpy(&data_, found_data.get_data(), sizeof(T)); 
-    }
+//     if (ret == DB_NOTFOUND) {
+//       empty_= true; 
+//     } else { 
+//       empty_ = false; 
+//       memcpy(&data_, found_data.get_data(), sizeof(T)); 
+//     }
   }
   
   ~BDBQueueView()   {
-
+    std::cout << "Bdb queue view destroying" << std::endl;
     //cursor_->close(); 
 
   }
@@ -62,7 +62,10 @@ public:
     
   }
  
-  T & front()  {
+  T &  front()  {
+//     if (empty()) {
+//       throw std::runtime_error("QueueView is empty");
+//     }
     return data_; 
   }
 

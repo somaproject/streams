@@ -62,12 +62,12 @@ void NetDataRaw::setSrc(datasource_t src)
 
 void NetDataRaw::nextData()
 {
-  while(!dataQueueView_.empty()) {
+  while(!pDataQueueView_->empty()) {
     // We have to copy the buffer here; this is a wee bit unfortunate,
     // but in general we'll be doing more than a pure copy. 
-    WaveBuffer_t *  newbuf = new WaveBuffer_t(dataQueueView_.front()); 
+    WaveBuffer_t *  newbuf = new WaveBuffer_t(pDataQueueView_->front()); 
     datalist_.push_back(newbuf); 
-    dataQueueView_.pop(); 
+    pDataQueueView_->pop(); 
   } 
   pSourcePad_->newData(); 
 
@@ -97,13 +97,13 @@ void NetDataRaw::reconnectSource(datasource_t src)
   src_ = src; 
 
   datalist_.clear(); 
-  dataQueueView_ = pNetDataCache_->getNetRawSource(src_); 
+  pDataQueueView_ = pNetDataCache_->getNetRawSource(src_); 
 
-  while( !  dataQueueView_.empty() )
+  while( !  pDataQueueView_->empty() )
     {
-      WaveBuffer_t *  newbuf = new WaveBuffer_t(dataQueueView_.front()); 
+      WaveBuffer_t *  newbuf = new WaveBuffer_t(pDataQueueView_->front()); 
       datalist_.push_back(newbuf); 
-      dataQueueView_.pop(); 
+      pDataQueueView_->pop(); 
     }
   
   pSourcePad_->invalidateData(); 
