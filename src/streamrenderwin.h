@@ -19,12 +19,13 @@
 
 #include "glconfig.h"
 #include "glspikes.h"
+#include "properties.h"
 
 #include "viscontrol.h"
 
 #include <cairogltext/glstring.h>
 
-enum ViewTypes {LIVESCROLL, LIVESTRIP, MANUAL}; 
+enum ViewTypes {OVERWRITE, STRIPCHART, MANUAL}; 
 
 
 class StreamRenderWin : public Gtk::GL::DrawingArea
@@ -51,7 +52,7 @@ public:
   { 
     get_window()->process_updates(false); 
   }
-  
+  Property<bool> trackLive;
   void invalidate(); 
   void invalidate2(); 
   void setCurrentTime(streamtime_t time); 
@@ -78,13 +79,14 @@ protected:
   
   void renderCurrentTimeCursor(); 
   bool invalidateCallback(); 
+
   // primary data source
   
   // state variables
   int lastX_; 
   int decayRange_; 
   int cutoffPos_; 
-  bool viewLatest_; 
+
   float viewT1_, viewT2_, viewX1_, viewX2_; 
   float selT1_, selT2_; 
   

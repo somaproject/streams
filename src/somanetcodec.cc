@@ -103,6 +103,7 @@ void SomaNetCodec::parseEvent(const Event_t & evt)
       stime |= evt.data[1]; 
       stime = stime << 16; 
       stime |= evt.data[2]; 
+      
       signalTimeUpdate_.emit(stime); 
       BOOST_FOREACH(somadspio::StateProxy & sp, dspStateProxies_) 
 	{

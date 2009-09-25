@@ -22,6 +22,7 @@
 
 #include "streamsapp.h"
 
+
 typedef std::set<int> waveStreamVisStatusSet_t; 
 
 
@@ -29,8 +30,8 @@ StreamsApp::StreamsApp(pSourceState_t pss, bf::path scratchdir) :
   pSourceState_(pss), 
   pPipelineManager_(new PipelineManager(scratchdir)), 
   pSomaConfig_(new SomaConfig), 
-  liveButton_("Live View"), 
   streamWin_(pPipelineManager_), 
+  trackLive_("Track Live"), 
   ppm_(*this, pSomaConfig_), 
   pmg_(pPipelineManager_, pSomaConfig_, vBoxPipelines_, ppm_), 
   testLabel_("Hello world")
@@ -51,7 +52,7 @@ StreamsApp::StreamsApp(pSourceState_t pss, bf::path scratchdir) :
   hBoxMain_.pack_start(vBoxPipelines_); 
   //vBoxPipelines_.pack_start(testLabel_); 
   hBoxMain_.pack_start(streamWin_, true, true); 
-  
+  trackLive_.addProperty(&(streamWin_.trackLive)); 
   //hBoxMain_.pack_start(triggerWin_, true, true); 
   streamWin_.set_size_request(1300, 1000); 
   //triggerWin_.set_size_request(150, 1000); 
@@ -60,12 +61,17 @@ StreamsApp::StreamsApp(pSourceState_t pss, bf::path scratchdir) :
   statusProgressBar_.set_size_request(100, 0); 
 
   hBoxStatus_.pack_start(statusBar_); 
-  hBoxStatus_.pack_start(liveButton_); 
+  hBoxStatus_.pack_start(trackLive_); 
+  hBoxStatus_.pack_start(liveModeCombo_); 
+  liveModeCombo_.append_text("manual"); 
+  liveModeCombo_.append_text("stripchart"); 
+  liveModeCombo_.append_text("overwrite"); 
+  
 
   show_all(); 
 
-//   pt->streamTimeSignal().connect(sigc::mem_fun(*this,
-// 					      &StreamsApp::setTime)); 
+  pSourceState_->timer->streamTimeSignal().connect(sigc::mem_fun(*this,
+									&StreamsApp::setTime)); 
   add_events (Gdk::ALL_EVENTS_MASK); 
 //   signal_realize().connect(sigc::mem_fun(*this, 
 // 					 &StreamsApp::on_realize_event)); 
@@ -245,12 +251,13 @@ StreamsApp::~StreamsApp()
 // }
 
 
-void StreamsApp::setTime(float time)
+void StreamsApp::setTime(streamtime_t time)
 {
-      
+  streamWin_.setCurrentTime(time); 
 }
 
 pPipelineManager_t StreamsApp::getPipelineManager()
 {
   return pPipelineManager_; 
 }
+

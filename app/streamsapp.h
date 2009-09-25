@@ -28,6 +28,7 @@
 #include "pipelinemanagergui.h"
 #include "propertypanemanager.h" 
 #include "somaconfig.h"
+#include "propwidgets/togglebutton.h"
 
 namespace bf = boost::filesystem; 
 
@@ -57,7 +58,8 @@ protected:
   Gtk::VBox  vBoxStreamStatus_; 
   Gtk::Widget* pMenuBar_; 
   Gtk::Statusbar statusBar_; 
-  Gtk::ToggleButton liveButton_; 
+  PropertyWidgets::ToggleButton trackLive_; 
+  Gtk::ComboBoxText liveModeCombo_; 
   Gtk::ProgressBar statusProgressBar_; 
   Gtk::VBox vBoxPipelines_; 
   PropertyPaneManager ppm_; 
@@ -93,6 +95,7 @@ protected:
   
   void setTime(streamtime_t time); 
   Gtk::Label testLabel_; 
+  
 };
 
 #endif // STREAMSAPP_H

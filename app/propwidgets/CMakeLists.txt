@@ -2,6 +2,7 @@
 set(propwidget_SRCS
   spinbutton.cc
   comboboxentry.cc
+  togglebutton.cc
 )
 
 add_library(propwidgets

@@ -6,8 +6,8 @@
 
 StreamRenderWin::StreamRenderWin(pVisControl_t pvc) : 
   decayRange_(100), 
-  viewLatest_(true), 
   cutoffPos_(0), 
+  trackLive(false), 
   viewT1_(0.0), 
   viewT2_(1.0), 
   viewX1_(-1000.0), 
@@ -17,7 +17,8 @@ StreamRenderWin::StreamRenderWin(pVisControl_t pvc) :
   zoomLevel_(1.0),
   s1fact_(2), 
   pVisControl_(pvc), 
-  timeGLstring_("sans", false, CENTER, BASELINE)
+  timeGLstring_("sans", false, CENTER, BASELINE),
+  viewType_(STRIPCHART)
 {
 
   Glib::RefPtr<Gdk::GL::Config> glconfig;
@@ -406,7 +407,7 @@ bool StreamRenderWin::on_button_press_event(GdkEventButton* event)
   if (event->type == GDK_BUTTON_PRESS)  
     {
       lastX_ = event->x; 
-      viewType_ = MANUAL; 
+      trackLive = false; 
     } 
 
   // don't block
@@ -546,6 +547,7 @@ bool StreamRenderWin::invalidateCallback() {
 
 void StreamRenderWin::setViewType(ViewTypes val)
 {
+  std::cout << "Setting view type" << std::endl;
   viewType_ = val; 
   invalidate(); 
 
@@ -553,15 +555,21 @@ void StreamRenderWin::setViewType(ViewTypes val)
 
 void StreamRenderWin::setCurrentTime(streamtime_t time)
 {
+  float tdelta = time - currentTime_; 
+
   currentTime_ = time; 
+//   std::cout << "currentTime_ = " << currentTime_ << " viewT2_ =" 
+// 	    << viewT2_ << std::endl;
   
   float twidth = viewT2_ - viewT1_; 
-  if (viewType_ == LIVESCROLL) {
-    if (currentTime_ > viewT2_) {
+  if (trackLive) { 
+    if (viewType_ == STRIPCHART ) {
+      //    if (currentTime_ > viewT2_) {
       // this is the sweep-view
-      viewT1_ += twidth; 
-      viewT2_ += twidth; 
+      viewT1_ = currentTime_ - twidth;
+      viewT2_ = currentTime_;
       invalidate();
+      //    }
     }
   } else if ((currentTime_ < viewT2_) and (currentTime_ > viewT1_)) {
     invalidate(); 
