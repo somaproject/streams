@@ -30,6 +30,7 @@ int main(int argc, char** argv)
   po::options_description desc("Allowed options");
   desc.add_options()
     ("help", "produce help message")
+    ("pipeline", po::value<string>(), "The pipeline configuration file")
     ("soma-ip", po::value<string>(), "The IP of the soma hardware")
     ("debug-timer", "debug: use internally-generated (non-network) timer")
     ("enable-network-log", po::value<string>()->default_value("warning"), "Enable soma network debugging at this level")
@@ -49,6 +50,10 @@ int main(int argc, char** argv)
     return 1;
   }
   
+  if (!vm.count("pipeline")) {
+    std::cout << "Need to specify pipeline configuration file" << std::endl; 
+    return 1; 
+  }
 //   config_logging(vm, LOG_ROOT); 
 
 //   // get logging objects
@@ -113,6 +118,8 @@ int main(int argc, char** argv)
   StreamsApp sa(pSourceState, scratchdir_base); 
 
   pPipelineManager_t pm = sa.getPipelineManager();   
+
+  
   for (int i = 0; i < 4; i++) {
 
     pStreamPipeline_t pl = 

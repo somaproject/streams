@@ -1,0 +1,10 @@
+[ { "name" : "pipeline01", 
+    "elements" : { "element name" : {"class" : "elementClass", 
+                                     "config" : {extra config dict} } 
+				     }
+    "connections" : [ ("element name", "port"), ("element name", "port") ]
+   }
+   ...
+
+]
+
