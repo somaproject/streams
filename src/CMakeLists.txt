@@ -19,7 +19,8 @@ set(streams_SRCS
   streampipeline.cc
   somanetcodec.cc
   networkdatacache.cc
-  pipelinemanager.cc)
+  pipelinemanager.cc
+  pipelineconfig.cc)
 
 set(ext_SRCS
   ext-common/cairogltext/glstring.cc
@@ -44,6 +45,7 @@ target_link_libraries(streams_core
     ${BDB_LIBRARIES}
     sources
     vis
+    json_spirit
 #    triggers
 #    filters
 )

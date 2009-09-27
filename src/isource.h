@@ -17,7 +17,7 @@ class ISource : public virtual core::IElement
   
 public:
   virtual void accept(boost::shared_ptr<ISourceVisitor>) = 0; 
-
+  
 protected: 
 
 };

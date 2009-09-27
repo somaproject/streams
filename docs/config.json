@@ -1,5 +1,6 @@
 [ { "name" : "pipeline01", 
-    "elements" : { "element name" : {"class" : "elementClass", 
+    "elements" : { "element name" : {"type" : "source" or "vis", 
+    "class" : "elementClass", 
                                      "config" : {extra config dict} } 
 				     }
     "connections" : [ ("element name", "port"), ("element name", "port") ]

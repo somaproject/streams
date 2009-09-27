@@ -43,12 +43,20 @@ add_executable(runtest
   mocksomanetcodec.cc
 
 )
+
+add_executable(pipelineconfig_test
+  pipelineconfig_test.cc
+  util.cc
+  runner.cc)
+
+
   target_link_libraries(runtest
     streams_core
     ${Boost_LIBRARIES} 
     ${GUIDEPS_LIBRARIES}
     ${SOMADEPS_LIBRARIES}
-  ${BDB_LIBRARIES}
+    ${BDB_LIBRARIES}
+    json_spirit
     )
   
 
@@ -61,7 +69,8 @@ set(testlist
   element_test
   networkdatacache_test
   pipelinemanager_test
-  bdbqueueview_test)
+  bdbqueueview_test
+  pipelineconfig_test)
 
 
 #SET(TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/tests)
@@ -79,8 +88,8 @@ foreach(testname ${testlist})
     ${Boost_LIBRARIES} 
     ${GUIDEPS_LIBRARIES}
     ${SOMADEPS_LIBRARIES}
-  ${BDB_LIBRARIES}
-
+    ${BDB_LIBRARIES}
+    json_spirit
     )
   
   ADD_TEST(${testname} ${testname})

@@ -48,13 +48,11 @@ pISource_t StreamPipeline::createSource(std::string type, std::string name)
       
     }
   }
-  
   pISource_t src = SourceFactory::create(type, pSourceState_, scratchdir_ / "source"); 
   src->accept(sourceVisitor_); 
-
+  
   src->setName(name); 
   sources_.push_back(src); 
-
   return src; 
   
 }

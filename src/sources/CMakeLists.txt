@@ -18,3 +18,7 @@ set(sources_SRCS
 add_library(sources
   ${sources_SRCS})
 
+target_link_libraries(sources
+  streams_core
+)
+  

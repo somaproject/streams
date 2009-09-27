@@ -17,7 +17,6 @@ NoiseWave::NoiseWave(std::string name, pTimer_t ptimer, bf::path scratch,
   
   pSourcePad_(createSourcePad<WaveBuffer_t>(dataList_, "default"))
 {
-
   lastTime_ = pTimer_->getStreamTime(); 
   pTimer_->streamTimeSignal().connect(sigc::mem_fun(*this, 
 					      &NoiseWave::timeUpdate)); 
@@ -27,6 +26,7 @@ NoiseWave::NoiseWave(std::string name, pTimer_t ptimer, bf::path scratch,
     streamtime_t delta = 0.1; 
     nextData(delta); 
   }
+
 }
 
 NoiseWave::~NoiseWave()

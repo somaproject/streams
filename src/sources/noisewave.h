@@ -29,7 +29,8 @@ public:
   Property<NoiseClass> noiseclass; 
 
   void accept(pISourceVisitor_t sv) { 
-    sv->visit(this); 
+    if (sv != NULL) 
+      sv->visit(this); 
   }
   
 

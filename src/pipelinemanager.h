@@ -24,6 +24,9 @@ public:
   std::list<pIVis_t> getVisList();
   sigc::signal<void, pStreamPipeline_t> & pipelineCreatedSignal(); 
 
+  size_t size();  // number of pipleines
+  pStreamPipeline_t getPipeline(std::string name); 
+
 private:
   sigc::signal<void, pStreamPipeline_t> newPipeline_; 
   

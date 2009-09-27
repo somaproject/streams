@@ -1,3 +1,4 @@
+#include <boost/foreach.hpp>
 #include "pipelinemanager.h"
 
 PipelineManager::PipelineManager(bf::path scratchdir) :
@@ -41,4 +42,20 @@ std::list<pIVis_t> PipelineManager::getVisList()
 sigc::signal<void, pStreamPipeline_t> & PipelineManager::pipelineCreatedSignal()
 {
   return newPipeline_; 
+}
+
+size_t PipelineManager::size()
+{
+  return pipelines_.size(); 
+}
+
+pStreamPipeline_t PipelineManager::getPipeline(std::string name) 
+{
+  BOOST_FOREACH(pStreamPipeline_t p, pipelines_) {
+    if (p->getName() == name) { 
+      return p; 
+    }
+  }
+  throw std::runtime_error("unknown pipeline"); 
+
 }

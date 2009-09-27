@@ -181,7 +181,7 @@ void WavesApp::on_button_quit_clicked()
 
 bool WavesApp::on_key_press_event(GdkEventKey* event)
 {
-  std::cout << "Keypress" << std::endl; 
+
   switch (event->keyval)
     {
     case GDK_z:
