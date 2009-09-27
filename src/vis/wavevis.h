@@ -40,7 +40,8 @@ class WaveVis : public VisBase
   void setScale(float); 
   
   void accept(pIVisVisitor_t sv) { 
-    sv->visit(this); 
+    if(sv)
+      sv->visit(this); 
   }
 
   Property<Gdk::Color> color; 

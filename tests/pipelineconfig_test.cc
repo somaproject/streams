@@ -24,13 +24,16 @@ BOOST_AUTO_TEST_CASE(pipelinemanager)
     "{ \"name\" : \"pipeline01\","
     "\"elements\" : { "
           "\"first\" : {\"type\" : \"source\","
-           "            \"class\" : \"NoiseWave\"} "
+           "            \"class\" : \"NoiseWave\"}, "
           "\"second\" : {\"type\" : \"vis\","
           "            \"class\" : \"WaveVis\"}}, "
-    "\"c\" : 1" // testing"
+    "\"connections\" : [[\"first\", \"default\", \"second\", \"default\"]]" // testing"
     " }]"; 
 
-  load_pipeline_config(pm, cfgstr); 
+  std::cout << cfgstr << std::endl;
+  std::istringstream is(cfgstr );
+
+  load_pipeline_config(pm, is); 
   BOOST_CHECK_EQUAL(pm->size(), 1); 
   pStreamPipeline_t pl = pm->getPipeline("pipeline01"); 
   

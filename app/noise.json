@@ -1,0 +1,11 @@
+[ 
+{ "name" : "pipeline01",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NoiseWave"}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}
+]
+

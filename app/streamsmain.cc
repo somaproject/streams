@@ -6,6 +6,7 @@
 #include <sigc++/sigc++.h>
 #include <somanetwork/logging.h>
 #include <somadspio/logging.h>
+#include "pipelineconfig.h"
 
 namespace po = boost::program_options;
 
@@ -118,24 +119,26 @@ int main(int argc, char** argv)
   StreamsApp sa(pSourceState, scratchdir_base); 
 
   pPipelineManager_t pm = sa.getPipelineManager();   
-
   
-  for (int i = 0; i < 4; i++) {
+  ifstream config_file(vm["pipeline"].as<string>().c_str() );
+  load_pipeline_config(pm, config_file); 
 
-    pStreamPipeline_t pl = 
-      pm->createPipeline(boost::str(boost::format("pipeline%d") % i));
-    pISource_t src = pl->createSource("NoiseWave", 
-				      boost::str(boost::format("ns%d") % i)); 
+//   for (int i = 0; i < 4; i++) {
 
-    pIVis_t vis = pl->createVis("WaveVis", 
-				boost::str(boost::format("waveVis%d") % i)); 
+//     pStreamPipeline_t pl = 
+//       pm->createPipeline(boost::str(boost::format("pipeline%d") % i));
+//     pISource_t src = pl->createSource("NoiseWave", 
+// 				      boost::str(boost::format("ns%d") % i)); 
+
+//     pIVis_t vis = pl->createVis("WaveVis", 
+// 				boost::str(boost::format("waveVis%d") % i)); 
           
-    core::pISourcePad_t ps1 = 
-      src->getSourcePad("default");
-    core::pISinkPad_t ps2 = 
-      vis->getSinkPad("default"); 
-    ps1->connect(ps2);
-  }
+//     core::pISourcePad_t ps1 = 
+//       src->getSourcePad("default");
+//     core::pISinkPad_t ps2 = 
+//       vis->getSinkPad("default"); 
+//     ps1->connect(ps2);
+//   }
 
   pnetwork->run(); 
 

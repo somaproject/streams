@@ -4,7 +4,6 @@
 #include <cassert>
 #include <sstream>
 
-
 using namespace json_spirit; 
 
 
@@ -19,10 +18,9 @@ const mValue& find_value( const mObject& obj, const std::string& name  )
 }
 
 
-void load_pipeline_config(pPipelineManager_t pm, std::string configstr)
+void load_pipeline_config(pPipelineManager_t pm, std::istream & is)
 {
   
-  std::istringstream is(configstr );
   mValue val; 
   read( is, val );
   const mArray & pipelines_array = val.get_array(); 
@@ -60,9 +58,23 @@ void load_pipeline_config(pPipelineManager_t pm, std::string configstr)
       } else {
 	throw std::runtime_error("unknown element type"); 
       }
-    }
+   }
     
-    mValue conn_obj = find_value(po, "c"); 
+    mValue conn_obj = find_value(po, "connections"); 
+    
+    mArray conns = conn_obj.get_array(); 
+    for (int ci = 0; ci < conns.size(); ++ci) {
+      mArray c = conns[p].get_array(); 
+      std::string srcelt = c[0].get_str(); 
+      std::string srcport = c[1].get_str(); 
+      std::string destelt = c[2].get_str(); 
+      std::string destport = c[3].get_str(); 
+
+      core::pISourcePad_t ps_s = elements[srcelt]->getSourcePad(srcport); 
+      core::pISinkPad_t ps_d = elements[destelt]->getSinkPad(destport); 
+      ps_s->connect(ps_d); 
+
+    }
     //int x = conn_obj.get_int(); 
     
     
