@@ -24,6 +24,7 @@ public:
     Glib::signal_timeout().connect(sigc::mem_fun(pt.get(), 
 						 &Timer::dummytimeout), 
 				   30); 
+    pt->dummy_last_time_ = boost::posix_time::microsec_clock::local_time();
     
     return pt; 
     
@@ -82,7 +83,8 @@ private:
   void updateSomaTime(somatime_t) ; 
   
   bool dummytimeout(); 
-  
+  boost::posix_time::ptime  dummy_last_time_; 
+
 }; 
 
 

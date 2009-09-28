@@ -138,6 +138,8 @@ static void stream_state_callback(pa_stream *s, void * ptr) {
 
 static void create_stream(const char *name, const char *description, const pa_sample_spec &ss, const pa_channel_map &cmap,
 			  PASource* pasource) {
+  std::cout << "Create stream " << name << std::endl;
+
     char t[256];
 
     

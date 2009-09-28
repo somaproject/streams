@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sys/time.h>
 #include <time.h>
+#include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
 #include "timer.h"
 
 
@@ -22,7 +23,15 @@ Timer::Timer(somatime_t starttime) :
 
 bool Timer::dummytimeout() 
 {
-  updateSomaTime(currentSomaTime_ + 500); 
+
+
+  boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time(); 
+  boost::posix_time::time_duration td = now - dummy_last_time_; 
+  dummy_last_time_ = now; 
+
+  long usec = td.total_microseconds(); 
+
+  updateSomaTime(currentSomaTime_ + usec/20); 
   return true; 
 }
 
