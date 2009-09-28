@@ -8,24 +8,19 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${GUIDEPS_INCLUDE_DIRS})
 include_directories(${SOMADEPS_INCLUDE_DIRS})
 
-set(vis_SRCS
-  sinevis.cc
-  visfactory.cc
+
+set(spect_vis_SRCS
+  spectvis.cc
+  spectvisrenderer.cc
 )
 
 
-add_library(vis
-  ${vis_SRCS}
-  ${sine_vis_SRCS}
+add_library(vis_spect
+  ${spect_vis_SRCS}
   )
 
-target_link_libraries(vis
-  vis_wave
-  vis_spect
+target_link_libraries(vis_spect
   ${Boost_LIBRARIES} 
   ${GUIDEPS_LIBRARIES}
   ${SOMADEPS_LIBRARIES}
 )
-
-add_subdirectory(wavevis)
-add_subdirectory(spectvis)

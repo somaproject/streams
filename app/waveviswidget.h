@@ -2,7 +2,7 @@
 #define WAVEVISWIDGET_H
 
 #include <gtkmm.h>
-#include <vis/wavevis.h>
+#include <vis/wavevis/wavevis.h>
 #include "propertypanemanager.h" 
 #include "elementstatus.h" 
 

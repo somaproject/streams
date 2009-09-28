@@ -1,8 +1,8 @@
 #include "visfactory.h"
 
 #include "sinevis.h"
-#include "wavevis.h"
-#include "spectvis.h"
+#include "wavevis/wavevis.h"
+#include "spectvis/spectvis.h"
 
 pIVis_t VisFactory::create(std::string typname, bf::path scratchdir) {
   

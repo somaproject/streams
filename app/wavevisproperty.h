@@ -2,7 +2,7 @@
 #define WAVEVISPROPERTY_H
 
 #include "propertypane.h"
-#include <vis/wavevis.h>
+#include <vis/wavevis/wavevis.h>
 #include <propwidgets/combobox.h>
 #include "somaconfig.h"
 

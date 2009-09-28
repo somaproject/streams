@@ -1,6 +1,6 @@
 #include "propertypanemanager.h"
 #include <sources/noisewave.h>
-#include <vis/wavevis.h>
+#include <vis/wavevis/wavevis.h>
 #include "noisewaveproperty.h"
 #include "wavevisproperty.h"
 #include "netdatawaveproperty.h"

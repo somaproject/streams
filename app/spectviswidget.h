@@ -2,7 +2,7 @@
 #define SPECTVISWIDGET_H
 
 #include <gtkmm.h>
-#include <vis/spectvis.h>
+#include <vis/spectvis/spectvis.h>
 #include "propertypanemanager.h" 
 #include "elementstatus.h" 
 
