@@ -8,14 +8,31 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${GUIDEPS_INCLUDE_DIRS})
 include_directories(${SOMADEPS_INCLUDE_DIRS})
 
-set(vis_SRCS
-  sinevis.cc 
+
+set(wave_vis_SRCS
   wavevis.cc 
   wavevisrenderer.cc 
   renderdownsample.cc
-  visfactory.cc)
+)
+
+set(sine_vis_SRCS
+  sinevis.cc 
+)
+
+set(spect_vis_SRCS
+  spectvis.cc
+  spectvisrenderer.cc
+)
+
+set(vis_SRCS
+  visfactory.cc
+)
 
 
 add_library(vis
-  ${vis_SRCS})
+  ${vis_SRCS}
+  ${wave_vis_SRCS}
+  ${sine_vis_SRCS}
+  ${spect_vis_SRCS}
+  )
 

@@ -7,20 +7,24 @@
 #include <vsip/math.hpp>
 #include <vsip/core/profile.hpp>
 
+const std::string SpectVis::TYPENAME = "SpectVis"; 
 
-SpectVis::SpectVis() :
+SpectVis::SpectVis(std::string name, bf::path scratch) :
+  VisBase(name), 
+  pSinkPad_(createSinkPad<WaveBuffer_t>("default")), 
   streamRenderer_(&spectBlocks_), 
-  streamTrigger_(&spectBlocks_), 
-  streamTriggerRenderer_(&spectBlocks_), 
   yheight_(100),
   color_("red"),
-  verticalScale_(1.0)
+  verticalScale_(1.0),
+  scratchdir_(scratch / name)
 {
-  
 
+  pSinkPad_->newDataSignal().connect(sigc::mem_fun(*this, 
+						   &SpectVis::newData)); 
+  
 }
 
-void SpectVis::drawMainWave(wavetime_t t1, wavetime_t t2, int pixels)
+void SpectVis::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
 {
   // i really hate how this modifies the gloabl GL state
   streamRenderer_.draw(t1, t2, pixels); 
@@ -33,11 +37,6 @@ SpectVis::~SpectVis()
 
 }
 
-void SpectVis::drawTriggerWave(wavetime_t tbefore, wavetime_t tafter, wavetime_t timepoint)
-{
-  streamTriggerRenderer_.drawTriggers(tbefore, tafter, timepoint); 
-  
-}
 
 void SpectVis::newData()
 {
@@ -49,20 +48,20 @@ void SpectVis::newData()
 
   // our inputs are buffers of data, our filtered
   // outputs are GLwavePoints
-  while (not pInDataQueue_->empty())
+  while (not pSinkPad_->getpQueueView()->empty())
     {
       // we're taking in WaveBuffer_t pointers
 
-      pWaveBuffer_t pwb = pInDataQueue_->front(); 
-      pInDataQueue_->pop(); 
+      WaveBuffer_t & wb = pSinkPad_->getpQueueView()->front(); 
+      pSinkPad_->getpQueueView()->pop(); 
 
       // do the signal processing with VSIPL++
       
       int FFTN = 100;
       // perform the STFT 
       spectBlocks_.push_back(new SpectBlock_t); 
-      spectBlocks_.back().starttime = pwb->time; 
-      spectBlocks_.back().endtime = pwb->time + pwb->data.size() * 1.0/pwb->samprate; 
+      spectBlocks_.back().starttime = wb.time; 
+      spectBlocks_.back().endtime = wb.time + wb.data.size() * 1.0/wb.samprate; 
       spectBlocks_.back().width = 1; 
       spectBlocks_.back().height = FFTN; 
       
@@ -80,7 +79,7 @@ void SpectVis::newData()
       
       // copy data to in:
       for (int i = 0; i < FFTN; i++) {
-	in(i) = cscalar_f(pwb->data[i]); 
+	in(i) = cscalar_f(wb.data[i]); 
       }
 
       //Compute forward and inverse FFT's
@@ -100,8 +99,7 @@ void SpectVis::newData()
       }
       
       streamRenderer_.newSample(); 
-      streamTrigger_.newSample(); 
-      streamTriggerRenderer_.newSample(); 
+
     }
   
 
@@ -113,100 +111,57 @@ void SpectVis::invalidateData()
 
 }
 
-updateTriggersSignal_t & SpectVis::updateTriggersSignal()
-{
-  return streamTrigger_.updateTriggersSignal(); 
-}
+// float SpectVis::getYOffset(){
+//   return yoffset_; 
+// }
 
+// void SpectVis::setYOffset(float x)
+// {
+//   yoffset_ = x; 
+// }
 
+// void SpectVis::setYHeight(float x)
+// {
+//   yheight_ = x; 
+//   streamRenderer_.setScale(yheight_ / verticalScale_, yheight_); 
+// }
 
-QueueView<wavetime_t>  SpectVis::getTriggerQueueView() 
-{
-  return streamTrigger_.getTriggerQueueView(); 
+// void SpectVis::setVerticalScale(float volts){
+
+//   verticalScale_ = volts; 
   
-}
+//   streamRenderer_.setScale(yheight_ / verticalScale_ , yheight_); 
+//   verticalScaleSignal_.emit(volts); 
 
-void SpectVis::setTriggerValue(wavetime_t level)
-{
-  streamTrigger_.setTriggerValue(level); 
-}
+// }
 
-void SpectVis::enableTrigger(bool value)
-{
+// float SpectVis::getVerticalScale()
+// {
+//   return verticalScale_; 
+// }
 
-  streamTrigger_.enableTrigger(value); 
-
-}
-
-
-
-void SpectVis::updateTriggers(bool reset)
-{
-
-  streamRenderer_.updateTriggers(reset); 
-  streamTriggerRenderer_.updateTriggers(reset); 
-
-}
-
-void SpectVis::setTriggerSource(const QueueView<wavetime_t> & tqv)
-{
-
-  streamRenderer_.setTriggerSource(tqv);
-  streamTriggerRenderer_.setTriggerSource(tqv); 
-
-}
-
-float SpectVis::getYOffset(){
-  return yoffset_; 
-}
-
-void SpectVis::setYOffset(float x)
-{
-  yoffset_ = x; 
-}
-
-void SpectVis::setYHeight(float x)
-{
-  yheight_ = x; 
-  streamRenderer_.setScale(yheight_ / verticalScale_, yheight_); 
-}
-
-void SpectVis::setVerticalScale(float volts){
-
-  verticalScale_ = volts; 
+// void SpectVis::setColor(Gdk::Color c)
+// {
   
-  streamRenderer_.setScale(yheight_ / verticalScale_ , yheight_); 
-  verticalScaleSignal_.emit(volts); 
+//   color_ = c; 
+//   streamRenderer_.setColor(c); 
+//   colorSignal_.emit(c); 
+// }
 
-}
+// Gdk::Color SpectVis::getColor()
+// {
+//   return color_; 
+// }
 
-float SpectVis::getVerticalScale()
-{
-  return verticalScale_; 
-}
-
-void SpectVis::setColor(Gdk::Color c)
-{
+// GLWavePoint_t SpectVis::filterNextPoint(GLWavePoint_t wp)
+// {
   
-  color_ = c; 
-  streamRenderer_.setColor(c); 
-  colorSignal_.emit(c); 
-}
+//   wp.t -= 0.1; // delay
 
-Gdk::Color SpectVis::getColor()
-{
-  return color_; 
-}
-
-GLWavePoint_t SpectVis::filterNextPoint(GLWavePoint_t wp)
-{
-  
-  wp.t -= 0.1; // delay
-
-  return wp; 
+//   return wp; 
 
 
 
-}
+// }
 
 

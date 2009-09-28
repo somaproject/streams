@@ -9,12 +9,14 @@
 class VisBase; 
 class SineVis; 
 class WaveVis; 
+class SpectVis; 
 
 class IVisVisitor {
 public:
   virtual void visit(VisBase * ) = 0; 
   virtual void visit(SineVis * ) = 0; 
   virtual void visit(WaveVis * ) = 0; 
+  virtual void visit(SpectVis * ) = 0; 
   
 }; 
 

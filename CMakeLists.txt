@@ -24,7 +24,9 @@ pkg_check_modules(GUIDEPS REQUIRED
   glibmm-2.4>=2.13.0
   gtkmm-2.4>=2.10
   gtkglextmm-1.2>=1.2
-  libglademm-2.4>=2.6)
+  libglademm-2.4>=2.6
+  vsipl++>=2.0
+)
 
 pkg_check_modules(SOMADEPS REQUIRED
   somanetwork-1.0>=1.0

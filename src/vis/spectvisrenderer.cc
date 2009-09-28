@@ -7,8 +7,6 @@ SpectVisRenderer::SpectVisRenderer(SpectBlockpVector_t * pSpectBlocks) :
   pSpectBlocks_(pSpectBlocks), 
   mostRecentRenderT1_(0.0), 
   mostRecentRenderT2_(0.0),
-  emptyTriggerList_(), 
-  triggerQueueView_(emptyTriggerList_),
   scale_(1.0), 
   color_("red"), 
   lastRenderInterval_(interval_t::empty())
@@ -321,27 +319,27 @@ sigc::signal<void> & SpectVisRenderer::invWaveSignal()
   return invWaveSignal_;
 }
 
-void SpectVisRenderer::updateTriggers(bool reset)
-{
-  if (reset) {
+// void SpectVisRenderer::updateTriggers(bool reset)
+// {
+//   if (reset) {
 
-    trigTimeList_.clear(); 
-    triggerQueueView_.reset(); 
-  }
-  else 
-    {
-      while ( not triggerQueueView_.empty()) {
-	trigTimeList_.push_back(triggerQueueView_.front()); 
-	triggerQueueView_.pop(); 
-      }
+//     trigTimeList_.clear(); 
+//     triggerQueueView_.reset(); 
+//   }
+//   else 
+//     {
+//       while ( not triggerQueueView_.empty()) {
+// 	trigTimeList_.push_back(triggerQueueView_.front()); 
+// 	triggerQueueView_.pop(); 
+//       }
       
-    }
-}
+//     }
+// }
 
-void SpectVisRenderer::setTriggerSource(const QueueView<wavetime_t> & tqv)
-{
-  triggerQueueView_ = tqv; 
-}
+// void SpectVisRenderer::setTriggerSource(const QueueView<wavetime_t> & tqv)
+// {
+//   triggerQueueView_ = tqv; 
+// }
 
 void SpectVisRenderer::setScale(float scale, float pixheight)
 {

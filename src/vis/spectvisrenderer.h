@@ -4,31 +4,62 @@
 #define GL_GLEXT_PROTOTYPES
 
 #include <gtkglmm.h>
-
-#ifdef G_OS_WIN32
-#define WIN32_LEAN_AND_MEAN 1
-#include <windows.h>
-#endif
-
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
 
 #include <map>
 
-#include "wave.h"
+#include "data/wave.h"
 #include "queueview.h"
 #include <boost/numeric/interval.hpp>
+#include <boost/ptr_container/ptr_vector.hpp>
 
 
-
-typedef std::map<wavetime_t, int> timeindex_t; 
+typedef std::map<streamtime_t, int> timeindex_t; 
 
 typedef boost::numeric::interval_lib::rounded_arith_exact< int > rounding_policy;
 typedef boost::numeric::interval_lib::checking_no_nan< int > checking_policy;
 typedef boost::numeric::interval_lib::policies< rounding_policy, checking_policy > interval_policies;
 typedef boost::numeric::interval< int, interval_policies > interval_t;
 
+
+
+class SpectBlock_t {
+public:
+  streamtime_t starttime; 
+  streamtime_t endtime; 
+  int width; 
+  int height; 
+  std::vector<unsigned char> data; 
+}; 
+
+typedef  boost::ptr_vector<SpectBlock_t> SpectBlockpVector_t; 
+
+
+struct SpectBlockTextureCacheItem_t {
+  bool hastexture; 
+  GLuint textureName;
+}; 
+
+
+inline bool compareStartTime(const SpectBlock_t x,
+			     const SpectBlock_t y)
+{
+  if (x.starttime < y.starttime) 
+    return true; 
+
+  return false; 
+}
+
+inline bool compareEndTime(const SpectBlock_t x,
+			     const SpectBlock_t y)
+{
+  if (x.endtime < y.endtime) 
+    return true; 
+
+  return false; 
+}
 
 class SpectVisRenderer
 {
@@ -37,14 +68,14 @@ class SpectVisRenderer
 
   ~SpectVisRenderer(); 
 
-  void draw(wavetime_t t1, wavetime_t t2, int pixels); 
+  void draw(streamtime_t t1, streamtime_t t2, int pixels); 
   void newSample(void); 
   void invalidateSamples(void); 
   void setColor(Gdk::Color c); 
 
-  // triggering
-  void updateTriggers(bool); 
-  void setTriggerSource(const QueueView<wavetime_t> & tqv);
+//   // triggering
+//   void updateTriggers(bool); 
+//   void setTriggerSource(const QueueView<streamtime_t> & tqv);
 
   sigc::signal<void> & invWaveSignal();
   
@@ -53,17 +84,16 @@ class SpectVisRenderer
  protected: 
   SpectBlockpVector_t * pSpectBlocks_; 
 
-  std::vector<GLWaveQuadStrip_t> ratesS2_; 
   timeindex_t indexS2_, indexS3_; 
 
-  wavetime_t mostRecentRenderT1_, mostRecentRenderT2_; 
+  streamtime_t mostRecentRenderT1_, mostRecentRenderT2_; 
   sigc::signal<void> invWaveSignal_; 
 
-  std::list<wavetime_t> emptyTriggerList_; 
+//   std::list<streamtime_t> emptyTriggerList_; 
 
-  QueueView<wavetime_t> triggerQueueView_; 
+//   QueueView<streamtime_t> triggerQueueView_; 
 
-  TriggerTimeList_t trigTimeList_ ;
+//   TriggerTimeList_t trigTimeList_ ;
   float scale_;
   float pixheight_; 
   Gdk::Color color_; 
