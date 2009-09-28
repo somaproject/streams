@@ -1,42 +1,51 @@
 
 
-SpectVis is the spectrogram visualization of the inbound wavebuffer_t data. 
+SpectVis is the spectrogram visualization of the inbound wavebuffer_t
+data,. 
 
-Hector recommended highly-overlapping STFTs, and using about 1 second duration
-
-That suggests that we need to take in the input buffers, append them
-to some circular buffer, and then do the relevant transforms.
-
-We're going to create our own datastructure, which contains
+Things to watch out for: 
+  - incoming wavebuffer_t's may have differing lengths, ranging from 1 to N
+  - incoming wavebuffer_t's may have differing sample rates
 
 
-GlSpect
+Parameters for specgram we might want to vary: 
+   Length of specgram (how many samples / points)
+   Scaling of range 
+   Linear vs log scale
+   linear vs log spectral scale
 
-streamtime_t : start time, end time
+   can we plot a spectrum chart over it? 
+
+   Degree of overlap? 
+
+We're going to keep all of this in a BDB cache. it's not
+entirely clear how we're going to solve the following two problems: 
+
+1. When we change the visualization settings like (say) length
+of specgram, it will result in a recomputation of all of the data. 
+
+So ideally there will be some out-of-thread / only at idle method for
+performing this computation.
+
+It's not quite clear what the right spectrum scale will be
 
 
---------------------------------------------------------------------
-We use 2d textures and quads to visualize "spectBlocks", or roughly block-sized
-chunks of STFT data. 
+FFTW speed
+----------------------
+The "signalbench" function suggests that we can FFT 
+about 1.1e8 samples/second, which means that for a
+6 hour 32ksps (691 Msample) data record it would take
+~6 seconds, or about 1 second per hour of data (per channel).
 
-The GL subsystem has finite texture memory, so we create a structure
+Now, there's no way we can process and write that much data
+to the disk -- BDB clocks in at about 30 MB/sec. 
 
-GLSpectBlockTextCache[]
+6 hours of data is ~3 GB, which would take about 100 seconds (2 min)
+to filter all the way through. Again, not the end of the
+world, assuming we can interrupt. 
 
-which contains a 1-1 mapping to the original SpectBlockpVect_.
-This happens via:
+(and most data won't be at 32ksps, but a lot slower, so whee)
 
-starttime_t : 
-pSpectBlock_t : a (weak) smart pointer to the spectBlock
-bool texture : is there currently a texture for this datum
-textureName : texture name
-
-On each render, we find the overlap with the previous render by
-keeping around an interval representing the previous-generation of
-texture conversions, as if it were a set. 
-
-Then 
-newset - oldset == the set we must generate textures for
-
-oldset - newset == the set we must delete textures for
+challenges: Prioritizing the operations
+using BDB as a cross-thread synchronization medium
 

@@ -13,7 +13,7 @@ pISource_t SourceFactory::create(std::string typname, pSourceState_t ss,
   
   if (typname == NoiseWave::TYPENAME) {
     pNoiseWave_t nw(new NoiseWave(defaultname, ss->timer, scratchdir, 
-				  1000)); 
+				  0)); 
     return nw; 
 
   } else if (typname == NetDataWave::TYPENAME) {

@@ -16,8 +16,15 @@ SpectVis::SpectVis(std::string name, bf::path scratch) :
   yheight_(100),
   color_("red"),
   verticalScale_(1.0),
-  scratchdir_(scratch / name)
+  scratchdir_(scratch / name),
+  vpp_(),
+  pixelHeight_(100)
 {
+  using namespace vsip;
+  using namespace vsip_csl;
+  using namespace vsip::impl::profile;
+
+
 
   pSinkPad_->newDataSignal().connect(sigc::mem_fun(*this, 
 						   &SpectVis::newData)); 
@@ -27,7 +34,7 @@ SpectVis::SpectVis(std::string name, bf::path scratch) :
 void SpectVis::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
 {
   // i really hate how this modifies the gloabl GL state
-  streamRenderer_.draw(t1, t2, pixels); 
+  streamRenderer_.renderStream(t1, t2, pixels); 
   
 }
 
@@ -57,7 +64,7 @@ void SpectVis::newData()
 
       // do the signal processing with VSIPL++
       
-      int FFTN = 100;
+      int FFTN = 128;
       // perform the STFT 
       spectBlocks_.push_back(new SpectBlock_t); 
       spectBlocks_.back().starttime = wb.time; 
@@ -73,29 +80,28 @@ void SpectVis::newData()
       // Create FFT objects
       f_fft_type f_fft(Domain<1>(FFTN), 1.0);
 
-      // Allocate input and output buffers
-      Vector<cscalar_f> in(FFTN, cscalar_f(1.f));
+//       // Allocate input and output buffers
+
+      Vector<cscalar_f> in(FFTN);
+      in = cscalar_f(1.0); 
       Vector<cscalar_f> out(FFTN);
       
       // copy data to in:
-      for (int i = 0; i < FFTN; i++) {
-	in(i) = cscalar_f(wb.data[i]); 
+      for (int i = 0; (i < FFTN) and ( i < wb.data.size()); i++) {
+ 	in(i) = cscalar_f(wb.data[i]); 
       }
 
-      //Compute forward and inverse FFT's
+//       //Compute forward and inverse FFT's
       out = f_fft(in);
 
-      spectBlocks_.back().data.reserve(FFTN*1*3);
+      spectBlocks_.back().data.resize(FFTN*1);
  
       for (int i = 0; i < FFTN; i++) {
- 	double mag = out(i).real() * out(i).real() + out(i).imag() * out(i).imag(); 
+ 	double mag = i; // out(i).real() * out(i).real() + out(i).imag() * out(i).imag(); 
 	
  	double scaledmag = mag; 
 	//std::cout << "i = " << i  << " mag = "  << mag << " " << scaledmag << std::endl; 
- 	spectBlocks_.back().data[i*3 + 0] = scaledmag; 
- 	spectBlocks_.back().data[i*3 + 1] = scaledmag; 
- 	spectBlocks_.back().data[i*3 + 2] = scaledmag; 
-	
+ 	spectBlocks_.back().data[i] = scaledmag; 
       }
       
       streamRenderer_.newSample(); 
@@ -165,3 +171,31 @@ void SpectVis::invalidateData()
 // }
 
 
+
+
+void SpectVis::renderTrigger(streamtime_t deltapre, streamtime_t deltapost, int pixels)
+{
+
+
+}
+
+
+
+void SpectVis::setPixelHeight(int x)
+{
+
+  pixelHeight_ = x; 
+
+}
+
+int SpectVis::getPixelHeight()
+{
+  return pixelHeight_; 
+
+}
+
+void SpectVis::setScale(float)
+{
+
+
+}

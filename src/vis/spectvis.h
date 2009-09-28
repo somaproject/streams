@@ -3,6 +3,7 @@
 
 #include <gtkmm.h>
 #include <boost/shared_ptr.hpp>
+#include <vsip/initfin.hpp>
 
 #include "visbase.h"
 
@@ -56,6 +57,7 @@ class SpectVis : public VisBase
 
   SpectBlockpVector_t spectBlocks_; 
   
+  int pixelHeight_; 
 //   float yoffset_; 
   float yheight_; 
 
@@ -67,6 +69,7 @@ class SpectVis : public VisBase
 
 //   GLWavePoint_t filterNextPoint(GLWavePoint_t wp);
   bf::path scratchdir_; 
+  vsip::vsipl vpp_; 
 
 };
 

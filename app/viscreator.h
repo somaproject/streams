@@ -14,6 +14,7 @@ public:
   void visit(VisBase * ); 
   void visit(SineVis * ); 
   void visit(WaveVis * ); 
+  void visit(SpectVis * ); 
 
 
 private:

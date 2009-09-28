@@ -27,6 +27,7 @@ set(app_widgets_SRCS
   noisewavewidget.cc
   pamonitorwidget.cc
   waveviswidget.cc
+  spectviswidget.cc
   netdatawavewidget.cc
   netdatarawwidget.cc)
 
@@ -52,6 +53,12 @@ target_link_libraries(streams
   app_widgets
   app_props
   propwidgets
-  streams_core)
+  streams_core
+    ${Boost_LIBRARIES} 
+    ${GUIDEPS_LIBRARIES}
+    ${SOMADEPS_LIBRARIES}
+    ${BDB_LIBRARIES}
+
+)
 
 add_subdirectory(propwidgets)

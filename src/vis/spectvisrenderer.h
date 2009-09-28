@@ -68,7 +68,7 @@ class SpectVisRenderer
 
   ~SpectVisRenderer(); 
 
-  void draw(streamtime_t t1, streamtime_t t2, int pixels); 
+  void renderStream(streamtime_t t1, streamtime_t t2, int pixels); 
   void newSample(void); 
   void invalidateSamples(void); 
   void setColor(Gdk::Color c); 

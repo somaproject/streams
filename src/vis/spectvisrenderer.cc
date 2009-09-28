@@ -32,11 +32,11 @@ SpectVisRenderer::~SpectVisRenderer()
 void SpectVisRenderer::newSample()
 {
   //boost::weak_ptr<SpectBlock_t> newsb = pSpectBlocks_->back(); 
-  SpectBlockTextureCacheItem_t newitem; 
-  newitem.hastexture = false; 
-  newitem.textureName = 0; 
+//   SpectBlockTextureCacheItem_t newitem; 
+//   newitem.hastexture = false; 
+//   newitem.textureName = 0; 
 
-  texCache_.push_back(newitem); 
+//   texCache_.push_back(newitem); 
   
 //   int S1N = 10; 
   
@@ -92,14 +92,14 @@ void SpectVisRenderer::newSample()
 
 }
 
-void SpectVisRenderer::draw(streamtime_t t1, streamtime_t t2, int pixels)
+void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
 {
   // pixels is just a hint
 
   mostRecentRenderT1_ = t1; 
   mostRecentRenderT2_ = t2; 
 
-  wavetime_t scale = pixels / (t2 -t1); 
+  streamtime_t scalea = pixels / (t2 -t1); 
   
 //   // draw the little range indicator
 //   setGLColor(0.8); 
@@ -111,92 +111,95 @@ void SpectVisRenderer::draw(streamtime_t t1, streamtime_t t2, int pixels)
 //   glEnd(); 
   
 
-  glLineWidth(1.0); 
-
+  glLineWidth(8.0); 
+  glColor4f(1.0, 1.0, 1.0, 1.0);
   // perform scaling
   glPushMatrix(); 
-  glScalef(1.0, scale_, 1.0); 
+  glScalef(1.0, 1./scale_, 1.0); 
   
 
-  glEnable(GL_TEXTURE_RECTANGLE_ARB); 
+//   glEnable(GL_TEXTURE_RECTANGLE_ARB); 
 
-  SpectBlockpVector_t::iterator  i1, i2;
-  SpectBlock_t p1, p2; 
+//   SpectBlockpVector_t::iterator  i1, i2;
+//   SpectBlock_t p1, p2; 
 
-  p1.endtime = t1; 
-  p1.starttime = t2; 
+//   p1.endtime = t1; 
+//   p1.starttime = t2; 
 
-  i1 = lower_bound(pSpectBlocks_->begin(), pSpectBlocks_->end(), 
- 		   p1, compareEndTime); 
+//   i1 = lower_bound(pSpectBlocks_->begin(), pSpectBlocks_->end(), 
+//  		   p1, compareEndTime); 
   
-  i2 = lower_bound(pSpectBlocks_->begin(), pSpectBlocks_->end(), 
- 		   p1, compareStartTime); 
+//   i2 = lower_bound(pSpectBlocks_->begin(), pSpectBlocks_->end(), 
+//  		   p1, compareStartTime); 
   
-  int len = i2 - i1; 
+//   int len = i2 - i1; 
+
+  int starti = 0;
+  int endi = pSpectBlocks_->size(); 
+
+//   // get the actual posiiton s
+//   int starti = i1 - pSpectBlocks_->begin(); 
+//   int endi = i2 - pSpectBlocks_->begin(); 
+//   if ( ! (endi < pSpectBlocks_->size())) {
+//     endi = pSpectBlocks_->size() - 1; 
+//   }
+
+//   interval_t newRenderInterval(starti, endi); 
   
-  // get the actual posiiton s
-  int starti = i1 - pSpectBlocks_->begin(); 
-  int endi = i2 - pSpectBlocks_->begin(); 
-  if ( ! (endi < pSpectBlocks_->size())) {
-    endi = pSpectBlocks_->size() - 1; 
-  }
+//   std::cout << "Currently len = " << len << " and starti = " << starti
+// 	    << " and endi = " << endi << std::endl; 
 
-  interval_t newRenderInterval(starti, endi); 
-  
-  std::cout << "Currently len = " << len << " and starti = " << starti
-	    << " and endi = " << endi << std::endl; 
+//   // DELETE THE OLD TEXTURES 
+//   if (!empty(lastRenderInterval_)) {
+//     // figure out what to delete 
+//     for (int i = lastRenderInterval_.lower(); i <= lastRenderInterval_.upper();
+// 	 i++) 
+//       {
+// 	assert(texCache_[i].hastexture); // sanity check; 
+// 	if (in(i, newRenderInterval)) { 
+// 	  // in the new interval, don't delete
+// 	} else {
+// 	  texCache_[i].hastexture = false; 
+// 	  GLuint texnames[1] = {0}; 
+// 	  texnames[0] = texCache_[i].textureName; 
+// 	  std::cout << "deleting texture for index i= " << i 
+// 		    << " name = " << texnames[0] << std::endl; 
+// 	  //glUnbind
+// 	  glDeleteTextures(1, texnames); 
+// 	}
+//       }
+//   }
 
-  // DELETE THE OLD TEXTURES 
-  if (!empty(lastRenderInterval_)) {
-    // figure out what to delete 
-    for (int i = lastRenderInterval_.lower(); i <= lastRenderInterval_.upper();
-	 i++) 
-      {
-	assert(texCache_[i].hastexture); // sanity check; 
-	if (in(i, newRenderInterval)) { 
-	  // in the new interval, don't delete
-	} else {
-	  texCache_[i].hastexture = false; 
-	  GLuint texnames[1] = {0}; 
-	  texnames[0] = texCache_[i].textureName; 
-	  std::cout << "deleting texture for index i= " << i 
-		    << " name = " << texnames[0] << std::endl; 
-	  //glUnbind
-	  glDeleteTextures(1, texnames); 
-	}
-      }
-  }
+//   // now render the relevant textures
 
-  // now render the relevant textures
-
-  if (!empty(newRenderInterval)) {
-    for (int i = newRenderInterval.lower(); i <= newRenderInterval.upper();
-	 i++) 
-      {
+//   if (!empty(newRenderInterval)) {
+//     for (int i = newRenderInterval.lower(); i <= newRenderInterval.upper();
+// 	 i++) 
+//       {
 	
-	if (! texCache_[i].hastexture) {
-	  GLuint texture; 
-	  glGenTextures(1, &texture); 
-	  texCache_[i].textureName = texture; 
-	  texCache_[i].hastexture = true; 
+// 	if (! texCache_[i].hastexture) {
+// 	  GLuint texture; 
+// 	  glGenTextures(1, &texture); 
+// 	  texCache_[i].textureName = texture; 
+// 	  texCache_[i].hastexture = true; 
 	  
-	  glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture); 
-	  int width = (*pSpectBlocks_)[i].width; 
-	  int height = (*pSpectBlocks_)[i].height; 
+// 	  glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture); 
+// 	  int width = (*pSpectBlocks_)[i].width; 
+// 	  int height = (*pSpectBlocks_)[i].height; 
 	  
-	  glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0 , GL_RGB, width, height, 
-		       0, GL_RGB, GL_UNSIGNED_BYTE, 
-		       &((*pSpectBlocks_)[i].data[0])); 
+// 	  glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0 , GL_RGB, width, height, 
+// 		       0, GL_RGB, GL_UNSIGNED_BYTE, 
+// 		       &((*pSpectBlocks_)[i].data[0])); 
 	  
-	}
-      }    
-  }
+// 	}
+//       }    
+//   }
 
   
 
-  lastRenderInterval_ = newRenderInterval; 
+//   lastRenderInterval_ = newRenderInterval; 
   
-  assert(len > 0); 
+//   assert(len > 0); 
   
 //   GLuint texture; 
 //   glEnable(GL_TEXTURE_RECTANGLE_ARB); 
@@ -216,31 +219,41 @@ void SpectVisRenderer::draw(streamtime_t t1, streamtime_t t2, int pixels)
 
 //   glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture); 
 
-  glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); 
+//   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); 
   
-  glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
-  glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
+//   glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
+//   glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
 
     
-  for (int i = starti; i <= endi; i++) {
+  for (int i = starti; i < endi; i++) {
 
-    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texCache_[i].textureName); 
-
-    glBegin(GL_QUADS);
-    glTexCoord2i(0, 0 );
-    glVertex2f((*pSpectBlocks_)[i].starttime, 0.0); 
+//     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texCache_[i].textureName); 
+    float starttime = (*pSpectBlocks_)[i].starttime; 
+    float endtime = (*pSpectBlocks_)[i].endtime; 
+    std::cout << "rendering lines " << starttime << " " 
+	      << endtime << std::endl; 
+    glBegin(GL_LINE_LOOP);
+//     glTexCoord2i(0, 0 );
+    glVertex2f(starttime, -100.0); 
     
-    glTexCoord2i((*pSpectBlocks_)[i].width, 0);
-    glVertex2f((*pSpectBlocks_)[i].endtime+0.01, 0.0); 
+//     glTexCoord2i((*pSpectBlocks_)[i].width, 0);
+    glVertex2f(endtime, -100.0); 
     
-    glTexCoord2i((*pSpectBlocks_)[i].width, (*pSpectBlocks_)[i].height); 
-    glVertex2f((*pSpectBlocks_)[i].endtime+0.01, 100.0); 
+//     glTexCoord2i((*pSpectBlocks_)[i].width, (*pSpectBlocks_)[i].height); 
+    glVertex2f(endtime, 100.0); 
     
-    glTexCoord2i(0, (*pSpectBlocks_)[i].height); 
-    glVertex2f((*pSpectBlocks_)[i].starttime, 100.0); 
+//     glTexCoord2i(0, (*pSpectBlocks_)[i].height); 
+    glVertex2f(starttime, 100.0); 
     glEnd(); 
   }
-  glDisable(GL_TEXTURE_RECTANGLE_ARB); 
+
+  //  glBegin(GL_LINES);
+//   glVertex2f(0, 0.0); 
+//   glVertex2f(t2-t1, 0.0); 
+//   glEnd(); 
+
+
+//   glDisable(GL_TEXTURE_RECTANGLE_ARB); 
 //   int len  = i2 - i1; 
 //   float fadethold = 50.0; 
 //   if (scale > fadethold) {
@@ -312,7 +325,7 @@ void SpectVisRenderer::draw(streamtime_t t1, streamtime_t t2, int pixels)
       
   glPopMatrix(); 
 
-}
+ }
 
 sigc::signal<void> & SpectVisRenderer::invWaveSignal()
 {

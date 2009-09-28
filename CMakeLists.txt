@@ -26,6 +26,7 @@ pkg_check_modules(GUIDEPS REQUIRED
   gtkglextmm-1.2>=1.2
   libglademm-2.4>=2.6
   vsipl++>=2.0
+  fftw3>=3.1
 )
 
 pkg_check_modules(SOMADEPS REQUIRED

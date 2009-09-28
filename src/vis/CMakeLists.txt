@@ -36,3 +36,9 @@ add_library(vis
   ${spect_vis_SRCS}
   )
 
+target_link_libraries(vis
+  ${Boost_LIBRARIES} 
+
+  ${GUIDEPS_LIBRARIES}
+  ${SOMADEPS_LIBRARIES}
+)
