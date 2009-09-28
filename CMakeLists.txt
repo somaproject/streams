@@ -19,6 +19,8 @@ SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 
 pkg_check_modules(GUIDEPS REQUIRED 
   sigc++-2.0>=2.0 
+  libpulse>=0.9.14
+  libpulse-mainloop-glib>=0.9.2
   glibmm-2.4>=2.13.0
   gtkmm-2.4>=2.10
   gtkglextmm-1.2>=1.2

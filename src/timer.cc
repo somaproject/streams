@@ -22,7 +22,7 @@ Timer::Timer(somatime_t starttime) :
 
 bool Timer::dummytimeout() 
 {
-  updateSomaTime(currentSomaTime_ + 5000); 
+  updateSomaTime(currentSomaTime_ + 500); 
   return true; 
 }
 

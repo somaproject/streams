@@ -3,6 +3,7 @@
 #include "noisewave.h"
 #include "netdatawave.h"
 #include "netdataraw.h"
+#include "pamonitor.h"
 
 
 pISource_t SourceFactory::create(std::string typname, pSourceState_t ss,
@@ -22,6 +23,10 @@ pISource_t SourceFactory::create(std::string typname, pSourceState_t ss,
   } else if (typname == NetDataRaw::TYPENAME) {
     pNetDataRaw_t ndw(new NetDataRaw(defaultname, ss->timer, ss->netdatacache, 
 				     ss->somanetcodec, scratchdir)); 
+    return ndw; 
+  } else if (typname == PulseAudioMonitorWave::TYPENAME) {
+    pPulseAudioMonitorWave_t ndw(new PulseAudioMonitorWave(defaultname, ss->timer,
+							   scratchdir)); 
     return ndw; 
   };
   

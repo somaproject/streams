@@ -50,6 +50,11 @@ add_executable(pipelineconfig_test
   runner.cc)
 
 
+add_executable(pasource_test
+  pasource_test.cc
+  runner.cc)
+
+
   target_link_libraries(runtest
     streams_core
     ${Boost_LIBRARIES} 
@@ -70,7 +75,9 @@ set(testlist
   networkdatacache_test
   pipelinemanager_test
   bdbqueueview_test
-  pipelineconfig_test)
+  pipelineconfig_test
+  pasource_test
+)
 
 
 #SET(TEST_DATA_PATH ${PROJECT_SOURCE_DIR}/tests)

@@ -14,6 +14,7 @@ public:
   void visit(NoiseWave * ); 
   void visit(NetDataWave *); 
   void visit(NetDataRaw *); 
+  void visit(PulseAudioMonitorWave *); 
 
 
   

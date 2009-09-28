@@ -328,7 +328,7 @@ bool StreamRenderWin::on_expose_event(GdkEventExpose* event)
   glEnd(); 
 
 //   // render current position
-//   renderCurrentTimeCursor(); 
+  renderCurrentTimeCursor(); 
   
   // Swap buffers.
   gldrawable->swap_buffers();
@@ -584,8 +584,8 @@ void StreamRenderWin::renderCurrentTimeCursor()
   glLineWidth(4.0);
   glColor4f(0.5, 0.5, 1.0, 1.0); 
   glBegin(GL_LINES); 
-  glVertex2f(currentTime_, viewX1_); 
-  glVertex2f(currentTime_, viewX2_); 
+  glVertex2f(currentTime_ - viewT1_, viewX1_); 
+  glVertex2f(currentTime_ - viewT1_, viewX2_); 
   glEnd(); 
     
 

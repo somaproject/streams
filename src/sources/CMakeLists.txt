@@ -11,14 +11,20 @@ include_directories(${SOMADEPS_INCLUDE_DIRS})
 set(sources_SRCS
   sourcebase.cc
   noisewave.cc
+  pamonitor.cc
   sourcefactory.cc
   netdatawave.cc
-  netdataraw.cc)
+  netdataraw.cc
+  pasource.cc
+  )
 
 add_library(sources
   ${sources_SRCS})
 
 target_link_libraries(sources
   streams_core
+  ${GUIDEPS_LIBRARIES}
+  ${GUIDEPS_LIBRARIES}
+
 )
   

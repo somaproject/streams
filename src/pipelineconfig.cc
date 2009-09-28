@@ -25,8 +25,10 @@ void load_pipeline_config(pPipelineManager_t pm, std::istream & is)
   read( is, val );
   const mArray & pipelines_array = val.get_array(); 
   
-  
+  std::cout << "There are " << pipelines_array.size() << " pipelines" << std::endl;
   for (int p = 0; p < pipelines_array.size(); p++) {
+
+    std::cout << "pipeline " << p << std::endl;
     mObject po = pipelines_array[p].get_obj(); 
 
     mValue name_val = find_value(po, "name"); 
@@ -61,10 +63,9 @@ void load_pipeline_config(pPipelineManager_t pm, std::istream & is)
    }
     
     mValue conn_obj = find_value(po, "connections"); 
-    
-    mArray conns = conn_obj.get_array(); 
+    const mArray & conns = conn_obj.get_array(); 
     for (int ci = 0; ci < conns.size(); ++ci) {
-      mArray c = conns[p].get_array(); 
+      mArray c = conns[ci].get_array(); 
       std::string srcelt = c[0].get_str(); 
       std::string srcport = c[1].get_str(); 
       std::string destelt = c[2].get_str(); 
@@ -75,6 +76,7 @@ void load_pipeline_config(pPipelineManager_t pm, std::istream & is)
       ps_s->connect(ps_d); 
 
     }
+    std::cout << "end " << std::endl;
     //int x = conn_obj.get_int(); 
     
     

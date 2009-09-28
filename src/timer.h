@@ -23,7 +23,7 @@ public:
     pTimer_t pt(new Timer(startexptime)); 
     Glib::signal_timeout().connect(sigc::mem_fun(pt.get(), 
 						 &Timer::dummytimeout), 
-				   100); 
+				   30); 
     
     return pt; 
     
