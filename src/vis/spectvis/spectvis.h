@@ -46,6 +46,9 @@ class SpectVis : public VisBase
   Property<Gdk::Color> color; 
   Property<float> scale; 
     
+  Property<int> fftN; 
+  Property<int> windowsize; 
+  Property<int> overlapFactor; 
   
  private:
   core::SinkPad<WaveBuffer_t> * pSinkPad_; 
@@ -53,10 +56,8 @@ class SpectVis : public VisBase
   void newData(); 
   void invalidateData(); 
 
-  SpectVisRenderer streamRenderer_; 
+  SpectVisRenderer * streamRenderer_; 
 
-  SpectBlockpVector_t spectBlocks_; 
-  
   int pixelHeight_; 
 //   float yoffset_; 
   float yheight_; 
@@ -69,7 +70,9 @@ class SpectVis : public VisBase
 
 //   GLWavePoint_t filterNextPoint(GLWavePoint_t wp);
   bf::path scratchdir_; 
-  vsip::vsipl vpp_; 
+  
+  pDb_t spectblockdb_; 
+
 
 };
 

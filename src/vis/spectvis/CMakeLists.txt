@@ -12,6 +12,7 @@ include_directories(${SOMADEPS_INCLUDE_DIRS})
 set(spect_vis_SRCS
   spectvis.cc
   spectvisrenderer.cc
+  data.cc
 )
 
 

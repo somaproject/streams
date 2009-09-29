@@ -49,3 +49,12 @@ world, assuming we can interrupt.
 challenges: Prioritizing the operations
 using BDB as a cross-thread synchronization medium
 
+Generic framework
+---------------------
+input data  -> fft preprocessor -> fft processor -> renderer
+
+
+FFTEngine: 
+takes in a stream of WaveBuffers, and 
+
+

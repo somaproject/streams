@@ -54,6 +54,10 @@ add_executable(pasource_test
   pasource_test.cc
   runner.cc)
 
+add_executable(spectvis_test
+  spectvis_test.cc
+  runner.cc)
+
 
   target_link_libraries(runtest
     streams_core
@@ -77,6 +81,7 @@ set(testlist
   bdbqueueview_test
   pipelineconfig_test
   pasource_test
+  spectvis_test
 )
 
 

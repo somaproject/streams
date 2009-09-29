@@ -1,31 +1,36 @@
 
 #include "spectvis.h"
 #include <iostream>
-#include <vsip/initfin.hpp>
-#include <vsip/support.hpp>
-#include <vsip/signal.hpp>
-#include <vsip/math.hpp>
-#include <vsip/core/profile.hpp>
+#include <boost/format.hpp>
 
 const std::string SpectVis::TYPENAME = "SpectVis"; 
 
 SpectVis::SpectVis(std::string name, bf::path scratch) :
   VisBase(name), 
   pSinkPad_(createSinkPad<WaveBuffer_t>("default")), 
-  streamRenderer_(&spectBlocks_), 
+
   yheight_(100),
   color_("red"),
   verticalScale_(1.0),
   scratchdir_(scratch / name),
-  vpp_(),
-  pixelHeight_(100)
+  pixelHeight_(100),
+  spectblockdb_(new Db(NULL, 0))
 {
-  using namespace vsip;
-  using namespace vsip_csl;
-  using namespace vsip::impl::profile;
 
+  u_int32_t oFlags = DB_CREATE |  DB_TRUNCATE |  DB_THREAD ; // Open flags;
+  bf::create_directories(scratchdir_);
+  bf::path dbpath = scratchdir_ / "spectblock.db"; 
+  std::cout << "Attempting to create " << dbpath << std::endl; 
+  spectblockdb_->set_pagesize(1<<16); 
+  spectblockdb_->set_bt_compare(spectvis_compare_double);
+  int ret = spectblockdb_->open(NULL,                // Transaction pointer
+				dbpath.string().c_str(), 
+				NULL,                // Optional logical database name
+				DB_BTREE,            // Database access method
+				oFlags,              // Open flags
+				0);                  // File mode (using defaults)
 
-
+  streamRenderer_ = new SpectVisRenderer(spectblockdb_); 
   pSinkPad_->newDataSignal().connect(sigc::mem_fun(*this, 
 						   &SpectVis::newData)); 
   
@@ -34,25 +39,23 @@ SpectVis::SpectVis(std::string name, bf::path scratch) :
 void SpectVis::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
 {
   // i really hate how this modifies the gloabl GL state
-  streamRenderer_.renderStream(t1, t2, pixels); 
+  streamRenderer_->renderStream(t1, t2, pixels); 
   
 }
 
 SpectVis::~SpectVis()
 {
   
-
+  delete streamRenderer_; 
 }
 
 
 void SpectVis::newData()
 {
-
-  using namespace vsip;
-  using namespace vsip_csl;
-  using namespace vsip::impl::profile;
+  // right now this is just a stupid no-op
 
 
+  char * buffer = (char*)malloc(SpectRenderBlock::maxbytes()); 
   // our inputs are buffers of data, our filtered
   // outputs are GLwavePoints
   while (not pSinkPad_->getpQueueView()->empty())
@@ -60,55 +63,28 @@ void SpectVis::newData()
       // we're taking in WaveBuffer_t pointers
 
       WaveBuffer_t & wb = pSinkPad_->getpQueueView()->front(); 
-      pSinkPad_->getpQueueView()->pop(); 
 
-      // do the signal processing with VSIPL++
+      SpectRenderBlock sbb(wb.data.size(), 1); 
+
+      sbb.starttime = wb.time; 
+      double starttime = sbb.starttime; 
+      sbb.endtime = wb.time + wb.data.size() * 1.0 / wb.samprate;
+
+      sbb.lowfreq = 0;
+      sbb.highfreq = 100; 
       
-      int FFTN = 128;
-      // perform the STFT 
-      spectBlocks_.push_back(new SpectBlock_t); 
-      spectBlocks_.back().starttime = wb.time; 
-      spectBlocks_.back().endtime = wb.time + wb.data.size() * 1.0/wb.samprate; 
-      spectBlocks_.back().width = 1; 
-      spectBlocks_.back().height = FFTN; 
-      
-
-      // this is slow to the point of embarrassment, but whatever, it's due tomorrow
-      
-      typedef Fft<const_Vector, cscalar_f, cscalar_f, fft_fwd> f_fft_type;
-  
-      // Create FFT objects
-      f_fft_type f_fft(Domain<1>(FFTN), 1.0);
-
-//       // Allocate input and output buffers
-
-      Vector<cscalar_f> in(FFTN);
-      in = cscalar_f(1.0); 
-      Vector<cscalar_f> out(FFTN);
-      
-      // copy data to in:
-      for (int i = 0; (i < FFTN) and ( i < wb.data.size()); i++) {
- 	in(i) = cscalar_f(wb.data[i]); 
-      }
-
-//       //Compute forward and inverse FFT's
-      out = f_fft(in);
-
-      spectBlocks_.back().data.resize(FFTN*1);
- 
-      for (int i = 0; i < FFTN; i++) {
- 	double mag = i; // out(i).real() * out(i).real() + out(i).imag() * out(i).imag(); 
-	
- 	double scaledmag = mag; 
-	//std::cout << "i = " << i  << " mag = "  << mag << " " << scaledmag << std::endl; 
- 	spectBlocks_.back().data[i] = scaledmag; 
+      int size = sbb.marshall_to_buffer(buffer); 
+      Dbt key(&(starttime), sizeof(starttime));
+      Dbt data(buffer, size); 
+      int ret = spectblockdb_->put(NULL, &key, &data, DB_NOOVERWRITE);
+      if (ret != 0) {
+	spectblockdb_->err(ret, "Put failed because key %f already exists", sbb.starttime);
       }
       
-      streamRenderer_.newSample(); 
-
+      pSinkPad_->getpQueueView()->pop();       
     }
   
-
+  free(buffer); 
 }
 
 void SpectVis::invalidateData()

@@ -3,13 +3,8 @@
 #include <assert.h>
 
 
-SpectVisRenderer::SpectVisRenderer(SpectBlockpVector_t * pSpectBlocks) :
-  pSpectBlocks_(pSpectBlocks), 
-  mostRecentRenderT1_(0.0), 
-  mostRecentRenderT2_(0.0),
-  scale_(1.0), 
-  color_("red"), 
-  lastRenderInterval_(interval_t::empty())
+SpectVisRenderer::SpectVisRenderer(pDb_t spectblockdb) : 
+  spectblockdb_(spectblockdb)
 {
   // initialize data from stream source buffer
   /* 
@@ -29,75 +24,75 @@ SpectVisRenderer::~SpectVisRenderer()
   
 }
 
-void SpectVisRenderer::newSample()
-{
-  //boost::weak_ptr<SpectBlock_t> newsb = pSpectBlocks_->back(); 
-//   SpectBlockTextureCacheItem_t newitem; 
-//   newitem.hastexture = false; 
-//   newitem.textureName = 0; 
+// void SpectVisRenderer::newSample()
+// {
+//   //boost::weak_ptr<SpectBlock_t> newsb = pSpectBlocks_->back(); 
+// //   SpectBlockTextureCacheItem_t newitem; 
+// //   newitem.hastexture = false; 
+// //   newitem.textureName = 0; 
 
-//   texCache_.push_back(newitem); 
+// //   texCache_.push_back(newitem); 
   
-//   int S1N = 10; 
+// //   int S1N = 10; 
   
-//   int N = pSamples_->size(); 
+// //   int N = pSamples_->size(); 
   
-//   if (ratesS2_.empty()) {
-//     GLWaveQuadStrip_t qs; 
-//     qs.xmin = p.x; 
-//     qs.xmax = p.x; 
-//     qs.tmin = p.t; 
-//     qs.tmax = p.t; 
-//     ratesS2_.push_back(qs); 
-//   } else if (N % S1N == 0) {
-//     // examine the last N points
-//     GLWavePoint_t minpoint, maxpoint; 
-//     minpoint.x = 100e6;
-//     maxpoint.x = -100e6; 
-//     for(int i = 0; i < S1N; i++) {
-//       int q =  N - i - 1; 
-//       GLWavePoint_t wp = (*pSamples_)[q]; 
-//       if (wp.x < minpoint.x)
-// 	minpoint.x = wp.x; 
+// //   if (ratesS2_.empty()) {
+// //     GLWaveQuadStrip_t qs; 
+// //     qs.xmin = p.x; 
+// //     qs.xmax = p.x; 
+// //     qs.tmin = p.t; 
+// //     qs.tmax = p.t; 
+// //     ratesS2_.push_back(qs); 
+// //   } else if (N % S1N == 0) {
+// //     // examine the last N points
+// //     GLWavePoint_t minpoint, maxpoint; 
+// //     minpoint.x = 100e6;
+// //     maxpoint.x = -100e6; 
+// //     for(int i = 0; i < S1N; i++) {
+// //       int q =  N - i - 1; 
+// //       GLWavePoint_t wp = (*pSamples_)[q]; 
+// //       if (wp.x < minpoint.x)
+// // 	minpoint.x = wp.x; 
       
-//       if (wp.x > maxpoint.x)
-// 	maxpoint.x = wp.x; 
-//     }
+// //       if (wp.x > maxpoint.x)
+// // 	maxpoint.x = wp.x; 
+// //     }
     
-//     // now we add a rectangle
-//     GLWaveQuadStrip_t pl, pr; 
+// //     // now we add a rectangle
+// //     GLWaveQuadStrip_t pl, pr; 
     
-//     // left points
-//     pl.xmin = minpoint.x; 
-//     pl.xmax = maxpoint.x; 
-//     pl.tmin = (*pSamples_)[N-S1N].t; 
-//     pl.tmax = (*pSamples_)[N-S1N].t; 
+// //     // left points
+// //     pl.xmin = minpoint.x; 
+// //     pl.xmax = maxpoint.x; 
+// //     pl.tmin = (*pSamples_)[N-S1N].t; 
+// //     pl.tmax = (*pSamples_)[N-S1N].t; 
 
-//     // right points
-//     pr.xmin = minpoint.x; 
-//     pr.xmax = maxpoint.x; 
-//     pr.tmin = (*pSamples_)[N-1].t; 
-//     pr.tmax = (*pSamples_)[N-1].t; 
+// //     // right points
+// //     pr.xmin = minpoint.x; 
+// //     pr.xmax = maxpoint.x; 
+// //     pr.tmin = (*pSamples_)[N-1].t; 
+// //     pr.tmax = (*pSamples_)[N-1].t; 
 
-//     ratesS2_.push_back(pl); 
-//     ratesS2_.push_back(pr); 
+// //     ratesS2_.push_back(pl); 
+// //     ratesS2_.push_back(pr); 
       
-//   }
+// //   }
   
-//   if ( (mostRecentRenderT1_ <= p.t) and (mostRecentRenderT2_ >= p.t) )
-//     {
-//       invWaveSignal_.emit(); 
-//     }
+// //   if ( (mostRecentRenderT1_ <= p.t) and (mostRecentRenderT2_ >= p.t) )
+// //     {
+// //       invWaveSignal_.emit(); 
+// //     }
   
 
-}
+// }
 
 void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
 {
   // pixels is just a hint
 
-  mostRecentRenderT1_ = t1; 
-  mostRecentRenderT2_ = t2; 
+//   mostRecentRenderT1_ = t1; 
+//   mostRecentRenderT2_ = t2; 
 
   streamtime_t scalea = pixels / (t2 -t1); 
   
@@ -115,7 +110,7 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
   glColor4f(1.0, 1.0, 1.0, 1.0);
   // perform scaling
   glPushMatrix(); 
-  glScalef(1.0, 1./scale_, 1.0); 
+  glScalef(1.0, 1./scale, 1.0); 
   
 
 //   glEnable(GL_TEXTURE_RECTANGLE_ARB); 
@@ -134,8 +129,8 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
   
 //   int len = i2 - i1; 
 
-  int starti = 0;
-  int endi = pSpectBlocks_->size(); 
+//   int starti = 0;
+//   int endi = pSpectBlocks_->size(); 
 
 //   // get the actual posiiton s
 //   int starti = i1 - pSpectBlocks_->begin(); 
@@ -224,28 +219,60 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
 //   glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 //   glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
 
+  Dbc *cursorp;
+  spectblockdb_->cursor(NULL, &cursorp, 0); 
+  double searchval = t1; 
+  Dbt search_key(&searchval, sizeof(searchval)); 
+  Dbt found_data; 
+
+  int ret = cursorp->get(&search_key, &found_data, DB_SET_RANGE);
+  if (ret == DB_NOTFOUND) { 
+    ret = cursorp->get(&search_key, &found_data, DB_LAST);
     
-  for (int i = starti; i < endi; i++) {
+  } else { 
+    ret = cursorp->get(&search_key, &found_data, DB_PREV);
+    if (ret == DB_NOTFOUND ) { // already first record
+      ret = cursorp->get(&search_key, &found_data, DB_FIRST);
+    }
+  }
+
+  // scratch bufer
+//   char * buffer = malloc(SpectRenderBlock::maxbytes()); 
+
+  while ((ret != DB_NOTFOUND) and *((double *)(search_key.get_data())) < t2) {
+    
+    SpectRenderBlock srb(0, 0); 
+    SpectRenderBlock::unmarshall_from_buffer(&srb, found_data.get_data()); 
+
+//     GLPointBuffer_t * bufptr; 
+//     bufptr = (GLPointBuffer_t * )found_data.get_data(); 
+//     renderGLPointBuffer(*((double*)search_key.get_data()) - t1, 
+// 			bufptr); 
+
 
 //     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texCache_[i].textureName); 
-    float starttime = (*pSpectBlocks_)[i].starttime; 
-    float endtime = (*pSpectBlocks_)[i].endtime; 
-    std::cout << "rendering lines " << starttime << " " 
-	      << endtime << std::endl; 
+    float starttime = srb.starttime; 
+    float endtime = srb.endtime; 
     glBegin(GL_LINE_LOOP);
 //     glTexCoord2i(0, 0 );
-    glVertex2f(starttime, -100.0); 
+    glVertex2f(starttime - t1, -100.0); 
     
 //     glTexCoord2i((*pSpectBlocks_)[i].width, 0);
-    glVertex2f(endtime, -100.0); 
+    glVertex2f(endtime - t1, -100.0); 
     
 //     glTexCoord2i((*pSpectBlocks_)[i].width, (*pSpectBlocks_)[i].height); 
-    glVertex2f(endtime, 100.0); 
+    glVertex2f(endtime -t1, 100.0); 
     
 //     glTexCoord2i(0, (*pSpectBlocks_)[i].height); 
-    glVertex2f(starttime, 100.0); 
+    glVertex2f(starttime -t1, 100.0); 
     glEnd(); 
+
+    ret = cursorp->get(&search_key, &found_data, DB_NEXT);
   }
+  cursorp->close(); 
+  //  free(buffer); 
+
+
 
   //  glBegin(GL_LINES);
 //   glVertex2f(0, 0.0); 
@@ -327,10 +354,6 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
 
  }
 
-sigc::signal<void> & SpectVisRenderer::invWaveSignal()
-{
-  return invWaveSignal_;
-}
 
 // void SpectVisRenderer::updateTriggers(bool reset)
 // {
@@ -354,37 +377,37 @@ sigc::signal<void> & SpectVisRenderer::invWaveSignal()
 //   triggerQueueView_ = tqv; 
 // }
 
-void SpectVisRenderer::setScale(float scale, float pixheight)
-{
-  scale_ = scale; 
-  pixheight_ = pixheight; 
-  invWaveSignal_.emit(); 
+// void SpectVisRenderer::setScale(float scale, float pixheight)
+// {
+//   scale_ = scale; 
+//   pixheight_ = pixheight; 
+//   invWaveSignal_.emit(); 
 
-}
+// }
 
-void SpectVisRenderer::setColor(Gdk::Color c)
-{
-  color_ = c; 
-  invWaveSignal_.emit(); 
+// void SpectVisRenderer::setColor(Gdk::Color c)
+// {
+//   color_ = c; 
+//   invWaveSignal_.emit(); 
 
-}
+// }
 
-void SpectVisRenderer::setGLColor(float alpha)
-{
-  float div = 1.0;
-  glColor4f(color_.get_red_p()/div,
-	    color_.get_green_p()/div,
-	    color_.get_blue_p()/div, 
-	    alpha); 
+// void SpectVisRenderer::setGLColor(float alpha)
+// {
+//   float div = 1.0;
+//   glColor4f(color_.get_red_p()/div,
+// 	    color_.get_green_p()/div,
+// 	    color_.get_blue_p()/div, 
+// 	    alpha); 
   
-  glColor4f(1.0, 1.0, 1.0, 1.0); // FIXME
+//   glColor4f(1.0, 1.0, 1.0, 1.0); // FIXME
   
-}
+// }
 
-void SpectVisRenderer::printStatus()
-{
-//   std::cout << "samples size() =" << pSamples_->size() 
-// 	    << " S2 size = " << ratesS2_.size() << std::endl; 
+// void SpectVisRenderer::printStatus()
+// {
+// //   std::cout << "samples size() =" << pSamples_->size() 
+// // 	    << " S2 size = " << ratesS2_.size() << std::endl; 
 
 
-}
+// }
