@@ -37,7 +37,8 @@ StreamPipeline::~StreamPipeline()
   
 }
 
-pISource_t StreamPipeline::createSource(std::string type, std::string name)
+pISource_t StreamPipeline::createSource(std::string type, std::string name,
+					const json_util::mObject & config)
 {
   // check if name is already in use
   for (std::list<pISource_t>::iterator pps = sources_.begin(); 
@@ -48,7 +49,8 @@ pISource_t StreamPipeline::createSource(std::string type, std::string name)
       
     }
   }
-  pISource_t src = SourceFactory::create(type, pSourceState_, scratchdir_ / "source"); 
+  pISource_t src = SourceFactory::create(type, pSourceState_, scratchdir_ / "source", 
+					 config); 
   src->accept(sourceVisitor_); 
   
   src->setName(name); 

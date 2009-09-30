@@ -7,31 +7,53 @@ using namespace soma::streams;
 
 const std::string NoiseWave::TYPENAME = "NoiseWave"; 
 
-NoiseWave::NoiseWave(std::string name, pTimer_t ptimer, bf::path scratch, 
-		     float preload) :
+NoiseWave::NoiseWave(std::string name, pTimer_t ptimer, bf::path scratch) :
   SourceBase(name), 
   amplitude(1.0), 
   noiseclass(WhiteNoise),
   pTimer_(ptimer), 
   fs_(1.0), 
-  
+  preload(0), 
   pSourcePad_(createSourcePad<WaveBuffer_t>(dataList_, "default"))
 {
   lastTime_ = pTimer_->getStreamTime(); 
   pTimer_->streamTimeSignal().connect(sigc::mem_fun(*this, 
 					      &NoiseWave::timeUpdate)); 
   
-  for (double t = -preload; t < 0; t += 0.1) { 
-    lastTime_ = t; 
-    streamtime_t delta = 0.1; 
-    nextData(delta); 
-  }
+  preload.signal().connect(sigc::mem_fun(*this, &NoiseWave::setPreload)); 
+  noiseclass.signal().connect(sigc::mem_fun(*this, &NoiseWave::setNoiseClass)); 
 
 }
 
 NoiseWave::~NoiseWave()
 {
   
+
+}
+
+
+void NoiseWave::setPreload(int preloadval)
+{
+  
+  std::cout << "setting preload!" << std::endl;
+  dataList_.clear(); 
+  pSourcePad_->invalidateData(); 
+  
+  float f = lastTime_; 
+
+  for (double t = -preload; t < f; t += 0.1) { 
+    lastTime_ = t; 
+    streamtime_t delta = 0.1; 
+    nextData(delta); 
+  }
+
+  lastTime_ = f; 
+
+}
+
+void NoiseWave::setNoiseClass(NoiseClass)
+{
+  setPreload(0); // rengenerate the data
 
 }
 

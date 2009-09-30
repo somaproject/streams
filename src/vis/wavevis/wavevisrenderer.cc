@@ -137,3 +137,12 @@ void WaveVisRenderer::printStatus()
 
 
 }
+
+void WaveVisRenderer::invalidateSamples()
+{
+  
+  BOOST_FOREACH(rendermap_t::value_type & r, renderers_) { 
+    r.second->reset(); 
+  }
+
+}

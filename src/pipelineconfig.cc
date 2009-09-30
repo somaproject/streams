@@ -1,21 +1,15 @@
 #include "pipelineconfig.h"
 
 #include "json_spirit.h"
+#include "jsonutil.h"
+
+
 #include <cassert>
 #include <sstream>
 
 using namespace json_spirit; 
+using namespace json_util;
 
-
-const mValue& find_value( const mObject& obj, const std::string& name  )
-{
-    mObject::const_iterator i = obj.find( name );
-
-    assert( i != obj.end() );
-    assert( i->first == name );
-
-    return i->second;
-}
 
 
 void load_pipeline_config(pPipelineManager_t pm, std::istream & is)
@@ -48,13 +42,13 @@ void load_pipeline_config(pPipelineManager_t pm, std::istream & is)
       std::string clas = find_value(elt, "class").get_str(); 
       
       mObject::const_iterator i = elt.find("config" );
-      mValue config; 
+      mObject config; 
       if (i != elt.end()) {
 	config = i->second.get_obj(); 
       }
       
       if (type == "source") { 
-	elements[eltname] = pipeline->createSource(clas, eltname); 
+	elements[eltname] = pipeline->createSource(clas, eltname, config); 
       } else if (type == "vis") {
 	elements[eltname] = pipeline->createVis(clas, eltname); 
       } else {

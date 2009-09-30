@@ -18,7 +18,7 @@ class NoiseWave : public SourceBase
 public:
   static const std::string TYPENAME;
   // this is just a prototype source
-  NoiseWave(std::string, pTimer_t, bf::path, float preload); 
+  NoiseWave(std::string, pTimer_t, bf::path); 
   
   ~NoiseWave(); 
   
@@ -33,6 +33,8 @@ public:
       sv->visit(this); 
   }
   
+  Property<int> preload; 
+
 
 
 private:
@@ -47,6 +49,8 @@ private:
   void timeUpdate(streamtime_t t); 
   streamtime_t lastTime_; 
 
+  void setPreload(int preloadval); 
+  void setNoiseClass(NoiseClass); 
 };
 
 typedef boost::shared_ptr<NoiseWave> pNoiseWave_t; 

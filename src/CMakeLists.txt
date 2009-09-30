@@ -20,7 +20,8 @@ set(streams_SRCS
   somanetcodec.cc
   networkdatacache.cc
   pipelinemanager.cc
-  pipelineconfig.cc)
+  pipelineconfig.cc
+  jsonutil)
 
 set(ext_SRCS
   ext-common/cairogltext/glstring.cc

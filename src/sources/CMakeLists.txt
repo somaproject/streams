@@ -11,6 +11,7 @@ include_directories(${SOMADEPS_INCLUDE_DIRS})
 set(sources_SRCS
   sourcebase.cc
   noisewave.cc
+  noisewaveconfig.cc
   pamonitor.cc
   sourcefactory.cc
   netdatawave.cc

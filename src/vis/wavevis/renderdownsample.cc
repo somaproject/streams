@@ -149,3 +149,11 @@ void RenderDownSample::newDataPoint(double streamtime, float data)
   }
 }
 
+void RenderDownSample::reset()
+{
+  std::cout << "RenderODwnSample::reset()" << std::endl;
+  buffer_.size = 0; 
+  uint32_t x; 
+  pdb_->truncate(NULL, &x, NULL); 
+  
+}

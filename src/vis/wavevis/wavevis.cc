@@ -16,6 +16,9 @@ WaveVis::WaveVis(std::string name, bf::path scratchdir):
   pSinkPad_->newDataSignal().connect(sigc::mem_fun(*this, 
 						   &WaveVis::newData)); 
   
+  pSinkPad_->invalidateDataSignal().connect(sigc::mem_fun(*this, 
+						   &WaveVis::invalidateData)); 
+  
   color.signal().connect(sigc::mem_fun(streamRenderer_, 
 				       &WaveVisRenderer::setColor)); 
   scale.signal().connect(sigc::mem_fun(*this, 
@@ -83,7 +86,14 @@ void WaveVis::newData()
 
 void WaveVis::invalidateData()
 {
-
+  streamRenderer_.invalidateSamples(); 
+  while (not pSinkPad_->getpQueueView()->empty())
+    {
+      // we're taking in WaveBuffer_t pointers
+      WaveBuffer_t & wb = pSinkPad_->getpQueueView()->front(); 
+      pSinkPad_->getpQueueView()->pop(); 
+      streamRenderer_.newSample(wb); 
+    }
 
 }
 

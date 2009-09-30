@@ -4,6 +4,7 @@
 #include <boost/filesystem.hpp>
 namespace bf = boost::filesystem; 
 
+#include "jsonutil.h"
 #include "sourcebase.h"
 #include "sourcestate.h"
 #include "isourcevisitor.h"
@@ -14,7 +15,9 @@ namespace bf = boost::filesystem;
 
 class SourceFactory {
 public : 
-  static pISource_t create(std::string name, pSourceState_t ss, bf::path scratchdir); 
+  static pISource_t create(std::string name, pSourceState_t ss, 
+			   bf::path scratchdir, 
+			   const json_util::mObject & config); 
   
 }; 
 

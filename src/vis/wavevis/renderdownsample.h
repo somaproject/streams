@@ -62,6 +62,8 @@ public:
 
   void renderStream(streamtime_t t1, streamtime_t t2, int pixels); 
   void newSample(const WaveBuffer_t & ); 
+  
+  void reset(); 
 
 private:
   

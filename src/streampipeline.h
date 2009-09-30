@@ -17,6 +17,9 @@
 #include "itriggervisitor.h"
 #include "ivisvisitor.h"
 
+#include "jsonutil.h"
+
+
 namespace bf = boost::filesystem; 
 
 class StreamPipeline {
@@ -31,7 +34,8 @@ public:
   void resetVisitors(pISourceVisitor_t, pIFilterVisitor_t, 
 		     pITriggerVisitor_t, pIVisVisitor_t); 
   
-  pISource_t createSource(std::string type, std::string name); 
+  pISource_t createSource(std::string type, std::string name, 
+			  const json_util::mObject &); 
   pIFilter_t createFilter(std::string type, std::string name); 
   pITrigger_t createTrigger(std::string type, std::string name); 
   pIVis_t createVis(std::string type, std::string vis); 
