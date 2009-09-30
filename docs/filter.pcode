@@ -1,0 +1,35 @@
+The data consist of an increasing number of data objects with unique
+64-bit timestamps, roughly corresponding to time-in-nanoseconds.
+It is guaranteed that no two time series elements will ever
+have the same timestamp. Once a buffer has been read, its value
+will never change. 
+
+The things that go into these buffers are _not_ required to be 
+constant size, but in general it must be possible to marshall/unmarshall them
+
+
+on_data_reset():
+   Truncate database
+   send reset signal
+   cursor = source.requestCursor(self, starttime)
+
+on_new_data(): 
+   consume data from the cursor until it is empty()
+   
+
+request a cursor()
+
+A TIMESTREAM_CURSOR:
+
+guaranteed to give you sequential elements in time. 
+
+thread-safe
+
+
+
+---------------------------------------------------------------------
+placing data into a buffer of this sort. 
+
+Always place sequentially, and keep track of which outputs
+you've inserted. 
+
