@@ -28,7 +28,7 @@ int main()
   size_t ITERS = 100; 
 
   Db db(NULL, 0);               // Instantiate the Db object
-  u_int32_t oFlags = DB_CREATE |  DB_TRUNCATE; // Open flags;
+  u_int32_t oFlags = DB_CREATE |  DB_TRUNCATE ; // Open flags;
  
   std::string dbname("QUEUE.db"); 
   boost::filesystem::remove_all(dbname );

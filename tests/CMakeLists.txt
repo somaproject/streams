@@ -58,6 +58,19 @@ add_executable(spectvis_test
   spectvis_test.cc
   runner.cc)
 
+add_executable(timedb_test
+  timedb_test.cc
+  runner.cc)
+
+add_executable(timedb_cursor_test
+  timedb_cursor_test.cc
+  runner.cc)
+
+
+
+add_executable(valgrind
+  valgrind.cc
+)
 
   target_link_libraries(runtest
     streams_core
@@ -66,6 +79,12 @@ add_executable(spectvis_test
     ${SOMADEPS_LIBRARIES}
     ${BDB_LIBRARIES}
     json_spirit
+    )
+  
+
+  target_link_libraries(valgrind
+    ${Boost_LIBRARIES} 
+
     )
   
 
@@ -82,6 +101,8 @@ set(testlist
   pipelineconfig_test
   pasource_test
   spectvis_test
+  timedb_test
+  timedb_cursor_test
 )
 
 

@@ -1,0 +1,52 @@
+Our attempt to create a time-series database. Right now we just want
+to get the port / cursor abstraction correct. 
+
+Then we'll go on to try and chain them intelligently. 
+
+And provide a reference implementation using BDB and one
+that does not use BDB
+
+Then we'll try and implement a source, a filter, and
+a sink. 
+
+Perhaps our naive implementation uses a set of ROPEs? 
+
+
+
+datastore.newSequence() # throws an error if we attempt to insert
+			 between two existing thingies
+
+
+datastore.addNext()
+...
+...
+...
+
+datastore.addNext() # if already present, returns true, 
+joins the underlying sequences...
+
+Cursor behavior
+------------------------------------------
+cursor behavior looks dead-on like the BDB cursor behavior
+we implement it internally with an iterator to the list
+
+cursor = datastore.getTimeCursor(timeid_t t); 
+
+int result = cursor.get(T * val, NEXT); 
+
+if result == NODATA: 
+   end of the line, no new data, something like that; did not get data
+
+# we can't really reset a cursor, can we ? 
+
+
+
+What are our synchronization primitive options? 
+
+
+what if we do the following: 
+
+write [50, 100]
+write [100, 200]
+
+How do we know to concatenate these two lists? 
