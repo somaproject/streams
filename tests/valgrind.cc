@@ -9,20 +9,20 @@ int main()
 
 
   TimeSeriesDataBase<std::string> db; 
-  
-  db.newSequence(10, "E"); 
-  db.append(11, "F"); 
-  db.append(12, "G"); 
-  
-  TimeCursor<std::string> tc = db.createCursor(8); 
-  
-  tc.valid();
-  assert(tc.requestTime() ==  8); 
+   db.newSequence(10, "A"); 
+  db.append(20, "B"); 
+  db.append(30, "C"); 
 
-  assert(tc.startTime() == 10); 
-  std::string x; 
+  db.newSequence(70, "G"); 
+  db.append(80, "H"); 
+  db.append(90, "I"); 
 
-  assert(tc.getCurrentValue(&x) ==  10); 
-  assert(tc.next() ==  CURSOR_RET_GOOD); 
-  std::cout << "DONE" << std::endl;
+  db.newSequence(20, "B"); 
+  db.append(30, "C"); 
+  db.append(40, "D"); 
+  db.append(50, "E"); 
+  db.append(60, "F"); 
+  db.append(70, "G"); 
+  db.append(80, "H"); 
+
 }

@@ -21,6 +21,7 @@ BOOST_AUTO_TEST_CASE(sequence)
   BOOST_CHECK(seq.search_leq(10) ==  seq.sequence.begin()); 
   BOOST_CHECK(seq.search_leq(11) ==  seq.sequence.begin()); 
   BOOST_CHECK(seq.search_leq(0) ==  seq.sequence.end()); 
+  delete headnode; 
 
 }
 

@@ -139,14 +139,38 @@ public:
 
   }
 
-  void reset() {
-    // invalidate all existing cursors
-    //closeAllCursors(); 
+   void reset() {
+     //invalidate all existing cursors
+       boost::shared_lock<boost::shared_mutex> cursorlock(cursors_mutex_); 
+       cursors_.clear(); 
+    
+       boost::unique_lock<boost::shared_mutex> seqlock(sequences_map_mutex_); 
+       
+       if (currentSequence_) {
+	 delete currentSequence_;
+       }
+       
+    typedef typename sequenceptrmap_t::value_type t; 
 
-    // delete all existing sequences
+    BOOST_FOREACH(t & s, sequences_) {
+      delete s.second; 
+    }
+
+
+    BOOST_FOREACH(nc_t * p, allnodes_){
+      delete p; 
+      
+    }
+
+
 
   }
   
+  ~TimeSeriesDataBase()
+  {
+    reset(); 
+  }
+
   size_t size() {
     // return total number of elements
     return allnodes_.size(); 
