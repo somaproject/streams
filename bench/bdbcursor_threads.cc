@@ -9,23 +9,6 @@
 
 
 const size_t benchbuf_n = 128; 
-typedef uint64_t timeid_t ; 
-int compare_timeid(Db *db, const Dbt *a, const Dbt *b)
-{
-  // Returns:
-  // < 0 if a < b
-  // = 0 if a = b
-  // > 0 if a > b
-  timeid_t ad; 
-  timeid_t bd; 
-  memcpy(&ad, a->get_data(), sizeof(a));
-  memcpy(&bd, b->get_data(), sizeof(b));
-  
-  if (ad < bd) return -1; 
-  if (ad > bd) return 1;
-  return 0; 
-}
-
 
 
 struct benchbuff
@@ -204,7 +187,7 @@ int main()
   u_int32_t env_flags = DB_CREATE |     // If the environment does not
     // exist, create it.
     DB_INIT_MPOOL |
-    DB_INIT_CDB 
+    DB_INIT_CDB |
     DB_THREAD ; // Initialize the in-memory cache.
 
   std::string envHome = "/tmp/benchtest"; 
@@ -237,7 +220,7 @@ int main()
   try {
     // Open the database
     db.set_pagesize(1<<16); 
-    db.set_bt_compare(compare_timeid);
+    //    db.set_bt_compare(compare_timeid);
     db.open(NULL,                // Transaction pointer
             dbname.c_str(),          // Database file name
             NULL,                // Optional logical database name

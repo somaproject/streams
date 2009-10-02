@@ -64,12 +64,13 @@ public:
 
 
   timeid_t getHeadTime() { 
-    // NOT THREAD SAFE
+    boost::shared_lock<boost::shared_mutex> lock(mutex); 
     return sequence.front().time;
   }
   
   timeid_t getTailTime()
   {
+    boost::shared_lock<boost::shared_mutex> lock(mutex); 
     return sequence.back().time; 
   }
 
@@ -85,6 +86,7 @@ public:
       t.       
       
     */
+    boost::shared_lock<boost::shared_mutex> lock(mutex); 
     si_t i = sequence.begin(); 
     
     si_t lastiter = sequence.end(); 
@@ -100,6 +102,7 @@ public:
 }; 
 
 typedef size_t cursorid_t; 
+
 
 template<typename T>
 class TimeSeriesDataBase
@@ -121,6 +124,7 @@ private:
   boost::shared_mutex sequences_map_mutex_;
 
   sequence_t * currentSequence_; 
+  boost::shared_mutex currentSequence_mutex_;
 
   typedef TimeCursor<T> timecursor_t; 
   typedef cursor_impl<T> timecursorimpl_t; 
@@ -145,7 +149,7 @@ public:
        cursors_.clear(); 
     
        boost::unique_lock<boost::shared_mutex> seqlock(sequences_map_mutex_); 
-       
+       boost::unique_lock<boost::shared_mutex> curretseqlock(currentSequence_mutex_); 
        if (currentSequence_) {
 	 delete currentSequence_;
        }
@@ -178,6 +182,8 @@ public:
 
   size_t seqsize() {
     size_t val = 0; 
+    boost::shared_lock<boost::shared_mutex> curretseqlock(currentSequence_mutex_); 
+
     if (currentSequence_ != NULL) {
       val += 1; 
     }
@@ -199,12 +205,12 @@ public:
 
 
     */ 
-    
     boost::upgrade_lock<boost::shared_mutex> lock(sequences_map_mutex_);
     
     boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
+    boost::unique_lock<boost::shared_mutex> curretseqlock(currentSequence_mutex_); 
 
-    std::cout << "newSequence called with t=" << t << std::endl;
+    //std::cout << "newSequence called with t=" << t << std::endl;
     if(currentSequence_) {
 
       sequences_.insert(std::make_pair(currentSequence_->getHeadTime(), currentSequence_));
@@ -219,7 +225,7 @@ public:
       typename sequenceptrmap_t::iterator range =  find_time_in_range(t); 
       if (range == sequences_.end()) 
 	{
-	  std::cout << "This is a brand-new sequence starting with  " << t << std::endl;
+	  //std::cout << "This is a brand-new sequence starting with  " << t << std::endl;
 	  MonotonicConstantSequence<T> * seq = new MonotonicConstantSequence<T>; 
 	  seq->valid = true; 
 	  
@@ -233,25 +239,25 @@ public:
 	} else { 
 	
 	typename sequence_t::seq_t::iterator i  = range->second->search_leq(t);
-	std::cout << "searched leq " << std::endl;
+	//	std::cout << "searched leq " << std::endl;
 	if (i == range->second->sequence.end())
 	  throw std::runtime_error("Violation of monotonic updates"); // FIXME better error message. 
 	
 	if (i->time != t){
 	  throw std::runtime_error("violation of monotonci updates"); // FIXME better error message
 	}
-	std::cout << "instead of creating new sequence, selecting sequence that began at " << range->first
-		  << std::endl;
+// 	std::cout << "instead of creating new sequence, selecting sequence that began at " << range->first
+// 		  << std::endl;
 	
 	currentSequence_ = range->second; 
 	sequences_.erase(range); 
 	currentAppendPosition_ = i; 
-	std::cout << "setting currentAppendPosition_ = " << i->time << std::endl; 
+// 	std::cout << "setting currentAppendPosition_ = " << i->time << std::endl; 
 	return true; 
       }
     } else { 
       // This is the first sequence in this DB
-      std::cout << "This is the first sequence in the DB" << std::endl;
+//       std::cout << "This is the first sequence in the DB" << std::endl;
       MonotonicConstantSequence<T> * seq = new MonotonicConstantSequence<T>; 
       seq->valid = true; 
       
@@ -273,13 +279,14 @@ public:
        returns true if this element has been added before
     */
 
-    std::cout << "append called with t=" << t << std::endl;
-    std::cout << "Sequences start is " << sequences_.begin()->first
-	      << std::endl;
+//     std::cout << "append called with t=" << t << std::endl;
+//     std::cout << "Sequences start is " << sequences_.begin()->first
+// 	      << std::endl;
 
     boost::upgrade_lock<boost::shared_mutex> seqmaplock(sequences_map_mutex_);
     boost::upgrade_to_unique_lock<boost::shared_mutex> seqmapuniqueLock(seqmaplock);
 
+    boost::shared_lock<boost::shared_mutex> curretseqlock(currentSequence_mutex_); 
 
     if(currentSequence_ == NULL) {
       throw std::runtime_error("Appending without a valid sequence");    
@@ -300,7 +307,7 @@ public:
     typename sequenceptrmap_t::iterator closest_list = sequences_.lower_bound(t); 
     
     if (closest_list != sequences_.end()) {
-      std::cout << "Checking to merge lists" << std::endl;
+//       std::cout << "Checking to merge lists" << std::endl;
       if (t == closest_list->first) {
 	// MERGE THE LISTS
 	currentAppendPosition_ = closest_list->second->sequence.begin(); 
@@ -411,13 +418,21 @@ public:
   timecursor_t createCursor(timeid_t inittime) { 
     // can take place in a client thread, so we must lock 
     // access to the underlying sequence 
-    std::cout << "init time = " << inittime << " " << 
-      sequences_.begin()->first << std::endl;
+//     std::cout << "init time = " << inittime << " " << 
+//       sequences_.begin()->first << std::endl;
+
     boost::shared_lock<boost::shared_mutex> lock(sequences_map_mutex_); 
+    boost::shared_lock<boost::shared_mutex> curretseqlock(currentSequence_mutex_); 
+    
     seqptrmapiter_t iter =  sequences_.upper_bound(inittime); 
     
     sequence_t * seq= NULL; 
     
+    if(currentSequence_ == NULL) {
+      timecursor_t tc(0, NULL); 
+      return tc; 
+    }
+
     if (inittime <= currentSequence_->getHeadTime()) {
       seq = currentSequence_; 
     }
@@ -435,7 +450,7 @@ public:
 
     if(seq == NULL) {
       timecursor_t tc(0, NULL); 
-      std::cout << "Returnning null cursor" << std::endl;
+//       std::cout << "Returnning null cursor" << std::endl;
       return tc; 
     }
 
@@ -464,6 +479,7 @@ public:
   }
 
   void closeCursor(cursorid_t id) {
+
     boost::upgrade_lock<boost::shared_mutex> lock(cursors_mutex_);
 
     typename cursormap_t::iterator ci = cursors_.find(id); 
@@ -476,15 +492,13 @@ public:
   }
 
   timeid_t getCursorRequestTime(cursorid_t id) {
-    std::cout << "getCursorRequestTime" << std::endl;
+
     boost::shared_lock<boost::shared_mutex> lock(cursors_mutex_);
-    std::cout << "lock acquired" << std::endl;
     typename cursormap_t::iterator ci = cursors_.find(id); 
     if (ci == cursors_.end() ) {
       throw std::runtime_error("Cursor does not exist; perhaps closed?");
     }
     assert(ci->second != NULL); 
-    std::cout << "Attempting the dereference" << std::endl;
     return ci->second->requestTime_; 
 
 
@@ -492,6 +506,7 @@ public:
   
   timeid_t getCursorStartTime(cursorid_t id) 
   {
+
     boost::shared_lock<boost::shared_mutex> lock(cursors_mutex_);
 
     typename cursormap_t::iterator ci = cursors_.find(id); 
@@ -504,8 +519,8 @@ public:
 
   timeid_t getCursorCurrentValue(cursorid_t id, T * val)
   {
+
     boost::shared_lock<boost::shared_mutex> lock(cursors_mutex_);
-    std::cout << "about to search through cursors" << std::endl;
 
     typename cursormap_t::iterator ci = cursors_.find(id); 
     if (ci == cursors_.end() ) {
@@ -513,7 +528,6 @@ public:
     }
     
     boost::shared_lock<boost::shared_mutex> seqmaplock(sequences_map_mutex_);
-    std::cout << "getting current value" << std::endl;
     timeid_t time = ci->second->currentReadPosition_->time; 
     *val = ci->second->currentReadPosition_->value; 
     return time; 
@@ -521,23 +535,18 @@ public:
 
   CURSOR_RET getCursorNext(cursorid_t id)
   {
-    std::cout << "Get cursor next" << std::endl; 
+
     boost::shared_lock<boost::shared_mutex> lock(cursors_mutex_);
     
-    std::cout << "About to search " << &cursors_  << std::endl;
     typename cursormap_t::iterator ci =    cursors_.find(id); 
 
-    std::cout << "Searched..." << std::endl; 
     if (ci == cursors_.end() ) {
       throw std::runtime_error("Cursor does not exist; perhaps closed?");
     }
-    std::cout << "HERE " << (int)cursors_.size() << " and more" << std::endl;
-    std::cout << "reading thing" << ci->first <<  std::endl; 
-    std::cout << "the seq is " << ci->second->tgtsequence << std::endl; 
+
     boost::shared_lock<boost::shared_mutex> seqlock(ci->second->tgtsequence->mutex); 
     ci->second->currentReadPosition_++ ; 
 
-    std::cout << "incremented pointer" << std::endl; 
 
     if(ci->second->currentReadPosition_ == ci->second->tgtsequence->sequence.end()) {
       ci->second->currentReadPosition_-- ; // backup
@@ -595,7 +604,6 @@ public:
   }
   
   CURSOR_RET next() {
-    std::cout << "cursor next, parentdb = " << parentDB_ << std::endl; 
     return parentDB_->getCursorNext(cursorid_); 
 
   }
@@ -628,7 +636,6 @@ private:
     cursorid_(cid), 
     parentDB_(parentDB)
   {
-    std::cout << "private constructor, parentDB_ = " << parentDB_  << std::endl;
 
   }
   
