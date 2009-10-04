@@ -25,8 +25,8 @@ pkg_check_modules(GUIDEPS REQUIRED
   gtkmm-2.4>=2.10
   gtkglextmm-1.2>=1.2
   libglademm-2.4>=2.6
-  vsipl++>=2.0
   fftw3>=3.1
+#  vsipl++>=2.0
 )
 
 pkg_check_modules(SOMADEPS REQUIRED
@@ -41,9 +41,12 @@ include_directories(app)
 include_directories(src/ext-common/)
 include_directories(json_spirit/json_spirit)
 
+include_directories(.)
+
 include_directories(src/logging/src)
 include_directories(src/logging/boost)
 include_directories(timedb)
+include_directories(threadpool)
 
 add_subdirectory(src)
 add_subdirectory(app)
@@ -51,3 +54,4 @@ add_subdirectory(tests)
 add_subdirectory(bench)
 add_subdirectory(json_spirit)
 add_subdirectory(timedb)
+add_subdirectory(elements)

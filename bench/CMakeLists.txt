@@ -37,6 +37,14 @@ add_executable(timedb
   
   )
 
+add_executable(threadpool
+	threadpool.cc  
+  )
+
+add_executable(glibbench
+	glibbench.cc
+  )
+
 target_link_libraries(bdb
   ${BDB_LIBRARIES}
     ${Boost_LIBRARIES} 
@@ -80,4 +88,18 @@ target_link_libraries(bdblookup
 target_link_libraries(timedb
     ${Boost_LIBRARIES} 
 )
+
+target_link_libraries(threadpool
+    ${Boost_LIBRARIES} 
+)
+
+
+target_link_libraries(glibbench
+  ${BDB_LIBRARIES}
+    ${Boost_LIBRARIES} 
+    ${GUIDEPS_LIBRARIES}
+    ${SOMADEPS_LIBRARIES}
+)
+
+
 

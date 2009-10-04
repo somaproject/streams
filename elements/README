@@ -1,0 +1,64 @@
+This is our second attempt (or maybe third) to create
+a series of asynchronous pipeline elements for processing streams
+of data akin to the "Actor" model inspired by erlang. 
+
+An "element" is a self-contained element for processing
+signals -- a node in a dataflow graph. This element can only
+communicate with the outside world (in terms of the framework)
+in one of three ways: 
+
+It can receive messages and data along its incoming links
+
+It can send messages and data along its outbound links. 
+
+It has "properties" representing stateful metadata that
+can communicate with the outside world. 
+
+
+Links
+----------
+A "link" connects two elements, indicating the flow of data/metadata
+from the "source" to the "sink". One source can be connected to multiple
+sinks. 
+
+A link can send three metadata-like "messages" : 
+    NEWDATA
+    RESET
+    NEWSEQUENCE
+
+which reflect state changes present in the underlying timedb associated
+with the link (each link has an associated timeDB)
+
+
+Links are basically metadata wrappers around timedbs. 
+
+
+Element Processing
+--------------------
+Figuring out the proper paradigm for elements to process
+information has been a challenge. At the moment, sadly, the best
+thing I can come up with that is 1. portable 2. scales appropriately
+3. can integrate nicely into GTKmm is a poor-mans variant of
+shared cooperative multitasking. This is because: 
+
+   1. I don't want a separate thread for each element (worst case, 128
+   threads. No way! 
+   
+   2. There is no way for linux to block on BOTH a condition variable and
+      a socket
+  
+   3. We're going to _have_ to do some sort of deferred computation /
+   cooperative behavior anyway, lest having 32 elements grinding
+   away filtering a set of signals would grind the system to a halt. 
+
+
+
+So, once every, oh, 30 ms or so, we'll call each element's "process()"
+method, which will alternatively do the following: 
+   1. for each inbound link, see if there are any new messages, and
+      if so, process them, manipulating the queue
+
+   2. see if there are any pending property mutations. Or anything
+    we should mutate about the properties and then subsequently signal. 
+
+The timeDB helps us out a lot here. 

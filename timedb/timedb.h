@@ -24,8 +24,6 @@ class TimeCursor;
 template<typename T>
 class cursor_impl; 
 
-
-
 enum CURSOR_RET {
   CURSOR_RET_GOOD = 0, 
   CURSOR_RET_NO_NEXT = -1  

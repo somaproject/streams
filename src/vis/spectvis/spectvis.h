@@ -3,7 +3,6 @@
 
 #include <gtkmm.h>
 #include <boost/shared_ptr.hpp>
-#include <vsip/initfin.hpp>
 
 #include "visbase.h"
 

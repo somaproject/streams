@@ -81,7 +81,39 @@ BOOST_AUTO_TEST_CASE(cursor_join_sequence_simple)
 }
   
 
-    
+BOOST_AUTO_TEST_CASE(shared_ptr_test)
+{
+  typedef boost::shared_ptr<std::string> pshared_str_t; 
+  TimeSeriesDataBase<pshared_str_t> db; 
+  
+  
+  db.newSequence(10, pshared_str_t(new std::string("E"))); 
+  db.append(11, pshared_str_t(new std::string("F"))); 
+  db.append(12, pshared_str_t(new std::string("G"))); 
+  
+  TimeCursor<pshared_str_t> tc = db.createCursor(8); 
+  
+  BOOST_CHECK(tc.valid()); 
+  BOOST_CHECK_EQUAL(tc.requestTime(), 8); 
+  BOOST_CHECK_EQUAL(tc.startTime(), 10); 
+  pshared_str_t x; 
+
+  BOOST_CHECK_EQUAL(tc.getCurrentValue(&x), 10); 
+  BOOST_CHECK_EQUAL(tc.next(), CURSOR_RET_GOOD); 
+  BOOST_CHECK_EQUAL(tc.getCurrentValue(&x), 11); 
+  BOOST_CHECK_EQUAL(tc.next(), CURSOR_RET_GOOD); 
+  BOOST_CHECK_EQUAL(tc.getCurrentValue(&x), 12); 
+  BOOST_CHECK_EQUAL(tc.next(), CURSOR_RET_NO_NEXT); 
+
+  db.append(13, pshared_str_t(new std::string("H"))); 
+  BOOST_CHECK_EQUAL(tc.next(), CURSOR_RET_GOOD); 
+  BOOST_CHECK_EQUAL(tc.getCurrentValue(&x), 13); 
+  BOOST_CHECK_EQUAL(tc.next(), CURSOR_RET_NO_NEXT); 
+  
+
+
+}
+ 
 
 
 BOOST_AUTO_TEST_SUITE_END(); 

@@ -17,6 +17,7 @@ add_executable(sourcepad_test
   sourcepad_test.cc
   runner.cc)
 
+
 add_executable(sourcesink_test
   sourcesink_test.cc
   runner.cc)
@@ -72,6 +73,11 @@ add_executable(valgrind
   valgrind.cc
 )
 
+# next-generation sequence stuff
+add_executable(sourcepad2_test
+  sourcepad2_test.cc
+  runner.cc)
+
   target_link_libraries(runtest
     streams_core
     ${Boost_LIBRARIES} 
@@ -103,6 +109,9 @@ set(testlist
   spectvis_test
   timedb_test
   timedb_cursor_test
+
+
+  sourcepad2_test
 )
 
 

@@ -1,0 +1,84 @@
+A filter has N sink pads (inputs) and one source pad. 
+
+A filter should be able to do the bulk of its processing
+"out-of-band", if necessary, although it's not quite clear how to
+figure this out? Maybe all of the processing should be "out of band", via
+a thread pool? 
+
+How do we get percentage bars? How do downstream elements even _know_
+what the percentages are? 
+   At the moment, they don't, there's no real way for them to, oh well. 
+   
+What are the signals that are propagated? 
+   new cursor point available? if you are done with your current cursor, maybe
+   you skip forward? 
+
+so let's say that an upstream element has the following signals it can emit: 
+
+1. reset() : everything I've told you before now is false
+2. newsequence(): A new sequence is available
+3. newdata() : I just added something on the end of the current active sequence
+
+Note that these signals are _NOT THREAD SAFE_, that is, they will be fired
+in their triggering thread's context.
+
+
+SourceElement.pad: 
+
+Let's test the performance of boost::threadpool
+
+
+What if we have a bajillion threads, and we periodically wake them up, and
+have them do their thing, and then sleep. 
+
+Right now we'd be looking at 48-64 threads. Is that too much? I don't think
+so on an 8-core machine, and we NEED TO MAKE SURE WE CAN ALWAYS REFACTOR
+INTO A THREAD POOL. 
+
+reset: Tell worker thread to reset, once it's done that, signal reset
+downstream. 
+
+newsequence: tell worker thread that there's a new sequence, and 
+maybe it should start working on that one when this one finishes
+
+newdata() : tell worker thread there's new data. 
+
+how do we propagate signals back up? that is, how do we say "hey, there's new data?"
+
+-------------------------------------------------------------------------------
+What are the things that we need? 
+1. thread-safe connection handling
+2. thread-safe property manipulation
+
+Where does computation happen? 
+
+1. reset -> reset everything, send reset signal downstream
+2. newdata -> hey, there's something to read: 
+      do some processing ,if warranted 
+      push into the relevant output queue
+      send downstream notification
+      
+3. newSequence -> hey, i've just started a new sequence at location XXX. You might be interested!
+      
+The question is how to propagate signals back _up_ -- we could poll? every 50 ms? 
+I mean, that's not a bad plan for the thing in general, right? polling every 50 ms? 
+"is there new data? if so, dispatch engine" 
+
+
+
+So let's figure out what a 1:1 filter would actually look like (again)
+
+The question is, as we push stuff into the output queue, or invalidate the output queue, or
+whatever, how do we signal this? 
+
+For example, a reset... how do we signal a reset? 
+
+We could do some sort of slow / incoherent polling... but I worry
+about reset-related race conditions?
+
+
+What if we have a thread-safe message queue that gets signals in and out, and any arbitrary
+element in the thread can read the queue? 
+
+What about blocking on the queue? 
+

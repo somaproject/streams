@@ -133,59 +133,6 @@ public:
     }
     
     running_ = false; 
-	
-//     Dbc *cursorp;
-//     db_->cursor(NULL, &cursorp, 0); 
-//     int count = 0; 
-
-//     timeid_t searchval = 0; 
-//     Dbt search_key(&searchval, sizeof(searchval)); 
-//     Dbt found_data; 
-
-
-//     timeid_t lastgood = 0; 
-
-//     bool backedup = false; 
-
-//     std::cout << "Reader starting " << std::endl;
-//     int ret =0; 
-//     while (count == 0) { 	// first one
-//       ret = cursorp->get(&search_key, &found_data, DB_FIRST);
-//       std::cout << "did a get " << std::endl;
-//       if (ret == 0) {
-// 	lastgood = *((timeid_t*)search_key.get_data()); 
-// 	std::cout << "lastgood = " << lastgood << std::endl;
-// 	count = 1; 
-//       } else {
-// 	sleep(0.1); // should actually synchronize! 
-//       }
-//     }
-//     std::cout << " got first " << ret 
-// 	      << " lastgood = " << lastgood << std::endl;
-//     while(count < iters_) {
-// 	ret = cursorp->get(&search_key, &found_data, DB_NEXT);
-// 	if (ret == DB_NOTFOUND) { 
-// 	  Dbt backup_key(&lastgood, sizeof(lastgood)); 
-// 	  backedup = true; 
-// 	  ret = cursorp->get(&search_key, &found_data, DB_SET);
-//  	  std::cout << "reader sleepy " << ret 
-// 		    << " lastgood = " << lastgood << std::endl; 
-// 	  sleep(0.1); 
-// 	} else {
-// 	  if (backedup) { 
-// 	    backedup = false; 
-// 	  } else { 
-// 	    time_t readerid =  *((timeid_t*)search_key.get_data()); 
-// 	    std::cout << "reader key: " << readerid
-// 		      << " count = " << count << std::endl; 
-// 	    assert(readerid == count); 
-// 	    lastgood = readerid; 
-	    
-// 	    count += 1; 
-// 	  }
-// 	}
-
-//     }
   }
   
   void stop() 
@@ -205,23 +152,21 @@ int main()
 {
   db_t db; 
 
-  size_t ITERS = 100000; 
+  size_t ITERS = 1000000; 
 
   Writer w(db, ITERS); 
   Reader r1(db, ITERS); 
-  //  Reader r2(db, ITERS); 
+  Reader r2(db, ITERS); 
   
-  //    std::cout << "Starting timer" << std::endl; 
-  //boost::timer timer; 
   timeval t1, t2; 
   gettimeofday(&t1, NULL); 
   w.run(); 
   r1.run(); 
-  //  r2.run(); 
+  r2.run(); 
 
   w.stop(); 
   r1.stop();
-  //  r2.stop();
+  r2.stop();
   
   gettimeofday(&t2, NULL); 
   
@@ -231,7 +176,5 @@ int main()
   std::cout << "puts took " << elapsed << " seconds" << std::endl; 
   std::cout << ITERS / elapsed << " records/sec" << std::endl; 
   std::cout << (ITERS*sizeof(benchbuff)) /1e6 / elapsed << " MB/sec" << std::endl; 
-  
-    
   
 }

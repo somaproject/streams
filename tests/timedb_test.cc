@@ -13,14 +13,16 @@ using namespace datastore;
 BOOST_AUTO_TEST_CASE(sequence)
 {
   std::cout << "TEST CASE SEQUENCE================"  << std::endl;
-  MonotonicConstantSequence<std::string> seq; 
-  
   ListNode<std::string> * headnode = new ListNode<std::string>(10, "Hello"); 
-  seq.sequence.push_back(*headnode); 
-
-  BOOST_CHECK(seq.search_leq(10) ==  seq.sequence.begin()); 
-  BOOST_CHECK(seq.search_leq(11) ==  seq.sequence.begin()); 
-  BOOST_CHECK(seq.search_leq(0) ==  seq.sequence.end()); 
+  
+  {
+    MonotonicConstantSequence<std::string> seq; 
+    seq.sequence.push_back(*headnode); 
+    
+    BOOST_CHECK(seq.search_leq(10) ==  seq.sequence.begin()); 
+    BOOST_CHECK(seq.search_leq(11) ==  seq.sequence.begin()); 
+    BOOST_CHECK(seq.search_leq(0) ==  seq.sequence.end()); 
+  }
   delete headnode; 
 
 }
