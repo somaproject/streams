@@ -1,6 +1,7 @@
 #ifndef __ELEMENTS_SOURCEPAD_H__
 #define __ELEMENTS_SOURCEPAD_H__
 
+#include <boost/shared_ptr.hpp>
 #include "isourcepad.h"
 #include "sinkpad.h"
 
@@ -10,51 +11,70 @@ namespace elements {
   template<class BufferT>
   class SourcePad : public ISourcePad 
   {
-  public:
+  private:
+    typedef typename SinkPad<BufferT>::pSinkPad_t pSinkPad_t; 
+    typedef LinkElement<BufferT> elt_t; 
+    typedef boost::shared_ptr<elt_t> pelt_t; 
 
-    static pSourcePad_t<BufferT>  createPad(TimeSeriesDataBase<BufferT> & tdb, 
-					    std::string name) 
+  public:
+    typedef boost::shared_ptr<SourcePad> pSourcePad_t; 
+
+    static pSourcePad_t  createPad(std::string name) 
     {
-      return pSourcePad_t(new SourcePad(tdb, name)); 
+      return pSourcePad_t(new SourcePad(name)); 
 
     }
 	      
 
-    void connect(ISinkPad *); 
+    void connect(pSinkPad_t sp) {
+      pSinks_.push_back(sp); 
+    }
 
-    void SourcePad<BufferT>::connect(ISinkPad * tgt) {
-      connect(dynamic_cast<SinkPad<BufferT>* >(tgt)); 
+    void connect(pISinkPad_t tgt) {
+      typedef  SinkPad<BufferT> sp_t; 
+      boost::dynamic_pointer_cast<sp_t>(tgt); 
       
     }
 
-    void connect(pISinkPad_t * sp) {
-
-    }
 
     std::string getName() { return name_;} 
 
-    void newData() {
-      BOOST_FOREACH(pSinkPad_t<BufferT> sink, pSinks_) {
-	sink->send(NEWDATA); 
+    void newData(timeid_t t, BufferT B) {
+      pelt_t elt(new elt_t); 
+      elt->datum = B; 
+      elt->time = t; 
+      elt->state = elt_t::DATA; 
+
+      BOOST_FOREACH(pSinkPad_t sink, pSinks_) {
+	
+	sink->senddata(elt); 
       }
     }
 
     void reset() {
-      BOOST_FOREACH(pSinkPad_t<BufferT> sink, pSinks_) {
-	sink->send(RESET); 
+      pelt_t elt(new elt_t); 
+      elt->time = 0; 
+      elt->state = elt_t::RESET; 
+      BOOST_FOREACH(pSinkPad_t sink, pSinks_) {
+	sink->sendmsg(RESET); 
+	sink->send(elt); 
       }
     }
 
-    void newSequence(timeid_t id) {
-      BOOST_FOREACH(pSinkPad_t<BufferT> sink, pSinks_) {
-	sink->send(NEWSEQUENCE); 
+    void newSequence(timeid_t t, BufferT B) {
+      pelt_t elt(new elt_t); 
+      elt->datum = B; 
+      elt->time = t; 
+      elt->state = elt_t::SEQUENCEHEAD; 
+
+      BOOST_FOREACH(pSinkPad_t sink, pSinks_) {
+	sink->senddata(elt); 
       }
     }
     
   protected:
-    SourcePad(std::string name, TimeSeriesDataBase<BufferT> & tdb) :
-      name_(name), 
-      tsdb_(tdb)
+    SourcePad(std::string name) :
+      name_(name) 
     {
 
 
@@ -62,9 +82,8 @@ namespace elements {
 
     std::string name_; 
 
-    TimeSeriesDataBase<BufferT> & tsdb; 
     
-    std::list<pSinkPad_t<BufferT> > pSinks_; 
+    std::list<pSinkPad_t > pSinks_; 
 
     
   }; 

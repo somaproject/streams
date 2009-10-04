@@ -4,50 +4,48 @@
 #include "isinkpad.h"
 #include "isourcepad.h"
 #include "commands.h"
-
+#include "timedb.h"
+#include "elementlist.h"
 
 namespace elements {
-  
+  using namespace datastore; 
+
   template<class BufferT> 
   class SinkPad : public ISinkPad {
   public: 
-    static pSinkPad_t<BufferT> createPad(std::string name) {
-      return new pSinkPad_t<BufferT>(name); 
+
+    typedef boost::shared_ptr<SinkPad> pSinkPad_t; 
+
+    static pSinkPad_t createPad(std::string name) {
+      return pSinkPad_t(new SinkPad(name)); 
     }
     
     std::string getName() { return name_;} 
-    
-  protected:
-    
-    SinkPad(std::string name) :
-      name_(name), 
-      connected_(false)
-    {
-      
+
+    void sendmsg(MESSAGES m)  {
+      commandqueue_.send(m); 
     }
     
-    void SinkPad<BufferT>::setSource(pSourcePad_t<BufferT> src)
+    void senddata(typename LinkElement<BufferT>::ptr_t data)  {
+      dataqueue_.send(data); 
+    }
+    
+  protected:
+
+    SinkPad(std::string name) :
+      name_(name)
     {
-      if(connected_) { 
-	connected_ = false; 
-	commandqueue_.send(DISCONNECT); 
-      } 
-
-      connected_ = true; 
-      commandqueue_.send(CONNECT); 
-
+      
     }
     
     std::string name_; 
     
     bool connected_; 
     
-    friend class SourcePad<BufferT>; 
+    commandqueue_t commandqueue_; 
 
-    commandqueue commandqueue_; 
-    
-    pTimeSeriesDatabase_t<bufferT> pendingTimeSeriesDatabase_; 
-    pTimeSeriesDatabase_t<bufferT> activeTimeSeriesDatabase_; 
+    typedef LinkElement<BufferT> elt_t; 
+    NaiveQueue<elt_t> dataqueue_; 
     
   }; 
   

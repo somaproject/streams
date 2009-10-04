@@ -78,6 +78,12 @@ add_executable(sourcepad2_test
   sourcepad2_test.cc
   runner.cc)
 
+add_executable(sourcesink2_test
+  sourcesink2_test.cc
+  runner.cc)
+
+
+
   target_link_libraries(runtest
     streams_core
     ${Boost_LIBRARIES} 
@@ -112,6 +118,7 @@ set(testlist
 
 
   sourcepad2_test
+  sourcesink2_test
 )
 
 
@@ -127,6 +134,7 @@ foreach(testname ${testlist})
   
   target_link_libraries(${testname}
     streams_core
+    elements
     ${Boost_LIBRARIES} 
     ${GUIDEPS_LIBRARIES}
     ${SOMADEPS_LIBRARIES}

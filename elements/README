@@ -21,7 +21,9 @@ A "link" connects two elements, indicating the flow of data/metadata
 from the "source" to the "sink". One source can be connected to multiple
 sinks. 
 
-A link can send three metadata-like "messages" : 
+A link can send several classes of metadata-like messages. These are entirely
+out-of-band: 
+
     NEWDATA
     RESET
     NEWSEQUENCE
@@ -29,8 +31,8 @@ A link can send three metadata-like "messages" :
 which reflect state changes present in the underlying timedb associated
 with the link (each link has an associated timeDB)
 
-
-Links are basically metadata wrappers around timedbs. 
+They can also accept data links, which embed similar metadata into
+the stream of transmission. 
 
 
 Element Processing

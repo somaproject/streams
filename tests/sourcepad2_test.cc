@@ -15,16 +15,15 @@ using namespace elements;
 
 BOOST_AUTO_TEST_CASE(simpletest)
 {
-
-
-  SourcePad<int> * pSourcePad = SourcePad<int>::createPad(data, "testpad"); 
+  typedef SourcePad<int> SP; 
   
-  BOOST_CHECK_EQUAL(pSourcePad->getName(), "testpad"); 
+  SP::pSourcePad_t sp = SP::createPad("Hello world"); 
   
-  // now make sure we can add/invalidate data when there's no one connected
-  pSourcePad->newData(); 
-  pSourcePad->invalidateData(); 
-
+  BOOST_CHECK_EQUAL(sp->getName(), "Hello world"); 
+  
+//   // now make sure we can add/invalidate data when there's no one connected
+  //sp->newData(); 
+  //sp->reset(); 
 
   
 }

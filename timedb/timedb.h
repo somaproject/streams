@@ -553,6 +553,9 @@ public:
     return CURSOR_RET_GOOD; 
   }
 
+
+  typedef boost::shared_ptr<TimeSeriesDataBase> ptr_t; 
+
 }; 
 
 template<typename T>

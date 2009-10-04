@@ -20,10 +20,10 @@ add_library(elements
 )
 
 
-target_link_libraries(elements_core
+target_link_libraries(elements
     ${Boost_LIBRARIES} 
     ${GUIDEPS_LIBRARIES}
     ${SOMADEPS_LIBRARIES}
-}
+)
 
 

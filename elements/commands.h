@@ -1,31 +1,20 @@
 #ifndef __ELEMENTS_COMMANDS_H__
 #define __ELEMENTS_COMMANDS_H__
 
+#include <boost/thread/mutex.hpp>
+#include <list>
+
+#include "tsqueue.h"
+
 namespace elements
 {
   enum MESSAGES { 
     RESET,
-    NEWDATA,
     NEWSEQUENCE,
     CONNECT, 
     DISCONNECT}; 
-  
-  class commandqueue
-  {
-    /*
-      AT THE MOMENT A VERY NAIVE IMPLEMENTATION
-      
-    */ 
-  public:
-    void send(MESSAGES m); 
-    bool empty(); 
-    MESSAGE get(); 
 
-  private:
-    boost::mutex mutex_; 
-    std::list<MESSAGES> queue_; 
-
-  }; 
+  typedef NaiveQueue<MESSAGES> commandqueue_t; 
   
 }
 
