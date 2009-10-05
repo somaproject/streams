@@ -82,6 +82,10 @@ add_executable(sourcesink2_test
   sourcesink2_test.cc
   runner.cc)
 
+add_executable(property_test
+  property_test.cc
+  runner.cc)
+
 
 
   target_link_libraries(runtest
@@ -119,6 +123,7 @@ set(testlist
 
   sourcepad2_test
   sourcesink2_test
+  property_test
 )
 
 
