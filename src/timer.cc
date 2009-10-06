@@ -85,7 +85,7 @@ timeid_t Timer::getTimeID()
 
 timeid_t Timer::somaTimeToTimeID(somatime_t st)
 {
-  return st - startSomaTime_; 
+  return (st - startSomaTime_) * 1000000000 / SOMATIME_PER_SEC; 
 }
 
 Timer::~Timer()

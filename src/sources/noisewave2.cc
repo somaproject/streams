@@ -45,6 +45,17 @@ void NoiseWave2::process(elements::timeid_t tid)
     is hard. 
 
    */
+
+  // Process properties
+  if(amplitude.pendingRequest() ) {
+    amplitude.set_value(amplitude.get_req_value()); 
+  }
+
+  if(noiseclass.pendingRequest() ) {
+    std::cout << "Setting noise class" << std::endl;
+    noiseclass.set_value(noiseclass.get_req_value()); 
+  }
+
   bool reset = false; 
 
   if (reset) { 

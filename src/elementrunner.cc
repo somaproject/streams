@@ -26,7 +26,7 @@ void StaticElementRunner::worker()
 {
   while(running_) {
     BOOST_FOREACH(elements::pIElement_t e, elements_) {
-      //e->process(timer_->getTimeID());       
+      e->process(timer_->getTimeID());       
     }
   }
   
