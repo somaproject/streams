@@ -2,9 +2,10 @@
 #define PROPERTY_COMBOBOX_H
 
 #include <gtkmm.h>
-#include <properties.h>
+#include <elements/property.h>
 #include <set>
 #include <list>
+#include "propwidget.h"
 
 namespace PropertyWidgets
 {
@@ -19,17 +20,17 @@ namespace PropertyWidgets
     enum State {NORMAL, PENDING, CONFLICTED}; 
 
   public:
-    typedef Property<valuetype_t> *  pProperty_t; 
+    typedef elements::Property<valuetype_t> *  pProperty_t; 
     void addProperty(pProperty_t comboProperty); 
     void delProperty(pProperty_t comboProperty); 
     void setPossibleValues(const possiblevalues_t & ); 
 
   private:
     typedef std::set<pProperty_t >  propset_t ; 
-    typedef std::map<pProperty_t, sigc::connection>  sigconnmap_t; 
+    typedef std::map<pProperty_t, size_t>  notifymap_t; 
     propset_t propertySet_; 
-    sigconnmap_t connMap_; 
-    void refreshProperty(valuetype_t value); 
+    notifymap_t notifyMap_; 
+    void refreshProperty(); 
 
     State state_; 
     valuetype_t value_; 
@@ -58,12 +59,16 @@ namespace PropertyWidgets
     
     possiblevalues_t possibleValues_; 
 
+    pWidgetPropertyNotify_t notify_; 
+
   }; 
 
   template <class valuetype_t> 
   ComboBox<valuetype_t>::ComboBox() :
     Gtk::ComboBox(), 
-    state_(NORMAL)
+    state_(NORMAL),
+    notify_(new WidgetPropertyNotify)
+
   {
     refTreeModel_ = Gtk::ListStore::create(modelColumns_);
     
@@ -71,6 +76,8 @@ namespace PropertyWidgets
     signal_changed().connect(sigc::mem_fun(*this, 
 					   &ComboBox::on_my_value_changed)); 
     pack_start(modelColumns_.colName); 
+    notify_->signal().connect(sigc::mem_fun(*this, 
+					    &ComboBox::refreshProperty)); 
     
     
   }
@@ -91,12 +98,12 @@ namespace PropertyWidgets
     if (propertySet_.find(comboProperty) == propertySet_.end()) {
       
       propertySet_.insert(comboProperty); 
-      sigc::connection conn = comboProperty->signal().connect(sigc::mem_fun(*this, 
-									    &ComboBox::refreshProperty)); 
-      
-      connMap_[comboProperty] = conn; 
+
+      size_t rethandle = comboProperty->add_watcher(notify_); 
+      notifyMap_[comboProperty] = rethandle; 
+
       if (! possibleValues_.empty()) {
-	refreshProperty(possibleValues_[0].second); 
+	refreshProperty(); 
       }
     }
     
@@ -132,14 +139,16 @@ namespace PropertyWidgets
   {
     if (propertySet_.find(comboProperty) != propertySet_.end()) {
       propertySet_.erase(comboProperty); 
-      connMap_[comboProperty].disconnect(); 
-      connMap_.erase(comboProperty); 
+
+    comboProperty->remove_watcher(notifyMap_[comboProperty]); 
+    notifyMap_.erase(comboProperty); 
+
     }
     
   }
   
   template <class valuetype_t> 
-  void ComboBox<valuetype_t>::refreshProperty(valuetype_t value) {
+  void ComboBox<valuetype_t>::refreshProperty() {
     /* 
        For each property, compute current value, and update
        

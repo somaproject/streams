@@ -4,7 +4,7 @@
 #include <gtkmm/main.h>
 #include <gtkmm.h>
 
-#include <properties.h>
+#include <elements/property.h>
 #include "spinbutton.h"
 #include "combobox.h"
 
@@ -24,8 +24,8 @@ protected:
 
   //Member widgets:Gtk::Adjustment
   // SPIN BUTTON TEST
-  Property<float> prop1_; 
-  Property<float> prop2_; 
+  elements::Property<float> prop1_; 
+  elements::Property<float> prop2_; 
   Gtk::Adjustment adjustment_; 
   PropertyWidgets::SpinButton m_button; 
   Gtk::Button statusButton_; 
@@ -35,18 +35,20 @@ protected:
   Gtk::VBox box_; 
   bool on_my_output(); 
 
+  bool idle_property_update(); 
+
   // COMBO BOX TEST
 
   PropertyWidgets::ComboBox<int> comboBox_; 
-  Property<int> comboIntProp1_; 
-  Property<int> comboIntProp2_; 
+  elements::Property<int> comboIntProp1_; 
+  elements::Property<int> comboIntProp2_; 
 
 };
 
 HelloWorld::HelloWorld()
   : prop1_(0.0), 
     prop2_(0.0), 
-    adjustment_(1.0, 1.0, 102.0, 1.0, 5.0, 0.0),
+    adjustment_(1.0, 0.0, 102.0, 1.0, 5.0, 0.0),
     statusButton_("status"), 
     setButton_("set prop2"), 
     setComboIntButton_("set both combo int"), 
@@ -78,8 +80,9 @@ HelloWorld::HelloWorld()
   box_.pack_start(setButton_); 
   box_.pack_start(setComboIntButton_); 
   box_.pack_start(setComboInt1Button_); 
+  std::cout << "Adding property " << std::endl;
   m_button.addProperty(&prop1_);
-  m_button.addProperty(&prop2_);
+  //  m_button.addProperty(&prop2_);
 
   // Combo box
   PropertyWidgets::ComboBox<int>::possiblevalues_t vals; 
@@ -95,6 +98,10 @@ HelloWorld::HelloWorld()
 
   // The final step is to display this newly created widget...
   show_all(); 
+
+  Glib::signal_timeout().connect( sigc::mem_fun(*this, &HelloWorld::idle_property_update) , 
+				  2000);
+
 }
 
 bool HelloWorld::on_my_output()
@@ -109,6 +116,31 @@ bool HelloWorld::on_my_output()
 }
 HelloWorld::~HelloWorld()
 {
+}
+
+bool HelloWorld::idle_property_update()
+{
+  
+  if(prop1_.pendingRequest() ) {
+    std::cout << "prop1_ setting to " << prop1_.get_req_value()<< std::endl;
+    prop1_.set_value(prop1_.get_req_value()); 
+  }
+
+  if(prop2_.pendingRequest() ) {
+    std::cout << "prop2_ setting to " << prop2_.get_req_value()<< std::endl;
+    prop2_.set_value(prop2_.get_req_value()); 
+  }
+
+
+  if(comboIntProp1_.pendingRequest() ) {
+    comboIntProp1_.set_value(comboIntProp1_.get_req_value()); 
+  }
+
+  if(comboIntProp2_.pendingRequest() ) {
+    comboIntProp2_.set_value(comboIntProp2_.get_req_value()); 
+  }
+  return true;
+
 }
 
 void HelloWorld::on_button_clicked()

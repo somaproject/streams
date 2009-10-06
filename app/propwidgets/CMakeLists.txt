@@ -1,7 +1,7 @@
 
 set(propwidget_SRCS
   spinbutton.cc
-  comboboxentry.cc
+#  comboboxentry.cc
   togglebutton.cc
 )
 

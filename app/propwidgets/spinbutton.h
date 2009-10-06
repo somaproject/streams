@@ -2,9 +2,10 @@
 #define PROPERTY_SPINBUTTON_H
 
 #include <gtkmm.h>
-#include <properties.h>
+#include <elements/property.h>
 #include <set>
 #include <list>
+#include "propwidget.h"
 
 namespace PropertyWidgets
 {
@@ -16,21 +17,24 @@ namespace PropertyWidgets
     enum State {NORMAL, PENDING, CONFLICTED}; 
 
   public:
-    typedef Property<float> *  pProperty_t; 
+    typedef elements::Property<float> *  pProperty_t; 
     void addProperty(pProperty_t spinProperty); 
     void delProperty(pProperty_t  spinProperty); 
     
   private:
     typedef std::set<pProperty_t >  propset_t ; 
-    typedef std::map<pProperty_t, sigc::connection>  sigconnmap_t; 
+    typedef std::map<pProperty_t, size_t>  notifymap_t; 
     propset_t propertySet_; 
-    sigconnmap_t connMap_; 
-    void refreshProperty(float value); 
+    notifymap_t notifyMap_; 
+    void refreshProperty(); 
 
     State state_; 
     float value_; 
     void setState(State); 
     void on_my_value_changed(); 
+
+    pWidgetPropertyNotify_t notify_; 
+    int on_my_input(double* new_value) ; 
 
   }; 
   

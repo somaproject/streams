@@ -12,11 +12,16 @@ using namespace PropertyWidgets;
 */
 SpinButton::SpinButton(Gtk::Adjustment & adj) :
   Gtk::SpinButton(adj), 
-  state_(NORMAL)
+  state_(NORMAL),
+  notify_(new WidgetPropertyNotify)
 {
 
   signal_value_changed().connect(sigc::mem_fun(*this, 
-					       &SpinButton::on_my_value_changed)); 
+ 					       &SpinButton::on_my_value_changed)); 
+  signal_input().connect(sigc::mem_fun(*this, 
+				       &SpinButton::on_my_input)); 
+  notify_->signal().connect(sigc::mem_fun(*this, 
+					  &SpinButton::refreshProperty)); 
 
 }
 
@@ -28,6 +33,14 @@ SpinButton::~SpinButton() {
 
 }
 
+int SpinButton::on_my_input(double* new_value)
+{
+  std::cout << "on my input" << *new_value << std::endl; 
+  std::cout << "The text was " << get_text() << std::endl;
+  
+  return Gtk::INPUT_ERROR; 
+
+}
 
 void SpinButton::addProperty(pProperty_t spinProperty) 
 {
@@ -35,11 +48,10 @@ void SpinButton::addProperty(pProperty_t spinProperty)
   if (propertySet_.find(spinProperty) == propertySet_.end()) {
     
     propertySet_.insert(spinProperty); 
-    sigc::connection conn = spinProperty->signal().connect(sigc::mem_fun(*this, 
-									 &SpinButton::refreshProperty)); 
-    
-    connMap_[spinProperty] = conn; 
-    refreshProperty(0.0); 
+
+    size_t rethandle = spinProperty->add_watcher(notify_); 
+    notifyMap_[spinProperty] = rethandle; 
+    refreshProperty(); 
 
   }
   
@@ -52,13 +64,15 @@ void SpinButton::delProperty(pProperty_t spinProperty)
 {
   if (propertySet_.find(spinProperty) != propertySet_.end()) {
     propertySet_.erase(spinProperty); 
-    connMap_[spinProperty].disconnect(); 
-    connMap_.erase(spinProperty); 
+
+    spinProperty->remove_watcher(notifyMap_[spinProperty]); 
+    notifyMap_.erase(spinProperty); 
+
   }
 
 }
 
-void SpinButton::refreshProperty(float value) {
+void SpinButton::refreshProperty() {
   /* 
      For each property, compute current value, and update
      
@@ -82,7 +96,7 @@ void SpinButton::refreshProperty(float value) {
       } 
     }
   }
-  
+  std::cout << "SpinButtonm::refreshProperty " << newvalue << std::endl;
   if (conflict) {
     setState(CONFLICTED); 
   } else {
@@ -97,8 +111,13 @@ void SpinButton::setState(State st) {
   
   if (st == NORMAL) {
     get_adjustment()->set_value(value_); 
+    std::cout << "setting adjustment  " << value_ 
+	      << " which is now " << get_adjustment()->get_value() << std::endl;
+    
     set_sensitive(true); 
-  } else if (st == PENDING) { 
+  } else if (st == PENDING) {
+    std::cout << "SpinButton::setState :  setting state to PENDING" 
+	      << std::endl; 
     get_adjustment()->set_value(value_);     
     set_sensitive(false); 
     
@@ -113,6 +132,8 @@ void SpinButton::setState(State st) {
 
 void SpinButton::on_my_value_changed()
 {
+  std::cout << "SpinButton::on_my_value_changed" << std::endl;
+
   double value = get_value(); 
   setState(PENDING); 
   for (propset_t::iterator  pi = propertySet_.begin(); 
@@ -120,6 +141,6 @@ void SpinButton::on_my_value_changed()
     *(*pi) = value; 
   }  
   
-  std::cout << "value changed" << std::endl; 
+  std::cout << "value changed to " << value << std::endl; 
 
 }
