@@ -21,6 +21,7 @@ set(streams_SRCS
   networkdatacache.cc
   pipelinemanager.cc
   pipelineconfig.cc
+  elementrunner.cc
   jsonutil)
 
 set(ext_SRCS

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <sys/time.h>
 #include <time.h>
+#include <boost/thread.hpp>
 #include "boost/date_time/posix_time/posix_time.hpp" //include all types plus i/o
 #include "timer.h"
 
@@ -44,6 +45,10 @@ void Timer::updateSomaTime(somatime_t newsomatime)
   currentWallTime_ = somaTimeToWallTime(currentSomaTime_); 
   currentStreamTime_ = somaTimeToStreamTime(currentSomaTime_); 
   currentExpTime_ = somaTimeToExpTime(currentSomaTime_); 
+  {
+    boost::unique_lock<boost::shared_mutex> lock(currentTimeID_mutex_); 
+    currentTimeID_ = somaTimeToTimeID(currentSomaTime_); 
+  }
   streamTimeSignal_.emit(currentStreamTime_); 
 
 }
@@ -70,6 +75,17 @@ streamtime_t Timer::getStreamTime()
 {
   return currentStreamTime_; 
 
+}
+
+timeid_t Timer::getTimeID()
+{
+  boost::unique_lock<boost::shared_mutex> lock(currentTimeID_mutex_); 
+  return currentTimeID_; 
+}
+
+timeid_t Timer::somaTimeToTimeID(somatime_t st)
+{
+  return st - startSomaTime_; 
 }
 
 Timer::~Timer()

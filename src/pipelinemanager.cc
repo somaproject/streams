@@ -59,3 +59,11 @@ pStreamPipeline_t PipelineManager::getPipeline(std::string name)
   throw std::runtime_error("unknown pipeline"); 
 
 }
+
+std::list<pStreamPipeline_t> PipelineManager::getPipelines()
+{
+  return pipelines_; 
+  
+}
+
+

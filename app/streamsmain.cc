@@ -7,6 +7,7 @@
 #include <somanetwork/logging.h>
 #include <somadspio/logging.h>
 #include "pipelineconfig.h"
+#include "elementrunner.h"
 
 namespace po = boost::program_options;
 
@@ -123,26 +124,25 @@ int main(int argc, char** argv)
   ifstream config_file(vm["pipeline"].as<string>().c_str() );
   load_pipeline_config(pm, config_file); 
 
-//   for (int i = 0; i < 4; i++) {
+  std::list<elements::pIElement_t> elements; 
+  BOOST_FOREACH(pStreamPipeline_t p, pm->getPipelines()) {
+    std::list<elements::pIElement_t> pe = p->getElements(); 
+    
+    std::copy(pe.begin(), pe.end(), 
+	      std::back_insert_iterator<std::list<elements::pIElement_t> >(elements)); 
 
-//     pStreamPipeline_t pl = 
-//       pm->createPipeline(boost::str(boost::format("pipeline%d") % i));
-//     pISource_t src = pl->createSource("NoiseWave", 
-// 				      boost::str(boost::format("ns%d") % i)); 
+  }
 
-//     pIVis_t vis = pl->createVis("WaveVis", 
-// 				boost::str(boost::format("waveVis%d") % i)); 
-          
-//     core::pISourcePad_t ps1 = 
-//       src->getSourcePad("default");
-//     core::pISinkPad_t ps2 = 
-//       vis->getSinkPad("default"); 
-//     ps1->connect(ps2);
-//   }
+  std::cout << "Running elements" << std::endl;
+  StaticElementRunner er(elements, ptimer); 
+
+  er.run();
 
   pnetwork->run(); 
 
   kit.run(sa);
+
+  er.stop();
 
   return 0;
 }

@@ -2,6 +2,8 @@
 #define TIMER_H
 
 #include <boost/shared_ptr.hpp>
+#include <boost/thread/mutex.hpp>
+
 #include <sigc++/sigc++.h>
 #include <gtkmm.h>
 
@@ -52,7 +54,7 @@ public:
   streamtime_t getStreamTime(); 
   walltime_t getWallTime(); // thin wrapper around gettimeofday-like functionality
   streamtime_t getExperimentTime(); 
-  
+  timeid_t getTimeID(); 
   
   streamtime_t time_; 
   
@@ -62,6 +64,7 @@ public:
   walltime_t somaTimeToWallTime(somatime_t); 
   streamtime_t somaTimeToStreamTime(somatime_t); 
   streamtime_t somaTimeToExpTime(somatime_t); 
+  timeid_t somaTimeToTimeID(somatime_t) ;
   
 
 private:
@@ -75,6 +78,10 @@ private:
   walltime_t currentWallTime_; 
   streamtime_t currentStreamTime_; 
   streamtime_t currentExpTime_; 
+
+  
+  timeid_t currentTimeID_; 
+  boost::shared_mutex currentTimeID_mutex_; 
   
   sigc::signal<void, streamtime_t> streamTimeSignal_; 
   pISomaNetCodec_t pSomaNetCodec_; 

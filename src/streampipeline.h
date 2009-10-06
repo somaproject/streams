@@ -44,6 +44,9 @@ public:
   std::list<pIFilter_t> getFilters(); 
   std::list<pITrigger_t> getTriggers(); 
   std::list<pIVis_t> getVis(); 
+
+  std::list<elements::pIElement_t> getElements(); 
+
   std::string getName() {return name_;}
 
 private:

@@ -1,4 +1,6 @@
 #include <boost/format.hpp>
+#include <algorithm>
+
 #include "streampipeline.h"
 #include "sources/sourcefactory.h"
 #include "vis/visfactory.h"
@@ -121,3 +123,12 @@ void StreamPipeline::resetVisitors(pISourceVisitor_t sv, pIFilterVisitor_t fv,
 
 }
   
+std::list<elements::pIElement_t> StreamPipeline::getElements()
+{
+
+  std::list<elements::pIElement_t> elements; 
+  std::copy(sources_.begin(), sources_.end(), 
+	    std::back_insert_iterator<std::list<elements::pIElement_t> >(elements)); 
+  
+  return elements; 
+}

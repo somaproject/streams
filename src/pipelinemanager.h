@@ -26,6 +26,7 @@ public:
 
   size_t size();  // number of pipleines
   pStreamPipeline_t getPipeline(std::string name); 
+  std::list<pStreamPipeline_t> getPipelines(); 
 
 private:
   sigc::signal<void, pStreamPipeline_t> newPipeline_; 
