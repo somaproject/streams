@@ -13,12 +13,12 @@ namespace elements {
 
     enum STATES {
       RESET,
-      DATA,
-      SEQUENCEHEAD
+      DATA
     }; 
     // note that datum is only valid for data, sequencehead
     STATES state; 
-    timeid_t time; 
+    timeid_t starttime; 
+    timeid_t endtime; 
     T datum; 
     
   }; 

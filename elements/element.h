@@ -1,13 +1,13 @@
-#ifndef ELEMENT_H
-#define ELEMENT_H
+#ifndef __ELEMENTS_ELEMENT_H__
+#define __ELEMENTS_ELEMENT_H__
 
 #include <map>
 #include <list>
-#include "ielement.h"
-#include "sourcepad.h"
-#include "sinkpad.h"
+#include <elements/ielement.h>
+#include <elements/sourcepad.h>
+#include <elements/sinkpad.h>
 
-namespace core { 
+namespace elements { 
 
   class Element : public virtual IElement {
   public:
@@ -15,63 +15,66 @@ namespace core {
       name_(name)
     {}; 
     
-    template<class BufferT> SourcePad<BufferT> *
-    createSourcePad(typename QueueView<BufferT>::dataContainer_t & buffer,
-		    std::string name)
-    {
-      SourcePad<BufferT> * ppad = SourcePad<BufferT>::createPad(buffer, name); 
-      pSourcePads_.insert(std::make_pair(name, ppad)); 
-      return ppad; 
+    template<class BufferT> 
+    typename SourcePad<BufferT>::pSourcePad_t 
+    createSourcePad(std::string name)  {
+      typename SourcePad<BufferT>::pSourcePad_t pad = 
+	SourcePad<BufferT>::createPad(name); 
+      pSourcePads_.insert(std::make_pair(name, pad)); 
+      return pad; 
     }
-    
-    template<class BufferT> SinkPad<BufferT> * 
-    createSinkPad(std::string name) {
-      SinkPad<BufferT> * ppad = SinkPad<BufferT>::createPad( name); 
-      pSinkPads_.insert(std::make_pair(name, ppad)); 
-      return ppad; 
-
-    }
-    
-    // access
-    template<class BufferT>
-    SourcePad<BufferT> * getSource(std::string name) {
-      sourcePadMap_t::iterator pos = pSourcePads_.find(name);
-      if (pos == pSourcePads_.end()) {
-	throw std::runtime_error("Unknown source pad"); 
-      }
-
-      return dynamic_cast<SourcePad<BufferT> *>(pos->second); 
-
-    }
-    
-    template<class BufferT>
-    SinkPad<BufferT> * getSink(std::string name) {
-      sinkPadMap_t::iterator pos = pSinkPads_.find(name);
-      if (pos == pSinkPads_.end()) {
-	throw std::runtime_error("Unknown sink pad"); 
-      }
-
-      return dynamic_cast<SinkPad<BufferT> *>(pos->second); 
       
-    }
+    template<class BufferT> 
+    typename SinkPad<BufferT>::pSinkPad_t
+    createSinkPad(std::string name) {
+      typename SinkPad<BufferT>::pSinkPad_t pad = 
+	SinkPad<BufferT>::createPad(name); 
 
-    std::list<std::string> getAvailableSources()
-    {
-      std::list<std::string> result; 
-      for (sourcePadMap_t::iterator ps = pSourcePads_.begin(); ps != pSourcePads_.end(); ++ps) {
-	result.push_back((*ps).second->getName()); 
-      }
-      return result; 
+      
+      pSinkPads_.insert(std::make_pair(name, pad)); 
+      return pad; 
     }
+    
+//     // access
+//     template<class BufferT>
+//     SourcePad<BufferT> * getSource(std::string name) {
+//       sourcePadMap_t::iterator pos = pSourcePads_.find(name);
+//       if (pos == pSourcePads_.end()) {
+// 	throw std::runtime_error("Unknown source pad"); 
+//       }
 
-    std::list<std::string> getAvailableSinks()
-    {
-      std::list<std::string> result; 
-      for (sinkPadMap_t::iterator ps = pSinkPads_.begin(); ps != pSinkPads_.end(); ++ps) {
-	result.push_back((*ps).second->getName()); 
-      }
-      return result; 
-    }
+//       return dynamic_cast<SourcePad<BufferT> *>(pos->second); 
+
+//     }
+    
+//     template<class BufferT>
+//     SinkPad<BufferT> * getSink(std::string name) {
+//       sinkPadMap_t::iterator pos = pSinkPads_.find(name);
+//       if (pos == pSinkPads_.end()) {
+// 	throw std::runtime_error("Unknown sink pad"); 
+//       }
+
+//       return dynamic_cast<SinkPad<BufferT> *>(pos->second); 
+      
+//     }
+
+//     std::list<std::string> getAvailableSources()
+//     {
+//       std::list<std::string> result; 
+//       for (sourcePadMap_t::iterator ps = pSourcePads_.begin(); ps != pSourcePads_.end(); ++ps) {
+// 	result.push_back((*ps).second->getName()); 
+//       }
+//       return result; 
+//     }
+
+//     std::list<std::string> getAvailableSinks()
+//     {
+//       std::list<std::string> result; 
+//       for (sinkPadMap_t::iterator ps = pSinkPads_.begin(); ps != pSinkPads_.end(); ++ps) {
+// 	result.push_back((*ps).second->getName()); 
+//       }
+//       return result; 
+//     }
 
     std::string getName() { return name_; } 
     void setName(std::string name) { name_ = name; }
@@ -95,12 +98,12 @@ namespace core {
       }
       return pos->second; 
     }
-    
+
   private:
-    typedef std::map<std::string, ISourcePad *>  sourcePadMap_t; 
+    typedef std::map<std::string, pISourcePad_t>  sourcePadMap_t; 
     sourcePadMap_t pSourcePads_; 
     
-    typedef std::map<std::string, ISinkPad *> sinkPadMap_t; 
+    typedef std::map<std::string, pISinkPad_t> sinkPadMap_t; 
     sinkPadMap_t pSinkPads_; 
 
     std::string name_; 

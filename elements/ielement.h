@@ -1,6 +1,9 @@
 #ifndef __ELEMENTS_IELEMENT_H__
 #define __ELEMENTS_IELEMENT_H__
-#include "sourcepad.h"
+
+#include <elements/types.h>
+
+#include <elements/sourcepad.h>
 
 namespace elements {
   class IElement {
@@ -11,7 +14,7 @@ namespace elements {
     virtual pISourcePad_t getSourcePad(std::string name) = 0; 
     virtual pISinkPad_t getSinkPad(std::string name) = 0; 
 
-    virtual void process() = 0; 
+    virtual void process(timeid_t) = 0; 
 
   }; 
 

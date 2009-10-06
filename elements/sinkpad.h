@@ -41,11 +41,13 @@ namespace elements {
     std::string name_; 
     
     bool connected_; 
-    
+
+  public:
     commandqueue_t commandqueue_; 
 
     typedef LinkElement<BufferT> elt_t; 
-    NaiveQueue<elt_t> dataqueue_; 
+    typedef boost::shared_ptr<elt_t> pelt_t; 
+    NaiveQueue<pelt_t> dataqueue_; 
     
   }; 
   

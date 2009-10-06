@@ -22,10 +22,23 @@ set(sources_SRCS
 add_library(sources
   ${sources_SRCS})
 
+set(sources2_SRCS
+  noisewave2.cc
+  )
+
+add_library(sources2
+  ${sources2_SRCS}
+)
+
 target_link_libraries(sources
   streams_core
   ${GUIDEPS_LIBRARIES}
   ${GUIDEPS_LIBRARIES}
 
+)
+  
+target_link_libraries(sources2
+  ${GUIDEPS_LIBRARIES}
+  ${GUIDEPS_LIBRARIES}
 )
   

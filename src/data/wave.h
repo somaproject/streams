@@ -5,10 +5,11 @@
 #include <boost/array.hpp>
 
 #include "streamtime.h" 
+#include <elements/types.h>
 
 struct WaveBuffer_t
 {
-  streamtime_t time; 
+  elements::timeid_t time; 
   float samprate; 
   std::vector<float> data; 
 }; 
@@ -18,7 +19,7 @@ typedef boost::shared_ptr<WaveBuffer_t> pWaveBuffer_t;
 template<int N> 
 struct WaveBufferDisk_t
 {
-  streamtime_t time; 
+  elements::timeid_t time; 
   float samprate; 
   boost::array<float, N> data;   
   
