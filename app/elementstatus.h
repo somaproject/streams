@@ -1,7 +1,7 @@
 #ifndef ELEMENTSTATUS_H
 #define ELEMENTSTATUS_H
 #include <gtkmm.h>
-#include <core/ielement.h>
+#include <elements/ielement.h>
 #include "propertypanemanager.h" 
 #include "somaconfig.h"
 
@@ -21,7 +21,7 @@ protected:
 
   PropertyPaneManager * pPPM_; 
   bool on_eventbox_button_press(GdkEventButton*); 
-  virtual core::IElement * getElement() = 0; 
+  virtual elements::IElement * getElement() = 0; 
 
   void clearCallback(); 
   sigc::connection conn_; 

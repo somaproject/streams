@@ -1,6 +1,6 @@
 #include "viscreator.h"
 #include "waveviswidget.h"
-#include "spectviswidget.h"
+//#include "spectviswidget.h"
 #include "pipelinegui.h"
 
 VisCreator::VisCreator(PipelineGUI  & pg) :
@@ -27,13 +27,13 @@ void VisCreator::visit(VisBase * )
 }
 
 
-void VisCreator::visit(SineVis* sv )
-{
+// void VisCreator::visit(SineVis* sv )
+// {
 
-}
+// }
 
 
-void VisCreator::visit(WaveVis * pwv)
+void VisCreator::visit(WaveVis2 * pwv)
 {
   
   WaveVisWidget * wv = new WaveVisWidget(pwv, pipelineGUI_.getSomaConfig()); 
@@ -46,15 +46,15 @@ void VisCreator::visit(WaveVis * pwv)
 
 }
 
-void VisCreator::visit(SpectVis * psv)
-{
+// void VisCreator::visit(SpectVis * psv)
+// {
   
-  SpectVisWidget * sv = new SpectVisWidget(psv, pipelineGUI_.getSomaConfig()); 
-  sv->setPropertyPaneManager(pipelineGUI_.getPropertyPaneManager()); 
+//   SpectVisWidget * sv = new SpectVisWidget(psv, pipelineGUI_.getSomaConfig()); 
+//   sv->setPropertyPaneManager(pipelineGUI_.getPropertyPaneManager()); 
   
-  // tell pipeline gui that there's a new source, and let it
-  // position appropriately
-  pipelineGUI_.addNewVis(sv); 
+//   // tell pipeline gui that there's a new source, and let it
+//   // position appropriately
+//   pipelineGUI_.addNewVis(sv); 
   
 
-}
+// }

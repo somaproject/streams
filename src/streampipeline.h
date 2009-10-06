@@ -6,16 +6,16 @@
 
 #include "forward.h"
 
-#include "isource.h"
-#include "ifilter.h"
-#include "itrigger.h"
-#include "ivis.h"
+#include <sources/isource.h>
+#include <filters/ifilter.h>
+#include <triggers/itrigger.h>
+#include <vis/ivis.h>
 
 #include "sourcestate.h" 
-#include "isourcevisitor.h"
-#include "ifiltervisitor.h"
-#include "itriggervisitor.h"
-#include "ivisvisitor.h"
+#include <sources/isourcevisitor.h>
+#include <filters/ifiltervisitor.h>
+#include <triggers/itriggervisitor.h>
+#include <vis/ivisvisitor.h>
 
 #include "jsonutil.h"
 

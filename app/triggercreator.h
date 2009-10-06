@@ -1,7 +1,7 @@
 #ifndef TRIGGERCREATOR_H
 #define TRIGGERCREATOR_H
 
-#include "itriggervisitor.h"
+#include <triggers/itriggervisitor.h>
 
 class PipelineGUI;
 class TriggerCreator : public ITriggerVisitor

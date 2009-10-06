@@ -1,7 +1,7 @@
 #ifndef FILTERCREATOR_H 
 #define FILTERCREATOR_H
 
-#include "ifiltervisitor.h"
+#include <filters/ifiltervisitor.h>
 
 class PipelineGUI; 
 

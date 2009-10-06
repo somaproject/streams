@@ -1,7 +1,7 @@
 #include "waveviswidget.h"
 #include <boost/format.hpp>
 
-WaveVisWidget::WaveVisWidget(WaveVis * nw, pSomaConfig_t sc) :
+WaveVisWidget::WaveVisWidget(WaveVis2 * nw, pSomaConfig_t sc) :
   ElementStatus(sc),
   wavevis_(nw)
 {
@@ -10,8 +10,8 @@ WaveVisWidget::WaveVisWidget(WaveVis * nw, pSomaConfig_t sc) :
   label_.set_text("Scale"); 
   show_all(); 
 
-  wavevis_->scale.signal().connect(sigc::mem_fun(*this, 
-						 &WaveVisWidget::scaleUpdate)); 
+//   wavevis_->scale.signal().connect(sigc::mem_fun(*this, 
+// 						 &WaveVisWidget::scaleUpdate)); 
   scaleUpdate(0.0);
 
   set_tooltip_text("Click me!");

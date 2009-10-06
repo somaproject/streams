@@ -15,8 +15,8 @@ class VisVisitorBase: public IVisVisitor
 {
 public: 
   virtual void visit(VisBase * ){}; 
-  virtual void visit(SineVis * ){}; 
-  virtual void visit(WaveVis * ){}; 
+  //virtual void visit(Vis2 * ){}; 
+  virtual void visit(WaveVis2 * ){}; 
   
 
   

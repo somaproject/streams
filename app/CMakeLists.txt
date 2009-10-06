@@ -25,11 +25,12 @@ add_library(app_gui
 
 set(app_widgets_SRCS
   noisewavewidget.cc
-  pamonitorwidget.cc
+#  pamonitorwidget.cc
   waveviswidget.cc
-  spectviswidget.cc
-  netdatawavewidget.cc
-  netdatarawwidget.cc)
+#  spectviswidget.cc
+  #netdatawavewidget.cc
+  #netdatarawwidget.cc
+)
 
 add_library(app_widgets
   ${app_widgets_SRCS})
@@ -37,8 +38,9 @@ add_library(app_widgets
 set(app_props_SRCS
   noisewaveproperty.cc
   wavevisproperty.cc
-  netdatawaveproperty.cc
-  netdatarawproperty.cc)
+  #netdatawaveproperty.cc
+  #netdatarawproperty.cc
+)
 
 add_library(app_props
   ${app_props_SRCS})

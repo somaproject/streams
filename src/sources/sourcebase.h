@@ -9,14 +9,14 @@
 #include <boost/shared_ptr.hpp>
 #include "forward.h"
 
-#include "core/element.h"
+#include <elements/element.h>
 #include "isource.h"
 #include "isourcevisitor.h"
 
 #include <boost/filesystem.hpp>
 namespace bf = boost::filesystem; 
 
-class SourceBase : public core::Element, public ISource
+class SourceBase : public elements::Element, public ISource
 {
 public:
       

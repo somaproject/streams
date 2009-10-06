@@ -6,7 +6,7 @@
 const std::string NoiseWave2::TYPENAME = "NoiseWave2"; 
 
 NoiseWave2::NoiseWave2(std::string name, bf::path scratch) :
-  Element(name), 
+  SourceBase(name), 
   amplitude(1.0), 
   noiseclass(WhiteNoise),
   preload(0), 

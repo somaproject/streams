@@ -34,25 +34,25 @@ WaveVisProperty::~WaveVisProperty()
 
 }
 
-bool WaveVisProperty::addElement(core::IElement * elt)
+bool WaveVisProperty::addElement(elements::IElement * elt)
 {
   // going to hell for this
-  WaveVis * ws = dynamic_cast<WaveVis*>(elt); 
+  WaveVis2 * ws = dynamic_cast<WaveVis2*>(elt); 
   if (ws == NULL) {
     return false; 
   }
   
-  scaleComboBox_.addProperty(&ws->scale); 
+  //scaleComboBox_.addProperty(&ws->scale); 
   return true; 
 }
 
-bool WaveVisProperty::delElement(core::IElement * elt)
+bool WaveVisProperty::delElement(elements::IElement * elt)
 {
-  WaveVis * ws = dynamic_cast<WaveVis*>(elt); 
+  WaveVis2 * ws = dynamic_cast<WaveVis2*>(elt); 
   if (ws == NULL) {
     return false; 
   }
 
-  scaleComboBox_.delProperty(&ws->scale); 
+  //scaleComboBox_.delProperty(&ws->scale); 
   return true; 
 }

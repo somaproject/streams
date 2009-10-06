@@ -1,6 +1,6 @@
 #include "propertypanemanager.h"
-#include <sources/noisewave.h>
-#include <vis/wavevis/wavevis.h>
+#include <sources/noisewave2.h>
+#include <vis/wavevis2/wavevis2.h>
 #include "noisewaveproperty.h"
 #include "wavevisproperty.h"
 #include "netdatawaveproperty.h"
@@ -22,14 +22,14 @@ PropertyPaneManager::~PropertyPaneManager()
   
 }
 
-void PropertyPaneManager::setElement(core::IElement * elt)
+void PropertyPaneManager::setElement(elements::IElement * elt)
 {
   // remove all elements, and set this as the only one
   signalClearAllElements_.emit(); 
   appendElement(elt); 
 }
 
-void PropertyPaneManager::appendElement(core::IElement* elt)
+void PropertyPaneManager::appendElement(elements::IElement* elt)
 {
   if (elements_.find(elt) == elements_.end())
     {
@@ -75,7 +75,7 @@ void PropertyPaneManager::appendElement(core::IElement* elt)
 }
 
 
-void PropertyPaneManager::removeElement(core::IElement * elt)
+void PropertyPaneManager::removeElement(elements::IElement * elt)
 {
   if (elements_.find(elt) == elements_.end())
     {
@@ -96,7 +96,7 @@ void PropertyPaneManager::removeElement(core::IElement * elt)
     // currently in conflict; this might have removed the conflict. 
     bool firstelt = true; 
     inConflict_ = false; 
-    for(std::set<core::IElement* >::iterator ei = elements_.begin(); 
+    for(std::set<elements::IElement* >::iterator ei = elements_.begin(); 
 	ei != elements_.end(); ++ei) {
       if (firstelt) {
 	firstelt = false; 
@@ -124,17 +124,17 @@ void PropertyPaneManager::removeElement(core::IElement * elt)
 }
 
 
-PropertyPane * PropertyPaneManager::createPropPane(core::IElement * elt)
+PropertyPane * PropertyPaneManager::createPropPane(elements::IElement * elt)
 {
   // TOTAL HORRIBLE HACK
-  if (dynamic_cast<NoiseWave*>(elt)) {
+  if (dynamic_cast<NoiseWave2*>(elt)) {
     return new NoiseWaveProperty(pSomaConfig_); 
-  } else if (dynamic_cast<WaveVis*>(elt)) {
+  } else if (dynamic_cast<WaveVis2*>(elt)) {
     return new WaveVisProperty(pSomaConfig_); 
-  } else if (dynamic_cast<NetDataWave*>(elt)) {
-    return new NetDataWaveProperty(pSomaConfig_); 
-  } else if (dynamic_cast<NetDataRaw*>(elt)) {
-    return new NetDataRawProperty(pSomaConfig_); 
+//   } else if (dynamic_cast<NetDataWave*>(elt)) {
+//     return new NetDataWaveProperty(pSomaConfig_); 
+//   } else if (dynamic_cast<NetDataRaw*>(elt)) {
+//     return new NetDataRawProperty(pSomaConfig_); 
   } else {
     throw std::runtime_error("unkown element class for property pane creation");
   }

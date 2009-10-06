@@ -10,11 +10,11 @@
 
 #include <elements/property.h>
 #include <elements/element.h>
-
+#include <sources/sourcebase.h>
 
 namespace bf = boost::filesystem; 
 
-class NoiseWave2 : public elements::Element //  public SourceBase
+class NoiseWave2 : public SourceBase
 {
 public:
   static const std::string TYPENAME;
@@ -38,10 +38,10 @@ public:
 
   void process(elements::timeid_t currenttime); 
   
-//   void accept(pISourceVisitor_t sv) { 
-//     if (sv != NULL) 
-//       sv->visit(this); 
-//   }
+  void accept(pISourceVisitor_t sv) { 
+    if (sv != NULL) 
+      sv->visit(this); 
+  }
 
 
 private:

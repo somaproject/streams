@@ -1,5 +1,5 @@
 #include "noisewaveproperty.h"
-
+#include <sources/noisewave2.h>
 
 NoiseWaveProperty::NoiseWaveProperty(pSomaConfig_t sc) :
   frame_("Fake Source"),
@@ -39,27 +39,27 @@ NoiseWaveProperty::~NoiseWaveProperty()
 
 }
 
-bool NoiseWaveProperty::addElement(core::IElement * elt)
+bool NoiseWaveProperty::addElement(elements::IElement * elt)
 {
   // going to hell for this
-  NoiseWave * ws = dynamic_cast<NoiseWave*>(elt); 
+  NoiseWave2 * ws = dynamic_cast<NoiseWave2*>(elt); 
   if (ws == NULL) {
     return false; 
   }
-  noiseClassComboBox_.addProperty(&ws->noiseclass);
-  amplitudeSpinButton_.addProperty(&ws->amplitude); 
+//   noiseClassComboBox_.addProperty(&ws->noiseclass);
+//   amplitudeSpinButton_.addProperty(&ws->amplitude); 
   return true; 
 }
 
-bool NoiseWaveProperty::delElement(core::IElement * elt)
+bool NoiseWaveProperty::delElement(elements::IElement * elt)
 {
-  NoiseWave * ws = dynamic_cast<NoiseWave*>(elt); 
+  NoiseWave2 * ws = dynamic_cast<NoiseWave2*>(elt); 
   if (ws == NULL) {
     return false; 
   }
   
-  noiseClassComboBox_.delProperty(&ws->noiseclass);
-  amplitudeSpinButton_.delProperty(&ws->amplitude); 
+//   noiseClassComboBox_.delProperty(&ws->noiseclass);
+//   amplitudeSpinButton_.delProperty(&ws->amplitude); 
 
   return true; 
 }

@@ -8,11 +8,11 @@
 
 #include <list>
 
-#include "core/ielement.h" 
+#include <elements/ielement.h>
 
 class ISourceVisitor; 
 
-class ISource : public virtual core::IElement
+class ISource : public virtual elements::IElement
 {
   
 public:

@@ -1,7 +1,7 @@
 #ifndef PROPERTYPANE_H
 #define PROPERTYPANE_H
 #include <gtkmm.h>
-#include <core/ielement.h>
+#include <elements/ielement.h>
 
 /*
    A property pane is a short-lived widget connected to a 
@@ -41,11 +41,11 @@
 class PropertyPane : public Gtk::VBox
 {
 public:
-  virtual bool addElement(core::IElement * elt) = 0; 
-  virtual bool delElement(core::IElement * elt) = 0; 
+  virtual bool addElement(elements::IElement * elt) = 0; 
+  virtual bool delElement(elements::IElement * elt) = 0; 
 private:
 
-  PropertyPane * createPropPane(core::IElement * elt); 
+  PropertyPane * createPropPane(elements::IElement * elt); 
   
 }; 
 

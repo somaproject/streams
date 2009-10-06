@@ -2,7 +2,7 @@
 #define WAVEVISPROPERTY_H
 
 #include "propertypane.h"
-#include <vis/wavevis/wavevis.h>
+#include <vis/wavevis2/wavevis2.h>
 #include <propwidgets/combobox.h>
 #include "somaconfig.h"
 
@@ -11,8 +11,8 @@ public:
   WaveVisProperty(pSomaConfig_t sc); 
   ~WaveVisProperty(); 
   
-  virtual bool addElement(core::IElement * elt); 
-  virtual bool delElement(core::IElement * elt); 
+  virtual bool addElement(elements::IElement * elt); 
+  virtual bool delElement(elements::IElement * elt); 
 
 private: 
   Gtk::Frame scaleFrame_;  

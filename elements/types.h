@@ -1,6 +1,9 @@
 #ifndef __ELEMENTS_TYPES_H__
 #define __ELEMENTS_TYPES_H__
 
+#include <stdint.h>
+#include <utility>
+
 namespace elements {
 
 typedef int64_t timeid_t; 

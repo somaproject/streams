@@ -12,8 +12,8 @@ public:
   NoiseWaveProperty(pSomaConfig_t sc); 
   ~NoiseWaveProperty(); 
   
-  virtual bool addElement(core::IElement * elt); 
-  virtual bool delElement(core::IElement * elt); 
+  virtual bool addElement(elements::IElement * elt); 
+  virtual bool delElement(elements::IElement * elt); 
 
 private: 
   Gtk::Frame frame_; 

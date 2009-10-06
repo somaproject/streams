@@ -2,9 +2,11 @@
 #define PROPERTY_TOGGLEBUTTON_H
 
 #include <gtkmm.h>
-#include <properties.h>
+#include <elements/property.h>
 #include <set>
 #include <list>
+
+#include "propwidget.h"
 
 namespace PropertyWidgets
 {
@@ -16,21 +18,23 @@ namespace PropertyWidgets
     enum State {NORMAL, PENDING, CONFLICTED}; 
 
   public:
-    typedef Property<bool> *  pProperty_t; 
+    typedef elements::Property<bool> *  pProperty_t; 
     void addProperty(pProperty_t toggleProperty); 
-    void delProperty(pProperty_t  toggleProperty); 
+    void delProperty(pProperty_t toggleProperty); 
     
   private:
     typedef std::set<pProperty_t >  propset_t ; 
-    typedef std::map<pProperty_t, sigc::connection>  sigconnmap_t; 
+    typedef std::map<pProperty_t, size_t>  notifymap_t; 
     propset_t propertySet_; 
-    sigconnmap_t connMap_; 
-    void refreshProperty(bool value); 
+    notifymap_t notifyMap_; 
+    void refreshProperty(); 
 
     State state_; 
     bool value_; 
     void setState(State); 
     void on_my_click(); 
+
+    pWidgetPropertyNotify_t notify_; 
 
   }; 
   

@@ -10,25 +10,18 @@ include_directories(${SOMADEPS_INCLUDE_DIRS})
 
 set(sources_SRCS
   sourcebase.cc
-  noisewave.cc
-  noisewaveconfig.cc
-  pamonitor.cc
+  noisewave2.cc
+#  noisewaveconfig.cc
+#  pamonitor.cc
   sourcefactory.cc
-  netdatawave.cc
-  netdataraw.cc
-  pasource.cc
+#   netdatawave.cc
+#   netdataraw.cc
+#   pasource.cc
   )
 
 add_library(sources
   ${sources_SRCS})
 
-set(sources2_SRCS
-  noisewave2.cc
-  )
-
-add_library(sources2
-  ${sources2_SRCS}
-)
 
 target_link_libraries(sources
   streams_core
@@ -37,8 +30,5 @@ target_link_libraries(sources
 
 )
   
-target_link_libraries(sources2
-  ${GUIDEPS_LIBRARIES}
-  ${GUIDEPS_LIBRARIES}
-)
+
   

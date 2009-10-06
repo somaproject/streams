@@ -2,10 +2,10 @@
 #define VISCONTROL_H
 
 #include <boost/shared_ptr.hpp>
-#include "istreamrenderer.h" 
-#include "itriggerrenderer.h" 
+#include <vis/istreamrenderer.h>
+#include <vis/itriggerrenderer.h>
 
-#include "ivis.h"
+#include <vis/ivis.h>
 
 class VisControl
 {

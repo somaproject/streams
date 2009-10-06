@@ -2,21 +2,21 @@
 #define NOISEWAVEWIDGET_H
 
 #include <gtkmm.h>
-#include <sources/noisewave.h>
+#include <sources/noisewave2.h>
 #include "elementstatus.h"
 
 class NoiseWaveWidget : public ElementStatus
 {
 public:
-  NoiseWaveWidget(NoiseWave *, pSomaConfig_t sc ); 
+  NoiseWaveWidget(NoiseWave2 *, pSomaConfig_t sc ); 
   ~NoiseWaveWidget(); 
 
 
 private:
-  NoiseWave * noiseWave_; 
+  NoiseWave2 * noiseWave_; 
   Gtk::Label label_; 
 
-  core::IElement * getElement() {
+  elements::IElement * getElement() {
     return noiseWave_; 
   }
 

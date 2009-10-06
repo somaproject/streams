@@ -1,7 +1,7 @@
 #ifndef VISCREATOR_H
 #define VISCREATOR_H
 
-#include "ivisvisitor.h"
+#include <vis/ivisvisitor.h>
 #include "propertypanemanager.h"
 
 class PipelineGUI; 
@@ -12,9 +12,9 @@ public:
   ~VisCreator(); 
   
   void visit(VisBase * ); 
-  void visit(SineVis * ); 
-  void visit(WaveVis * ); 
-  void visit(SpectVis * ); 
+//   void visit(SineVis * ); 
+  void visit(WaveVis2 * ); 
+//   void visit(SpectVis * ); 
 
 
 private:

@@ -9,13 +9,13 @@
 class NetDataWaveWidget : public ElementStatus
 {
 public:
-  NetDataWaveWidget(NetDataWave *, pSomaConfig_t ); 
+  NetDataWaveWidget(pNetDataWave_t, pSomaConfig_t ); 
   ~NetDataWaveWidget(); 
   
 
 private:
 
-  NetDataWave * netDataWave_; 
+  pNetDataWave_t netDataWave_; 
   
   Gtk::VBox vboxMain_; 
   Gtk::HBox hboxAnalog_; 
@@ -38,7 +38,7 @@ private:
   Gtk::Label labelHPFValue_; 
   void hpfCallback(bool hpf); 
   
-  core::IElement * getElement() {
+  elements::pIElement_t getElement() {
     return netDataWave_; 
   }
 

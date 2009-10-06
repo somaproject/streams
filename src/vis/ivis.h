@@ -4,18 +4,15 @@
 #include <map>
 #include <iostream>
 
-#include "core/ielement.h" 
-//#include "isource.h"
+#include <elements/ielement.h>
 #include "istreamrenderer.h"
 #include "itriggerrenderer.h" 
-//#include "ivisvisitor.h"
-
 
 // this is where we typedef the relevent typedefs
 //typedef sigc::signal<void, bool> updateTriggersSignal_t; 
 class IVisVisitor; 
 
-class IVis : public virtual core::IElement,  
+class IVis : public virtual elements::IElement,  
 	     public IStreamRenderer, public ITriggerRenderer
 {
   

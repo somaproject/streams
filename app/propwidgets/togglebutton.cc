@@ -12,12 +12,15 @@ using namespace PropertyWidgets;
 */
 ToggleButton::ToggleButton(std::string name) :
   Gtk::ToggleButton(name.c_str()),
-  state_(NORMAL)
+  state_(NORMAL), 
+  notify_(new WidgetPropertyNotify)
 {
 
   signal_clicked().connect(sigc::mem_fun(*this, 
 					       &ToggleButton::on_my_click)); 
-
+  notify_->signal().connect(sigc::mem_fun(*this, 
+					  &ToggleButton::refreshProperty)); 
+			    
 }
 
 ToggleButton::~ToggleButton() {
@@ -35,12 +38,9 @@ void ToggleButton::addProperty(pProperty_t toggleProperty)
   if (propertySet_.find(toggleProperty) == propertySet_.end()) {
     
     propertySet_.insert(toggleProperty); 
-    sigc::connection conn = toggleProperty->signal().connect(sigc::mem_fun(*this, 
-									 &ToggleButton::refreshProperty)); 
-    
-    connMap_[toggleProperty] = conn; 
-    refreshProperty(0.0); 
-
+    size_t rethandle = toggleProperty->add_watcher(notify_); 
+    notifyMap_[toggleProperty] = rethandle; 
+    refreshProperty(); 
   }
   
 
@@ -52,13 +52,13 @@ void ToggleButton::delProperty(pProperty_t toggleProperty)
 {
   if (propertySet_.find(toggleProperty) != propertySet_.end()) {
     propertySet_.erase(toggleProperty); 
-    connMap_[toggleProperty].disconnect(); 
-    connMap_.erase(toggleProperty); 
+    toggleProperty->remove_watcher(notifyMap_[toggleProperty]); 
+    notifyMap_.erase(toggleProperty); 
   }
 
 }
 
-void ToggleButton::refreshProperty(bool value) {
+void ToggleButton::refreshProperty() {
   /* 
      For each property, compute current value, and update
      
@@ -68,6 +68,7 @@ void ToggleButton::refreshProperty(bool value) {
 	- This is a fast operation
 
   */
+
   bool newvalue = false; 
   bool seen = false; 
   bool conflict = false; 

@@ -51,13 +51,13 @@ add_executable(pipelineconfig_test
   runner.cc)
 
 
-add_executable(pasource_test
-  pasource_test.cc
-  runner.cc)
+# add_executable(pasource_test
+#   pasource_test.cc
+#   runner.cc)
 
-add_executable(spectvis_test
-  spectvis_test.cc
-  runner.cc)
+# add_executable(spectvis_test
+#   spectvis_test.cc
+#   runner.cc)
 
 add_executable(timedb_test
   timedb_test.cc
@@ -119,8 +119,8 @@ set(testlist
   pipelinemanager_test
   bdbqueueview_test
   pipelineconfig_test
-  pasource_test
-  spectvis_test
+  #pasource_test
+  #spectvis_test
   timedb_test
   timedb_cursor_test
 
@@ -145,7 +145,6 @@ foreach(testname ${testlist})
   target_link_libraries(${testname}
     streams_core
     elements
-    sources2
 
     ${Boost_LIBRARIES} 
     ${GUIDEPS_LIBRARIES}

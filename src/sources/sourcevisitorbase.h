@@ -14,9 +14,9 @@
 class SourceVisitorBase: public ISourceVisitor 
 {
 public: 
-  virtual void visit(SourceBase *  sb) {}; 
-  virtual void visit(NoiseWave * nw) {}; 
-  virtual void visit(NetDataWave * ndw) {}; 
+  //virtual void visit(SourceBase *  sb) {}; 
+  virtual void visit(NoiseWave2 * nw) {}; 
+  //  virtual void visit(NetDataWave * ndw) {}; 
 }; 
 
 

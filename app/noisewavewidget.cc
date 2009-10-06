@@ -1,6 +1,6 @@
 #include "noisewavewidget.h"
 
-NoiseWaveWidget::NoiseWaveWidget(NoiseWave * nw, pSomaConfig_t sc) :
+NoiseWaveWidget::NoiseWaveWidget(NoiseWave2 * nw, pSomaConfig_t sc) :
   ElementStatus(sc),
   noiseWave_(nw)
 {

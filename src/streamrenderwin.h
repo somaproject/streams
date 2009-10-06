@@ -19,7 +19,7 @@
 
 #include "glconfig.h"
 #include "glspikes.h"
-#include "properties.h"
+#include <elements/property.h>
 
 #include "viscontrol.h"
 
@@ -52,7 +52,7 @@ public:
   { 
     get_window()->process_updates(false); 
   }
-  Property<bool> trackLive;
+  elements::Property<bool> trackLive;
   void invalidate(); 
   void invalidate2(); 
   void setCurrentTime(streamtime_t time); 

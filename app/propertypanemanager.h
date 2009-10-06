@@ -1,7 +1,7 @@
 #ifndef PROPERTYPANEMANAGER_H
 #define PROPERTYPANEMANAGER_H
 
-#include <core/ielement.h>
+#include <elements/ielement.h>
 #include <set>
 #include "propertypane.h"
 #include "somaconfig.h"
@@ -34,23 +34,23 @@ public:
   PropertyPaneManager(Gtk::Window & parent, 
 		      pSomaConfig_t somaconfig); 
   ~PropertyPaneManager(); 
-  void setElement(core::IElement *); 
-  void appendElement(core::IElement *); 
+  void setElement(elements::IElement *); 
+  void appendElement(elements::IElement *); 
   
-  void removeElement(core::IElement *); 
+  void removeElement(elements::IElement *); 
   sigc::signal<void> & clearSignal() 
   {
     return signalClearAllElements_;
   }
 
 private:
-  std::set<core::IElement *> elements_; 
+  std::set<elements::IElement *> elements_; 
   bool inConflict_; 
   PropertyPane * proppane_;   
   Gtk::Window window_; 
   // we are a visitor! 
   
-  PropertyPane * createPropPane(core::IElement* elt); 
+  PropertyPane * createPropPane(elements::IElement* elt); 
   sigc::signal<void> signalClearAllElements_; 
 
   pSomaConfig_t pSomaConfig_; 

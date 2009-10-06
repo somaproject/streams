@@ -1,17 +1,17 @@
-#ifndef VISBASE_H
-#define VISBASE_H
+#ifndef __STREAMS_VISBASE_H__
+#define __STREAMS_VISBASE_H__
 #include <boost/shared_ptr.hpp>
 #include <map>
 #include <iostream>
 #include <boost/filesystem.hpp>
 namespace bf = boost::filesystem; 
 
-#include "core/element.h"
+#include <elements/element.h>
 #include "ivis.h"
 #include "ivisvisitor.h"
 
 
-class VisBase : public core::Element, public IVis
+class VisBase : public elements::Element, public IVis
 {
 //         typedef boost::shared_ptr<buffer_t> pBuffer_t; 
 

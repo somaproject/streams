@@ -32,7 +32,7 @@ void load_pipeline_config(pPipelineManager_t pm, std::istream & is)
     pStreamPipeline_t pipeline = pm->createPipeline(name); 
     
     // create the elements
-    std::map<std::string, core::pIElement_t> elements; 
+    std::map<std::string, elements::pIElement_t> elements; 
 
     mObject::const_iterator ielt; 
     for (ielt = elt_obj.begin(); ielt != elt_obj.end(); ++ielt) {
@@ -65,8 +65,8 @@ void load_pipeline_config(pPipelineManager_t pm, std::istream & is)
       std::string destelt = c[2].get_str(); 
       std::string destport = c[3].get_str(); 
 
-      core::pISourcePad_t ps_s = elements[srcelt]->getSourcePad(srcport); 
-      core::pISinkPad_t ps_d = elements[destelt]->getSinkPad(destport); 
+      elements::pISourcePad_t ps_s = elements[srcelt]->getSourcePad(srcport); 
+      elements::pISinkPad_t ps_d = elements[destelt]->getSinkPad(destport); 
       ps_s->connect(ps_d); 
 
     }

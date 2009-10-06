@@ -6,12 +6,12 @@
 
 #include "sourcestate.h"
 #include "streampipeline.h" 
-#include "sourcevisitorbase.h"
-#include "filtervisitorbase.h"
-#include "triggervisitorbase.h"
-#include "visvisitorbase.h"
+#include <sources/sourcevisitorbase.h>
+#include <filters/filtervisitorbase.h>
+#include <triggers/triggervisitorbase.h>
+#include <vis/visvisitorbase.h>
 
-#include "sources/noisewave.h"
+#include "sources/noisewave2.h"
 #include "timer.h"
 
 #include "pipelinemanager.h"

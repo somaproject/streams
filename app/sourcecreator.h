@@ -1,7 +1,7 @@
 #ifndef SOURCECREATOR_H
 #define SOURCECREATOR_H
 
-#include "isourcevisitor.h"
+#include <sources/isourcevisitor.h>
 
 class PipelineGUI; 
 class SourceCreator : public ISourceVisitor
@@ -11,10 +11,10 @@ public:
   ~SourceCreator(); 
   
   void visit(SourceBase * ); 
-  void visit(NoiseWave * ); 
-  void visit(NetDataWave *); 
-  void visit(NetDataRaw *); 
-  void visit(PulseAudioMonitorWave *); 
+  void visit(NoiseWave2 * ); 
+//   void visit(NetDataWave *); 
+//   void visit(NetDataRaw *); 
+//   void visit(PulseAudioMonitorWave *); 
 
 
   
