@@ -11,21 +11,9 @@ WaveVis2::WaveVis2(std::string name, bf::path scratchdir):
   //  color(Gdk::Color::parse("red"))
   scale(0.0),
   scratchdir_(scratchdir / name),
-  streamRenderer_(scratchdir_)
+  renderall_(scratchdir_)
 {
-  
-//   pSinkPad_->newDataSignal().connect(sigc::mem_fun(*this, 
-// 						   &WaveVis2::newData)); 
-  
-//   pSinkPad_->invalidateDataSignal().connect(sigc::mem_fun(*this, 
-// 						   &WaveVis2::invalidateData)); 
-  
-//   color.signal().connect(sigc::mem_fun(streamRenderer_, 
-// 				       &WaveVis2Renderer::setColor)); 
-//   scale.signal().connect(sigc::mem_fun(*this, 
-// 				       &WaveVis2::setScale)); 
-  
-//   std::cout << "WAVE2 VIS CREATED" << std::endl; 
+
 }
 
 
@@ -77,32 +65,29 @@ void WaveVis2::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
   streamtime_t windowsize = t2 - t1; 
   
 
-  boost::shared_lock<boost::shared_mutex> lock(buffer_mutex_);
+//   boost::shared_lock<boost::shared_mutex> lock(buffer_mutex_);
     
-  buffer_map_t::iterator i = buffer_.lower_bound(t1); 
-  if ((i != buffer_.begin()) and (i != buffer_.end())) {
-    i--; 
-  }
-  while(i != buffer_.end()) { 
-    double origintime = i->first - t1; 
-//     std::cout << "time = " << i->first << std::endl;
-    renderGLPointBuffer(origintime, i->second); 
-    i++; 
-  }
+//   buffer_map_t::iterator i = buffer_.lower_bound(t1); 
+//   if ((i != buffer_.begin()) and (i != buffer_.end())) {
+//     i--; 
+//   }
+//   while(i != buffer_.end()) { 
+//     double origintime = i->first - t1; 
+// //     std::cout << "time = " << i->first << std::endl;
+//     renderGLPointBuffer(origintime, i->second); 
+//     i++; 
+//   }
+
+  timeid_t timeid_t1 = timeid_t(t1 * 1e9); 
+  timeid_t timeid_t2 = timeid_t(t2 * 1e9); 
+
+  renderall_.renderStream(timeid_t1, timeid_t2, pixels); 
+
   glPopMatrix(); 
 
 }
 
 
-void WaveVis2::renderGLPointBuffer(double origintime, 
-				   pGLPointBuffer_t  bufptr)
-{
-    glPushMatrix();
-    glTranslatef(origintime, 0, 0); 
-    glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t), &(bufptr->data[0]) ); 
-    glDrawArrays(GL_LINE_STRIP, 0, bufptr->size); 
-    glPopMatrix(); 
-}
 
 // TriggerRenderer interface:
 void WaveVis2::renderTrigger(streamtime_t deltapre, streamtime_t deltapost, 
@@ -268,33 +253,31 @@ void WaveVis2::process(elements::timeid_t t)
 
       if (le->state  
 	  == elements::LinkElement<WaveBuffer_t>::RESET) {
-	
-	boost::upgrade_lock<boost::shared_mutex> lock(buffer_mutex_);
-	boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
-	buffer_.clear(); 
-
+	// FIXME do a reset
+	renderall_.reset(); 
       } else { 
 	
 	WaveBuffer_t wb = le->datum; 
 	
-	pGLPointBuffer_t pb(new GLPointBuffer_t); 
+	renderall_.newSample(wb); 
+// 	pGLPointBuffer_t pb(new GLPointBuffer_t); 
 	
-	pb->size = 0; 
-	double bufstarttime = (double)wb.time / 1e9; 
+// 	pb->size = 0; 
+// 	double bufstarttime = (double)wb.time / 1e9; 
 	
-	double period = 1/wb.samprate; 
-	// do the conversion
-	for(int i = 0; i < wb.data.size(); i++) { 
-	  pb->data[pb->size].t = period * i; 
-	  pb->data[pb->size].x = wb.data[i]; 
-	  pb->size++; 
-	}
-	// now stick in the buffer
-	boost::upgrade_lock<boost::shared_mutex> lock(buffer_mutex_);
-	boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
+// 	double period = 1/wb.samprate; 
+// 	// do the conversion
+// 	for(int i = 0; i < wb.data.size(); i++) { 
+// 	  pb->data[pb->size].t = period * i; 
+// 	  pb->data[pb->size].x = wb.data[i]; 
+// 	  pb->size++; 
+// 	}
+// 	// now stick in the buffer
+// 	boost::upgrade_lock<boost::shared_mutex> lock(buffer_mutex_);
+// 	boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
 	
-	buffer_.insert(std::make_pair(bufstarttime, pb)); 
-	cnt++; 
+// 	buffer_.insert(std::make_pair(bufstarttime, pb)); 
+ 	cnt++; 
       }
     }
   }

@@ -15,7 +15,7 @@
 
 #include <vis/visbase.h>
 #include <data/wave.h>
-#include "wavevisrenderer.h"
+#include "renderall.h"
 #include <elements/property.h>
 #include <boost/thread/shared_mutex.hpp>
 
@@ -59,17 +59,8 @@ private:
   
   int pixelHeight_; 
   bf::path scratchdir_; 
-  WaveVisRenderer streamRenderer_; 
 
-  typedef boost::shared_ptr<GLPointBuffer_t> pGLPointBuffer_t; 
-  typedef std::map<streamtime_t, pGLPointBuffer_t> buffer_map_t; 
-  buffer_map_t buffer_; 
-  boost::shared_mutex buffer_mutex_; 
-
-
-  void renderGLPointBuffer(double origintime, 
-			   pGLPointBuffer_t  bufptr); 
-
+  wavevis2::RenderAll renderall_; 
 };
 
 #endif // WAVESTREAMVIS_H

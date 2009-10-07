@@ -26,6 +26,10 @@ add_executable(bdbqueue_cursor
   bdbqueue_cursor.cc
 )
 
+add_executable(bdbcursor_threads
+  bdbcursor_threads.cc
+)
+
 
 add_executable(signalbench
   signalbench.cc
@@ -100,6 +104,15 @@ target_link_libraries(glibbench
     ${GUIDEPS_LIBRARIES}
     ${SOMADEPS_LIBRARIES}
 )
+
+target_link_libraries(bdbcursor_threads
+  ${BDB_LIBRARIES}
+    ${Boost_LIBRARIES} 
+    ${GUIDEPS_LIBRARIES}
+    ${SOMADEPS_LIBRARIES}
+
+)
+
 
 
 

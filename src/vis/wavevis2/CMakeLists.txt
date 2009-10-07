@@ -11,8 +11,8 @@ include_directories(${SOMADEPS_INCLUDE_DIRS})
 
 set(wave_vis2_SRCS
   wavevis2.cc 
-  wavevisrenderer.cc 
-  renderdownsample.cc
+  renderall.cc
+
 )
 add_library(vis_wave2
   ${wave_vis2_SRCS}
