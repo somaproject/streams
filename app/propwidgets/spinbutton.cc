@@ -18,8 +18,8 @@ SpinButton::SpinButton(Gtk::Adjustment & adj) :
 
   signal_value_changed().connect(sigc::mem_fun(*this, 
  					       &SpinButton::on_my_value_changed)); 
-  signal_input().connect(sigc::mem_fun(*this, 
-				       &SpinButton::on_my_input)); 
+//   signal_input().connect(sigc::mem_fun(*this, 
+// 				       &SpinButton::on_my_input)); 
   notify_->signal().connect(sigc::mem_fun(*this, 
 					  &SpinButton::refreshProperty)); 
 
@@ -118,7 +118,7 @@ void SpinButton::setState(State st) {
   } else if (st == PENDING) {
     std::cout << "SpinButton::setState :  setting state to PENDING" 
 	      << std::endl; 
-    get_adjustment()->set_value(value_);     
+    //get_adjustment()->set_value(value_);     
     set_sensitive(false); 
     
   } else if (st == CONFLICTED) {

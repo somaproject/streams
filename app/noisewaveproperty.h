@@ -2,7 +2,7 @@
 #define NOISEWAVEPROPERTY_H
 
 #include "propertypane.h"
-#include <sources/noisewave.h>
+#include <sources/noisewave2.h>
 #include "propwidgets/combobox.h"
 #include "propwidgets/spinbutton.h"
 #include "somaconfig.h"
@@ -24,12 +24,19 @@ private:
 
   Gtk::Adjustment adjustment_; 
 
+  Gtk::HBox preloadHBox_; 
+  Gtk::Label preloadLabel_; 
+
+
+  Gtk::Adjustment preloadadjustment_; 
+
   PropertyWidgets::SpinButton amplitudeSpinButton_; 
+  PropertyWidgets::SpinButton preloadSpinButton_; 
   
   Gtk::HBox classHBox_; 
   Gtk::Label classLabel_; 
 
-  PropertyWidgets::ComboBox<NoiseWave::NoiseClass> noiseClassComboBox_; 
+  PropertyWidgets::ComboBox<NoiseWave2::NoiseClass> noiseClassComboBox_; 
 
   pSomaConfig_t pSomaConfig_; 
   //  PropertyWidgets::SpinButton scaleSpin_; 

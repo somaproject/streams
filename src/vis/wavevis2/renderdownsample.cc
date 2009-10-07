@@ -121,7 +121,6 @@ void RenderDownSample::newDataPoint(double streamtime, float data)
     // put in the buffer
     
 
-//     std::cout << "putting with key " << bufstarttime_ << std::endl; 
     Dbt key(&bufstarttime_, sizeof(bufstarttime_));
     Dbt data(&buffer_, sizeof(buffer_)); 
     int ret = pdb_->put(NULL, &key, &data, DB_NOOVERWRITE);
@@ -151,7 +150,6 @@ void RenderDownSample::newDataPoint(double streamtime, float data)
 
 void RenderDownSample::reset()
 {
-  std::cout << "RenderODwnSample::reset()" << std::endl;
   buffer_.size = 0; 
   uint32_t x; 
   pdb_->truncate(NULL, &x, NULL); 

@@ -5,17 +5,20 @@ NoiseWaveProperty::NoiseWaveProperty(pSomaConfig_t sc) :
   frame_("Fake Source"),
   amplitudeLabel_("amplitude:"), 
   adjustment_(1.0, 1.0, 102.0, 1.0, 5.0, 0.0),
+  preloadLabel_("preload (min): "), 
+  preloadadjustment_(0, 0, 60 * 12, 1.0, 5.0, 0.0), 
   classLabel_("signal class:"), 
   amplitudeSpinButton_(adjustment_), 
+  preloadSpinButton_(preloadadjustment_), 
   pSomaConfig_(sc)
 {
 
-  PropertyWidgets::ComboBox<NoiseWave::NoiseClass>::possiblevalues_t vals; 
+  PropertyWidgets::ComboBox<NoiseWave2::NoiseClass>::possiblevalues_t vals; 
  
-  vals.push_back( std::make_pair("white noise", NoiseWave::WhiteNoise)); 
-  vals.push_back( std::make_pair("noisy sine", NoiseWave::NoisySine)); 
-  vals.push_back( std::make_pair("square wave", NoiseWave::SquareWave)); 
-  vals.push_back( std::make_pair("bimodal", NoiseWave::BiModal)); 
+  vals.push_back( std::make_pair("white noise", NoiseWave2::WhiteNoise)); 
+  vals.push_back( std::make_pair("noisy sine", NoiseWave2::NoisySine)); 
+  vals.push_back( std::make_pair("square wave", NoiseWave2::SquareWave)); 
+  vals.push_back( std::make_pair("bimodal", NoiseWave2::BiModal)); 
 
   noiseClassComboBox_.setPossibleValues(vals); 
   
@@ -27,6 +30,9 @@ NoiseWaveProperty::NoiseWaveProperty(pSomaConfig_t sc) :
   amplitudeHBox_.pack_start(amplitudeLabel_); 
   amplitudeHBox_.pack_start(amplitudeSpinButton_); 
   
+  propbox_.pack_start(preloadHBox_); 
+  preloadHBox_.pack_start(preloadLabel_); 
+  preloadHBox_.pack_start(preloadSpinButton_); 
   propbox_.pack_start(classHBox_); 
   classHBox_.pack_start(classLabel_); 
   classHBox_.pack_start(noiseClassComboBox_); 
@@ -46,8 +52,9 @@ bool NoiseWaveProperty::addElement(elements::IElement * elt)
   if (ws == NULL) {
     return false; 
   }
-//   noiseClassComboBox_.addProperty(&ws->noiseclass);
-//   amplitudeSpinButton_.addProperty(&ws->amplitude); 
+  noiseClassComboBox_.addProperty(&ws->noiseclass);
+  amplitudeSpinButton_.addProperty(&ws->amplitude); 
+  preloadSpinButton_.addProperty(&ws->preload); 
   return true; 
 }
 
@@ -58,8 +65,9 @@ bool NoiseWaveProperty::delElement(elements::IElement * elt)
     return false; 
   }
   
-//   noiseClassComboBox_.delProperty(&ws->noiseclass);
-//   amplitudeSpinButton_.delProperty(&ws->amplitude); 
+  noiseClassComboBox_.delProperty(&ws->noiseclass);
+  amplitudeSpinButton_.delProperty(&ws->amplitude); 
+  preloadSpinButton_.delProperty(&ws->preload); 
 
   return true; 
 }

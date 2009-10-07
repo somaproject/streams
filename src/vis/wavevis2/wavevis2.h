@@ -17,6 +17,7 @@
 #include <data/wave.h>
 #include "wavevisrenderer.h"
 #include <elements/property.h>
+#include <boost/thread/shared_mutex.hpp>
 
 class WaveVis2; 
 
@@ -52,13 +53,23 @@ class WaveVis2 : public VisBase
 private:
   elements::SinkPad<WaveBuffer_t>::pSinkPad_t pSinkPad_; 
 
-  void newData(); 
-  void invalidateData(); 
+//   void newData(); 
+//   void invalidateData(); 
   
   
   int pixelHeight_; 
   bf::path scratchdir_; 
   WaveVisRenderer streamRenderer_; 
+
+  typedef boost::shared_ptr<GLPointBuffer_t> pGLPointBuffer_t; 
+  typedef std::map<streamtime_t, pGLPointBuffer_t> buffer_map_t; 
+  buffer_map_t buffer_; 
+  boost::shared_mutex buffer_mutex_; 
+
+
+  void renderGLPointBuffer(double origintime, 
+			   pGLPointBuffer_t  bufptr); 
+
 };
 
 #endif // WAVESTREAMVIS_H

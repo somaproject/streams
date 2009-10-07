@@ -52,11 +52,16 @@ void NoiseWave2::process(elements::timeid_t tid)
   }
 
   if(noiseclass.pendingRequest() ) {
-    std::cout << "Setting noise class" << std::endl;
     noiseclass.set_value(noiseclass.get_req_value()); 
   }
 
   bool reset = false; 
+  if(preload.pendingRequest() ) {
+    std::cout << "Changed preload value, resetting" << std::endl; 
+    preload.set_value(preload.get_req_value()); 
+    reset = true; 
+  }
+
 
   if (reset) { 
     reset_preload_data(); 
@@ -79,9 +84,10 @@ void NoiseWave2::process(elements::timeid_t tid)
 
 void NoiseWave2::reset_preload_data()
 {
+  std::cout << "RESETTING PRELOAD DATA" << std::endl; 
   preload_iters_ = std::stack<datamap_t::iterator>(); 
   preload_data_.clear(); 
-  
+  remaining_preload_pos_ = -int(preload) * 60 * elements::TIMEID_PER_SEC; 
 }
 
 void NoiseWave2::reset_sent_flags()
@@ -116,7 +122,6 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
   */ 
   
   assert(endtime > starttime); 
-
   // how many data points
   elements::timeid_t timedelta = endtime - starttime; 
   double fdelta = double(timedelta) / elements::TIMEID_PER_SECF; 
@@ -130,7 +135,7 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
   wb->samprate = FS_; 
 
   // integer fs
-  elements::timeid_t fs_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
+  elements::timeid_t period_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
 
   double freq = 1.0; 
   //freq += 10; 
@@ -152,7 +157,7 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
       //float y = double(random()) / RAND_MAX - 0.5; 
       //float x = VSCALE * sin (float(i) / FS * 3.14152*2 * freq) + y;
       float x; 
-      if ((((starttime + i * fs_ns ) / 1000000) % 2) == 0) {
+      if ((((starttime + i * period_ns ) / 1000000) % 2) == 0) {
 	x = VSCALE/2; 
       } else {
 
@@ -171,10 +176,8 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
   
   //
 
-  assert(timedelta >= (N * fs_ns)); 
-  elements::timeid_t remainder = timedelta - (N * fs_ns); 
-  
-  return std::make_pair(remainder, wb); 
+  assert(timedelta >= (N * period_ns)); 
+  return std::make_pair(N*period_ns, wb); 
 
 }
 
@@ -183,10 +186,10 @@ void NoiseWave2::create_outstanding_preload_data()
 {
 
   const int BUFSIZE = 256; 
-  elements::timeid_t fs_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
+  elements::timeid_t period_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
 
   if (remaining_preload_pos_ < 0) {
-    elements::timeid_t endpos = remaining_preload_pos_ + BUFSIZE * fs_ns; 
+    elements::timeid_t endpos = remaining_preload_pos_ + BUFSIZE * period_ns; 
     
     std::pair<timeid_t, pWaveBuffer_t> newdata
       = createDataBuffer(remaining_preload_pos_, endpos); 
@@ -203,11 +206,12 @@ void NoiseWave2::create_outstanding_preload_data()
 
 void NoiseWave2::create_new_data(elements::timeid_t tid)
 {
-  const int BUFSIZE = 256; 
+  const int BUFSIZE = 128; 
   // integer fs
-  elements::timeid_t fs_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
+  elements::timeid_t period_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
 
-  if (tid > ((fs_ns) * BUFSIZE + lasttime_)) {
+  elements::timeid_t threshold = (period_ns) * BUFSIZE + lasttime_; 
+  if (tid > threshold) {
     std::pair<timeid_t, pWaveBuffer_t> newdata
       = createDataBuffer(lasttime_, tid); 
     
@@ -217,11 +221,11 @@ void NoiseWave2::create_new_data(elements::timeid_t tid)
     
     // now actually send? 
 
-    pSourcePad_->newData(lasttime_, lasttime_ + (tid - newdata.first), 
+    pSourcePad_->newData(lasttime_, lasttime_+ newdata.first, 
 			 *(sb->data())); // FIXME double-copy? 
     sb->set_sent(true); 
     
-    lasttime_ += (tid - newdata.first); 
+    lasttime_ += newdata.first; 
         
   }
   
@@ -272,7 +276,7 @@ void NoiseWave2::send_data()
 			   wb->time + (wb->samprate * wb->data.size()) *
 			   elements::TIMEID_PER_SEC, 
 			   *wb);
-      std::cout << "sending"  << std::endl; 
+
     }
     if (sendcnt == MAXSEND) {
       break; 

@@ -32,7 +32,7 @@ public:
   enum NoiseClass {WhiteNoise, NoisySine, SquareWave, BiModal}; 
   elements::Property<NoiseClass> noiseclass; 
 
-  elements::Property<int> preload; 
+  elements::Property<float> preload; // in minutes
 
   elements::Property<elements::timewindow_t> activetime; 
 

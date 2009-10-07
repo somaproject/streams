@@ -54,8 +54,8 @@ public:
        
      */ 
     
-//     std::cout << "attempted assignment, to new value " 
-// 	      << value << std::endl;
+    std::cout << "attempted assignment, to new value " 
+ 	      << value << std::endl;
     upgrade_lock_t reqlock(reqvalue_mutex_);
     // get exclusive access
     up_unique_lock_t requniqueLock(reqlock);
@@ -71,8 +71,8 @@ public:
     shared_lock_t value_lock(value_mutex_); 
     shared_lock_t reqvalue_lock(reqvalue_mutex_); 
 //     std::cout << "query of pendingRequest" 
-// 	      << " value_ = " << value_ 
-// 	      << " reqValue_ ="  << reqValue_ << std::endl;
+//  	      << " value_ = " << value_ 
+//  	      << " reqValue_ ="  << reqValue_ << std::endl;
     if (value_ != reqValue_) { 
       return true; 
     } 

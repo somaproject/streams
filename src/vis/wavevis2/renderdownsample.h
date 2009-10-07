@@ -14,7 +14,6 @@
 
 #include <data/wave.h>
 
-#include "core/sinkpad.h"
 #include "vis/irenderer.h"
 
 namespace bf = boost::filesystem; 

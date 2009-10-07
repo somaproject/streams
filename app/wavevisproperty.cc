@@ -42,7 +42,7 @@ bool WaveVisProperty::addElement(elements::IElement * elt)
     return false; 
   }
   
-  //scaleComboBox_.addProperty(&ws->scale); 
+  scaleComboBox_.addProperty(&ws->scale); 
   return true; 
 }
 
@@ -53,6 +53,6 @@ bool WaveVisProperty::delElement(elements::IElement * elt)
     return false; 
   }
 
-  //scaleComboBox_.delProperty(&ws->scale); 
+  scaleComboBox_.delProperty(&ws->scale); 
   return true; 
 }

@@ -133,7 +133,7 @@ int main(int argc, char** argv)
 
   }
 
-  std::cout << "Running elements" << std::endl;
+  std::cout << "Running elements " << elements.size()  << std::endl;
   StaticElementRunner er(elements, ptimer); 
 
   er.run();

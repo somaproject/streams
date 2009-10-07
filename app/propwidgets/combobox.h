@@ -244,7 +244,8 @@ namespace PropertyWidgets
 	    setState(PENDING); 
 	    for (typename propset_t::iterator  pi = propertySet_.begin(); 
 	     pi != propertySet_.end(); pi++) {
-
+	      std::cout << "Attempting to set ComboBox" 
+			<< row[modelColumns_.colVal] << std::endl; 
 	      *(*pi) = row[modelColumns_.colVal]; 
 	    }  
 	  }

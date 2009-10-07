@@ -130,5 +130,14 @@ std::list<elements::pIElement_t> StreamPipeline::getElements()
   std::copy(sources_.begin(), sources_.end(), 
 	    std::back_insert_iterator<std::list<elements::pIElement_t> >(elements)); 
   
+  std::copy(vis_.begin(), vis_.end(), 
+	    std::back_insert_iterator<std::list<elements::pIElement_t> >(elements)); 
+  
+//   std::copy(filters_.begin(), filters_.end(), 
+// 	    std::back_insert_iterator<std::list<elements::pIElement_t> >(elements)); 
+  
+//   std::copy(triggers_.begin(), triggers_.end(), 
+// 	    std::back_insert_iterator<std::list<elements::pIElement_t> >(elements)); 
+  
   return elements; 
 }
