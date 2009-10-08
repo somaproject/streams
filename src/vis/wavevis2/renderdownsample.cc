@@ -64,7 +64,7 @@ RenderDownSample::RenderDownSample(timeid_t sampledur, size_t binsize,
   std::string dbname("my_db.db"); 
   boost::filesystem::remove_all(dbname );
   
-  db_->set_pagesize(1<<16); 
+  db_->set_pagesize(1<<13); 
   db_->set_bt_compare(renderdownsample_compare_timeid);
   db_->open(NULL,                // Transaction pointer
 	  dbname.c_str(),          // Database file name
@@ -189,7 +189,8 @@ void RenderDownSample::renderStream(timeid_t t1, timeid_t t2, int pixels)
   /* Must be thread-safe!
    */
    
-
+  shared_lock_t trunclock(truncate_mutex_); 
+    
   Dbc *cursorp;
   
   timeid_t searchval = t1; 
@@ -238,21 +239,27 @@ void RenderDownSample::reset() {
      Instead of truncating, we delete all the records; ug, slow. 
   */ 
 
-  presentBins_.clear(); 
+  upgrade_lock_t reqlock(truncate_mutex_);
+  // get exclusive access
+  up_unique_lock_t requniqueLock(reqlock);
 
-  // clear the entire database! 
-  timeid_t tid= 0; 
-  Dbt key(&tid, sizeof(tid));
-  GLPointBuffer_t pb; 
-  Dbt data(&pb, sizeof(GLPointBuffer_t)); 
-  Dbc * cursorp; 
-  db_->cursor(NULL, &cursorp,  DB_WRITECURSOR  ); 
-  int ret; 
-  while ((ret = cursorp->get(&key, &data, 
-			     DB_SET)) == 0) {
-    cursorp->del(0);
-  }
-  cursorp->close(); 
+  presentBins_.clear();
+  uint32_t x; 
+  db_->truncate(0, &x, 0); 
+
+//   // clear the entire database! 
+//   timeid_t tid= 0; 
+//   Dbt key(&tid, sizeof(tid));
+//   GLPointBuffer_t pb; 
+//   Dbt data(&pb, sizeof(GLPointBuffer_t)); 
+//   Dbc * cursorp; 
+//   db_->cursor(NULL, &cursorp,  DB_WRITECURSOR  ); 
+//   int ret; 
+//   while ((ret = cursorp->get(&key, &data, 
+// 			     DB_SET)) == 0) {
+//     cursorp->del(0);
+//   }
+//   cursorp->close(); 
 
 
 }

@@ -38,6 +38,11 @@ private:
   void renderGLPointBuffer(timeid_t origintime, 
 			  GLPointBuffer_t * bufptr); 
 
+  typedef boost::shared_lock<boost::shared_mutex> shared_lock_t; 
+  typedef boost::upgrade_lock<boost::shared_mutex> upgrade_lock_t; 
+  typedef boost::upgrade_to_unique_lock<boost::shared_mutex> up_unique_lock_t; 
+
+  boost::shared_mutex truncate_mutex_; 
 
 }; 
 

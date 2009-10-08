@@ -34,7 +34,7 @@ RenderAll::RenderAll(bf::path scratch) :
   bf::path envHome = scratch / "renderall"; 
   boost::filesystem::remove_all(envHome); 
   boost::filesystem::create_directories(envHome);
-  
+  std::cout << "db is " << envHome << std::endl;
   try {
     dbEnv_.open(envHome.string().c_str(), env_flags, 0);
   } catch(DbException &e) {
@@ -55,7 +55,7 @@ RenderAll::RenderAll(bf::path scratch) :
   std::string dbname("my_db.db"); 
   boost::filesystem::remove_all(dbname );
   
-  db_->set_pagesize(1<<16); 
+  db_->set_pagesize(1<<14); 
   db_->set_bt_compare(renderall_compare_timeid);
   db_->open(NULL,                // Transaction pointer
 	  dbname.c_str(),          // Database file name
@@ -76,7 +76,6 @@ void RenderAll::newSample(WaveBuffer_t & wb) {
   
   double period = 1/wb.samprate; 
   // do the conversion
-  std::cout << "wb.data.size()" << wb.data.size() << std::endl; 
   for(int i = 0; i < wb.data.size(); i++) { 
     pb->data[pb->size].t = period * i; 
     pb->data[pb->size].x = wb.data[i]; 
@@ -102,6 +101,7 @@ void RenderAll::renderStream(timeid_t t1, timeid_t t2, int pixels)
   /* Must be thread-safe!
    */
    
+  shared_lock_t trunclock(truncate_mutex_); 
 
   Dbc *cursorp;
   
@@ -150,20 +150,28 @@ void RenderAll::reset() {
      Instead of truncating, we delete all the records; ug, slow. 
   */ 
   std::cout << "RenderAll::reset()" << std::endl;
-  timeid_t tid= 0; 
-  Dbt key(&tid, sizeof(tid));
-  GLPointBuffer_t pb; 
-  Dbt data(&pb, sizeof(GLPointBuffer_t)); 
-  Dbc * cursorp; 
-  db_->cursor(NULL, &cursorp,  DB_WRITECURSOR  ); 
-  int ret; 
-  while ((ret = cursorp->get(&key, &data, 
-			     DB_SET)) == 0) {
-    cursorp->del(0);
-  }
-  cursorp->close(); 
 
+  upgrade_lock_t reqlock(truncate_mutex_);
+  // get exclusive access
+  up_unique_lock_t requniqueLock(reqlock);
 
+  uint32_t x; 
+  db_->truncate(0, &x, 0); 
+
+//   timeid_t tid= 0; 
+//   Dbt key(&tid, sizeof(tid));
+//   GLPointBuffer_t pb; 
+//   Dbt data(&pb, sizeof(GLPointBuffer_t)); 
+//   Dbc * cursorp; 
+//   db_->cursor(NULL, &cursorp,  DB_WRITECURSOR  ); 
+//   int ret; 
+//   while ((ret = cursorp->get(&key, &data, 
+// 			     DB_SET)) == 0) {
+//     cursorp->del(0);
+//   }
+//   cursorp->close(); 
+
+  std::cout << "RenderAll::reset() done" << std::endl;
 }
 
 RenderAll::~RenderAll()

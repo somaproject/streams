@@ -14,7 +14,7 @@ WaveVis2::WaveVis2(std::string name, bf::path scratchdir):
   renderall_(scratchdir_)
 {
   using namespace wavevis2; 
-  for(int i = 0; i < 8; i++) { 
+  for(int i = 0; i < 0; i+=2) { 
     timeid_t time = 10000000000; 
     RenderDownSample * rds = new RenderDownSample(1000000 * (1 << i), 100, scratchdir_); 
     downsampledRenderers_.insert(std::make_pair(time * 1 << i, rds)); 
@@ -87,7 +87,7 @@ void WaveVis2::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
   timeid_t timeid_t1 = timeid_t(t1 * 1e9); 
   timeid_t timeid_t2 = timeid_t(t2 * 1e9); 
 
-  if (windowsize_ns < 5000000000) { 
+  if (windowsize_ns < 50000000000) { 
 //     std::cout << "Rendering with renderall" << std::endl;
     renderall_.renderStream(timeid_t1, timeid_t2, pixels); 
   } else { 
@@ -273,10 +273,12 @@ void WaveVis2::process(elements::timeid_t t)
       if (le->state  
 	  == elements::LinkElement<WaveBuffer_t>::RESET) {
 	// FIXME do a reset
+	std::cout << "Beginning reset " << std::endl; 
 	renderall_.reset(); 
 	BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
 	  i.second->reset(); 
 	}
+	std::cout << "reset done " << std::endl; 
 
       } else { 
 	
@@ -287,23 +289,6 @@ void WaveVis2::process(elements::timeid_t t)
 	  i.second->newSample(wb);
 	}
 
-// 	pGLPointBuffer_t pb(new GLPointBuffer_t); 
-	
-// 	pb->size = 0; 
-// 	double bufstarttime = (double)wb.time / 1e9; 
-	
-// 	double period = 1/wb.samprate; 
-// 	// do the conversion
-// 	for(int i = 0; i < wb.data.size(); i++) { 
-// 	  pb->data[pb->size].t = period * i; 
-// 	  pb->data[pb->size].x = wb.data[i]; 
-// 	  pb->size++; 
-// 	}
-// 	// now stick in the buffer
-// 	boost::upgrade_lock<boost::shared_mutex> lock(buffer_mutex_);
-// 	boost::upgrade_to_unique_lock<boost::shared_mutex> uniqueLock(lock);
-	
-// 	buffer_.insert(std::make_pair(bufstarttime, pb)); 
  	cnt++; 
       }
     }
