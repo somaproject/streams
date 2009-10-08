@@ -11,32 +11,59 @@
   These objects must have a bdbT.copy(&foo) object to 
   copy themselves into the underlying T object. 
 
+  Originally we kept a cursor around, but that will totally
+  screw threading. Since we're connected to a Queue-based BDB, 
+  we know the recnos are monotonic starting at one, and can always just
+  ask for the next. 
+
 */
 
 
 template<typename T, typename bdbT> 
 class BDBQueueView : public core::IQueueView<T>
 {
-  
-public:
-  BDBQueueView(Db * db) 
+
+
+  class Cursor
   {
-    db->cursor(NULL, &cursor_, 0); 
+    // RAII cursor wrapper
+  public:
+    Cursor(Db * db) {
+      db->cursor(NULL, &cursor, 0); 
+    } 
+    
+    ~Cursor()
+    {
+      cursor->close(); 
+    }
+
+    Dbc * cursor; 
+  }; 
+
+public:
+  BDBQueueView(Db * db) :
+    db_(db), 
+    rid_(0) // RID is always "what's in data_"
+  {
+
     Dbt found_data; 
     Dbt search_key; 
-
-    int ret = cursor_->get(&search_key, &found_data, DB_FIRST); 
+    
+    Cursor c(db_); 
+    int ret = c.cursor->get(&search_key, &found_data, DB_FIRST); 
 
     if (ret == DB_NOTFOUND) {
       empty_= true; 
     } else { 
       empty_ = false; 
       memcpy(&data_, found_data.get_data(), sizeof(T)); 
+      rid_ = *((db_recno_t*)search_key.get_data()); 
     }
+
   }
   
   ~BDBQueueView()   {
-    //cursor_->close(); 
+    //cursor->close(); 
 
   }
 
@@ -47,10 +74,12 @@ public:
       return false; 
     } 
 
-    // empty is currently true
     Dbt found_data; 
-    Dbt search_key; 
-    int ret = cursor_->get(&search_key, &found_data, DB_NEXT); 
+    db_recno_t next = rid_ + 1; 
+    Dbt search_key(&next, sizeof(next)); 
+    
+    Cursor c(db_);
+    int ret = c.cursor->get(&search_key, &found_data, DB_SET); 
     if (ret == DB_NOTFOUND) {
       empty_= true; 
       return true; 
@@ -58,6 +87,7 @@ public:
       empty_ = false; 
       memcpy(&buffer_, found_data.get_data(), sizeof(bdbT)); 
       buffer_.copy(&data_); 
+      rid_ = *((db_recno_t*)search_key.get_data()); 
       return false; 
     }
     
@@ -74,15 +104,20 @@ public:
   void pop() {
 
     Dbt found_data; 
-    Dbt search_key; 
 
-    int ret = cursor_->get(&search_key, &found_data, DB_NEXT);
+    db_recno_t next = rid_ + 1; 
+    Dbt search_key(&next, sizeof(next)); 
+
+    Cursor c(db_);
+
+    int ret = c.cursor->get(&search_key, &found_data, DB_GET_BOTH);
 
     if (ret == DB_NOTFOUND) {
       empty_ = true; 
     } else { 
       empty_ = false; 
       memcpy(&data_, found_data.get_data(), sizeof(T)); 
+      rid_ = *((db_recno_t*)search_key.get_data()); 
     }
     
   }
@@ -90,23 +125,28 @@ public:
   void reset() {
     Dbt found_data; 
     Dbt search_key; 
-    int ret = cursor_->get(&search_key, &found_data, DB_FIRST); 
+
+    Cursor c(db_);
+
+    int ret = c.cursor->get(&search_key, &found_data, DB_FIRST); 
 
     if (ret == DB_NOTFOUND) {
       empty_ = true; 
     } else { 
       empty_ = false; 
       memcpy(&data_, found_data.get_data(), sizeof(T)); 
+      rid_ = *((db_recno_t*)search_key.get_data()); 
     }
     
 
   }
 private:
-  Dbc * cursor_; 
+  Db * db_; 
   T data_; 
   bdbT buffer_; 
   bool empty_; 
-
+  db_recno_t rid_; 
+  
 };
 
 

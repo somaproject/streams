@@ -44,6 +44,8 @@ public:
 private: 
   static const int MAXWAVE = 64; 
 
+  DbEnv dbEnv_; 
+
   pISomaNetCodec_t pNetCodec_; 
   pTimer_t pTimer_; 
   bf::path scratchdir_;

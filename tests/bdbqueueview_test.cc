@@ -90,7 +90,8 @@ BOOST_AUTO_TEST_CASE(simpletest) {
     Dbt data(&bufdata, sizeof(bufdata)); 
       
     int ret = db.put(NULL, &key, &data,  DB_APPEND);
-        
+    std::cout << "put value" << *((db_recno_t*)key.get_data())
+	      << std::endl; 
     BOOST_CHECK_EQUAL(qv1.empty(), false); 
     BOOST_CHECK_EQUAL(qv2.empty(), false); 
     
