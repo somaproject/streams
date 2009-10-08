@@ -2,7 +2,7 @@
 #define __PULSEAUDIOMONITORWAVE_WIDGET_H__
 
 #include <gtkmm.h>
-#include <sources/pamonitor.h>
+#include <sources/pamonitor/pamonitor.h>
 #include "elementstatus.h"
 
 class PulseAudioMonitorWaveWidget : public ElementStatus
@@ -16,7 +16,7 @@ private:
   PulseAudioMonitorWave * pamonWave_; 
   Gtk::Label label_; 
 
-  core::IElement * getElement() {
+  elements::IElement * getElement() {
     return pamonWave_; 
   }
 

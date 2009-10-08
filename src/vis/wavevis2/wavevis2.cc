@@ -299,7 +299,7 @@ void WaveVis2::process(elements::timeid_t t)
 	
 	WaveBuffer_t wb = le->datum; 
 	
-	renderall_.newSample(wb); 
+ 	renderall_.newSample(wb); 
 	BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
 	  i.second->newSample(wb);
 	}

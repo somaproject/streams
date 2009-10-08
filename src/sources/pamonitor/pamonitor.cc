@@ -8,11 +8,10 @@ using namespace soma::streams;
 
 const std::string PulseAudioMonitorWave::TYPENAME = "PulseAudioMonitorWave"; 
 
-PulseAudioMonitorWave::PulseAudioMonitorWave(std::string name, pTimer_t ptimer, 
+PulseAudioMonitorWave::PulseAudioMonitorWave(std::string name, 
 					     bf::path scratch) :
   SourceBase(name), 
-  pTimer_(ptimer), 
-  pSourcePad_(createSourcePad<WaveBuffer_t>(dataList_, "default")),
+  pSourcePad_(createSourcePad<WaveBuffer_t>("default")),
   start_time(boost::posix_time::microsec_clock::local_time()),
   samppos_(0)
 {
@@ -20,12 +19,14 @@ PulseAudioMonitorWave::PulseAudioMonitorWave(std::string name, pTimer_t ptimer,
 //   pTimer_->streamTimeSignal().connect(sigc::mem_fun(*this, 
 // 					      &PulseAudioMonitorWave::timeUpdate)); 
   
-//   for (double t = -preload; t < 0; t += 0.1) { 
-//     lastTime_ = t; 
-//     streamtime_t delta = 0.1; 
-//     nextData(delta); 
-//   }
+  // note that this is going to be called out of process! 
   pasource_.datasig.connect(sigc::mem_fun(*this, &PulseAudioMonitorWave::nextData)); 
+
+}
+
+void PulseAudioMonitorWave::process(elements::timeid_t t)
+{
+  pasource_.process(50); // assuming it's in ms
 
 }
 
@@ -39,20 +40,28 @@ void PulseAudioMonitorWave::nextData(const float * d, unsigned l)
 {
   /* Buffer start time here is tricky */ 
   
-  
+
+
 //   boost::posix_time::ptime now = boost::posix_time::microsec_clock::local_time(); 
 //   boost::posix_time::time_duration td = now - start_time; 
-  
-//   std::cout <<  pTimer_->getStreamTime() << " " << l << std::endl; 
   int FS = 44100; 
 
-  dataList_.push_back(new WaveBuffer_t()); 
-  dataList_.back().time = double(samppos_)/FS; 
-  dataList_.back().samprate = FS; 
-  dataList_.back().data.reserve(l/2); 
-  for(int i = 0; i < l/2; i++) {
-    dataList_.back().data.push_back(d[i*2]); 
+  WaveBuffer_t wb; 
+  double time = double(samppos_)/FS; 
+  wb.time = timeid_t(time * elements::TIMEID_PER_SEC); 
+  wb.samprate = FS; 
+
+  int N = l/2; 
+  wb.data.reserve(N); 
+  for(int i = 0; i < N; i++) {
+    wb.data.push_back(d[i*2]); 
   }
-  pSourcePad_->newData(); 
-  samppos_ += l/2;   
+  
+  pSourcePad_->newData(wb.time, 
+		       wb.time + (wb.samprate * wb.data.size()) *
+		       elements::TIMEID_PER_SEC, 
+		       wb);
+//   std::cout << "PulseAudioMonitorWave::nextData N=" << N
+//  	    << " time = " << time << " wb.time= " << wb.time << std::endl; 
+  samppos_ += N;   
 }

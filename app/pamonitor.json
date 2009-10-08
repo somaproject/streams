@@ -4,47 +4,7 @@
           "first" : {"type" : "source",
                        "class" : "PulseAudioMonitorWave"}, 
           "second" : {"type" : "vis",
-                      "class" : "WaveVis"}}, 
-    "connections" : [["first", "default", "second", "default"]]
-},
-{ "name" : "pipeline02",
-    "elements" : { 
-          "first" : {"type" : "source",
-                       "class" : "PulseAudioMonitorWave"}, 
-          "second" : {"type" : "vis",
-                      "class" : "WaveVis"}},
-    "connections" : [["first", "default", "second", "default"]]
-},
-{ "name" : "pipeline03",
-    "elements" : { 
-          "first" : {"type" : "source",
-                       "class" : "PulseAudioMonitorWave"}, 
-          "second" : {"type" : "vis",
-                      "class" : "WaveVis"}}, 
-    "connections" : [["first", "default", "second", "default"]]
-},
-{ "name" : "pipeline04",
-    "elements" : { 
-          "first" : {"type" : "source",
-                       "class" : "PulseAudioMonitorWave"}, 
-          "second" : {"type" : "vis",
-                      "class" : "WaveVis"}}, 
-    "connections" : [["first", "default", "second", "default"]]
-},
-{ "name" : "pipeline05",
-    "elements" : { 
-          "first" : {"type" : "source",
-                       "class" : "PulseAudioMonitorWave"}, 
-          "second" : {"type" : "vis",
-                      "class" : "WaveVis"}}, 
-    "connections" : [["first", "default", "second", "default"]]
-},
-{ "name" : "pipeline06",
-    "elements" : { 
-          "first" : {"type" : "source",
-                       "class" : "PulseAudioMonitorWave"}, 
-          "second" : {"type" : "vis",
-                      "class" : "WaveVis"}}, 
+                      "class" : "WaveVis2"}}, 
     "connections" : [["first", "default", "second", "default"]]
 }
 

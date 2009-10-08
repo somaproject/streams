@@ -36,10 +36,10 @@ PASource::PASource() :
   device_name_(NULL),
   device_description_(NULL)
 {
-  mainloop_ = pa_glib_mainloop_new(g_main_context_default());
+  mainloop_ = pa_mainloop_new();
   g_assert(mainloop_);
             
-  context_ = pa_context_new(pa_glib_mainloop_get_api(mainloop_), "PulseAudio Soma Streams Monitor");
+  context_ = pa_context_new(pa_mainloop_get_api(mainloop_), "PulseAudio Soma Streams Monitor");
   g_assert(context_);
             
   pa_context_set_state_callback(context_, context_state_callback, this);
@@ -49,8 +49,8 @@ PASource::PASource() :
 
 PASource::~PASource()
 {
-  std::cout << "Beginning destruction" << std::endl;
-  pa_glib_mainloop_free(mainloop_);
+
+  pa_mainloop_free(mainloop_);
             
   if (stream_)
     pa_stream_unref(stream_);
@@ -60,10 +60,17 @@ PASource::~PASource()
             
 }
 
+void PASource::process(int timeout) {
+
+  pa_mainloop_prepare(mainloop_, timeout); 
+  pa_mainloop_poll(mainloop_); 
+  pa_mainloop_dispatch(mainloop_); 
+
+}
 
 void PASource::pushData(const float * f, unsigned l)
 {
-  datasig.emit(f, l); 
+   datasig.emit(f, l); 
 }
 
 // static void stream_update_timing_info_callback(pa_stream *s, int success, void *) {
@@ -104,9 +111,9 @@ static void stream_read_callback(pa_stream *s, size_t l, void * ptr) {
 	      << std::endl;
     return;
   }
-    
-  pasource->pushData((const float*) p, l/sizeof(float));
-
+  if(p != NULL) {
+    pasource->pushData((const float*) p, l/sizeof(float));
+  }
   pa_stream_drop(s);
 }
 
@@ -138,7 +145,6 @@ static void stream_state_callback(pa_stream *s, void * ptr) {
 
 static void create_stream(const char *name, const char *description, const pa_sample_spec &ss, const pa_channel_map &cmap,
 			  PASource* pasource) {
-  std::cout << "Create stream " << name << std::endl;
 
     char t[256];
 
@@ -192,14 +198,13 @@ static void context_get_sink_info_callback(pa_context *, const pa_sink_info *si,
 
 static void context_get_server_info_callback(pa_context *c, const pa_server_info*si, void * p)  {
   PASource * pasource = (PASource *)p; 
-  
+
   if (!si) {
     std::cerr << "Failed to get server information" << std::endl;
     return;
   }
 
   if (pasource->mode_ == PASource::PLAYBACK) {
-    std::cout << "Server info callback PLAYBACK" << std::endl; 
     if (!si->default_sink_name) {
       std::cerr << "No default sink set." << std::endl; 
       return;
@@ -208,7 +213,6 @@ static void context_get_server_info_callback(pa_context *c, const pa_server_info
     pa_operation_unref(pa_context_get_sink_info_by_name(c, si->default_sink_name, context_get_sink_info_callback, p));
     
   } else if (pasource->mode_ == PASource::RECORD) {
-    std::cout << "Server info callback RECORD" << std::endl; 
     
     if (!si->default_source_name) {
       std::cerr << "No default source set." << std::endl; 
@@ -221,7 +225,6 @@ static void context_get_server_info_callback(pa_context *c, const pa_server_info
 
 static void context_state_callback(pa_context *c, void * pasrcptr) {
   PASource * pasource = (PASource *)pasrcptr; 
-  std::cout << "context state callback" << std::endl;
     switch (pa_context_get_state(c)) {
         case PA_CONTEXT_UNCONNECTED:
         case PA_CONTEXT_CONNECTING:
@@ -242,7 +245,7 @@ static void context_state_callback(pa_context *c, void * pasrcptr) {
 // 	      pa_operation_unref(pa_context_get_sink_info_by_name(c, device_name, context_get_sink_info_callback, NULL)); 
 // 	    } 
 //             else {
-	    std::cout << "get server info in general " << std::endl; 
+
 	    
 	    pa_operation_unref(pa_context_get_server_info(c, context_get_server_info_callback, pasrcptr));
 	    //            }
@@ -260,5 +263,5 @@ static void context_state_callback(pa_context *c, void * pasrcptr) {
 	  }
           
     }
-    std::cout << "Context state callback end" << std::endl; 
+
 }

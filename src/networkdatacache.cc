@@ -6,10 +6,11 @@ NetworkDataCache::NetworkDataCache(pISomaNetCodec_t pnc,
   dbEnv_(0), 
   pNetCodec_(pnc), 
   pTimer_(ptime),
-  scratchdir_(scratchdir / "netdatawave"),
-  waveSignals_(MAXWAVE),
-  rawSignals_(MAXWAVE)
+  scratchdir_(scratchdir / "netdatawave")
 {
+
+  boost::mutex::scoped_lock  lock(mutex_);
+
   pNetCodec_->newDataSignal().connect(sigc::mem_fun(*this, 
 						 &NetworkDataCache::appendNewData)); 
   
@@ -53,6 +54,8 @@ NetworkDataCache::~NetworkDataCache()
 
 core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetWaveSource(datasource_t n)
 {
+  boost::mutex::scoped_lock  lock(mutex_);
+
   dbmap_t::iterator pdb = waveCacheDBs_.find(n); 
   if (pdb == waveCacheDBs_.end()) {
     // open a new database
@@ -86,6 +89,7 @@ core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetWaveSource(datasourc
 
 core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetRawSource(datasource_t n)
 {
+  boost::mutex::scoped_lock  lock(mutex_);
 
   dbmap_t::iterator pdb = rawCacheDBs_.find(n); 
   
@@ -120,6 +124,8 @@ core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetRawSource(datasource
 
 void NetworkDataCache::appendNewData(pDataPacket_t newData)
 {
+  boost::mutex::scoped_lock  lock(mutex_);
+
   if (newData->typ == WAVE) {
     dbmap_t::iterator pdb = waveCacheDBs_.find(newData->src); 
     if (pdb !=  waveCacheDBs_.end()) {
@@ -148,7 +154,6 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
       assert(ret == 0); 
       //      cursorp->close(); 
 
-      waveSignals_[src].emit(); 
     }
     
   } else if (newData->typ == RAW) {
@@ -176,7 +181,6 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
       int ret = pdb->second->put(NULL, &key, &data, DB_APPEND); // FIXME check return
       //      cursorp->close(); 
       assert(ret == 0); 
-      rawSignals_[src].emit(); 
       //}
     }
     

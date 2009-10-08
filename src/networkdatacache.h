@@ -6,6 +6,8 @@
 #include <somanetwork/wave.h>
 #include <somanetwork/raw.h>
 #include <data/wave.h>
+#include <boost/thread/mutex.hpp>
+
 #include "isomanetcodec.h"
 #include "timer.h"
 
@@ -23,6 +25,9 @@ namespace bf = boost::filesystem;
   wave-buffers (with a max data size), or doing some extra copying and
   _storing_ a different class of data structure.
   
+  Right now it's protected by one giant mutex, although the
+  returned queue views should be able to operate in different
+  threads. 
 
  */ 
 class NetworkDataCache
@@ -43,7 +48,7 @@ public:
 
 private: 
   static const int MAXWAVE = 64; 
-
+  boost::mutex mutex_; 
   DbEnv dbEnv_; 
 
   pISomaNetCodec_t pNetCodec_; 

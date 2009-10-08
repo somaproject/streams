@@ -562,6 +562,12 @@ void StreamRenderWin::setCurrentTime(streamtime_t time)
 // 	    << viewT2_ << std::endl;
   
   float twidth = viewT2_ - viewT1_; 
+  
+  // update tracklive
+  if (trackLive.pendingRequest()) {
+    trackLive.set_value(trackLive.get_req_value()); 
+  }
+
   if (trackLive) { 
     if (viewType_ == STRIPCHART ) {
       //    if (currentTime_ > viewT2_) {

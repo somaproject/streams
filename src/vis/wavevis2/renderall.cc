@@ -69,7 +69,7 @@ RenderAll::RenderAll(bf::path scratch) :
 
 
 void RenderAll::newSample(WaveBuffer_t & wb) {
-  const int BUFSIZE = 2048; 
+  const int BUFSIZE = 4096; 
   char  buffer[BUFSIZE]; 
   
   size_t len = waveBuffer_to_buffer(buffer, wb); 

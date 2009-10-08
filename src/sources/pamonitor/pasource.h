@@ -23,8 +23,8 @@ public:
 
   // signal that's float, a float pointer, and a long buffer
 
-  pa_glib_mainloop * mainloop_;
-  
+  pa_mainloop * mainloop_;
+
   pa_context *context_;
   pa_stream *stream_;
   char * device_name_; 
@@ -38,6 +38,8 @@ public:
   pa_sample_spec nss_;
 
   sigc::signal<void, const float *, unsigned> datasig; 
+
+  void process(int timeout); 
 
 }; 
 

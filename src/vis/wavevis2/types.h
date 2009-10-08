@@ -27,7 +27,7 @@ struct GLWavePoint_t
 
 struct GLPointBuffer_t
 {
-  static const int BUFFERN = 512; // Maximum size in data points of a buffer
+  static const int BUFFERN = 1024; // Maximum size in data points of a buffer
   size_t size; 
   boost::array<GLWavePoint_t, BUFFERN> data; 
   GLPointBuffer_t() : 

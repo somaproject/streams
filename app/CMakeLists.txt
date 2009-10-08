@@ -25,7 +25,7 @@ add_library(app_gui
 
 set(app_widgets_SRCS
   noisewavewidget.cc
-#  pamonitorwidget.cc
+  pamonitorwidget.cc
   waveviswidget.cc
 #  spectviswidget.cc
   #netdatawavewidget.cc

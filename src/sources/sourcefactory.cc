@@ -4,7 +4,7 @@
 // #include "noisewaveconfig.h"
 // #include "netdatawave.h"
 // #include "netdataraw.h"
-// #include "pamonitor.h"
+#include <sources/pamonitor/pamonitor.h>
 
 
 pISource_t SourceFactory::create(std::string typname, pSourceState_t ss,
@@ -16,7 +16,6 @@ pISource_t SourceFactory::create(std::string typname, pSourceState_t ss,
   if (typname == NoiseWave2::TYPENAME) {
     pNoiseWave2_t nw(new NoiseWave2(defaultname, scratchdir)); 
     return nw; 
-//     return NoiseWave_config(defaultname, ss->timer, scratchdir, config); 
 
 //   } else if (typname == NetDataWave::TYPENAME) {
 //     pNetDataWave_t ndw(new NetDataWave(defaultname, ss->timer, ss->netdatacache, 
@@ -26,10 +25,10 @@ pISource_t SourceFactory::create(std::string typname, pSourceState_t ss,
 //     pNetDataRaw_t ndw(new NetDataRaw(defaultname, ss->timer, ss->netdatacache, 
 // 				     ss->somanetcodec, scratchdir)); 
 //     return ndw; 
-//   } else if (typname == PulseAudioMonitorWave::TYPENAME) {
-//     pPulseAudioMonitorWave_t ndw(new PulseAudioMonitorWave(defaultname, ss->timer,
-// 							   scratchdir)); 
-//     return ndw; 
+  } else if (typname == PulseAudioMonitorWave::TYPENAME) {
+    pPulseAudioMonitorWave_t ndw(new PulseAudioMonitorWave(defaultname,
+ 							   scratchdir)); 
+    return ndw; 
   };
   
   throw std::runtime_error("Unknown source type " + typname); 

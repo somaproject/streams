@@ -8,10 +8,8 @@
 #include <core/element.h>
 #include <core/sourcepad.h>
 #include <properties.h>
-#include "timer.h" 
 
-#include <core/queueview.h>
-#include "sourcebase.h"
+#include <sources/sourcebase.h>
 #include "pasource.h"
 
 class PulseAudioMonitorWave : public SourceBase
@@ -19,31 +17,27 @@ class PulseAudioMonitorWave : public SourceBase
 public:
   static const std::string TYPENAME;
   // this is just a prototype source
-  PulseAudioMonitorWave(std::string, pTimer_t, bf::path); 
+  PulseAudioMonitorWave(std::string, bf::path); 
   
   ~PulseAudioMonitorWave(); 
   
-//   // emit updatedData
-//   void setFs(double fs); 
-//   Property<float> amplitude; 
-//   enum NoiseClass {WhiteNoise, NoisySine, SquareWave, BiModal}; 
-//   Property<NoiseClass> noiseclass; 
+
+  void process(elements::timeid_t currenttime); 
 
   void accept(pISourceVisitor_t sv) { 
     if (sv != NULL) 
       sv->visit(this); 
   }
   
-  
-
 
 private:
 
-  core::SourcePad<WaveBuffer_t> * pSourcePad_; 
-  boost::ptr_list<WaveBuffer_t> dataList_; 
+  elements::SourcePad<WaveBuffer_t>::pSourcePad_t pSourcePad_; 
+
+  //boost::ptr_list<WaveBuffer_t> dataList_; 
   double fs_;
 
-  pTimer_t pTimer_; 
+  //  pTimer_t pTimer_; 
   void nextData(const float * f, unsigned l); 
   
 //   void timeUpdate(streamtime_t t); 
