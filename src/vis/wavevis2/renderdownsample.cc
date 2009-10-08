@@ -125,13 +125,12 @@ void RenderDownSample::newSample(WaveBuffer_t & wb) {
 	pb = new GLPointBuffer_t; 
 	pb->size = 0; 
 	for(int i = 0; i < GLPointBuffer_t::BUFFERN; i++) {
-
+	  pb->data[i].x = 0; 
 	  pb->data[i].t = double(sampledur_)/1e9 * i;
 	  
 	}
 
 	presentBins_.insert(sample_time_bin); 
-
 	
       } else { 
 	// the bin exists currently, so load it into the cache
@@ -246,7 +245,7 @@ void RenderDownSample::reset() {
   upgrade_lock_t reqlock(truncate_mutex_);
   // get exclusive access
   up_unique_lock_t requniqueLock(reqlock);
-  std::cout << "RenderDownSample::reset() " << std::endl; 
+//   std::cout << "RenderDownSample::reset() " << std::endl; 
   presentBins_.clear();
   uint32_t x; 
 //   db_->close(DB_NOSYNC); 
@@ -276,7 +275,7 @@ void RenderDownSample::reset() {
 //   }
 
   db_->truncate(0, &x, 0); 
-  std::cout << "RenderDownSample::reset() done " << std::endl; 
+//   std::cout << "RenderDownSample::reset() done " << std::endl; 
 
 //   // clear the entire database! 
 //   timeid_t tid= 0; 

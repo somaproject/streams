@@ -7,6 +7,37 @@
           "second" : {"type" : "vis",
                       "class" : "WaveVis2"}}, 
     "connections" : [["first", "default", "second", "default"]]
+}, 
+
+{ "name" : "pipeline02",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NoiseWave2",
+		       "config" : {"preload" : 100}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}, 
+
+{ "name" : "pipeline03",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NoiseWave2",
+		       "config" : {"preload" : 100}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}, 
+
+{ "name" : "pipeline04",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NoiseWave2",
+		       "config" : {"preload" : 100}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
 }
+
 ]
 

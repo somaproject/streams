@@ -154,7 +154,7 @@ void RenderAll::reset() {
   /* 
      Instead of truncating, we delete all the records; ug, slow. 
   */ 
-  std::cout << "RenderAll::reset()" << std::endl;
+//   std::cout << "RenderAll::reset()" << std::endl;
 
   upgrade_lock_t reqlock(truncate_mutex_);
   // get exclusive access
@@ -176,7 +176,7 @@ void RenderAll::reset() {
 //   }
 //   cursorp->close(); 
 
-  std::cout << "RenderAll::reset() done" << std::endl;
+//   std::cout << "RenderAll::reset() done" << std::endl;
 }
 
 RenderAll::~RenderAll()

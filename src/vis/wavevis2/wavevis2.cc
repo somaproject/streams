@@ -14,7 +14,7 @@ WaveVis2::WaveVis2(std::string name, bf::path scratchdir):
   renderall_(scratchdir_)
 {
   using namespace wavevis2; 
-  for(int i = 0; i < 8; i+=2) { 
+  for(int i = 0; i < 8; i++) { 
     timeid_t time = 10000000000; 
     RenderDownSample * rds = new RenderDownSample(1000000 * (1 << i), 100, scratchdir_); 
     downsampledRenderers_.insert(std::make_pair(time * 1 << i, rds)); 
