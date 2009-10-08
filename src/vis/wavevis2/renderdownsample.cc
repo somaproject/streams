@@ -24,7 +24,7 @@ int renderdownsample_compare_timeid(Db *db, const Dbt *a, const Dbt *b)
 RenderDownSample::RenderDownSample(timeid_t sampledur, size_t binsize, 
 				   bf::path scratch) :
   sampledur_(sampledur),
-  binsize_(binsize),
+  //  binsize_(binsize),
   bindur_(binsize * sampledur),
   dbEnv_(0)
 {
@@ -98,7 +98,11 @@ void RenderDownSample::newSample(WaveBuffer_t & wb) {
 
   GLPointBuffer_t * pb; 
 
-  db_->cursor(NULL, &cursorp,  DB_WRITECURSOR  ); 
+  int ret = db_->cursor(NULL, &cursorp,  DB_WRITECURSOR  ); 
+  if (ret != 0 ) {
+    throw std::runtime_error("inconsistency between presentBins_ and database"); 
+  }
+
   
   bool currentBuffer = false; 
 
@@ -123,7 +127,7 @@ void RenderDownSample::newSample(WaveBuffer_t & wb) {
 	for(int i = 0; i < GLPointBuffer_t::BUFFERN; i++) {
 
 	  pb->data[i].t = double(sampledur_)/1e9 * i;
-
+	  
 	}
 
 	presentBins_.insert(sample_time_bin); 
@@ -242,10 +246,37 @@ void RenderDownSample::reset() {
   upgrade_lock_t reqlock(truncate_mutex_);
   // get exclusive access
   up_unique_lock_t requniqueLock(reqlock);
-
+  std::cout << "RenderDownSample::reset() " << std::endl; 
   presentBins_.clear();
   uint32_t x; 
+//   db_->close(DB_NOSYNC); 
+
+//   std::string dbname("my_db2.db"); 
+
+// //   db_->remove(dbname.c_str(), NULL, 0); 
+//   delete db_;  
+  
+//   db_ = new Db(&dbEnv_, 0);               // Instantiate the Db object
+  
+//   //   //  db_->remove(); 
+//   u_int32_t oFlags = DB_CREATE |  DB_THREAD; // Open flags;
+
+  
+//   //   boost::filesystem::remove_all(dbname );
+  
+//   int ret = db_->open(NULL,                // Transaction pointer
+// 		      dbname.c_str(),          // Database file name
+// 		      NULL,                // Optional logical database name
+// 		      DB_BTREE,            // Database access method
+// 		      oFlags,              // Open flags
+// 		      0);                  // File mode (using defaults)
+  
+//   if(ret != 0) {
+//     std::cout << "ERROR OPENING DATABASE" << std::endl;
+//   }
+
   db_->truncate(0, &x, 0); 
+  std::cout << "RenderDownSample::reset() done " << std::endl; 
 
 //   // clear the entire database! 
 //   timeid_t tid= 0; 

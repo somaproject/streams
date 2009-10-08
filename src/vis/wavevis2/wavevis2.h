@@ -64,6 +64,7 @@ private:
   wavevis2::RenderAll renderall_; 
   typedef std::map<timeid_t, wavevis2::RenderDownSample*> dsmap_t; 
   dsmap_t downsampledRenderers_; 
+  void reset(); 
 
 };
 

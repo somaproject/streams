@@ -18,7 +18,9 @@ int renderall_compare_timeid(Db *db, const Dbt *a, const Dbt *b);
 class RenderAll : public IRenderer
 {
   /* 
-     Store and render all (lowest-level) data points
+     Store and render all (lowest-level) data points. We basically
+     save the naked waveBuffers to disk, and then
+     read them out as needed. 
      
   */
 public:
@@ -43,7 +45,11 @@ private:
   typedef boost::upgrade_to_unique_lock<boost::shared_mutex> up_unique_lock_t; 
 
   boost::shared_mutex truncate_mutex_; 
+  
+  size_t waveBuffer_to_buffer(char * dest, const WaveBuffer_t & wb); 
+  WaveBuffer_t waveBuffer_from_buffer(char *, size_t len); 
 
+  
 }; 
 
 }

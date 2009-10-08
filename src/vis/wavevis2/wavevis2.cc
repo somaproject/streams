@@ -14,7 +14,7 @@ WaveVis2::WaveVis2(std::string name, bf::path scratchdir):
   renderall_(scratchdir_)
 {
   using namespace wavevis2; 
-  for(int i = 0; i < 0; i+=2) { 
+  for(int i = 0; i < 8; i+=2) { 
     timeid_t time = 10000000000; 
     RenderDownSample * rds = new RenderDownSample(1000000 * (1 << i), 100, scratchdir_); 
     downsampledRenderers_.insert(std::make_pair(time * 1 << i, rds)); 
@@ -265,6 +265,27 @@ void WaveVis2::process(elements::timeid_t t)
   int cnt = 0; 
   while (cnt < MAXCNT) {
     {
+
+      if(pSinkPad_->commandqueue_.empty() == false) { 
+	elements::MESSAGES m = pSinkPad_->commandqueue_.get(); 
+	if (m == elements::RESET) { 
+	  while(pSinkPad_->dataqueue_.empty()	  ) {
+	    // consume remaining data until reset
+	    boost::shared_ptr<elements::LinkElement<WaveBuffer_t> > le = pSinkPad_->dataqueue_.get(); 
+	    if (le->state == 
+		elements::LinkElement<WaveBuffer_t>::RESET) {
+	      reset(); 
+	      break; 
+	    }
+
+	  }
+
+	} else {
+
+	  std::cerr << "Unknown command?" << std::endl; 
+	}
+      }
+      
       if(pSinkPad_->dataqueue_.empty()) {
 	break; 
       }
@@ -272,14 +293,8 @@ void WaveVis2::process(elements::timeid_t t)
 
       if (le->state  
 	  == elements::LinkElement<WaveBuffer_t>::RESET) {
-	// FIXME do a reset
-	std::cout << "Beginning reset " << std::endl; 
-	renderall_.reset(); 
-	BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
-	  i.second->reset(); 
-	}
-	std::cout << "reset done " << std::endl; 
 
+	reset(); 
       } else { 
 	
 	WaveBuffer_t wb = le->datum; 
@@ -294,4 +309,17 @@ void WaveVis2::process(elements::timeid_t t)
     }
   }
   // FIXME: put in reset signal 
+}
+
+void WaveVis2::reset()
+{
+  std::cout << "Beginning reset " << std::endl; 
+  renderall_.reset(); 
+  BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
+    i.second->reset(); 
+    std::cout << "Downsample had a successful reset" << std::endl; 
+  }
+  std::cout << "reset done " << std::endl; 
+
+
 }

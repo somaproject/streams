@@ -38,7 +38,6 @@ namespace elements {
     boost::mutex mutex_; 
     std::list<T> queue_; 
 
-
   }; 
 
 }

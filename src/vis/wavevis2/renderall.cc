@@ -69,40 +69,30 @@ RenderAll::RenderAll(bf::path scratch) :
 
 
 void RenderAll::newSample(WaveBuffer_t & wb) {
-  GLPointBuffer_t * pb = new GLPointBuffer_t; 
-	
-  pb->size = 0; 
-  double bufstarttime = (double)wb.time / 1e9; 
+  const int BUFSIZE = 2048; 
+  char  buffer[BUFSIZE]; 
   
-  double period = 1/wb.samprate; 
-  // do the conversion
-  for(int i = 0; i < wb.data.size(); i++) { 
-    pb->data[pb->size].t = period * i; 
-    pb->data[pb->size].x = wb.data[i]; 
-    pb->size++; 
-  }
+  size_t len = waveBuffer_to_buffer(buffer, wb); 
   
   Dbt key(&wb.time, sizeof(wb.time));
-  Dbt data(pb, sizeof(GLPointBuffer_t)); 
+  Dbt data(buffer, len); 
   Dbc * cursorp; 
   db_->cursor(NULL, &cursorp,  DB_WRITECURSOR  ); 
   int ret = cursorp->put(&key, &data, DB_KEYFIRST); 
   if (ret != 0) { 
-    std::cout << "ERror putting " << std::endl; 
+    std::cout << "Error putting " << std::endl; 
   }
   cursorp->close(); 
   
-  delete pb; 
-
 }
 
 void RenderAll::renderStream(timeid_t t1, timeid_t t2, int pixels)
 {
   /* Must be thread-safe!
    */
-   
-  shared_lock_t trunclock(truncate_mutex_); 
 
+  shared_lock_t trunclock(truncate_mutex_); 
+  
   Dbc *cursorp;
   
   timeid_t searchval = t1; 
@@ -110,26 +100,41 @@ void RenderAll::renderStream(timeid_t t1, timeid_t t2, int pixels)
   Dbt found_data; 
   
   
+
   db_->cursor(NULL, &cursorp, 0); 
   int ret = cursorp->get(&search_key, &found_data, DB_SET_RANGE);
+
+
   if (ret == 0) { 
     // attempt to get the previous one
     ret = cursorp->get(&search_key, &found_data, DB_PREV);
     if (ret != 0) { 
       ret = cursorp->get(&search_key, &found_data, DB_SET_RANGE);
     }
+    GLPointBuffer_t * pb = new GLPointBuffer_t;   
+    
     while ((ret == 0) and (*((timeid_t*)search_key.get_data()) < t2)) {
       timeid_t buftime = *((timeid_t*)search_key.get_data()) ; 
       
-      GLPointBuffer_t * bufptr; 
-      bufptr = (GLPointBuffer_t * )found_data.get_data(); 
-      renderGLPointBuffer(buftime - t1, bufptr); 
+      
+
+      WaveBuffer_t wb = waveBuffer_from_buffer((char*)found_data.get_data(), 
+					       found_data.get_size()); 
+      pb->size = 0; 
+      double period = 1/wb.samprate; 
+      // do the conversion
+      for(int i = 0; i < wb.data.size(); i++) { 
+	pb->data[pb->size].t = period * i; 
+	pb->data[pb->size].x = wb.data[i]; 
+	pb->size++; 
+      }
+      renderGLPointBuffer(buftime - t1, pb); 
       ret = cursorp->get(&search_key, &found_data, DB_NEXT);
     } 
+    delete pb; 
   }
   
   cursorp->close(); 
-  
 
 }
 
@@ -181,6 +186,65 @@ RenderAll::~RenderAll()
 
 }
 
+size_t RenderAll::waveBuffer_to_buffer(char * dest, const WaveBuffer_t & wb)
+{
+  /* 
+     Copy the wave buffer into the destination pointer, returning
+     the total size;
+
+   */ 
+  char * p = dest; 
+  
+  size_t size = wb.data.size(); 
+  
+  
+  memcpy(p, &size, sizeof(size)); 
+  p += sizeof(size); 
+  
+  memcpy(p, &wb.time, sizeof(wb.time)); 
+  p += sizeof(wb.time); 
+  
+  memcpy(p, &wb.samprate, sizeof(wb.samprate)); 
+  p += sizeof(wb.samprate); 
+  
+  if (size > 0 ) { 
+    memcpy(p, &wb.data[0], sizeof(wb.data[0]) * size); 
+    p +=  sizeof(wb.data[0]) * size; 
+  }
+  return p - dest; 
+  
+}
+
+WaveBuffer_t RenderAll::waveBuffer_from_buffer(char * inp, size_t len) {
+  /* 
+
+     Given a character buffer and a length, return a new WaveBuffer_t object. 
+
+
+   */ 
+
+  char * p = inp; 
+  size_t size; 
+
+  memcpy(&size, p, sizeof(size)); 
+  p += sizeof(size); 
+  WaveBuffer_t wb; 
+  
+  memcpy(&wb.time, p, sizeof(wb.time)); 
+  p += sizeof(wb.time); 
+  
+  memcpy(&wb.samprate, p, sizeof(wb.samprate)); 
+  p += sizeof(wb.samprate); 
+
+  if (size > 0 ) { 
+    wb.data.resize(size); 
+    memcpy(&wb.data[0], p, sizeof(wb.data[0]) * size); 
+  }
+  return wb; 
+
+}
+
+  
 
 
 }

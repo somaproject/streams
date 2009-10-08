@@ -48,7 +48,7 @@ public:
 
 private:
   const timeid_t sampledur_; 
-  const size_t binsize_;
+  static const size_t binsize_ = GLPointBuffer_t::BUFFERN; 
   const timeid_t bindur_; 
   DbEnv dbEnv_; 
   
