@@ -210,10 +210,11 @@ void NoiseWave2::create_new_data(elements::timeid_t tid)
   // integer fs
   elements::timeid_t period_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
 
+
   elements::timeid_t threshold = (period_ns) * BUFSIZE + lasttime_; 
-  if (tid > threshold) {
+  while (tid > threshold) { 
     std::pair<timeid_t, pWaveBuffer_t> newdata
-      = createDataBuffer(lasttime_, tid); 
+      = createDataBuffer(lasttime_, threshold); 
     
     pSentBufferWrapper_t sb(new SentBufferWrapper(newdata.second)); 
 
@@ -226,7 +227,7 @@ void NoiseWave2::create_new_data(elements::timeid_t tid)
     sb->set_sent(true); 
     
     lasttime_ += newdata.first; 
-        
+    threshold = (period_ns) * BUFSIZE + lasttime_;      
   }
   
 

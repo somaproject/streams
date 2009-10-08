@@ -16,6 +16,7 @@
 #include <vis/visbase.h>
 #include <data/wave.h>
 #include "renderall.h"
+#include "renderdownsample.h"
 #include <elements/property.h>
 #include <boost/thread/shared_mutex.hpp>
 
@@ -61,6 +62,9 @@ private:
   bf::path scratchdir_; 
 
   wavevis2::RenderAll renderall_; 
+  typedef std::map<timeid_t, wavevis2::RenderDownSample*> dsmap_t; 
+  dsmap_t downsampledRenderers_; 
+
 };
 
 #endif // WAVESTREAMVIS_H

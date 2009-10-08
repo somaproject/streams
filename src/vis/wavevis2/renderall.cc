@@ -24,6 +24,7 @@ RenderAll::RenderAll(bf::path scratch) :
   dbEnv_(0)
 {
 
+  dbEnv_.set_cachesize(0, 1024 * 1024 * 10, 1); 
 
   u_int32_t env_flags = DB_CREATE |     // If the environment does not
     DB_INIT_MPOOL |
@@ -75,6 +76,7 @@ void RenderAll::newSample(WaveBuffer_t & wb) {
   
   double period = 1/wb.samprate; 
   // do the conversion
+  std::cout << "wb.data.size()" << wb.data.size() << std::endl; 
   for(int i = 0; i < wb.data.size(); i++) { 
     pb->data[pb->size].t = period * i; 
     pb->data[pb->size].x = wb.data[i]; 
@@ -110,15 +112,21 @@ void RenderAll::renderStream(timeid_t t1, timeid_t t2, int pixels)
   
   db_->cursor(NULL, &cursorp, 0); 
   int ret = cursorp->get(&search_key, &found_data, DB_SET_RANGE);
-
-  while ((ret == 0) and (*((timeid_t*)search_key.get_data()) < t2)) {
-    timeid_t buftime = *((timeid_t*)search_key.get_data()) ; 
-    
-    GLPointBuffer_t * bufptr; 
-    bufptr = (GLPointBuffer_t * )found_data.get_data(); 
-    renderGLPointBuffer(buftime - t1, bufptr); 
-    ret = cursorp->get(&search_key, &found_data, DB_NEXT);
-  } 
+  if (ret == 0) { 
+    // attempt to get the previous one
+    ret = cursorp->get(&search_key, &found_data, DB_PREV);
+    if (ret != 0) { 
+      ret = cursorp->get(&search_key, &found_data, DB_SET_RANGE);
+    }
+    while ((ret == 0) and (*((timeid_t*)search_key.get_data()) < t2)) {
+      timeid_t buftime = *((timeid_t*)search_key.get_data()) ; 
+      
+      GLPointBuffer_t * bufptr; 
+      bufptr = (GLPointBuffer_t * )found_data.get_data(); 
+      renderGLPointBuffer(buftime - t1, bufptr); 
+      ret = cursorp->get(&search_key, &found_data, DB_NEXT);
+    } 
+  }
   
   cursorp->close(); 
   
@@ -141,6 +149,7 @@ void RenderAll::reset() {
   /* 
      Instead of truncating, we delete all the records; ug, slow. 
   */ 
+  std::cout << "RenderAll::reset()" << std::endl;
   timeid_t tid= 0; 
   Dbt key(&tid, sizeof(tid));
   GLPointBuffer_t pb; 

@@ -13,7 +13,13 @@ WaveVis2::WaveVis2(std::string name, bf::path scratchdir):
   scratchdir_(scratchdir / name),
   renderall_(scratchdir_)
 {
-
+  using namespace wavevis2; 
+  for(int i = 0; i < 8; i++) { 
+    timeid_t time = 10000000000; 
+    RenderDownSample * rds = new RenderDownSample(1000000 * (1 << i), 100, scratchdir_); 
+    downsampledRenderers_.insert(std::make_pair(time * 1 << i, rds)); 
+  }
+  
 }
 
 
@@ -63,7 +69,7 @@ void WaveVis2::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
   // 
   // pick the scale
   streamtime_t windowsize = t2 - t1; 
-  
+  timeid_t windowsize_ns = timeid_t(windowsize * 1e9);
 
 //   boost::shared_lock<boost::shared_mutex> lock(buffer_mutex_);
     
@@ -81,7 +87,20 @@ void WaveVis2::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
   timeid_t timeid_t1 = timeid_t(t1 * 1e9); 
   timeid_t timeid_t2 = timeid_t(t2 * 1e9); 
 
-  renderall_.renderStream(timeid_t1, timeid_t2, pixels); 
+  if (windowsize_ns < 5000000000) { 
+//     std::cout << "Rendering with renderall" << std::endl;
+    renderall_.renderStream(timeid_t1, timeid_t2, pixels); 
+  } else { 
+    if (!downsampledRenderers_.empty()) { 
+      dsmap_t::iterator lb = downsampledRenderers_.upper_bound(windowsize_ns); 
+      if (lb == downsampledRenderers_.end())  { 
+	lb--; 
+      }
+      //     std::cout << "rendering with window = " << windowsize_ns 
+      // 	      << " and iterator = " << lb->first << std::endl;
+      lb->second->renderStream(timeid_t1, timeid_t2, pixels); 
+    }
+  }
 
   glPopMatrix(); 
 
@@ -255,11 +274,19 @@ void WaveVis2::process(elements::timeid_t t)
 	  == elements::LinkElement<WaveBuffer_t>::RESET) {
 	// FIXME do a reset
 	renderall_.reset(); 
+	BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
+	  i.second->reset(); 
+	}
+
       } else { 
 	
 	WaveBuffer_t wb = le->datum; 
 	
 	renderall_.newSample(wb); 
+	BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
+	  i.second->newSample(wb);
+	}
+
 // 	pGLPointBuffer_t pb(new GLPointBuffer_t); 
 	
 // 	pb->size = 0; 
