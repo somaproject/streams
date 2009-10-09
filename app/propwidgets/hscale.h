@@ -1,5 +1,5 @@
-#ifndef PROPERTY_SPINBUTTON_H
-#define PROPERTY_SPINBUTTON_H
+#ifndef PROPERTY_HSCALE_H
+#define PROPERTY_HSCALE_H
 
 #include <gtkmm.h>
 #include <elements/property.h>
@@ -9,17 +9,29 @@
 
 namespace PropertyWidgets
 {
-class SpinButton : public Gtk::SpinButton 
-{
-public:
-  SpinButton(Gtk::Adjustment & adj); 
-  ~SpinButton(); 
-  enum State {NORMAL, PENDING, CONFLICTED}; 
+/*
+  The HScale has a minimum, a maximum, and a step value. 
+
+  potentailly there's a render visualization
+
   
+
+
+
+ */
+
+class HScale : public Gtk::HScale
+{
+
+  enum State {NORMAL, PENDING, CONFLICTED}; 
+
 public:
+  HScale(double min, double max, double step); 
+  ~HScale(); 
+  
   typedef elements::Property<float> *  pProperty_t; 
-  void addProperty(pProperty_t spinProperty); 
-  void delProperty(pProperty_t  spinProperty); 
+  void addProperty(pProperty_t scaleProperty); 
+  void delProperty(pProperty_t scaleProperty); 
     
 private:
   typedef std::set<pProperty_t >  propset_t ; 
@@ -29,15 +41,16 @@ private:
   void refreshProperty(); 
 
   State state_; 
+
   float value_; 
+
   void setState(State); 
-  void on_my_value_changed(); 
-  
+
   pWidgetPropertyNotify_t notify_; 
-  int on_my_input(double* new_value) ; 
-  
+  void refreshProperty(); 
+
+
 }; 
 
-}
 
-#endif // SPINBUTTON_H
+}

@@ -3,12 +3,12 @@
 #include <iostream>
 #include <boost/format.hpp>
 
+
 const std::string SpectVis::TYPENAME = "SpectVis"; 
 
 SpectVis::SpectVis(std::string name, bf::path scratch) :
   VisBase(name), 
   pSinkPad_(createSinkPad<WaveBuffer_t>("default")), 
-
   yheight_(100),
   color_("red"),
   verticalScale_(1.0),
@@ -17,27 +17,15 @@ SpectVis::SpectVis(std::string name, bf::path scratch) :
   spectblockdb_(new Db(NULL, 0))
 {
 
-  u_int32_t oFlags = DB_CREATE |  DB_TRUNCATE |  DB_THREAD ; // Open flags;
-  bf::create_directories(scratchdir_);
-  bf::path dbpath = scratchdir_ / "spectblock.db"; 
-  std::cout << "Attempting to create " << dbpath << std::endl; 
-  spectblockdb_->set_pagesize(1<<16); 
-  spectblockdb_->set_bt_compare(spectvis_compare_double);
-  int ret = spectblockdb_->open(NULL,                // Transaction pointer
-				dbpath.string().c_str(), 
-				NULL,                // Optional logical database name
-				DB_BTREE,            // Database access method
-				oFlags,              // Open flags
-				0);                  // File mode (using defaults)
-
   streamRenderer_ = new SpectVisRenderer(spectblockdb_); 
-  pSinkPad_->newDataSignal().connect(sigc::mem_fun(*this, 
-						   &SpectVis::newData)); 
-  
+
 }
 
 void SpectVis::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
 {
+
+  shared_lock_t trunclock(truncate_mutex_); 
+
   // i really hate how this modifies the gloabl GL state
   streamRenderer_->renderStream(t1, t2, pixels); 
   
@@ -172,6 +160,83 @@ int SpectVis::getPixelHeight()
 
 void SpectVis::setScale(float)
 {
+
+
+}
+
+
+void SpectVis::process(elements::timeid_t id)
+{
+  
+  if(scale.pendingRequest()) {
+//     std::cout << "WaveVis2::process pending request scale" << std::endl;
+    scale.set_value(scale.get_req_value()); 
+  }
+
+  int MAXCNT = 10; 
+  int cnt = 0; 
+  while (cnt < MAXCNT) {
+    {
+
+      if(pSinkPad_->commandqueue_.empty() == false) { 
+	elements::MESSAGES m = pSinkPad_->commandqueue_.get(); 
+	if (m == elements::RESET) { 
+	  while(pSinkPad_->dataqueue_.empty()	  ) {
+	    // consume remaining data until reset
+	    boost::shared_ptr<elements::LinkElement<WaveBuffer_t> > le = pSinkPad_->dataqueue_.get(); 
+	    if (le->state == 
+		elements::LinkElement<WaveBuffer_t>::RESET) {
+	      reset(); 
+	      break; 
+	    }
+
+	  }
+
+	} else {
+
+	  std::cerr << "Unknown command?" << std::endl; 
+	}
+      }
+      
+      if(pSinkPad_->dataqueue_.empty()) {
+	break; 
+      }
+      boost::shared_ptr<elements::LinkElement<WaveBuffer_t> > le = pSinkPad_->dataqueue_.get(); 
+
+      if (le->state  
+	  == elements::LinkElement<WaveBuffer_t>::RESET) {
+
+	reset(); 
+      } else { 
+	
+	WaveBuffer_t wb = le->datum; 
+	
+ 	renderall_.newSample(wb); 
+	BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
+	  i.second->newSample(wb);
+	}
+
+ 	cnt++; 
+      }
+    }
+  }
+
+  
+}
+
+
+void WaveVis2::reset()
+{
+  std::cout << "Beginning reset " << std::endl; 
+  renderall_.reset(); 
+  BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
+    i.second->reset(); 
+    std::cout << "Downsample had a successful reset" << std::endl; 
+  }
+  std::cout << "reset done " << std::endl; 
+
+
+}
 
 
 }
