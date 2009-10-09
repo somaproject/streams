@@ -13,6 +13,8 @@ set(spect_vis_SRCS
   spectvis.cc
   spectvisrenderer.cc
   data.cc
+  helper.cc
+  fftengine.cc
 )
 
 

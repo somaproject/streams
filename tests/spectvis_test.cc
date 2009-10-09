@@ -1,35 +1,106 @@
 #include <iostream>
-
+#include <list>
 #include <boost/test/unit_test.hpp>
 #include <boost/test/auto_unit_test.hpp>
+#include <boost/assign/list_of.hpp>
 
 #include <vis/spectvis/spectvis.h>
 #include <vis/spectvis/data.h>
-
+#include <vis/spectvis/helper.h>
 
 BOOST_AUTO_TEST_SUITE(spectvis); 
+using namespace boost::assign;
 
-BOOST_AUTO_TEST_CASE(datamarhsall)
+BOOST_AUTO_TEST_CASE(helper_get_bin_bounds)
 {
+  typedef std::pair<timeid_t, timeid_t> range_t; 
   
-  SpectRenderBlock sbb(128, 4); 
-  (*sbb.data)[0][3] = 123.456; 
+  range_t rid = get_bin_bounds(0, 10000, 1); 
+  BOOST_CHECK_EQUAL(rid.first, 0); 
+  BOOST_CHECK_EQUAL(rid.second, 10000 -1); 
+
+  rid = get_bin_bounds(1, 10000, 1); 
+  BOOST_CHECK_EQUAL(rid.first, 10000); 
+  BOOST_CHECK_EQUAL(rid.second, 20000 -1); 
+
+  rid = get_bin_bounds(-1, 10000, 1); 
+  BOOST_CHECK_EQUAL(rid.first, -10000); 
+  BOOST_CHECK_EQUAL(rid.second, -1); 
+
+  rid = get_bin_bounds(0, 10000, 5); 
+  BOOST_CHECK_EQUAL(rid.first, 0); 
+  BOOST_CHECK_EQUAL(rid.second, 10000-1); 
+
+  rid = get_bin_bounds(1, 10000, 5); 
+  BOOST_CHECK_EQUAL(rid.first, 2000); 
+  BOOST_CHECK_EQUAL(rid.second, 12000-1); 
+
   
-  char * buffer = (char*)malloc(sbb.maxbytes()); 
-  sbb.marshall_to_buffer(buffer); 
-  
-  SpectRenderBlock sbb2(10, 20); 
-  SpectRenderBlock::unmarshall_from_buffer(&sbb2, buffer); 
-  
-  free(buffer); 
-  BOOST_CHECK_EQUAL(sbb.N, sbb2.N);
-  BOOST_CHECK_EQUAL(sbb.k, sbb2.k);
-  for (int i = 0; i < sbb.N; i++) {
-    for (int k = 0; k < sbb.k; k++) {
-      BOOST_CHECK_EQUAL(((*sbb.data)[k][i]),
-			((*sbb2.data)[k][i])); 
+}
+
+bool list_equal(bufferlist_t a, bufferlist_t b) {
+  BOOST_CHECK_EQUAL(a.size(), b.size()); 
+  if (a.size() == b.size()) { 
+    bufferlist_t::iterator ai, bi; 
+    ai = a.begin(); 
+    bi = b.begin();
+    
+    while (ai != a.end() and bi != b.end()) {
+      BOOST_CHECK_EQUAL(*ai, *bi); 
+      ai++; 
+      bi++; 
+
     }
   }
+}
+BOOST_AUTO_TEST_CASE(helper_buf_range) {
+  
+  // first simple cases
+  bufferlist_t bl = get_buffers_that_depend_on_times(0, 1000, 
+						     10000, 1); 
+  bufferlist_t er = list_of(0); 
+
+  BOOST_CHECK_EQUAL(bl.size(), 1); 
+  
+  list_equal(bl, er); 
+
+  bl = get_buffers_that_depend_on_times(0, 10000, 10000, 1); 
+  er = list_of(0)(1); 
+  list_equal(bl, er); 
+
+  bl = get_buffers_that_depend_on_times(-1, 10000, 10000, 1); 
+  er = list_of(-1)(0)(1); 
+  list_equal(bl, er); 
+
+  bl = get_buffers_that_depend_on_times(-1, 10000, 10000, 2); 
+  er = list_of(-2)(-1)(0)(1)(2); 
+  list_equal(bl, er); 
+
+  
+
+}
+
+BOOST_AUTO_TEST_CASE(helper_range_query)
+{
+  using namespace spectvis; 
+  
+  RangeQuery<int> rq; 
+  
+  rq.insert(0, 0, 10); 
+  BOOST_CHECK_EQUAL(rq.query(-10, 2).size(), 1); 
+  BOOST_CHECK_EQUAL(rq.query(0, 2).size(), 1); 
+  BOOST_CHECK_EQUAL(rq.query(4, 8).size(), 1); 
+
+  rq.insert(1, 11, 20); 
+  BOOST_CHECK_EQUAL(rq.query(-10, 2).size(), 1); 
+  BOOST_CHECK_EQUAL(rq.query(0, 2).size(), 1); 
+  BOOST_CHECK_EQUAL(rq.query(4, 8).size(), 1); 
+  BOOST_CHECK_EQUAL(rq.query(8, 12).size(), 2); 
+
+  BOOST_CHECK_EQUAL(rq.query(30, 40).size(), 0); 
+
+  
+
 }
 
 

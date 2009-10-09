@@ -4,11 +4,11 @@
 #include <gtkmm.h>
 #include <boost/shared_ptr.hpp>
 
-#include "visbase.h"
+#include <vis/visbase.h>
 
 #include "data/wave.h"
 #include "spectvisrenderer.h"
-#include "properties.h"
+#include <elements/property.h>
 
 
 
@@ -57,11 +57,11 @@ class SpectVis : public VisBase
   }
 
   //  Property<Gdk::Color> color; 
-  Property<float> scale; 
+  elements::Property<float> scale; 
     
-  Property<int> fftN; 
-  Property<float> windowsize; 
-  Property<float> overlapFactor; 
+  elements::Property<int> fftN; 
+  elements::Property<float> windowsize; 
+  elements::Property<float> overlapFactor; 
   
   void process(elements::timeid_t tid); 
 
@@ -87,8 +87,16 @@ class SpectVis : public VisBase
   
   std::map<timeid_t, WaveBuffer_t> waveBufferCache_; 
 
+  typedef boost::shared_lock<boost::shared_mutex> shared_lock_t; 
+  typedef boost::upgrade_lock<boost::shared_mutex> upgrade_lock_t; 
+  typedef boost::upgrade_to_unique_lock<boost::shared_mutex> up_unique_lock_t; 
 
+  boost::shared_mutex truncate_mutex_; 
   
+  void newData(); 
+
+  void reset(); 
+
 };
 
 #endif // WAVESTREAMVIS_H

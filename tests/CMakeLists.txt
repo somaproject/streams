@@ -55,9 +55,9 @@ add_executable(pipelineconfig_test
 #   pasource_test.cc
 #   runner.cc)
 
-# add_executable(spectvis_test
-#   spectvis_test.cc
-#   runner.cc)
+add_executable(spectvis_test
+  spectvis_test.cc
+  runner.cc)
 
 add_executable(timedb_test
   timedb_test.cc
@@ -120,7 +120,7 @@ set(testlist
   bdbqueueview_test
   pipelineconfig_test
   #pasource_test
-  #spectvis_test
+  spectvis_test
   timedb_test
   timedb_cursor_test
 
