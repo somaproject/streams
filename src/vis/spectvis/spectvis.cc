@@ -5,6 +5,19 @@
 
 
 const std::string SpectVis::TYPENAME = "SpectVis"; 
+using namespace spectvis; 
+
+pFFT_t identity(float * data, int data_size, int N, float fs)
+{
+  
+  //Identity operation that just copies the data 
+  pFFT_t y(new FFT); 
+  y->data.reserve(data_size); 
+  for (int i = 0; i < data_size; i++) { 
+    y->data.push_back(data[i]); 
+  }
+  return y; 
+}
 
 SpectVis::SpectVis(std::string name, bf::path scratch) :
   VisBase(name), 
@@ -17,10 +30,10 @@ SpectVis::SpectVis(std::string name, bf::path scratch) :
   verticalScale_(1.0),
   scratchdir_(scratch / name),
   pixelHeight_(100),
-  spectblockdb_(new Db(NULL, 0))
+  fftengine_(identity)
 {
 
-  streamRenderer_ = new SpectVisRenderer(spectblockdb_); 
+  streamRenderer_ = new spectvis::SpectVisRenderer(fftengine_); 
 
 }
 
@@ -207,12 +220,7 @@ void SpectVis::process(elements::timeid_t id)
       } else { 
 	
 	WaveBuffer_t wb = le->datum; 
-	
-	//newSample(wb); 
-//  	renderall_.newSample(wb); 
-// 	BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
-// 	  i.second->newSample(wb);
-// 	}
+	fftengine_.appendData(wb); 
 
  	cnt++; 
       }

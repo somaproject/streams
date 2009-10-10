@@ -1,15 +1,15 @@
 #include <boost/foreach.hpp>
-
+#include <iostream>
 #include "fftengine.h"
 
 
 namespace spectvis {
 
-FFTEngine::FFTEngine(fft_op_t fftop) 
-//   fftop_(fftop),
-//   fftN_(128),
-//   winsize_(1000000000),
-//   overlap_(4)
+FFTEngine::FFTEngine(fft_op_t fftop)  : 
+  fftop_(fftop),
+  fftN_(128),
+  winsize_(1000000000),
+  overlap_(4)
 {
 
 
@@ -66,13 +66,14 @@ void FFTEngine::appendData(pWaveBuffer_t pwb) {
 
   bufferlist_t bufferlist = get_buffers_that_depend_on_times(start, end,
 							     winsize_, overlap_); 
-  
   BOOST_FOREACH(bufferid_t bid, bufferlist) {
     // 2. see if any of them are done. 
     bool present = check_all_data_present(bid); 
-    
     // 3. if so, add them to the "can now FFT" list. 
     if (present) {
+//       std::cout << "all data present for buffer " << bid 
+// 		<< " inserting into pending"  << std::endl; 
+
       pending_.insert(bid); 
     }
   }
@@ -89,7 +90,6 @@ void FFTEngine::process(int MAXCNT )
 
   int cnt = 0; 
   while (cnt < MAXCNT) {
-
     if (!workqueue_.empty()) {
       bufferid_t bid = *workqueue_.begin(); 
       std::pair<timeid_t, timeid_t> times = get_bin_bounds(bid, winsize_, overlap_); 
@@ -99,7 +99,7 @@ void FFTEngine::process(int MAXCNT )
       std::vector<float> data = get_buffer_data(bid, &fs); 
       size_t datasize = data.size(); 
       
-
+//       std::cout << "performing fft on bid=" << bid << std::endl; 
       pFFT_t Y = fftop_(&data[0], datasize, fftN_, fs); 
       Y->starttime = times.first; 
       Y->endtime = times.second; 
@@ -109,17 +109,19 @@ void FFTEngine::process(int MAXCNT )
       pending_.erase(bid); 
       workqueue_.erase(bid);
     } else { 
+
       if (!pending_.empty()) {
-	// nothing in the work queue, so just pick some value and do it
-	bufferid_t bid = *workqueue_.begin(); 
+// 	std::cout << "process: pending not empty, size=" << pending_.size() 
+// 		  << std::endl;
+
+	bufferid_t bid = *pending_.begin(); 
 	std::pair<timeid_t, timeid_t> times = get_bin_bounds(bid, winsize_, overlap_); 
 
 	float fs; 
 	
 	std::vector<float> data = get_buffer_data(bid, &fs); 
 	size_t datasize = data.size(); 
-	
-	
+
 	pFFT_t Y = fftop_(&data[0], datasize, fftN_, fs); 
 	Y->starttime = times.first; 
 	Y->endtime = times.second; 
@@ -127,6 +129,7 @@ void FFTEngine::process(int MAXCNT )
 	cache_.insert(std::make_pair(bid, Y)); 
 	
 	workqueue_.erase(bid);
+	pending_.erase(bid);
       }
     }
     cnt++; 
@@ -229,7 +232,7 @@ std::vector<float> FFTEngine::get_buffer_data(bufferid_t x, float * fs ) {
 
      
   */ 
-  
+
   // safety
   if (datacache_.empty()) {
     return std::vector<float>(); 
@@ -254,7 +257,7 @@ std::vector<float> FFTEngine::get_buffer_data(bufferid_t x, float * fs ) {
   output.reserve(winsize_ / period_ns + 5); // preallocate the data
 
   bool pushing_data = false; 
-  
+
   timeid_t tpos = i->first; 
   while((i != datacache_.end()) and (i->first <= end)) {
     for (int j = 0; j < i->second->data.size(); j++) { 
@@ -263,6 +266,7 @@ std::vector<float> FFTEngine::get_buffer_data(bufferid_t x, float * fs ) {
       }
       tpos += period_ns; 
     }
+    i++; 
   }
 
   return output; 
@@ -287,7 +291,7 @@ bool FFTEngine::check_all_data_present(bufferid_t x ) {
     i--;
   }
   
-  
+  timeid_t lasttime; 
   // the real solution here is to make sure there aren't any big gaps? 
   while((i != datacache_.end()) and (i->first <= end)) {
     timeid_t tpos = i->first; 
@@ -296,17 +300,23 @@ bool FFTEngine::check_all_data_present(bufferid_t x ) {
     timeid_t period_ns = int(period * elements::TIMEID_PER_SECF); 
     double len = period * i->second->data.size(); 
     timeid_t duration = int(len * elements::TIMEID_PER_SECF); 
+    lasttime = tpos + duration; 
 
     i++; 
     if ((i != datacache_.end()) and (i->first <= end)) {
-      timeid_t gap = (tpos + duration) - i->first; 
+      timeid_t gap =   i->first - (tpos + duration);
+
       if (gap > period_ns * 2) { 
 	return false; 
       }
     }
   }
+  if (lasttime >= end) { 
+    return true;   
+  } else { 
+    return false; 
+  }
 
-  return true;   
 }
 
 void FFTEngine::reload_pending_from_datacache()

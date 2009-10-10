@@ -14,7 +14,7 @@
 #include "queueview.h"
 #include "properties.h"
 #include "vis/spectvis/data.h"
-
+#include <vis/spectvis/fftengine.h> 
 // typedef std::map<streamtime_t, int> timeindex_t; 
 
 // typedef boost::numeric::interval_lib::rounded_arith_exact< int > rounding_policy;
@@ -28,11 +28,12 @@
 //   GLuint textureName;
 // }; 
 
+namespace spectvis { 
 
 class SpectVisRenderer
 {
  public: 
-  SpectVisRenderer(pDb_t spectblockdb) ; 
+  SpectVisRenderer(FFTEngine & eng); 
 
   ~SpectVisRenderer(); 
 
@@ -44,11 +45,13 @@ class SpectVisRenderer
  protected: 
 
   //float pixheight_; 
-
+  
 
 //   std::vector<SpectBlockTextureCacheItem_t> texCache_; 
-  pDb_t spectblockdb_; 
+  FFTEngine fftengine_; 
 
 };
 
-#endif // WAVE_H
+}
+
+#endif 

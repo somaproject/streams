@@ -18,6 +18,7 @@ public:
   std::vector<float> data; 
   
   size_t N; 
+  float maxfreq; // final frequency bin 
   
 }; 
 

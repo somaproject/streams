@@ -104,6 +104,8 @@ add_executable(noisewave2_test
 
   target_link_libraries(valgrind
     ${Boost_LIBRARIES} 
+    streams_core
+    elements
 
     )
   

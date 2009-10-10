@@ -2,9 +2,10 @@
 #include "spectvisrenderer.h"
 #include <assert.h>
 
+namespace spectvis { 
 
-SpectVisRenderer::SpectVisRenderer(pDb_t spectblockdb) : 
-  spectblockdb_(spectblockdb)
+SpectVisRenderer::SpectVisRenderer(FFTEngine & eng) : 
+  fftengine_(eng)
 {
   // initialize data from stream source buffer
   /* 
@@ -219,58 +220,58 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
 //   glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
 //   glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
 
-  Dbc *cursorp;
-  spectblockdb_->cursor(NULL, &cursorp, 0); 
-  double searchval = t1; 
-  Dbt search_key(&searchval, sizeof(searchval)); 
-  Dbt found_data; 
+//   Dbc *cursorp;
+//   spectblockdb_->cursor(NULL, &cursorp, 0); 
+//   double searchval = t1; 
+//   Dbt search_key(&searchval, sizeof(searchval)); 
+//   Dbt found_data; 
 
-  int ret = cursorp->get(&search_key, &found_data, DB_SET_RANGE);
-  if (ret == DB_NOTFOUND) { 
-    ret = cursorp->get(&search_key, &found_data, DB_LAST);
+//   int ret = cursorp->get(&search_key, &found_data, DB_SET_RANGE);
+//   if (ret == DB_NOTFOUND) { 
+//     ret = cursorp->get(&search_key, &found_data, DB_LAST);
     
-  } else { 
-    ret = cursorp->get(&search_key, &found_data, DB_PREV);
-    if (ret == DB_NOTFOUND ) { // already first record
-      ret = cursorp->get(&search_key, &found_data, DB_FIRST);
-    }
-  }
+//   } else { 
+//     ret = cursorp->get(&search_key, &found_data, DB_PREV);
+//     if (ret == DB_NOTFOUND ) { // already first record
+//       ret = cursorp->get(&search_key, &found_data, DB_FIRST);
+//     }
+//   }
 
-  // scratch bufer
-//   char * buffer = malloc(SpectRenderBlock::maxbytes()); 
+//   // scratch bufer
+// //   char * buffer = malloc(SpectRenderBlock::maxbytes()); 
 
-  while ((ret != DB_NOTFOUND) and *((double *)(search_key.get_data())) < t2) {
+//   while ((ret != DB_NOTFOUND) and *((double *)(search_key.get_data())) < t2) {
     
-    SpectRenderBlock srb(0, 0); 
-    SpectRenderBlock::unmarshall_from_buffer(&srb, found_data.get_data()); 
+//     SpectRenderBlock srb(0, 0); 
+//     SpectRenderBlock::unmarshall_from_buffer(&srb, found_data.get_data()); 
 
-//     GLPointBuffer_t * bufptr; 
-//     bufptr = (GLPointBuffer_t * )found_data.get_data(); 
-//     renderGLPointBuffer(*((double*)search_key.get_data()) - t1, 
-// 			bufptr); 
+// //     GLPointBuffer_t * bufptr; 
+// //     bufptr = (GLPointBuffer_t * )found_data.get_data(); 
+// //     renderGLPointBuffer(*((double*)search_key.get_data()) - t1, 
+// // 			bufptr); 
 
 
-//     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texCache_[i].textureName); 
-    float starttime = srb.starttime; 
-    float endtime = srb.endtime; 
-    glBegin(GL_LINE_LOOP);
-//     glTexCoord2i(0, 0 );
-    glVertex2f(starttime - t1, -100.0); 
+// //     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texCache_[i].textureName); 
+//     float starttime = srb.starttime; 
+//     float endtime = srb.endtime; 
+//     glBegin(GL_LINE_LOOP);
+// //     glTexCoord2i(0, 0 );
+//     glVertex2f(starttime - t1, -100.0); 
     
-//     glTexCoord2i((*pSpectBlocks_)[i].width, 0);
-    glVertex2f(endtime - t1, -100.0); 
+// //     glTexCoord2i((*pSpectBlocks_)[i].width, 0);
+//     glVertex2f(endtime - t1, -100.0); 
     
-//     glTexCoord2i((*pSpectBlocks_)[i].width, (*pSpectBlocks_)[i].height); 
-    glVertex2f(endtime -t1, 100.0); 
+// //     glTexCoord2i((*pSpectBlocks_)[i].width, (*pSpectBlocks_)[i].height); 
+//     glVertex2f(endtime -t1, 100.0); 
     
-//     glTexCoord2i(0, (*pSpectBlocks_)[i].height); 
-    glVertex2f(starttime -t1, 100.0); 
-    glEnd(); 
+// //     glTexCoord2i(0, (*pSpectBlocks_)[i].height); 
+//     glVertex2f(starttime -t1, 100.0); 
+//     glEnd(); 
 
-    ret = cursorp->get(&search_key, &found_data, DB_NEXT);
-  }
-  cursorp->close(); 
-  //  free(buffer); 
+//     ret = cursorp->get(&search_key, &found_data, DB_NEXT);
+//   }
+//   cursorp->close(); 
+//   //  free(buffer); 
 
 
 
@@ -411,3 +412,5 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
 
 
 // }
+}
+

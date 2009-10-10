@@ -9,7 +9,7 @@
 #include "data/wave.h"
 #include "spectvisrenderer.h"
 #include <elements/property.h>
-
+#include "fftengine.h" 
 
 
 class SpectVis; 
@@ -68,7 +68,7 @@ class SpectVis : public VisBase
  private:
   elements::SinkPad<WaveBuffer_t>::pSinkPad_t pSinkPad_; 
 
-  SpectVisRenderer * streamRenderer_; 
+  spectvis::SpectVisRenderer * streamRenderer_; 
 
   int pixelHeight_; 
 //   float yoffset_; 
@@ -96,6 +96,8 @@ class SpectVis : public VisBase
   void newData(); 
 
   void reset(); 
+
+  spectvis::FFTEngine fftengine_; 
 
 };
 

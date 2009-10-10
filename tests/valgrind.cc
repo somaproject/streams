@@ -1,28 +1,30 @@
 #include <iostream>
 #include <cassert>
-#include "timedb.h"
+#include <vis/spectvis/fftengine.h>
+//#include <somanetwork/logging.h>
 
-using namespace datastore; 
+using namespace spectvis; 
+
+
+pFFT_t identity(float * data, int data_size, int N, float fs)
+{
+  /* 
+     Identity operation that just copies the data
+     
+  */ 
+  pFFT_t y(new FFT); 
+  y->data.reserve(data_size); 
+  for (int i = 0; i < data_size; i++) { 
+    y->data.push_back(data[i]); 
+  }
+  return y; 
+}
+
 
 int main()
 {
+  //  somanetwork::init_logs(boost::logging::level::fatal); 
 
-
-  TimeSeriesDataBase<std::string> db; 
-   db.newSequence(10, "A"); 
-  db.append(20, "B"); 
-  db.append(30, "C"); 
-
-  db.newSequence(70, "G"); 
-  db.append(80, "H"); 
-  db.append(90, "I"); 
-
-  db.newSequence(20, "B"); 
-  db.append(30, "C"); 
-  db.append(40, "D"); 
-  db.append(50, "E"); 
-  db.append(60, "F"); 
-  db.append(70, "G"); 
-  db.append(80, "H"); 
+  FFTEngine fft(identity); 
 
 }
