@@ -7,10 +7,12 @@
 #include <vis/spectvis/spectvis.h>
 #include <vis/spectvis/data.h>
 #include <vis/spectvis/helper.h>
+#include <vis/spectvis/fftengine.h>
 
-BOOST_AUTO_TEST_SUITE(spectvis); 
+BOOST_AUTO_TEST_SUITE(spectvistest); 
 using namespace boost::assign;
 
+using namespace spectvis; 
 BOOST_AUTO_TEST_CASE(helper_get_bin_bounds)
 {
   typedef std::pair<timeid_t, timeid_t> range_t; 
@@ -53,6 +55,7 @@ bool list_equal(bufferlist_t a, bufferlist_t b) {
     }
   }
 }
+
 BOOST_AUTO_TEST_CASE(helper_buf_range) {
   
   // first simple cases
@@ -99,8 +102,36 @@ BOOST_AUTO_TEST_CASE(helper_range_query)
 
   BOOST_CHECK_EQUAL(rq.query(30, 40).size(), 0); 
 
-  
+}
 
+pFFT_t identity(float * data, int data_size, int N, float fs)
+{
+  /* 
+     Identity operation that just copies the data
+     
+  */ 
+  pFFT_t y(new FFT); 
+  y->data.reserve(data_size); 
+  for (int i = 0; i < data_size; i++) { 
+    y->data.push_back(data[i]); 
+  }
+  return y; 
+}
+
+
+BOOST_AUTO_TEST_CASE(fft_engine_1)
+{
+  typedef std::list<pFFT_t> fftlist_t; 
+  FFTEngine fft(identity); 
+//   fft.set_fftN(128); 
+//   fft.set_windowsize(10000); 
+//   fft.set_overlapFactor(1); 
+
+//   // Now, the null test
+//   fftlist_t fl = fft.getFFT(0, 10000); 
+//   BOOST_CHECK_EQUAL(fl.size(), 0); 
+
+  
 }
 
 

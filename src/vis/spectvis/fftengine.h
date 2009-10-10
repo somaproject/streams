@@ -95,6 +95,8 @@ private:
 
   bool check_all_data_present(bufferid_t ); 
 
+  std::vector<float> get_buffer_data(bufferid_t id, float * fs); 
+  
 };
 
 }

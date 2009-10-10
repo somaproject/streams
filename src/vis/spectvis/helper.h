@@ -8,9 +8,6 @@
 
 namespace spectvis {
   
-typedef elements::timeid_t timeid_t; 
-
-
 typedef std::list<bufferid_t> bufferlist_t; 
 
 std::list<int64_t> bin_range(timeid_t t1, timeid_t t2, timeid_t binsize); 

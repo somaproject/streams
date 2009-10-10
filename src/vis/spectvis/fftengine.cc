@@ -5,13 +5,18 @@
 
 namespace spectvis {
 
-FFTEngine::FFTEngine(fft_op_t fftop) :
-  fftop_(fftop),
-  fftN_(128),
-  winsize_(1000000000),
-  overlap_(4)
+FFTEngine::FFTEngine(fft_op_t fftop) 
+//   fftop_(fftop),
+//   fftN_(128),
+//   winsize_(1000000000),
+//   overlap_(4)
 {
 
+
+}
+
+FFTEngine::~FFTEngine()
+{
 
 }
 
@@ -87,13 +92,18 @@ void FFTEngine::process(int MAXCNT )
 
     if (!workqueue_.empty()) {
       bufferid_t bid = *workqueue_.begin(); 
-      
-      float * data; 
+      std::pair<timeid_t, timeid_t> times = get_bin_bounds(bid, winsize_, overlap_); 
 
-      size_t datasize; 
-      
       float fs; 
-      pFFT_t Y = fftop_(data, datasize, fftN_, fs); 
+      
+      std::vector<float> data = get_buffer_data(bid, &fs); 
+      size_t datasize = data.size(); 
+      
+
+      pFFT_t Y = fftop_(&data[0], datasize, fftN_, fs); 
+      Y->starttime = times.first; 
+      Y->endtime = times.second; 
+
       cache_.insert(std::make_pair(bid, Y)); 
       
       pending_.erase(bid); 
@@ -102,13 +112,18 @@ void FFTEngine::process(int MAXCNT )
       if (!pending_.empty()) {
 	// nothing in the work queue, so just pick some value and do it
 	bufferid_t bid = *workqueue_.begin(); 
-	
-	float * data; 
-	
-	size_t datasize; 
-	
+	std::pair<timeid_t, timeid_t> times = get_bin_bounds(bid, winsize_, overlap_); 
+
 	float fs; 
-	pFFT_t Y = fftop_(data, datasize, fftN_, fs); 
+	
+	std::vector<float> data = get_buffer_data(bid, &fs); 
+	size_t datasize = data.size(); 
+	
+	
+	pFFT_t Y = fftop_(&data[0], datasize, fftN_, fs); 
+	Y->starttime = times.first; 
+	Y->endtime = times.second; 
+	
 	cache_.insert(std::make_pair(bid, Y)); 
 	
 	workqueue_.erase(bid);
@@ -205,8 +220,97 @@ std::list<pFFT_t> FFTEngine::getFFT(timeid_t start, timeid_t end) {
 }
 
 
-bool FFTEngine::check_all_data_present(bufferid_t x ) {
+std::vector<float> FFTEngine::get_buffer_data(bufferid_t x, float * fs ) {
+  /* 
+     Get contiguous vector of buffer data. 
 
+     Right now we assume that the sample rate is continuous, and
+     so at the interface we just end up double-sampling the data. Oh well. 
+
+     
+  */ 
+  
+  // safety
+  if (datacache_.empty()) {
+    return std::vector<float>(); 
+  }
+  
+  std::pair<timeid_t, timeid_t> times = get_bin_bounds(x, winsize_, overlap_); 
+  
+  timeid_t start = times.first; 
+  timeid_t end = times.second; 
+  
+  datacache_t::iterator i = datacache_.lower_bound(start); 
+  
+  if (i != datacache_.begin()) {
+    i--;
+  
+  }
+  *fs =  i->second->samprate; 
+  double period = 1.0 / i->second->samprate; 
+  timeid_t period_ns = int(period * elements::TIMEID_PER_SECF); 
+
+  std::vector<float> output; 
+  output.reserve(winsize_ / period_ns + 5); // preallocate the data
+
+  bool pushing_data = false; 
+  
+  timeid_t tpos = i->first; 
+  while((i != datacache_.end()) and (i->first <= end)) {
+    for (int j = 0; j < i->second->data.size(); j++) { 
+      if (tpos >= start and tpos <= end) { 
+	output.push_back(i->second->data[j]); 
+      }
+      tpos += period_ns; 
+    }
+  }
+
+  return output; 
+}
+
+
+bool FFTEngine::check_all_data_present(bufferid_t x ) {
+  /* 
+     A heuristic to make sure we have data covering x. 
+     
+     
+  */ 
+  
+  std::pair<timeid_t, timeid_t> times = get_bin_bounds(x, winsize_, overlap_); 
+  
+  timeid_t start = times.first; 
+  timeid_t end = times.second; 
+  
+  datacache_t::iterator i = datacache_.lower_bound(start); 
+
+  if (i != datacache_.begin()) {
+    i--;
+  }
+  
+  
+  // the real solution here is to make sure there aren't any big gaps? 
+  while((i != datacache_.end()) and (i->first <= end)) {
+    timeid_t tpos = i->first; 
+
+    double period = 1.0 / i->second->samprate; 
+    timeid_t period_ns = int(period * elements::TIMEID_PER_SECF); 
+    double len = period * i->second->data.size(); 
+    timeid_t duration = int(len * elements::TIMEID_PER_SECF); 
+
+    i++; 
+    if ((i != datacache_.end()) and (i->first <= end)) {
+      timeid_t gap = (tpos + duration) - i->first; 
+      if (gap > period_ns * 2) { 
+	return false; 
+      }
+    }
+  }
+
+  return true;   
+}
+
+void FFTEngine::reload_pending_from_datacache()
+{
 
 }
 
