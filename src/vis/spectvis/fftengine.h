@@ -78,7 +78,11 @@ public:
     return newfft_signal_; 
   }
 
+  void recompute() ; 
+
+
 private:
+
   fft_op_t fftop_;  
   int fftN_; 
   timeid_t winsize_; 
@@ -106,6 +110,8 @@ private:
   size_t gen_fft_id(); 
   newfft_signal_t newfft_signal_; 
   
+
+
 };
 
 }

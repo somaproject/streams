@@ -90,9 +90,40 @@ void SpectVis::setScale(float)
 void SpectVis::process(elements::timeid_t id)
 {
   
+  // --------------------------------------------------------------
+  // GUI properties
+  // --------------------------------------------------------------
   if(scale.pendingRequest()) {
 //     std::cout << "WaveVis2::process pending request scale" << std::endl;
     scale.set_value(scale.get_req_value()); 
+  }
+
+  // --------------------------------------------------------------
+  // properties that cause a recomputation
+  // --------------------------------------------------------------
+  bool recompute  = false; 
+  if(fftN.pendingRequest()) { 
+    fftN.set_value(fftN.get_req_value()); 
+    fftengine_.set_fftN(fftN); 
+    recompute = true; 
+  }
+  
+  if(windowsize.pendingRequest()) { 
+    windowsize.set_value(windowsize.get_req_value()); 
+    fftengine_.set_windowsize(windowsize*1e9) ; 
+    std::cout << "setting windowsize to " << windowsize << std::endl; 
+    recompute = true; 
+  }
+
+  if(overlapFactor.pendingRequest()) { 
+    overlapFactor.set_value(overlapFactor.get_req_value()); 
+    fftengine_.set_overlapFactor(overlapFactor); 
+    recompute = true; 
+  }
+  
+  if (recompute) { 
+    fftengine_.recompute(); 
+    dscache_.reset(); 
   }
 
   int MAXCNT = 10; 
@@ -155,6 +186,14 @@ void SpectVis::reset()
   std::cout << "reset done " << std::endl; 
   fftengine_.reset(); 
   dscache_.reset(); 
+
+}
+
+void SpectVis::recompute()
+{
+
+  dscache_.reset();   
+  fftengine_.recompute() ; 
 
 }
 

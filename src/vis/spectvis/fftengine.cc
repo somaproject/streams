@@ -337,4 +337,38 @@ size_t FFTEngine::gen_fft_id()
   return uid_++; 
 }
 
+
+void FFTEngine::recompute() 
+{
+  /* When a global setting changes, we need to recompute all of
+     the existing values; 
+
+
+     
+  */ 
+  std::cout << "FFTEngine::recompute() " << std::endl; 
+  cache_.clear(); 
+  pending_.clear();
+  workqueue_.clear(); 
+  
+  if (datacache_.empty() == false) { 
+    timeid_t first_time = datacache_.begin()->first; 
+    datacache_t::iterator iter = datacache_.end(); 
+    iter--; 
+    timeid_t last_time = iter->first; // FIXME should also incorporate wb length
+    
+    
+    bufferlist_t bl = get_buffers_that_depend_on_times(first_time, last_time, 
+						       winsize_, overlap_); 
+    std::cout << "bufferlist = " << bl.size() << std::endl;
+    // for each buffer, if we can compute , do it
+    BOOST_FOREACH(bufferid_t id, bl) {
+      if (check_all_data_present(id)) {
+	pending_.insert(id); 
+      }
+    }
+    
+  }
+}
+
 }

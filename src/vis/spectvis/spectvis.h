@@ -62,7 +62,7 @@ class SpectVis : public VisBase
     
   elements::Property<int> fftN; 
   elements::Property<float> windowsize; 
-  elements::Property<float> overlapFactor; 
+  elements::Property<int> overlapFactor; 
   
   void process(elements::timeid_t tid); 
 
@@ -96,7 +96,7 @@ class SpectVis : public VisBase
   void newData(); 
 
   void reset(); 
-
+  void recompute();
   spectvis::FFTEngine fftengine_; 
 
   spectvis::DownsampleCache dscache_; 

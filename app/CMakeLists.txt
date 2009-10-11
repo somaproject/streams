@@ -38,6 +38,7 @@ add_library(app_widgets
 set(app_props_SRCS
   noisewaveproperty.cc
   wavevisproperty.cc
+  spectvisproperty.cc
   #netdatawaveproperty.cc
   #netdatarawproperty.cc
 )
