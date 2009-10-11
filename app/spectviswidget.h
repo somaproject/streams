@@ -19,7 +19,7 @@ private:
   
   void on_size_allocate(Gtk::Allocation & r); 
   void scaleUpdate(float scale); 
-  core::IElement * getElement() { 
+  elements::IElement * getElement() { 
     return spectvis_; 
   }
   

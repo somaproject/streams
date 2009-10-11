@@ -22,7 +22,7 @@ add_library(vis
 target_link_libraries(vis
 #  vis_wave
   vis_wave2
-    vis_spect
+  vis_spect
   ${Boost_LIBRARIES} 
   ${GUIDEPS_LIBRARIES}
   ${SOMADEPS_LIBRARIES}

@@ -11,8 +11,10 @@
 #include <map>
 
 #include "data/wave.h"
-#include "queueview.h"
 #include "properties.h"
+#include "spectdownsample.h"
+#include "lrucache.h"
+
 #include "vis/spectvis/data.h"
 #include <vis/spectvis/fftengine.h> 
 // typedef std::map<streamtime_t, int> timeindex_t; 
@@ -33,7 +35,7 @@ namespace spectvis {
 class SpectVisRenderer
 {
  public: 
-  SpectVisRenderer(FFTEngine & eng); 
+  SpectVisRenderer(FFTEngine & eng, DownsampleCache & ds); 
 
   ~SpectVisRenderer(); 
 
@@ -46,10 +48,18 @@ class SpectVisRenderer
 
   //float pixheight_; 
   
+  typedef LRUCache<size_t, GLuint> texturecache_t; 
 
+  texturecache_t texturecache_; 
 //   std::vector<SpectBlockTextureCacheItem_t> texCache_; 
-  FFTEngine fftengine_; 
+  FFTEngine & fftengine_; 
+  DownsampleCache & dscache_; 
+  void render_high_res_stream(timeid_t t1, timeid_t t2, int pix); 
+  void render_low_res_stream(timeid_t t1, timeid_t t2, int pix); 
 
+  texturecache_t dstexturecache_; 
+
+  
 };
 
 }

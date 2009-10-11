@@ -10,7 +10,8 @@
 #include "spectvisrenderer.h"
 #include <elements/property.h>
 #include "fftengine.h" 
-
+#include "spectdownsample.h"
+#include "types.h"
 
 class SpectVis; 
 
@@ -85,7 +86,6 @@ class SpectVis : public VisBase
   
   pDb_t spectblockdb_; 
   
-  std::map<timeid_t, WaveBuffer_t> waveBufferCache_; 
 
   typedef boost::shared_lock<boost::shared_mutex> shared_lock_t; 
   typedef boost::upgrade_lock<boost::shared_mutex> upgrade_lock_t; 
@@ -98,6 +98,9 @@ class SpectVis : public VisBase
   void reset(); 
 
   spectvis::FFTEngine fftengine_; 
+
+  spectvis::DownsampleCache dscache_; 
+  void on_new_fft(spectvis::pFFT_t fft); 
 
 };
 

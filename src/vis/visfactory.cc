@@ -2,7 +2,7 @@
 
 // #include "sinevis.h"
 // #include "wavevis/wavevis.h"
-// #include "spectvis/spectvis.h"
+#include "spectvis/spectvis.h"
 #include "wavevis2/wavevis2.h"
 
 pIVis_t VisFactory::create(std::string typname, bf::path scratchdir) {
@@ -17,14 +17,12 @@ pIVis_t VisFactory::create(std::string typname, bf::path scratchdir) {
 //     pWaveVis_t wv(new WaveVis(defaultname, scratchdir)); 
 //     return wv; 
 
-//   } else if (typname == SpectVis::TYPENAME) {
-//     pSpectVis_t sv(new SpectVis(defaultname, scratchdir)); 
-//     return sv; 
-
-  if (typname == WaveVis2::TYPENAME) {
+  if (typname == SpectVis::TYPENAME) {
+    pSpectVis_t sv(new SpectVis(defaultname, scratchdir)); 
+    return sv; 
+  }  else if (typname == WaveVis2::TYPENAME) {
     pWaveVis2_t wv(new WaveVis2(defaultname, scratchdir)); 
     return wv; 
-
   } else {
     throw std::runtime_error("Unknown vis type " + typname); 
   }

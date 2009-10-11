@@ -8,8 +8,9 @@ namespace spectvis {
 FFTEngine::FFTEngine(fft_op_t fftop)  : 
   fftop_(fftop),
   fftN_(128),
-  winsize_(1000000000),
-  overlap_(4)
+  winsize_(100000000),
+  overlap_(1),
+  uid_(0)
 {
 
 
@@ -71,8 +72,6 @@ void FFTEngine::appendData(pWaveBuffer_t pwb) {
     bool present = check_all_data_present(bid); 
     // 3. if so, add them to the "can now FFT" list. 
     if (present) {
-//       std::cout << "all data present for buffer " << bid 
-// 		<< " inserting into pending"  << std::endl; 
 
       pending_.insert(bid); 
     }
@@ -99,13 +98,16 @@ void FFTEngine::process(int MAXCNT )
       std::vector<float> data = get_buffer_data(bid, &fs); 
       size_t datasize = data.size(); 
       
-//       std::cout << "performing fft on bid=" << bid << std::endl; 
       pFFT_t Y = fftop_(&data[0], datasize, fftN_, fs); 
+      Y->uid = gen_fft_id(); 
+
       Y->starttime = times.first; 
       Y->endtime = times.second; 
-
-      cache_.insert(std::make_pair(bid, Y)); 
+      Y->bufferid = bid; 
+      Y->overlap = overlap_; 
       
+      cache_.insert(std::make_pair(bid, Y)); 
+      newfft_signal_.emit(Y); 
       pending_.erase(bid); 
       workqueue_.erase(bid);
     } else { 
@@ -123,8 +125,13 @@ void FFTEngine::process(int MAXCNT )
 	size_t datasize = data.size(); 
 
 	pFFT_t Y = fftop_(&data[0], datasize, fftN_, fs); 
+	Y->uid = gen_fft_id(); 
+	Y->overlap = overlap_; 
+	Y->bufferid = bid; 
 	Y->starttime = times.first; 
 	Y->endtime = times.second; 
+
+	newfft_signal_.emit(Y); 
 	
 	cache_.insert(std::make_pair(bid, Y)); 
 	
@@ -199,6 +206,7 @@ std::list<pFFT_t> FFTEngine::getFFT(timeid_t start, timeid_t end) {
   std::list<pFFT_t> results; 
   
   BOOST_FOREACH(bufferid_t bid, bufferlist) {
+
     // 2. if FFT has been computed, append to list
     fftcache_t::iterator ffti = cache_.find(bid); 
     
@@ -322,6 +330,11 @@ bool FFTEngine::check_all_data_present(bufferid_t x ) {
 void FFTEngine::reload_pending_from_datacache()
 {
 
+}
+
+size_t FFTEngine::gen_fft_id()
+{
+  return uid_++; 
 }
 
 }

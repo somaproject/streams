@@ -1,6 +1,8 @@
 #ifndef __SPECTVIS_FFTENGINE_H__
 #define __SPECTVIS_FFTENGINE_H__
 
+#include <sigc++/sigc++.h>
+
 #include <boost/tuple/tuple.hpp>
 #include <boost/function.hpp>
 #include <data/wave.h>
@@ -70,14 +72,18 @@ public:
   std::list<pFFT_t> getFFT(timeid_t start, timeid_t end); 
   /* Return the FFTs in this window -- we might need
      a better interface to this at some point */ 
-  
+  typedef sigc::signal<void, pFFT_t>  newfft_signal_t; 
+
+  inline newfft_signal_t & newfft_signal() {
+    return newfft_signal_; 
+  }
 
 private:
   fft_op_t fftop_;  
   int fftN_; 
   timeid_t winsize_; 
   int overlap_; 
-
+  size_t uid_;
 
   typedef std::map<timeid_t, pWaveBuffer_t> datacache_t; 
   datacache_t datacache_; 
@@ -96,6 +102,9 @@ private:
   bool check_all_data_present(bufferid_t ); 
 
   std::vector<float> get_buffer_data(bufferid_t id, float * fs); 
+  
+  size_t gen_fft_id(); 
+  newfft_signal_t newfft_signal_; 
   
 };
 

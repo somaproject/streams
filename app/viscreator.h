@@ -14,8 +14,8 @@ public:
   void visit(VisBase * ); 
 //   void visit(SineVis * ); 
   void visit(WaveVis2 * ); 
-//   void visit(SpectVis * ); 
-
+  void visit(SpectVis * ); 
+  
 
 private:
   PipelineGUI & pipelineGUI_; 

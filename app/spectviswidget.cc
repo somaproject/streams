@@ -10,8 +10,8 @@ SpectVisWidget::SpectVisWidget(SpectVis * nw, pSomaConfig_t sc) :
   label_.set_text("Scale"); 
   show_all(); 
 
-  spectvis_->scale.signal().connect(sigc::mem_fun(*this, 
-						 &SpectVisWidget::scaleUpdate)); 
+//   spectvis_->scale.signal().connect(sigc::mem_fun(*this, 
+// 						 &SpectVisWidget::scaleUpdate)); 
   scaleUpdate(0.0);
 
   set_tooltip_text("Click me!");

@@ -90,25 +90,28 @@ add_executable(noisewave2_test
   noisewave2_test.cc
   runner.cc)
 
+add_executable(lrucache_test
+  lrucache.cc
+  runner.cc
+  )
 
 
-  target_link_libraries(runtest
-    streams_core
-    ${Boost_LIBRARIES} 
-    ${GUIDEPS_LIBRARIES}
-    ${SOMADEPS_LIBRARIES}
-    ${BDB_LIBRARIES}
-    json_spirit
-    )
+target_link_libraries(runtest
+  streams_core
+  ${Boost_LIBRARIES} 
+  ${GUIDEPS_LIBRARIES}
+  ${SOMADEPS_LIBRARIES}
+  ${BDB_LIBRARIES}
+  json_spirit
+  )
+
+
+target_link_libraries(valgrind
+  ${Boost_LIBRARIES} 
+  streams_core
+  elements
   
-
-  target_link_libraries(valgrind
-    ${Boost_LIBRARIES} 
-    streams_core
-    elements
-
-    )
-  
+  )
 
 
 
@@ -131,6 +134,7 @@ set(testlist
   sourcesink2_test
   property_test
   noisewave2_test
+  lrucache_test
 )
 
 

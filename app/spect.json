@@ -2,9 +2,22 @@
 { "name" : "pipeline01",
     "elements" : { 
           "first" : {"type" : "source",
-                       "class" : "NoiseWave"}, 
+                       "class" : "NoiseWave2"}, 
           "second" : {"type" : "vis",
-                      "class" : "SpectVis"}}, 
+                      "class" : "SpectVis"}, 
+          "third" : {"type" : "vis",
+                      "class" : "WaveVis2"}
+		      }, 
+    "connections" : [["first", "default", "second", "default"], 
+    ["first", "default", "third", "default"]
+    ]
+},
+{ "name" : "pipeline02",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NoiseWave2"}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
     "connections" : [["first", "default", "second", "default"]]
 }
 ]

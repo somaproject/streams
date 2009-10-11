@@ -17,6 +17,7 @@ public:
   virtual void visit(VisBase * ){}; 
   //virtual void visit(Vis2 * ){}; 
   virtual void visit(WaveVis2 * ){}; 
+  virtual void visit(SpectVis * ){}; 
   
 
   

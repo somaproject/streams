@@ -16,6 +16,8 @@ pFFT_t identity(float * data, int data_size, int N, float fs)
   for (int i = 0; i < data_size; i++) { 
     y->data.push_back(data[i]); 
   }
+  y->N = y->data.size(); 
+  y->maxfreq = fs/2; 
   return y; 
 }
 
@@ -30,11 +32,13 @@ SpectVis::SpectVis(std::string name, bf::path scratch) :
   verticalScale_(1.0),
   scratchdir_(scratch / name),
   pixelHeight_(100),
-  fftengine_(identity)
+  fftengine_(identity),
+  dscache_(10, 1)
 {
-
-  streamRenderer_ = new spectvis::SpectVisRenderer(fftengine_); 
-
+  
+  std::cout << "Creating SpectVIs" << std::endl;
+  streamRenderer_ = new spectvis::SpectVisRenderer(fftengine_, dscache_); 
+  fftengine_.newfft_signal().connect(sigc::mem_fun(*this, &SpectVis::on_new_fft)); 
 }
 
 void SpectVis::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
@@ -212,21 +216,22 @@ void SpectVis::process(elements::timeid_t id)
 	break; 
       }
       boost::shared_ptr<elements::LinkElement<WaveBuffer_t> > le = pSinkPad_->dataqueue_.get(); 
-
+      
       if (le->state  
 	  == elements::LinkElement<WaveBuffer_t>::RESET) {
-
+	
 	reset(); 
       } else { 
 	
 	WaveBuffer_t wb = le->datum; 
 	fftengine_.appendData(wb); 
-
- 	cnt++; 
+	
       }
+      cnt++; 
+      
     }
   }
-
+  fftengine_.process(MAXCNT); 
   
 }
 
@@ -244,32 +249,8 @@ void SpectVis::reset()
 
 }
 
-// void SpectVis::newSample(const WaveBuffer_t & wb) 
-// {
-//   // 1. add buffer range to range list. 
+void SpectVis::on_new_fft(spectvis::pFFT_t fft)
+{
+  dscache_.addFFT(fft); 
 
-//   // 2. get the implicated buffers
-
-//   // for each buffer:
-//   //   is it complete? if so, mark it as done-able. 
-//   //   -- reasonable heuristic -- in general, arrival of a packet will complete a buffer
-//   // 
-
-// }
-
-// void SpectVis::computeFFTs()
-// {
-//   /* 
-//      Examine the list of FFT windows that we could deal with but haven't yet, and
-//      FFT them. 
-     
-//      // get the buffer
-//   */ 
-  
-  
-//   /* Stick the results in the FFT DB
-     
-
-//    */ 
-
-// }
+}

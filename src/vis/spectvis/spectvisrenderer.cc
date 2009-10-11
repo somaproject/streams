@@ -1,11 +1,14 @@
 #include <iostream> 
+#include <boost/foreach.hpp>
 #include "spectvisrenderer.h"
 #include <assert.h>
 
 namespace spectvis { 
 
-SpectVisRenderer::SpectVisRenderer(FFTEngine & eng) : 
-  fftengine_(eng)
+SpectVisRenderer::SpectVisRenderer(FFTEngine & eng, DownsampleCache  & dscache) : 
+  fftengine_(eng),
+  dscache_(dscache), 
+  scale(1.0)
 {
   // initialize data from stream source buffer
   /* 
@@ -95,8 +98,14 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
 //   mostRecentRenderT1_ = t1; 
 //   mostRecentRenderT2_ = t2; 
 
+  streamtime_t windowsize = t2 - t1; 
+  timeid_t windowsize_ns = timeid_t(windowsize * 1e9);
+
   streamtime_t scalea = pixels / (t2 -t1); 
   
+  timeid_t timeid_t1 = timeid_t(t1 * 1e9); 
+  timeid_t timeid_t2 = timeid_t(t2 * 1e9); 
+
 //   // draw the little range indicator
 //   setGLColor(0.8); 
 
@@ -114,243 +123,23 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
   glScalef(1.0, 1./scale, 1.0); 
   
 
-//   glEnable(GL_TEXTURE_RECTANGLE_ARB); 
-
-//   SpectBlockpVector_t::iterator  i1, i2;
-//   SpectBlock_t p1, p2; 
-
-//   p1.endtime = t1; 
-//   p1.starttime = t2; 
-
-//   i1 = lower_bound(pSpectBlocks_->begin(), pSpectBlocks_->end(), 
-//  		   p1, compareEndTime); 
-  
-//   i2 = lower_bound(pSpectBlocks_->begin(), pSpectBlocks_->end(), 
-//  		   p1, compareStartTime); 
-  
-//   int len = i2 - i1; 
-
-//   int starti = 0;
-//   int endi = pSpectBlocks_->size(); 
-
-//   // get the actual posiiton s
-//   int starti = i1 - pSpectBlocks_->begin(); 
-//   int endi = i2 - pSpectBlocks_->begin(); 
-//   if ( ! (endi < pSpectBlocks_->size())) {
-//     endi = pSpectBlocks_->size() - 1; 
-//   }
-
-//   interval_t newRenderInterval(starti, endi); 
-  
-//   std::cout << "Currently len = " << len << " and starti = " << starti
-// 	    << " and endi = " << endi << std::endl; 
-
-//   // DELETE THE OLD TEXTURES 
-//   if (!empty(lastRenderInterval_)) {
-//     // figure out what to delete 
-//     for (int i = lastRenderInterval_.lower(); i <= lastRenderInterval_.upper();
-// 	 i++) 
-//       {
-// 	assert(texCache_[i].hastexture); // sanity check; 
-// 	if (in(i, newRenderInterval)) { 
-// 	  // in the new interval, don't delete
-// 	} else {
-// 	  texCache_[i].hastexture = false; 
-// 	  GLuint texnames[1] = {0}; 
-// 	  texnames[0] = texCache_[i].textureName; 
-// 	  std::cout << "deleting texture for index i= " << i 
-// 		    << " name = " << texnames[0] << std::endl; 
-// 	  //glUnbind
-// 	  glDeleteTextures(1, texnames); 
-// 	}
-//       }
-//   }
-
-//   // now render the relevant textures
-
-//   if (!empty(newRenderInterval)) {
-//     for (int i = newRenderInterval.lower(); i <= newRenderInterval.upper();
-// 	 i++) 
-//       {
-	
-// 	if (! texCache_[i].hastexture) {
-// 	  GLuint texture; 
-// 	  glGenTextures(1, &texture); 
-// 	  texCache_[i].textureName = texture; 
-// 	  texCache_[i].hastexture = true; 
-	  
-// 	  glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture); 
-// 	  int width = (*pSpectBlocks_)[i].width; 
-// 	  int height = (*pSpectBlocks_)[i].height; 
-	  
-// 	  glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0 , GL_RGB, width, height, 
-// 		       0, GL_RGB, GL_UNSIGNED_BYTE, 
-// 		       &((*pSpectBlocks_)[i].data[0])); 
-	  
-// 	}
-//       }    
-//   }
-
-  
-
-//   lastRenderInterval_ = newRenderInterval; 
-  
-//   assert(len > 0); 
-  
-//   GLuint texture; 
-//   glEnable(GL_TEXTURE_RECTANGLE_ARB); 
-
-//   glGenTextures(1, &texture);
-  
-//   char data[128 * 128 * 4]; 
-//   for (int i = 0; i < 128; i++) {
-//     for (int j = 0; j < 128; j++) {
-//       data[i * (128 * 4) + j * 4 + 0 ] = j*10; 
-//       data[i * (128 * 4) + j * 4 + 1 ] = 0; 
-//       data[i * (128 * 4) + j * 4 + 2 ] = 0; 
-//       data[i * (128 * 4) + j * 4 + 3 ] = 255;
-//     }
-//   }
 
 
-//   glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture); 
+  glEnable(GL_TEXTURE_RECTANGLE_ARB); 
 
-//   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); 
-  
-//   glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
-//   glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
+  timeid_t threshold = 50 * elements::TIMEID_SEC;
+  if ((timeid_t2 - timeid_t1) < threshold) { 
+    // just render low threshold 
+    render_high_res_stream(timeid_t1, timeid_t2, pixels); 
+  } else {
+    render_low_res_stream(timeid_t1, timeid_t2, pixels); 
 
-//   Dbc *cursorp;
-//   spectblockdb_->cursor(NULL, &cursorp, 0); 
-//   double searchval = t1; 
-//   Dbt search_key(&searchval, sizeof(searchval)); 
-//   Dbt found_data; 
+  }
 
-//   int ret = cursorp->get(&search_key, &found_data, DB_SET_RANGE);
-//   if (ret == DB_NOTFOUND) { 
-//     ret = cursorp->get(&search_key, &found_data, DB_LAST);
-    
-//   } else { 
-//     ret = cursorp->get(&search_key, &found_data, DB_PREV);
-//     if (ret == DB_NOTFOUND ) { // already first record
-//       ret = cursorp->get(&search_key, &found_data, DB_FIRST);
-//     }
-//   }
-
-//   // scratch bufer
-// //   char * buffer = malloc(SpectRenderBlock::maxbytes()); 
-
-//   while ((ret != DB_NOTFOUND) and *((double *)(search_key.get_data())) < t2) {
-    
-//     SpectRenderBlock srb(0, 0); 
-//     SpectRenderBlock::unmarshall_from_buffer(&srb, found_data.get_data()); 
-
-// //     GLPointBuffer_t * bufptr; 
-// //     bufptr = (GLPointBuffer_t * )found_data.get_data(); 
-// //     renderGLPointBuffer(*((double*)search_key.get_data()) - t1, 
-// // 			bufptr); 
-
-
-// //     glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texCache_[i].textureName); 
-//     float starttime = srb.starttime; 
-//     float endtime = srb.endtime; 
-//     glBegin(GL_LINE_LOOP);
-// //     glTexCoord2i(0, 0 );
-//     glVertex2f(starttime - t1, -100.0); 
-    
-// //     glTexCoord2i((*pSpectBlocks_)[i].width, 0);
-//     glVertex2f(endtime - t1, -100.0); 
-    
-// //     glTexCoord2i((*pSpectBlocks_)[i].width, (*pSpectBlocks_)[i].height); 
-//     glVertex2f(endtime -t1, 100.0); 
-    
-// //     glTexCoord2i(0, (*pSpectBlocks_)[i].height); 
-//     glVertex2f(starttime -t1, 100.0); 
-//     glEnd(); 
-
-//     ret = cursorp->get(&search_key, &found_data, DB_NEXT);
-//   }
-//   cursorp->close(); 
+  //   cursorp->close(); 
 //   //  free(buffer); 
+  glDisable(GL_TEXTURE_RECTANGLE_ARB); 
 
-
-
-  //  glBegin(GL_LINES);
-//   glVertex2f(0, 0.0); 
-//   glVertex2f(t2-t1, 0.0); 
-//   glEnd(); 
-
-
-//   glDisable(GL_TEXTURE_RECTANGLE_ARB); 
-//   int len  = i2 - i1; 
-//   float fadethold = 50.0; 
-//   if (scale > fadethold) {
-//     setGLColor(1.0); 
-//    } else {
-//      setGLColor(1.0 - (fadethold - scale)/200.0);
-//    }
-  
-//   if (scale > 200.0) {  
-//      glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t),
-//  		    &(*i1)); 
-//      glDrawArrays(GL_LINE_STRIP, 0, len); 
-     
-//   }
-
-
-//   std::vector<GLWaveQuadStrip_t>::iterator  qi1, qi2;
-//   GLWaveQuadStrip_t qs1, qs2; 
-
-//   qs1.tmax = t1; 
-
-//   qi1 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
-// 		   qs1, compareTime2); 
-  
-//   qs2.tmax = t2; 
-//   qi2 = lower_bound(ratesS2_.begin(), ratesS2_.end(), 
-// 		   qs2, compareTime2); 
-  
-
-//   int len2 = qi2 - qi1; 
-
-
-//   if (scale < fadethold) {
-
-//     setGLColor((fadethold - scale)/fadethold  + 0.5); 
-//     glVertexPointer(2, GL_FLOAT, sizeof(GLWavePoint_t), 
-//  		    &(ratesS2_[0])); 
-   
-    
-//     glDrawArrays(GL_QUAD_STRIP, 0, 2*ratesS2_.size()); 
-//     glDrawArrays(GL_LINES, 0, 2*ratesS2_.size()); 
-     
-    
-//   }
-  
-//   // stupid trigger rendering
-//   std::vector<wavetime_t>::iterator trigi1, trigi2; 
-//   trigi1 = lower_bound(trigTimeList_.begin(), 
-//  		       trigTimeList_.end(), 
-//  		       t1); 
-
-//   trigi2 = lower_bound(trigTimeList_.begin(), 
-//  		       trigTimeList_.end(), 
-//  		       t2); 
-
-
-//   //glColor4f(0.0, 1.0, 0.0, 1.0); 
-//   printStatus();
-//   //std::cout << "Rendering triggers!" << trigTimeList_.size() << std::endl; 
-//    for(std::vector<wavetime_t>::iterator i = trigi1; 
-//        i != trigi2; i++)
-//      {
-
-//        glBegin(GL_LINE_STRIP); 
-//        glVertex2f(*i, -50); 
-//        glVertex2f(*i, 50); 
-//        glEnd(); 
-//      }
-      
   glPopMatrix(); 
 
  }
@@ -412,5 +201,132 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
 
 
 // }
+
+void SpectVisRenderer::render_high_res_stream(timeid_t timeid_t1, timeid_t timeid_t2, int pix)
+{
+ 
+  std::list<pFFT_t> ffts = fftengine_.getFFT(timeid_t1, timeid_t2); 
+
+  streamtime_t t1 = double(timeid_t1)/1e9; 
+  streamtime_t t2 = double(timeid_t2)/1e9; 
+
+  BOOST_FOREACH(pFFT_t pfft, ffts) { 
+    /* check for textures */ 
+
+    if(!texturecache_.exists(pfft->uid))  {
+      // not in cache, create
+      GLuint texture; 
+      glGenTextures(1, &texture); 
+      glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture); 
+
+      glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); 
+      glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
+      glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
+
+      glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0 ,GL_LUMINANCE,  // GL_RGBA, 
+		   1, pfft->data.size(),  0, GL_LUMINANCE, 
+		   GL_FLOAT, 
+		   &(pfft->data[0])); 
+
+      texturecache_.insert(pfft->uid, texture); 
+    }
+    
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texturecache_.get(pfft->uid)); 
+    timeid_t starttime_id = pfft->starttime; 
+    float starttime = double(starttime_id)/1e9; 
+    timeid_t window_endtime = pfft->endtime; 
+    timeid_t width = window_endtime - starttime_id; 
+    timeid_t endtime_id = starttime_id + width / pfft->overlap; 
+    float endtime = double(endtime_id)/1e9; 
+//     std::cout << "plotting " << starttime 
+// 	      << " window_endtime=" << window_endtime 
+// 	      << " computed endtime " 
+// 	      << " " << endtime 
+// 	      << " overlap =" << pfft->overlap << std::endl;
+    
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0 );
+    glVertex2f(starttime - t1, -100.0); 
+    
+    glTexCoord2f(pfft->data.size(), 0 );
+    glVertex2f(endtime - t1, -100.0); 
+    
+    glTexCoord2f(pfft->data.size(), pfft->data.size() );
+    glVertex2f(endtime -t1, 100.0); 
+    
+    glTexCoord2f(0, pfft->data.size() );
+    glVertex2f(starttime -t1, 100.0); 
+    glEnd(); 
+
+  }
+
 }
 
+void SpectVisRenderer::render_low_res_stream(timeid_t timeid_t1, timeid_t timeid_t2, int pix)
+{
+  // first, ask the downsampled cache for any elements it might have
+  
+  std::list<pDSFFT_t> dsffts =  dscache_.getDSFFTs(timeid_t1, timeid_t2); 
+  std::cout << "dsffts.size() = " << dsffts.size() << std::endl;
+  // create / use textures
+
+  streamtime_t t1 = double(timeid_t1)/1e9; 
+  streamtime_t t2 = double(timeid_t2)/1e9; 
+
+  BOOST_FOREACH(pDSFFT_t pfft, dsffts) { 
+    if(!dstexturecache_.exists(pfft->uid)) { 
+      
+      GLuint texture; 
+      glGenTextures(1, &texture); 
+      glBindTexture(GL_TEXTURE_RECTANGLE_ARB, texture); 
+      
+      glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE); 
+      glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
+      glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
+      
+      size_t height = pfft->data.shape()[0]; 
+      size_t width = pfft->data.shape()[1]; 
+      glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0 ,GL_LUMINANCE,  // GL_RGBA, 
+		   width, height,  0, GL_LUMINANCE, 
+		   GL_FLOAT, 
+		   pfft->data.data()); 
+      dstexturecache_.insert(pfft->uid, texture); 
+    }
+
+    
+    glBindTexture(GL_TEXTURE_RECTANGLE_ARB, dstexturecache_.get(pfft->uid)); 
+
+    timeid_t starttime_id = pfft->starttime; 
+    float starttime = double(starttime_id)/1e9; 
+    timeid_t window_endtime = pfft->endtime; 
+    timeid_t width = window_endtime - starttime_id; 
+    timeid_t endtime_id = starttime_id + width; 
+    float endtime = double(endtime_id)/1e9; 
+//     std::cout << "plotting " << starttime 
+// 	      << " window_endtime=" << window_endtime 
+// 	      << " computed endtime " 
+// 	      << " " << endtime 
+// 	      << " overlap =" << pfft->overlap << std::endl;
+    
+    size_t texwidth = pfft->data.shape()[1]; 
+    size_t texheight = pfft->data.shape()[0]; 
+    std::cout << texwidth << " texheight = " << texheight << std::endl;
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 0 );
+    glVertex2f(starttime - t1, -100.0); 
+    
+    glTexCoord2f(texwidth, 0 );
+    glVertex2f(endtime - t1, -100.0); 
+    
+    glTexCoord2f(texwidth, texheight);
+    glVertex2f(endtime -t1, 100.0); 
+    
+    glTexCoord2f(0, texheight);
+    glVertex2f(starttime -t1, 100.0); 
+    glEnd(); 
+
+  }
+  
+}
+
+}

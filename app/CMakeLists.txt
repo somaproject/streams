@@ -27,7 +27,7 @@ set(app_widgets_SRCS
   noisewavewidget.cc
   pamonitorwidget.cc
   waveviswidget.cc
-#  spectviswidget.cc
+  spectviswidget.cc
   #netdatawavewidget.cc
   #netdatarawwidget.cc
 )
