@@ -58,7 +58,8 @@ class SpectVisRenderer
   void render_low_res_stream(timeid_t t1, timeid_t t2, int pix); 
 
   texturecache_t dstexturecache_; 
-
+  
+  static const size_t MAX_TEXTURE = 3000; 
   
 };
 

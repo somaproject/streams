@@ -58,8 +58,7 @@ std::list<pDSFFT_t> DownsampleCache::getDSFFTs(timeid_t starttime, timeid_t endt
 bool DownsampleCache::can_downsample(intbin_t b)
 {
   // check if we can downsample for a given bin
-  std::cout << "can downsample ? b = " << b << " "
-	    << fftcache_.size() << std::endl; 
+
   fftcache_t::iterator ffti = fftcache_.find(b * intbinsize_); 
   if (ffti == fftcache_.end()) {
     return false; 
@@ -74,19 +73,16 @@ bool DownsampleCache::can_downsample(intbin_t b)
 
   for(ffti; ffti != fftcache_.end(); ++ffti) {
     if(ffti->second->bufferid != (bufferid_pos +1) ) {
-      std::cout << "Fail 1 " << std::endl; 
+
       return false; 
     }
     
     if(ffti->second->N != const_N) {
-      std::cout << "Fail 2 ffti->second->N="
-		<< ffti->second->N << " constN = " 
-		<< const_N << std::endl; 
       return false; 
     }
     
     if(ffti->second->maxfreq != const_maxfreq) { 
-      std::cout << "Fail 3 " << std::endl; 
+
       return false; 
     }
 
@@ -97,11 +93,9 @@ bool DownsampleCache::can_downsample(intbin_t b)
     }
 
     if (maxcnt > intbinsize_) { 
-      std::cout << "Fail 4 " << std::endl; 
       return false; 
     }
   }
-  std::cout << "Fail 5 " << std::endl; 
   return false; 
 
 }
@@ -113,7 +107,7 @@ void DownsampleCache::create_downsample(intbin_t b)
      NOTE THIS ONLY WORKS IF YOU ARE SURE YOU can_downsample
      
   */ 
-  std::cout << "Creating downsampled fft for bin " << b << std::endl;
+
   pDSFFT_t dsfft(new DownsampledFFT); 
   
   
@@ -148,10 +142,6 @@ void DownsampleCache::create_downsample(intbin_t b)
 
   ffti--; 
   dsfft->endtime = ffti->second->endtime; 
-  std::cout << "Created downsampled " 
-	    << " starttime = " << dsfft->starttime 
-	    << " endtime = " << dsfft->endtime 
-	    << " n = " << dsfft->N << std::endl;
 
   cache_.insert(std::make_pair(dsfft->starttime, dsfft)); 
 }

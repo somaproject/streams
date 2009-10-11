@@ -58,98 +58,6 @@ SpectVis::~SpectVis()
 }
 
 
-void SpectVis::newData()
-{
-  // right now this is just a stupid no-op
-
-
-  //  char * buffer = (char*)malloc(SpectRenderBlock::maxbytes()); 
-  // our inputs are buffers of data, our filtered
-  // outputs are GLwavePoints
-//   while (not pSinkPad_->getpQueueView()->empty())
-//     {
-//       // we're taking in WaveBuffer_t pointers
-
-//       WaveBuffer_t & wb = pSinkPad_->getpQueueView()->front(); 
-
-//       SpectRenderBlock sbb(wb.data.size(), 1); 
-
-//       sbb.starttime = wb.time; 
-//       double starttime = sbb.starttime; 
-//       sbb.endtime = wb.time + wb.data.size() * 1.0 / wb.samprate;
-
-//       sbb.lowfreq = 0;
-//       sbb.highfreq = 100; 
-      
-//       int size = sbb.marshall_to_buffer(buffer); 
-//       Dbt key(&(starttime), sizeof(starttime));
-//       Dbt data(buffer, size); 
-//       int ret = spectblockdb_->put(NULL, &key, &data, DB_NOOVERWRITE);
-//       if (ret != 0) {
-// 	spectblockdb_->err(ret, "Put failed because key %f already exists", sbb.starttime);
-//       }
-      
-//       pSinkPad_->getpQueueView()->pop();       
-//     }
-  
-//   free(buffer); 
-}
-
-// float SpectVis::getYOffset(){
-//   return yoffset_; 
-// }
-
-// void SpectVis::setYOffset(float x)
-// {
-//   yoffset_ = x; 
-// }
-
-// void SpectVis::setYHeight(float x)
-// {
-//   yheight_ = x; 
-//   streamRenderer_.setScale(yheight_ / verticalScale_, yheight_); 
-// }
-
-// void SpectVis::setVerticalScale(float volts){
-
-//   verticalScale_ = volts; 
-  
-//   streamRenderer_.setScale(yheight_ / verticalScale_ , yheight_); 
-//   verticalScaleSignal_.emit(volts); 
-
-// }
-
-// float SpectVis::getVerticalScale()
-// {
-//   return verticalScale_; 
-// }
-
-// void SpectVis::setColor(Gdk::Color c)
-// {
-  
-//   color_ = c; 
-//   streamRenderer_.setColor(c); 
-//   colorSignal_.emit(c); 
-// }
-
-// Gdk::Color SpectVis::getColor()
-// {
-//   return color_; 
-// }
-
-// GLWavePoint_t SpectVis::filterNextPoint(GLWavePoint_t wp)
-// {
-  
-//   wp.t -= 0.1; // delay
-
-//   return wp; 
-
-
-
-// }
-
-
-
 
 void SpectVis::renderTrigger(streamtime_t deltapre, streamtime_t deltapost, int pixels)
 {
@@ -245,7 +153,8 @@ void SpectVis::reset()
 //     std::cout << "Downsample had a successful reset" << std::endl; 
 //   }
   std::cout << "reset done " << std::endl; 
-
+  fftengine_.reset(); 
+  dscache_.reset(); 
 
 }
 

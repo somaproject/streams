@@ -136,6 +136,16 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
 
   }
 
+  // clear the cache if necessary
+  while(texturecache_.size() > MAX_TEXTURE) { 
+    GLuint texval = texturecache_.pop_old(); 
+    glDeleteTextures(1, &texval); 
+  }
+  while(dstexturecache_.size() > MAX_TEXTURE) { 
+    GLuint texval = dstexturecache_.pop_old(); 
+    glDeleteTextures(1, &texval); 
+  }
+
   //   cursorp->close(); 
 //   //  free(buffer); 
   glDisable(GL_TEXTURE_RECTANGLE_ARB); 
@@ -267,7 +277,7 @@ void SpectVisRenderer::render_low_res_stream(timeid_t timeid_t1, timeid_t timeid
   // first, ask the downsampled cache for any elements it might have
   
   std::list<pDSFFT_t> dsffts =  dscache_.getDSFFTs(timeid_t1, timeid_t2); 
-  std::cout << "dsffts.size() = " << dsffts.size() << std::endl;
+
   // create / use textures
 
   streamtime_t t1 = double(timeid_t1)/1e9; 
@@ -310,7 +320,6 @@ void SpectVisRenderer::render_low_res_stream(timeid_t timeid_t1, timeid_t timeid
     
     size_t texwidth = pfft->data.shape()[1]; 
     size_t texheight = pfft->data.shape()[0]; 
-    std::cout << texwidth << " texheight = " << texheight << std::endl;
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0 );
     glVertex2f(starttime - t1, -100.0); 
