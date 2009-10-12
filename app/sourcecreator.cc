@@ -1,7 +1,7 @@
 #include "sourcecreator.h"
 #include "noisewavewidget.h"
 #include "pipelinegui.h"
-//#include "netdatawavewidget.h"
+#include "netdatawavewidget.h"
 //#include "netdatarawwidget.h"
 #include "pamonitorwidget.h"
 
@@ -37,16 +37,16 @@ void SourceCreator::visit(NoiseWave2 * nw)
   pipelineGUI_.addNewSource(ng); 
 }
 
-// void SourceCreator::visit(NetDataWave * nd)
-// {
+void SourceCreator::visit(NetDataWave * nd)
+{
 
-//   NetDataWaveWidget * ndw(new NetDataWaveWidget(nd, pipelineGUI_.getSomaConfig())); 
-//   ndw->setPropertyPaneManager(pipelineGUI_.getPropertyPaneManager()); 
+  NetDataWaveWidget * ndw(new NetDataWaveWidget(nd, pipelineGUI_.getSomaConfig())); 
+  ndw->setPropertyPaneManager(pipelineGUI_.getPropertyPaneManager()); 
 
-//   pipelineGUI_.addNewSource(ndw); 
+  pipelineGUI_.addNewSource(ndw); 
   
 
-// }
+}
 
 // void SourceCreator::visit(NetDataRaw * nd)
 // {

@@ -28,7 +28,7 @@ set(app_widgets_SRCS
   pamonitorwidget.cc
   waveviswidget.cc
   spectviswidget.cc
-  #netdatawavewidget.cc
+  netdatawavewidget.cc
   #netdatarawwidget.cc
 )
 
@@ -39,7 +39,7 @@ set(app_props_SRCS
   noisewaveproperty.cc
   wavevisproperty.cc
   spectvisproperty.cc
-  #netdatawaveproperty.cc
+  netdatawaveproperty.cc
   #netdatarawproperty.cc
 )
 

@@ -24,7 +24,7 @@ NetDataWaveProperty::~NetDataWaveProperty()
 
 }
 
-bool NetDataWaveProperty::addElement(core::IElement * elt)
+bool NetDataWaveProperty::addElement(elements::IElement * elt)
 {
   // going to hell for this
   NetDataWave * ws = dynamic_cast<NetDataWave*>(elt); 
@@ -52,7 +52,7 @@ bool NetDataWaveProperty::addElement(core::IElement * elt)
   return true; 
 }
 
-bool NetDataWaveProperty::delElement(core::IElement * elt)
+bool NetDataWaveProperty::delElement(elements::IElement * elt)
 {
   NetDataWave * ws = dynamic_cast<NetDataWave*>(elt); 
   if (ws == NULL) {

@@ -13,9 +13,10 @@
 #include <core/queueview.h>
 #include <elements/property.h>
 
-#include "sourcebase.h"
+#include <sources/sourcebase.h>
 #include "networkdatacache.h"
 #include "isomanetcodec.h"
+#include "notify.h"
 
 class NetDataWave : public SourceBase
 {
@@ -60,7 +61,7 @@ public:
   std::list<datasource_t> getAvailableSources(); 
 
   // physical amplifier properties:
-  elements::PropertyProxy<int> gain; 
+  elements::Property<int> gain; 
   std::list<int> getAvailableGains(); 
   elements::Property<bool> hpfen; 
   elements::Property<int> selchan; 
@@ -73,7 +74,7 @@ public:
   std::list<std::pair<uint32_t, std::string> > getAvailableFilterIDs(); 
   
 private:
-  elements::SourcePad<WaveBuffer_t>::ptr_t  pSourcePad_; 
+  elements::SourcePad<WaveBuffer_t>::pSourcePad_t  pSourcePad_; 
   
   pTimer_t pTimer_; 
   pNetworkDataCache_t pNetDataCache_; 
@@ -98,6 +99,12 @@ private:
 
   int getGainProxy(); 
   void setGainProxy(int x);
+
+  netdatawave::pPropertyNotify_t srcnotify_; 
+  void process(elements::timeid_t tid);
+
+  void on_src_change(); 
+
 
 }; 
 

@@ -62,7 +62,7 @@ core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetWaveSource(datasourc
     Db * db = new Db(&dbEnv_, 0); 
     
     bf::path wavedb_path(boost::str(boost::format("wave%d.db") % n)); 
-      u_int32_t oFlags = DB_CREATE |  DB_TRUNCATE; // Open flags;
+      u_int32_t oFlags = DB_CREATE ; // Open flags;
 
     db->set_pagesize(1<<16); 
     db->set_flags(DB_INORDER); 

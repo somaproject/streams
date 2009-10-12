@@ -8,31 +8,20 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${GUIDEPS_INCLUDE_DIRS})
 include_directories(${SOMADEPS_INCLUDE_DIRS})
 
-set(sources_SRCS
-  sourcebase.cc
-  noisewave2.cc
-#  noisewaveconfig.cc
-
-  sourcefactory.cc
-#   netdataraw.cc
-
+set(netdatawave_SRCS
+  netdatawave.cc
   )
 
-add_library(sources
-  ${sources_SRCS})
+add_library(source_netdatawave
+  ${netdatawave_SRCS})
 
 
-target_link_libraries(sources
+target_link_libraries(source_netdatawave
   streams_core
-  source_pamonitor
-  source_netdatawave
   ${GUIDEPS_LIBRARIES}
   ${GUIDEPS_LIBRARIES}
 
 )
-
-add_subdirectory(pamonitor)
-add_subdirectory(netdatawave)
   
 
   

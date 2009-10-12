@@ -6,8 +6,8 @@
 // Forward Declarations
 class SourceBase; 
 class NoiseWave2; 
-// class NetDataWave; 
-// class NetDataRaw; 
+class NetDataWave; 
+class NetDataRaw; 
 class PulseAudioMonitorWave; 
 
 class ISourceVisitor {
@@ -15,7 +15,7 @@ class ISourceVisitor {
 public:
   virtual void visit(SourceBase * ) = 0; 
   virtual void visit(NoiseWave2 * ) = 0; 
-//   virtual void visit(NetDataWave *) = 0; 
+  virtual void visit(NetDataWave *) = 0; 
 //   virtual void visit(NetDataRaw *) = 0; 
   virtual void visit(PulseAudioMonitorWave *) = 0; 
 

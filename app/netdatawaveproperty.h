@@ -2,7 +2,7 @@
 #define NETDATAWAVEPROPERTY_H
 
 #include "propertypane.h"
-#include <sources/netdatawave.h>
+#include <sources/netdatawave/netdatawave.h>
 #include <propwidgets/spinbutton.h>
 #include <propwidgets/combobox.h>
 #include "somaconfig.h"
@@ -13,8 +13,8 @@ public:
   NetDataWaveProperty(pSomaConfig_t sc); 
   ~NetDataWaveProperty(); 
   
-  virtual bool addElement(core::IElement * elt); 
-  virtual bool delElement(core::IElement * elt); 
+  virtual bool addElement(elements::IElement * elt); 
+  virtual bool delElement(elements::IElement * elt); 
 
 private: 
   PropertyWidgets::ComboBox<datasource_t> sourceComboBox_; 

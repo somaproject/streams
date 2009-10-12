@@ -2,20 +2,20 @@
 #define NETADATAWAVEWIDGET_H
 
 #include <gtkmm.h>
-#include <sources/netdatawave.h>
+#include <sources/netdatawave/netdatawave.h>
 #include <elementstatus.h>
 #include <somaconfig.h>
 
 class NetDataWaveWidget : public ElementStatus
 {
 public:
-  NetDataWaveWidget(pNetDataWave_t, pSomaConfig_t ); 
+  NetDataWaveWidget(NetDataWave *, pSomaConfig_t ); 
   ~NetDataWaveWidget(); 
   
 
 private:
 
-  pNetDataWave_t netDataWave_; 
+  NetDataWave * netDataWave_; 
   
   Gtk::VBox vboxMain_; 
   Gtk::HBox hboxAnalog_; 
@@ -38,7 +38,7 @@ private:
   Gtk::Label labelHPFValue_; 
   void hpfCallback(bool hpf); 
   
-  elements::pIElement_t getElement() {
+  elements::IElement * getElement() {
     return netDataWave_; 
   }
 

@@ -30,15 +30,15 @@ NetDataWaveWidget::NetDataWaveWidget(NetDataWave * nw, pSomaConfig_t sc) :
   show_all(); 
 
   sourceCallback(0); 
-  netDataWave_->src.signal().connect(sigc::mem_fun(*this, 
-						  &NetDataWaveWidget::sourceCallback)); 
+//   netDataWave_->src.signal().connect(sigc::mem_fun(*this, 
+// 						  &NetDataWaveWidget::sourceCallback)); 
   gainCallback(0); 
-  netDataWave_->gain.signal().connect(sigc::mem_fun(*this, 
-						    &NetDataWaveWidget::gainCallback)); 
+//   netDataWave_->gain.signal().connect(sigc::mem_fun(*this, 
+// 						    &NetDataWaveWidget::gainCallback)); 
     
   hpfCallback(false); 
-  netDataWave_->hpfen.signal().connect(sigc::mem_fun(*this, 
-						     &NetDataWaveWidget::hpfCallback)); 
+//   netDataWave_->hpfen.signal().connect(sigc::mem_fun(*this, 
+// 						     &NetDataWaveWidget::hpfCallback)); 
   
 }
 

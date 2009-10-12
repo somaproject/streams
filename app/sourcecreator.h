@@ -12,7 +12,7 @@ public:
   
   void visit(SourceBase * ); 
   void visit(NoiseWave2 * ); 
-//   void visit(NetDataWave *); 
+  void visit(NetDataWave *); 
 //   void visit(NetDataRaw *); 
   void visit(PulseAudioMonitorWave *); 
 
