@@ -14,7 +14,7 @@ set(sources_SRCS
 #  noisewaveconfig.cc
 
   sourcefactory.cc
-#   netdatawave.cc
+  netdatawave.cc
 #   netdataraw.cc
 
   )

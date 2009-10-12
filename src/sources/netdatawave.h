@@ -11,7 +11,7 @@
 #include "timer.h" 
 
 #include <core/queueview.h>
-#include "properties.h"
+#include <elements/property.h>
 
 #include "sourcebase.h"
 #include "networkdatacache.h"
@@ -19,6 +19,31 @@
 
 class NetDataWave : public SourceBase
 {
+  /* 
+     NetDataWave, for interfacing with Soma's Wave Sink Source
+ 
+     Acquisition properties like src, gain, hpf-en
+     Filtering properties like downsampling ratio, filter selection
+     
+     Note that it gets most of its data from the network data cache, 
+     and directly communicates with the soma net codec and underlying
+     dsp state proxy. 
+     
+     The properties here are a bit complex: Most are just pass-throughs
+     for the soma net codec. That is, they in no way invalidate
+     existing data or trigger a reset, but instead change the hardware
+     properties, which impact all subsequent data. 
+     
+     
+     This means that most of the property manipulation takes place
+     outside of the primary process loop, and is instead a propertyProxy
+     that connects to the acqdatasource. 
+
+     The only property that actually impacts the data we're receiving
+     is the "select a channel" property. 
+     
+   */ 
+
 public:
   static const std::string TYPENAME; 
   NetDataWave(std::string, pTimer_t, pNetworkDataCache_t, 
@@ -31,25 +56,24 @@ public:
   }
 
   // primary property : data source
-  Property<datasource_t> src; 
+  elements::Property<datasource_t> src; 
   std::list<datasource_t> getAvailableSources(); 
 
   // physical amplifier properties:
-  PropertyProxy<int> gain; 
+  elements::PropertyProxy<int> gain; 
   std::list<int> getAvailableGains(); 
-  Property<bool> hpfen; 
-  Property<int> selchan; 
+  elements::Property<bool> hpfen; 
+  elements::Property<int> selchan; 
 
   // DSP-level properties
   typedef std::pair<int, int> samprate_t; 
-  Property<samprate_t>  sampratenum; 
+  elements::Property<samprate_t>  sampratenum; 
   std::list<samprate_t> getAvailableSampRates(); 
-  Property<uint32_t> filterid; 
+  elements::Property<uint32_t> filterid; 
   std::list<std::pair<uint32_t, std::string> > getAvailableFilterIDs(); 
   
 private:
-  core::SourcePad<WaveBuffer_t> * pSourcePad_; 
-  boost::ptr_list<WaveBuffer_t>  datalist_; 
+  elements::SourcePad<WaveBuffer_t>::ptr_t  pSourcePad_; 
   
   pTimer_t pTimer_; 
   pNetworkDataCache_t pNetDataCache_; 
