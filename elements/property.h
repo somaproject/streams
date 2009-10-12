@@ -54,7 +54,7 @@ public:
        
      */ 
     
-    std::cout << "attempted assignment, to new value " 
+    std::cout << "property attempted assignment, to new value " 
  	      << value << std::endl;
     upgrade_lock_t reqlock(reqvalue_mutex_);
     // get exclusive access
@@ -70,9 +70,6 @@ public:
   {
     shared_lock_t value_lock(value_mutex_); 
     shared_lock_t reqvalue_lock(reqvalue_mutex_); 
-//     std::cout << "query of pendingRequest" 
-//  	      << " value_ = " << value_ 
-//  	      << " reqValue_ ="  << reqValue_ << std::endl;
     if (value_ != reqValue_) { 
       return true; 
     } 
@@ -93,6 +90,31 @@ public:
     up_unique_lock_t uniqueLock(lock);
     
     value_ = v; 
+    reqValue_ = v; 
+    shared_lock_t watcher_lock(watchers_mutex_);
+
+    // now possibly notify watchers
+    typedef std::map<size_t, pIPropertyNotify_t> watchermap_t; 
+    for(watchermap_t::iterator i = watchers_.begin(); i != watchers_.end(); 
+	i++) 
+      {
+	i->second->notify(); 
+      }
+    
+  }
+
+  void set_value(const boost::optional<ValueType> & v) {
+//     std::cout << "property is setting value to " << v << std::endl;
+    if(!v){
+      return; 
+    }
+    
+    upgrade_lock_t lock(value_mutex_);
+    // get exclusive access
+    up_unique_lock_t uniqueLock(lock);
+    
+    value_ = *v; 
+    reqValue_ = *v; 
 
     shared_lock_t watcher_lock(watchers_mutex_);
 

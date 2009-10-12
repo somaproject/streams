@@ -143,8 +143,10 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
       }
 
       db_recno_t rid; 
-    
-      Dbt key(&rid, sizeof(rid));
+      
+      Dbt key(&rid, sizeof(rid)); 
+      key.set_ulen(sizeof(rid)); 
+      key.set_flags(DB_DBT_USERMEM );
       Dbt data(&wb, sizeof(WaveBufferDisk_t<WAVEBUF_LEN> )); 
       
 //       Dbc * cursorp; 

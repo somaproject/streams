@@ -61,7 +61,7 @@ public:
   std::list<datasource_t> getAvailableSources(); 
 
   // physical amplifier properties:
-  elements::Property<int> gain; 
+  elements::Property<int > gain; 
   std::list<int> getAvailableGains(); 
   elements::Property<bool> hpfen; 
   elements::Property<int> selchan; 
@@ -104,7 +104,13 @@ private:
   void process(elements::timeid_t tid);
 
   void on_src_change(); 
+  bool on_check_property_change();
 
+  sigc::connection gainconn_; 
+  bool gain_pending_req_known_;
+  void on_gain_update(int, int);
+
+  static const int CONTCHAN = 4; 
 
 }; 
 

@@ -18,7 +18,7 @@ public:
 
 private: 
   PropertyWidgets::ComboBox<datasource_t> sourceComboBox_; 
-  PropertyWidgets::ComboBox<int> gainComboBox_; 
+  PropertyWidgets::ComboBox<int > gainComboBox_; 
 
   pSomaConfig_t pSomaConfig_; 
 

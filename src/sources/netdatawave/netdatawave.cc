@@ -43,8 +43,26 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
   pDataQueueView_ = pNetDataCache_->getNetWaveSource(newsrc); 
   pSourcePad_->reset(); 
   src.set_value(newsrc); // will then trigger out-of-band signal
-
+  Glib::signal_timeout().connect(sigc::mem_fun(*this, 
+					       &NetDataWave::on_check_property_change), 
+				 200); 
+  
 }
+
+bool NetDataWave::on_check_property_change()
+{
+  if(gain.pendingRequest()) {
+    if(!gain_pending_req_known_) { 
+      std::cout << " check property change: attempting to set to " << gain.get_req_value()
+		<< " while current val = " << gain << std::endl; 
+      // unknown, so we should attempt to set the property 
+      pNetCodec_->getDSPStateProxy(src).acqdatasrc.setGain(CONTCHAN, gain.get_req_value()); 
+      gain_pending_req_known_ = true; 
+    }
+  }
+  return true; 
+}
+
 
 void NetDataWave::gainFilter(int chan, int gain) 
   /* 
@@ -119,6 +137,16 @@ void NetDataWave::reconnectSource(datasource_t src)
     necessitates a reconnection to all of the somadspio sources. 
     
   */ 
+  if(gainconn_) 
+    gainconn_.disconnect(); 
+  
+  gainconn_ = pNetCodec_->getDSPStateProxy(src).acqdatasrc.gain().connect(
+									  sigc::mem_fun(*this, 
+											&NetDataWave::on_gain_update)); 
+  
+  gain_pending_req_known_ = false; 
+
+  gain.set_value(pNetCodec_->getDSPStateProxy(src).acqdatasrc.getGain(CONTCHAN)); 
 
 //   sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc,
 // 		&AcqDataSource::setGain); 
@@ -128,6 +156,14 @@ void NetDataWave::reconnectSource(datasource_t src)
 //  		  gainSignal_); 
 
 
+}
+
+void NetDataWave::on_gain_update(int x, int y) {
+  if (x == CONTCHAN) { 
+    std::cout << "Setting gain update to " << y << std::endl;
+    gain_pending_req_known_ = false; 
+    gain.set_value(y); 
+  }
 }
 
 void NetDataWave::reconnectPropertyProxies()
