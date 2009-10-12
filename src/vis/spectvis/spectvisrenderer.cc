@@ -2,13 +2,15 @@
 #include <boost/foreach.hpp>
 #include "spectvisrenderer.h"
 #include <assert.h>
-
+#include "shaderutil/shaders.h"
+#include "shaderprogs.h"
 namespace spectvis { 
 
 SpectVisRenderer::SpectVisRenderer(FFTEngine & eng, DownsampleCache  & dscache) : 
   fftengine_(eng),
   dscache_(dscache), 
-  scale(1.0)
+  scale(1.0),
+  gpuProgCompiled_(false)
 {
   // initialize data from stream source buffer
   /* 
@@ -93,6 +95,8 @@ SpectVisRenderer::~SpectVisRenderer()
 
 void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
 {
+
+  checkGPUProgCompiled(); 
   // pixels is just a hint
 
 //   mostRecentRenderT1_ = t1; 
@@ -127,13 +131,14 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
 
   glEnable(GL_TEXTURE_RECTANGLE_ARB); 
 
-  timeid_t threshold = 50 * elements::TIMEID_SEC;
+  timeid_t threshold = 100 * elements::TIMEID_SEC;
   if ((timeid_t2 - timeid_t1) < threshold) { 
     // just render low threshold 
+    std::cout << "rendering high res" << std::endl;
     render_high_res_stream(timeid_t1, timeid_t2, pixels); 
   } else {
+    std::cout << "rendering low res res" << std::endl;
     render_low_res_stream(timeid_t1, timeid_t2, pixels); 
-
   }
 
   // clear the cache if necessary
@@ -216,9 +221,12 @@ void SpectVisRenderer::render_high_res_stream(timeid_t timeid_t1, timeid_t timei
 {
  
   std::list<pFFT_t> ffts = fftengine_.getFFT(timeid_t1, timeid_t2); 
+  std::cout << "highres ffts count = " << ffts.size() << std::endl;
 
   streamtime_t t1 = double(timeid_t1)/1e9; 
   streamtime_t t2 = double(timeid_t2)/1e9; 
+
+  useGPUProgram(gpuProg_); 
 
   BOOST_FOREACH(pFFT_t pfft, ffts) { 
     /* check for textures */ 
@@ -253,22 +261,33 @@ void SpectVisRenderer::render_high_res_stream(timeid_t timeid_t1, timeid_t timei
 // 	      << " computed endtime " 
 // 	      << " " << endtime 
 // 	      << " overlap =" << pfft->overlap << std::endl;
+
+    float alpha=1.0; 
+    GLint unialpha = glGetUniformLocation(gpuProg_,"alpha");
+    glUniform1f(unialpha, alpha); 
+
+    float max=1.0; 
+    GLint unimax = glGetUniformLocation(gpuProg_,"maxval");
+    glUniform1f(unimax, max); 
+
     
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0 );
     glVertex2f(starttime - t1, -100.0); 
     
-    glTexCoord2f(pfft->data.size(), 0 );
+    glTexCoord2f(pfft->N, 0 );
     glVertex2f(endtime - t1, -100.0); 
     
-    glTexCoord2f(pfft->data.size(), pfft->data.size() );
+    glTexCoord2f(pfft->N, pfft->N );
     glVertex2f(endtime -t1, 100.0); 
     
-    glTexCoord2f(0, pfft->data.size() );
+    glTexCoord2f(0, pfft->N );
     glVertex2f(starttime -t1, 100.0); 
     glEnd(); 
 
   }
+
+  useGPUProgram(0); 
 
 }
 
@@ -277,7 +296,7 @@ void SpectVisRenderer::render_low_res_stream(timeid_t timeid_t1, timeid_t timeid
   // first, ask the downsampled cache for any elements it might have
   
   std::list<pDSFFT_t> dsffts =  dscache_.getDSFFTs(timeid_t1, timeid_t2); 
-
+  std::cout << "Lowres DSFFT count = " << dsffts.size() << std::endl;
   // create / use textures
 
   streamtime_t t1 = double(timeid_t1)/1e9; 
@@ -338,4 +357,21 @@ void SpectVisRenderer::render_low_res_stream(timeid_t timeid_t1, timeid_t timeid
   
 }
 
+void SpectVisRenderer::checkGPUProgCompiled() { 
+  if (!gpuProgCompiled_) {
+    
+    GLuint vshdr = loadGPUShader(glstring_vertex, GL_VERTEX_SHADER); 
+    GLuint fshdr = loadGPUShader(glstring_fragment, GL_FRAGMENT_SHADER); 
+    std::list<GLuint> shaders; 
+    shaders.push_back(vshdr); 
+    shaders.push_back(fshdr); 
+    gpuProg_ = createGPUProgram(shaders); 
+
+    GLint texSampler; 
+    texSampler = glGetUniformLocation(gpuProg_, "tex"); 
+    glUniform1i(texSampler, GL_TEXTURE0); 
+
+    gpuProgCompiled_  = true; 
+  }
+}
 }

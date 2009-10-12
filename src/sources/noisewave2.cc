@@ -137,7 +137,7 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
   // integer fs
   elements::timeid_t period_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
 
-  double freq = 1.0; 
+  double freq = 100.0; 
   //freq += 10; 
   double VSCALE = amplitude; 
   

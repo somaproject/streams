@@ -16,6 +16,7 @@ set(spect_vis_SRCS
   helper.cc
   fftengine.cc
   spectdownsample.cc
+  fftwop.cc
 )
 
 

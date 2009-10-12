@@ -26,7 +26,8 @@ StreamRenderWin::StreamRenderWin(pVisControl_t pvc) :
   // Try double-buffered visual
   glconfig = Gdk::GL::Config::create(Gdk::GL::MODE_RGBA   |
                                      Gdk::GL::MODE_DOUBLE | 
-				     Gdk::GL::MODE_ACCUM);
+				     Gdk::GL::MODE_ACCUM | 
+				     Gdk::GL::MODE_MULTISAMPLE);
   if (!glconfig)
     {
       throw std::runtime_error("Could not acquire double-buffered visual"); 
@@ -85,7 +86,8 @@ void StreamRenderWin::on_realize()
   //glEnable(GL_NORMALIZE);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);	
   glEnable(GL_BLEND); 
-
+  glEnable(GL_MULTISAMPLE_ARB);
+  glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
   glEnable(GL_LINE_SMOOTH); 
   glEnable(GL_POINT_SMOOTH); 
   glEnable(GL_POLYGON_SMOOTH); 

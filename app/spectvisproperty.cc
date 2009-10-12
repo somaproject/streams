@@ -36,6 +36,7 @@ SpectVisProperty::SpectVisProperty(pSomaConfig_t sc) :
   windowsizeHBox_.pack_start(windowsizeComboBox_); 
   
   PropertyWidgets::ComboBox<float>::possiblevalues_t win_vals; 
+  win_vals.push_back(std::make_pair("125 ms", 0.125)); 
   win_vals.push_back(std::make_pair("250 ms", 0.25)); 
   win_vals.push_back(std::make_pair("500 ms", 0.5)); 
   win_vals.push_back(std::make_pair("1 sec", 1)); 

@@ -1,44 +1,60 @@
-
-#include "spectvis.h"
+#include <fftw3.h>
 #include <iostream>
 #include <boost/format.hpp>
+
+#include "spectvis.h"
+
+
 
 
 const std::string SpectVis::TYPENAME = "SpectVis"; 
 using namespace spectvis; 
 
-pFFT_t identity(float * data, int data_size, int N, float fs)
-{
-  
-  //Identity operation that just copies the data 
-  pFFT_t y(new FFT); 
-  y->data.reserve(data_size); 
-  for (int i = 0; i < data_size; i++) { 
-    y->data.push_back(data[i]); 
+class Identity : public spectvis::IFFTop { 
+public:
+  pFFT_t operator() (float * data, int data_size, int N, float fs)
+  {
+    
+    //Identity operation that just copies the data 
+    pFFT_t y(new FFT); 
+    y->data.reserve(data_size); 
+    for (int i = 0; i < data_size; i++) { 
+      y->data.push_back(data[i]); 
+    }
+    y->N = y->data.size(); 
+    y->maxfreq = fs/2; 
+    return y; 
   }
-  y->N = y->data.size(); 
-  y->maxfreq = fs/2; 
-  return y; 
-}
+};
 
 SpectVis::SpectVis(std::string name, bf::path scratch) :
   VisBase(name), 
   scale(1.0), 
-  fftN(128), 
+  fftN(512), 
   windowsize(1.0),
-  overlapFactor(1.0),
+  overlapFactor(1),
+  cmap_max(1000.0), 
   pSinkPad_(createSinkPad<WaveBuffer_t>("default")), 
   yheight_(100),
   verticalScale_(1.0),
   scratchdir_(scratch / name),
   pixelHeight_(100),
-  fftengine_(identity),
-  dscache_(10, 1)
+  fftengine_(),
+  dscache_(40, 1)
 {
   
   std::cout << "Creating SpectVIs" << std::endl;
   streamRenderer_ = new spectvis::SpectVisRenderer(fftengine_, dscache_); 
   fftengine_.newfft_signal().connect(sigc::mem_fun(*this, &SpectVis::on_new_fft)); 
+
+  //pfftwop_ = new Identity; // FFTW(fftN, 4096); 
+  pfftwop_ = new FFTW(fftN, 1<<16); 
+  fftengine_.set_op(pfftwop_); 
+
+  fftengine_.set_fftN(fftN); 
+  fftengine_.set_windowsize(windowsize*1e9) ; 
+  fftengine_.set_overlapFactor(overlapFactor); 
+  
 }
 
 void SpectVis::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
@@ -55,6 +71,8 @@ SpectVis::~SpectVis()
 {
   
   delete streamRenderer_; 
+  delete pfftwop_; 
+
 }
 
 

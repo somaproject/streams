@@ -5,8 +5,8 @@
 
 namespace spectvis {
 
-FFTEngine::FFTEngine(fft_op_t fftop)  : 
-  fftop_(fftop),
+FFTEngine::FFTEngine()  : 
+  fftop_(NULL),
   fftN_(128),
   winsize_(100000000),
   overlap_(1),
@@ -86,6 +86,9 @@ void FFTEngine::process(int MAXCNT )
      function.
 
   */ 
+  if(!fftop_) {
+    return; 
+  }
 
   int cnt = 0; 
   while (cnt < MAXCNT) {
@@ -98,7 +101,7 @@ void FFTEngine::process(int MAXCNT )
       std::vector<float> data = get_buffer_data(bid, &fs); 
       size_t datasize = data.size(); 
       
-      pFFT_t Y = fftop_(&data[0], datasize, fftN_, fs); 
+      pFFT_t Y = (*fftop_)(&data[0], datasize, fftN_, fs); 
       Y->uid = gen_fft_id(); 
 
       Y->starttime = times.first; 
@@ -124,7 +127,7 @@ void FFTEngine::process(int MAXCNT )
 	std::vector<float> data = get_buffer_data(bid, &fs); 
 	size_t datasize = data.size(); 
 
-	pFFT_t Y = fftop_(&data[0], datasize, fftN_, fs); 
+	pFFT_t Y = (*fftop_)(&data[0], datasize, fftN_, fs); 
 	Y->uid = gen_fft_id(); 
 	Y->overlap = overlap_; 
 	Y->bufferid = bid; 

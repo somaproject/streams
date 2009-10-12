@@ -60,7 +60,11 @@ class SpectVisRenderer
   texturecache_t dstexturecache_; 
   
   static const size_t MAX_TEXTURE = 3000; 
-  
+  bool gpuProgCompiled_;
+
+  void checkGPUProgCompiled(); 
+  GLuint gpuProg_; 
+
 };
 
 }

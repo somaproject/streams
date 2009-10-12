@@ -15,6 +15,11 @@
 
 namespace spectvis {
 
+class IFFTop {
+public:
+  virtual pFFT_t operator()(float * ptr_to_data, int data_size, int N, float fs) =0; 
+}; 
+
 class FFTEngine 
 {
   /*
@@ -39,15 +44,19 @@ class FFTEngine
   
 public:
 
-  typedef boost::function<pFFT_t (float * ptr_to_data, int data_size, int N, float fs)> fft_op_t; 
+
   // arguments are: 
   //   float *   ptr_to_data
   //   int       length of data
   //   int N     length of FFT
   //   float fs  sampling rate
 
-   FFTEngine(fft_op_t); 
+  FFTEngine(); 
   ~FFTEngine(); 
+
+  inline void set_op(IFFTop * op) {
+    fftop_ = op;
+  }
 
   void reset(); 
 
@@ -83,7 +92,7 @@ public:
 
 private:
 
-  fft_op_t fftop_;  
+  IFFTop * fftop_;  
   int fftN_; 
   timeid_t winsize_; 
   int overlap_; 

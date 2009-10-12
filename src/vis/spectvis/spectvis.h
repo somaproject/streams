@@ -12,6 +12,8 @@
 #include "fftengine.h" 
 #include "spectdownsample.h"
 #include "types.h"
+#include "fftwop.h"
+
 
 class SpectVis; 
 
@@ -60,9 +62,15 @@ class SpectVis : public VisBase
   //  Property<Gdk::Color> color; 
   elements::Property<float> scale; 
     
+  // FFT computation parameters
   elements::Property<int> fftN; 
   elements::Property<float> windowsize; 
   elements::Property<int> overlapFactor; 
+  
+  // Color map properties
+  elements::Property<float> cmap_max; 
+  
+  
   
   void process(elements::timeid_t tid); 
 
@@ -101,6 +109,9 @@ class SpectVis : public VisBase
 
   spectvis::DownsampleCache dscache_; 
   void on_new_fft(spectvis::pFFT_t fft); 
+
+  spectvis::IFFTop * pfftwop_; 
+
 
 };
 
