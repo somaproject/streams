@@ -5,6 +5,7 @@
 #include <sources/netdatawave/netdatawave.h>
 #include <propwidgets/spinbutton.h>
 #include <propwidgets/combobox.h>
+#include <propwidgets/checkbox.h>
 #include "somaconfig.h"
 
 
@@ -19,6 +20,7 @@ public:
 private: 
   PropertyWidgets::ComboBox<datasource_t> sourceComboBox_; 
   PropertyWidgets::ComboBox<int > gainComboBox_; 
+  PropertyWidgets::CheckBox hpfCheckBox_; 
 
   pSomaConfig_t pSomaConfig_; 
 

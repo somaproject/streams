@@ -54,6 +54,7 @@ NetworkDataCache::~NetworkDataCache()
 
 core::IQueueView<WaveBuffer_t>::ptr NetworkDataCache::getNetWaveSource(datasource_t n)
 {
+  std::cout << "NetworkDataCache::getNetWaveSource(datasource_t n =" << n << std::endl;
   boost::mutex::scoped_lock  lock(mutex_);
 
   dbmap_t::iterator pdb = waveCacheDBs_.find(n); 
@@ -134,7 +135,7 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
       Wave_t  wp = rawToWave(newData); 
       WaveBufferDisk_t<WAVEBUF_LEN>  wb; 
       wb.samprate = wp.sampratenum / float(wp.samprateden); 
-      wb.time = pTimer_->somaTimeToStreamTime(wp.time); 
+      wb.time = pTimer_->somaTimeToTimeID(wp.time); 
       for(int i = 0; i < WAVEBUF_LEN; i++) {
 	float val = float(wp.wave[i]) / 1e9; 
 	float tsdelta =  1.0 / wb.samprate; 
@@ -148,7 +149,6 @@ void NetworkDataCache::appendNewData(pDataPacket_t newData)
       key.set_ulen(sizeof(rid)); 
       key.set_flags(DB_DBT_USERMEM );
       Dbt data(&wb, sizeof(WaveBufferDisk_t<WAVEBUF_LEN> )); 
-      
 //       Dbc * cursorp; 
 //       pdb->second->cursor(NULL, &cursorp,  DB_WRITECURSOR  ); 
 

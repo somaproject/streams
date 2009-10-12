@@ -3,6 +3,7 @@ set(propwidget_SRCS
   spinbutton.cc
 #  comboboxentry.cc
   togglebutton.cc
+  checkbox.cc
 #  hscale.cc
 )
 

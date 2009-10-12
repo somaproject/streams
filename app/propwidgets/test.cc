@@ -1,4 +1,5 @@
 #include <iostream>
+#include <boost/format.hpp>
 #include <gtkmm/button.h>
 #include <gtkmm/window.h>
 #include <gtkmm/main.h>
@@ -7,6 +8,7 @@
 #include <elements/property.h>
 #include "spinbutton.h"
 #include "combobox.h"
+#include "label.h"
 
 class HelloWorld : public Gtk::Window
 {
@@ -32,6 +34,7 @@ protected:
   Gtk::Button setButton_; 
   Gtk::Button setComboIntButton_; 
   Gtk::Button setComboInt1Button_; 
+  PropertyWidgets::Label<float>  prop1label_; 
   Gtk::VBox box_; 
   bool on_my_output(); 
 
@@ -44,6 +47,12 @@ protected:
   elements::Property<int> comboIntProp2_; 
 
 };
+
+std::string floatformat1(float x,  PropertyWidgets::Label<float>::State s)
+{
+  return boost::str(boost::format("Hello world %x") % x) ; 
+  
+}
 
 HelloWorld::HelloWorld()
   : prop1_(0.0), 
@@ -79,7 +88,8 @@ HelloWorld::HelloWorld()
   box_.pack_start(statusButton_); 
   box_.pack_start(setButton_); 
   box_.pack_start(setComboIntButton_); 
-  box_.pack_start(setComboInt1Button_); 
+  box_.pack_start(setComboInt1Button_);
+  box_.pack_start(prop1label_);
   std::cout << "Adding property " << std::endl;
   m_button.addProperty(&prop1_);
   //  m_button.addProperty(&prop2_);
@@ -99,6 +109,8 @@ HelloWorld::HelloWorld()
   // The final step is to display this newly created widget...
   show_all(); 
 
+  prop1label_.formatSignal().connect(&floatformat1); 
+  prop1label_.addProperty(&prop1_); 
   Glib::signal_timeout().connect( sigc::mem_fun(*this, &HelloWorld::idle_property_update) , 
 				  2000);
 

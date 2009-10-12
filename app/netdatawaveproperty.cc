@@ -3,10 +3,12 @@
 #include <boost/format.hpp>
 
 NetDataWaveProperty::NetDataWaveProperty(pSomaConfig_t sc) : 
-  pSomaConfig_(sc)
+  pSomaConfig_(sc),
+  hpfCheckBox_("High Pass Filter Enable")
 {
   pack_start(sourceComboBox_);
   pack_start(gainComboBox_);
+  pack_start(hpfCheckBox_); 
 
   // set possible values
   
@@ -44,11 +46,11 @@ bool NetDataWaveProperty::addElement(elements::IElement * elt)
   sourceComboBox_.setPossibleValues(vals); 
   sourceComboBox_.addProperty(&ws->src); 
 
+
   std::cout << "Gain combo box adding property" << std::endl;
   gainComboBox_.addProperty(&ws->gain); 
-  
+  hpfCheckBox_.addProperty(&ws->hpfen);   
 
-  //scaleSpin_.addProperty(&ws->scale); 
   return true; 
 }
 
@@ -60,6 +62,7 @@ bool NetDataWaveProperty::delElement(elements::IElement * elt)
   }
   sourceComboBox_.delProperty(&ws->src); 
   gainComboBox_.delProperty(&ws->gain); 
-  //scaleSpin_.delProperty(&ws->scale); 
+  hpfCheckBox_.delProperty(&ws->hpfen);   
+
   return true; 
 }

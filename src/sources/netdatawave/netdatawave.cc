@@ -13,7 +13,7 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
   pNetDataCache_(ndc), 
   pSourcePad_(createSourcePad<WaveBuffer_t>("default")), 
   pNetCodec_(pnc), 
-  src(0), 
+  src(1), 
   srcnotify_(new netdatawave::PropertyNotify()), 
   // acqdatasource properties: 
   gain(0), 
@@ -27,9 +27,6 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
   src.add_watcher(srcnotify_); 
   
 //   pNetCodec_->getDSPStateProxy(src_); 
-//   pNetCodec_->getDSPStateProxy(src_).acqdatasrc.gain().connect
-//     (sigc::mem_fun(*this, &NetDataWave::gainFilter)); 
-//   reconnectPropertyProxies(); 
 
 //   src.signal().connect(sigc::mem_fun(*this, 
 // 				     &NetDataWave::setSrc)); 
@@ -45,7 +42,7 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
   src.set_value(newsrc); // will then trigger out-of-band signal
   Glib::signal_timeout().connect(sigc::mem_fun(*this, 
 					       &NetDataWave::on_check_property_change), 
-				 200); 
+				 150); 
   
 }
 
@@ -60,23 +57,16 @@ bool NetDataWave::on_check_property_change()
       gain_pending_req_known_ = true; 
     }
   }
+  if(hpfen.pendingRequest()) {
+    if(!hpfen_pending_req_known_) { 
+      // unknown, so we should attempt to set the property 
+      pNetCodec_->getDSPStateProxy(src).acqdatasrc.setHPFen(CONTCHAN, hpfen.get_req_value()); 
+      hpfen_pending_req_known_ = true; 
+    }
+  }
   return true; 
 }
 
-
-void NetDataWave::gainFilter(int chan, int gain) 
-  /* 
-     The propertyProxy we use for gain expects a signal with a single
-     gain, whereas the acqdatasource emits signals for all gain changes. 
-     Thus we must filter out for the continuous channel
-  */
-{
-
-  if (chan == CONTCHANNEL) {
-
-    gainSignal_.emit(gain);     
-  }
-}
 
 
 NetDataWave::~NetDataWave()
@@ -121,10 +111,14 @@ void NetDataWave::process(elements::timeid_t tid)
       // send the datum
 //       pSourcePad_->newData(lasttime_, lasttime_+ newdata.first, 
 // 			   *(sb->data())); // FIXME double-copy? 
-      
+      WaveBuffer_t  wb = pDataQueueView_->front(); 
+      pSourcePad_->newData(wb.time, wb.time + timeid_t((1./wb.samprate)*wb.data.size()*1e9), 
+			   wb); 
+      pDataQueueView_->pop(); 
     } else {
       break; 
     }
+    cnt++; 
   }
   
 
@@ -144,16 +138,20 @@ void NetDataWave::reconnectSource(datasource_t src)
 									  sigc::mem_fun(*this, 
 											&NetDataWave::on_gain_update)); 
   
+  if(hpfenconn_) 
+    hpfenconn_.disconnect(); 
+  
+  hpfenconn_ = pNetCodec_->getDSPStateProxy(src).acqdatasrc.hpfen().connect(
+									  sigc::mem_fun(*this, 
+											&NetDataWave::on_hpfen_update)); 
+  
   gain_pending_req_known_ = false; 
+  hpfen_pending_req_known_ = false; 
 
   gain.set_value(pNetCodec_->getDSPStateProxy(src).acqdatasrc.getGain(CONTCHAN)); 
 
 //   sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc,
 // 		&AcqDataSource::setGain); 
-
-//   gain.resetProxy(sigc::mem_fun(*this, &NetDataWave::setGainProxy), 
-// 		  sigc::mem_fun(*this, &NetDataWave::getGainProxy), 
-//  		  gainSignal_); 
 
 
 }
@@ -166,33 +164,20 @@ void NetDataWave::on_gain_update(int x, int y) {
   }
 }
 
+void NetDataWave::on_hpfen_update(int x, bool y) {
+  if (x == CONTCHAN) { 
+    std::cout << "Setting hpfen update to " << y << std::endl;
+    hpfen_pending_req_known_ = false; 
+    hpfen.set_value(y); 
+  }
+}
+
 void NetDataWave::reconnectPropertyProxies()
 {
 
   std::cout << "NetDataWave::reconnectPropertyProxies()" << std::endl; 
 
 }
-
-// int NetDataWave::getGainProxy() 
-// {
-
-//   boost::optional<int> b = pNetCodec_->getDSPStateProxy(src_).acqdatasrc.getGain(CONTCHANNEL) ;
-//   int val = 0; 
-
-//   if (b) {
-//     return val = *b; 
-//   }; 
-  
-//   return val; 
-  
-// }
-
-// void NetDataWave::setGainProxy(int x)
-// {
-
-//   pNetCodec_->getDSPStateProxy(src_).acqdatasrc.setGain(CONTCHANNEL, x);
-
-// }
 
 std::list<datasource_t> NetDataWave::getAvailableSources()
 {

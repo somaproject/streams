@@ -90,15 +90,9 @@ private:
   void reconnectSource(datasource_t src); 
   datasource_t src_; 
 
-  sigc::signal<void, int> gainSignal_; 
-  void gainFilter(int chan, int gain); 
-
   void reconnectPropertyProxies(); 
 
   static const int CONTCHANNEL = 4; 
-
-  int getGainProxy(); 
-  void setGainProxy(int x);
 
   netdatawave::pPropertyNotify_t srcnotify_; 
   void process(elements::timeid_t tid);
@@ -109,6 +103,12 @@ private:
   sigc::connection gainconn_; 
   bool gain_pending_req_known_;
   void on_gain_update(int, int);
+
+
+  sigc::connection hpfenconn_; 
+  bool hpfen_pending_req_known_;
+  void on_hpfen_update(int, bool);
+
 
   static const int CONTCHAN = 4; 
 
