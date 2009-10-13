@@ -9,6 +9,7 @@
 #include "spinbutton.h"
 #include "combobox.h"
 #include "label.h"
+#include "hscale.h"
 
 class HelloWorld : public Gtk::Window
 {
@@ -35,6 +36,8 @@ protected:
   Gtk::Button setComboIntButton_; 
   Gtk::Button setComboInt1Button_; 
   PropertyWidgets::Label<float>  prop1label_; 
+  PropertyWidgets::HScale prop1scale_; 
+
   Gtk::VBox box_; 
   bool on_my_output(); 
 
@@ -62,6 +65,7 @@ HelloWorld::HelloWorld()
     setButton_("set prop2"), 
     setComboIntButton_("set both combo int"), 
     setComboInt1Button_("set combo int 1"), 
+    prop1scale_(0.0, 100.0, 1.0), 
     m_button(adjustment_),   // creates a new button with label "Hello World".
     comboIntProp1_(1),
     comboIntProp2_(1)
@@ -90,6 +94,7 @@ HelloWorld::HelloWorld()
   box_.pack_start(setComboIntButton_); 
   box_.pack_start(setComboInt1Button_);
   box_.pack_start(prop1label_);
+  box_.pack_start(prop1scale_);
   std::cout << "Adding property " << std::endl;
   m_button.addProperty(&prop1_);
   //  m_button.addProperty(&prop2_);
@@ -103,6 +108,8 @@ HelloWorld::HelloWorld()
   comboBox_.setPossibleValues(vals); 
   comboBox_.addProperty(&comboIntProp1_); 
   comboBox_.addProperty(&comboIntProp2_); 
+
+  prop1scale_.addProperty(&prop1_);
 
   box_.pack_start(comboBox_); 
 

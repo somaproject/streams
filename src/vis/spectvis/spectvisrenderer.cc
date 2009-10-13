@@ -242,7 +242,7 @@ void SpectVisRenderer::render_high_res_stream(timeid_t timeid_t1, timeid_t timei
       glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
       glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
 
-      glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0 , GL_bLUMINANCE32F_ARB,  // GL_RGBA, 
+      glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0 , GL_LUMINANCE32F_ARB,  // GL_RGBA, 
 		   1, pfft->data.size(),  0, GL_LUMINANCE, 
 		   GL_FLOAT, 
 		   &(pfft->data[0])); 

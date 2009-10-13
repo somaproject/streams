@@ -4,6 +4,7 @@
 #include "propertypane.h"
 #include <vis/spectvis/spectvis.h>
 #include <propwidgets/combobox.h>
+#include <propwidgets/hscale.h>
 #include "somaconfig.h"
 
 class SpectVisProperty : public PropertyPane { 
@@ -29,6 +30,11 @@ private:
   Gtk::Label overlapLabel_; 
   Gtk::HBox overlapHBox_; 
   PropertyWidgets::ComboBox<int> overlapComboBox_; 
+
+
+  Gtk::Label cmapMaxLabel_; 
+  Gtk::HBox cmapMaxHBox_; 
+  PropertyWidgets::HScale cmapMaxHScale_; 
   
   pSomaConfig_t pSomaConfig_; 
 };

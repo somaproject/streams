@@ -14,7 +14,6 @@ namespace PropertyWidgets
 
   potentailly there's a render visualization
 
-  
 
 
 
@@ -47,10 +46,14 @@ private:
   void setState(State); 
 
   pWidgetPropertyNotify_t notify_; 
-  void refreshProperty(); 
 
-
+  bool on_signal_change_value(Gtk::ScrollType,double val); 
+  void on_my_value_changed(); 
+  
 }; 
 
 
 }
+
+
+#endif

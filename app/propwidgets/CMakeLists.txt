@@ -4,7 +4,7 @@ set(propwidget_SRCS
 #  comboboxentry.cc
   togglebutton.cc
   checkbox.cc
-#  hscale.cc
+  hscale.cc
 )
 
 add_library(propwidgets

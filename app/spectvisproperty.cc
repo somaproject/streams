@@ -10,6 +10,8 @@ SpectVisProperty::SpectVisProperty(pSomaConfig_t sc) :
   windowsizeComboBox_(), 
   overlapLabel_("overlap factor"), 
   overlapComboBox_(), 
+  cmapMaxLabel_("Max value"), 
+  cmapMaxHScale_(0.0, 100.0, 1.0), 
   pSomaConfig_(sc)
 {
   pack_start(fftPropertiesFrame_); 
@@ -18,6 +20,7 @@ SpectVisProperty::SpectVisProperty(pSomaConfig_t sc) :
   fftVBox_.pack_start(fftNHBox_); 
   fftVBox_.pack_start(windowsizeHBox_); 
   fftVBox_.pack_start(overlapHBox_); 
+  fftVBox_.pack_start(cmapMaxHBox_); 
   
 
   // FFTN: 
@@ -55,6 +58,9 @@ SpectVisProperty::SpectVisProperty(pSomaConfig_t sc) :
   
   overlapComboBox_.setPossibleValues(ol_vals); 
 
+  cmapMaxHBox_.pack_start(cmapMaxLabel_); 
+  cmapMaxHBox_.pack_start(cmapMaxHScale_); 
+
 }
 
 
@@ -75,6 +81,7 @@ bool SpectVisProperty::addElement(elements::IElement * elt)
   fftNComboBox_.addProperty(&ws->fftN); 
   windowsizeComboBox_.addProperty(&ws->windowsize); 
   overlapComboBox_.addProperty(&ws->overlapFactor); 
+  cmapMaxHScale_.addProperty(&ws->cmap_max); 
   return true; 
 }
 
@@ -84,7 +91,7 @@ bool SpectVisProperty::delElement(elements::IElement * elt)
   if (ws == NULL) {
     return false; 
   }
-
+  cmapMaxHScale_.delProperty(&ws->cmap_max); 
   overlapComboBox_.delProperty(&ws->overlapFactor); 
   windowsizeComboBox_.delProperty(&ws->windowsize); 
   fftNComboBox_.delProperty(&ws->fftN); 

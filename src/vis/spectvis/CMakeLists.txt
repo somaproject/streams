@@ -22,9 +22,11 @@ set(spect_vis_SRCS
 
 add_library(vis_spect
   ${spect_vis_SRCS}
+  
   )
 
 target_link_libraries(vis_spect
+  streams_core
   ${Boost_LIBRARIES} 
   ${GUIDEPS_LIBRARIES}
   ${SOMADEPS_LIBRARIES}
