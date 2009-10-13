@@ -99,7 +99,8 @@ void RenderAll::renderStream(timeid_t t1, timeid_t t2, int pixels)
   Dbt search_key(&searchval, sizeof(searchval)); 
   Dbt found_data; 
   
-  
+  size_t buffercnt = 0; 
+  size_t samplecnt = 0; 
 
   db_->cursor(NULL, &cursorp, 0); 
   int ret = cursorp->get(&search_key, &found_data, DB_SET_RANGE);
@@ -120,6 +121,8 @@ void RenderAll::renderStream(timeid_t t1, timeid_t t2, int pixels)
 
       WaveBuffer_t wb = waveBuffer_from_buffer((char*)found_data.get_data(), 
 					       found_data.get_size()); 
+      buffercnt++; 
+      
       pb->size = 0; 
       double period = 1/wb.samprate; 
       // do the conversion
@@ -128,12 +131,15 @@ void RenderAll::renderStream(timeid_t t1, timeid_t t2, int pixels)
 	pb->data[pb->size].x = wb.data[i]; 
 	pb->size++; 
       }
+      samplecnt += pb->size; 
       renderGLPointBuffer(buftime - t1, pb); 
       ret = cursorp->get(&search_key, &found_data, DB_NEXT);
     } 
     delete pb; 
   }
-  
+  std::cout << "RenderAll: samplecnt = " << samplecnt 
+	    << " buffercnt = " << buffercnt << std::endl; 
+
   cursorp->close(); 
 
 }

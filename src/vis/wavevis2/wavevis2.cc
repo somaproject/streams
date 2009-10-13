@@ -87,7 +87,7 @@ void WaveVis2::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
   timeid_t timeid_t1 = timeid_t(t1 * 1e9); 
   timeid_t timeid_t2 = timeid_t(t2 * 1e9); 
 
-  if (windowsize_ns < 50000000000) { 
+  if (windowsize_ns < 500000000) { 
 //     std::cout << "Rendering with renderall" << std::endl;
     renderall_.renderStream(timeid_t1, timeid_t2, pixels); 
   } else { 

@@ -114,6 +114,13 @@ void SpectVis::process(elements::timeid_t id)
   if(scale.pendingRequest()) {
 //     std::cout << "WaveVis2::process pending request scale" << std::endl;
     scale.set_value(scale.get_req_value()); 
+    streamRenderer_->set_vscale(scale); 
+  }
+
+  if(cmap_max.pendingRequest()) {
+    cmap_max.set_value(cmap_max.get_req_value()); 
+    streamRenderer_->set_cmap_max(cmap_max); 
+
   }
 
   // --------------------------------------------------------------

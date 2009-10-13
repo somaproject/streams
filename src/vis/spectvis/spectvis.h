@@ -59,9 +59,6 @@ class SpectVis : public VisBase
       sv->visit(this); 
   }
 
-  //  Property<Gdk::Color> color; 
-  elements::Property<float> scale; 
-    
   // FFT computation parameters
   elements::Property<int> fftN; 
   elements::Property<float> windowsize; 
@@ -69,6 +66,7 @@ class SpectVis : public VisBase
   
   // Color map properties
   elements::Property<float> cmap_max; 
+  elements::Property<float> scale; 
   
   
   

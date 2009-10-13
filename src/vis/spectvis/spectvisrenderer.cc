@@ -7,9 +7,10 @@
 namespace spectvis { 
 
 SpectVisRenderer::SpectVisRenderer(FFTEngine & eng, DownsampleCache  & dscache) : 
+  cmap_max_(5.0),
+  vscale_(1.0), 
   fftengine_(eng),
   dscache_(dscache), 
-  scale(1.0),
   gpuProgCompiled_(false)
 {
   // initialize data from stream source buffer
@@ -124,7 +125,7 @@ void SpectVisRenderer::renderStream(streamtime_t t1, streamtime_t t2, int pixels
   glColor4f(1.0, 1.0, 1.0, 1.0);
   // perform scaling
   glPushMatrix(); 
-  glScalef(1.0, 1./scale, 1.0); 
+  glScalef(1.0, 1./vscale_, 1.0); 
   
 
 
@@ -241,7 +242,7 @@ void SpectVisRenderer::render_high_res_stream(timeid_t timeid_t1, timeid_t timei
       glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MAG_FILTER, GL_LINEAR); 
       glTexParameteri(GL_TEXTURE_RECTANGLE_ARB, GL_TEXTURE_MIN_FILTER, GL_LINEAR); 
 
-      glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0 ,GL_LUMINANCE,  // GL_RGBA, 
+      glTexImage2D(GL_TEXTURE_RECTANGLE_ARB, 0 , GL_bLUMINANCE32F_ARB,  // GL_RGBA, 
 		   1, pfft->data.size(),  0, GL_LUMINANCE, 
 		   GL_FLOAT, 
 		   &(pfft->data[0])); 
@@ -266,9 +267,8 @@ void SpectVisRenderer::render_high_res_stream(timeid_t timeid_t1, timeid_t timei
     GLint unialpha = glGetUniformLocation(gpuProg_,"alpha");
     glUniform1f(unialpha, alpha); 
 
-    float max=1.0; 
     GLint unimax = glGetUniformLocation(gpuProg_,"maxval");
-    glUniform1f(unimax, max); 
+    glUniform1f(unimax, cmap_max_); 
 
     
     glBegin(GL_QUADS);
@@ -374,4 +374,15 @@ void SpectVisRenderer::checkGPUProgCompiled() {
     gpuProgCompiled_  = true; 
   }
 }
+
+void SpectVisRenderer::set_cmap_max(float x) {
+  cmap_max_ = x; 
+}
+
+
+void SpectVisRenderer::set_vscale(float y) {
+  vscale_ = y; 
+
+}
+
 }

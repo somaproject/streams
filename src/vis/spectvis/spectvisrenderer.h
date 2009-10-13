@@ -41,12 +41,16 @@ class SpectVisRenderer
 
   void renderStream(streamtime_t t1, streamtime_t t2, int pixels); 
 
-  Property<Gdk::Color> color; 
-  Property<float> scale; 
+  void set_cmap_max(float); 
+  void set_vscale(float); 
+  
 
  protected: 
 
   //float pixheight_; 
+
+  float cmap_max_; 
+  float vscale_; 
   
   typedef LRUCache<size_t, GLuint> texturecache_t; 
 
