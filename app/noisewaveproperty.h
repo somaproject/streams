@@ -27,6 +27,9 @@ private:
   Gtk::HBox preloadHBox_; 
   Gtk::Label preloadLabel_; 
 
+  Gtk::HBox samplingRateHBox_; 
+  Gtk::Label samplingRateLabel_; 
+
 
   Gtk::Adjustment preloadadjustment_; 
 
@@ -37,6 +40,8 @@ private:
   Gtk::Label classLabel_; 
 
   PropertyWidgets::ComboBox<NoiseWave2::NoiseClass> noiseClassComboBox_; 
+
+  PropertyWidgets::ComboBox<float> samplingRateComboBox_; 
 
   pSomaConfig_t pSomaConfig_; 
   //  PropertyWidgets::SpinButton scaleSpin_; 

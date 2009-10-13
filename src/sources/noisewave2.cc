@@ -10,10 +10,11 @@ NoiseWave2::NoiseWave2(std::string name, bf::path scratch) :
   amplitude(1.0), 
   noiseclass(WhiteNoise),
   preload(0), 
+  samplingrate(1000.), 
   activetime(std::make_pair(0, 0)), 
   pSourcePad_(createSourcePad<WaveBuffer_t>("default")), 
-  lasttime_(0), 
-  FS_(1000)
+  frequency(1000.0),
+  lasttime_(0)
 {
 
 }
@@ -53,6 +54,14 @@ void NoiseWave2::process(elements::timeid_t tid)
 
   if(noiseclass.pendingRequest() ) {
     noiseclass.set_value(noiseclass.get_req_value()); 
+  }
+
+  if(samplingrate.pendingRequest()) {
+    samplingrate.set_value(samplingrate.get_req_value()); 
+  }
+
+  if(frequency.pendingRequest()) {
+    frequency.set_value(frequency.get_req_value()); 
   }
 
   bool reset = false; 
@@ -125,17 +134,19 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
   // how many data points
   elements::timeid_t timedelta = endtime - starttime; 
   double fdelta = double(timedelta) / elements::TIMEID_PER_SECF; 
+  
+  double FS = samplingrate; 
 
-  double Nf = fdelta / (1./ FS_); 
+  double Nf = fdelta / (1./ FS); 
   int N = int(floor(Nf)); 
 
   pWaveBuffer_t wb(new WaveBuffer_t); 
   wb->data.reserve(N); 
   wb->time = starttime; 
-  wb->samprate = FS_; 
+  wb->samprate = FS; 
 
   // integer fs
-  elements::timeid_t period_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
+  elements::timeid_t period_ns = long(round((1./FS)*elements::TIMEID_PER_SECF)); 
 
   double freq = 100.0; 
   //freq += 10; 
@@ -149,7 +160,7 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
   } else if (noiseclass == NoisySine) {
     for (int i = 0; i < N; i++) {
       float y = 0; // = double(random()) / RAND_MAX - 0.5; 
-      float x = VSCALE * sin ((starttime/elements::TIMEID_PER_SECF + i* 1.0/ FS_) * 3.14152*2 * freq) + y;
+      float x = VSCALE * sin ((starttime/elements::TIMEID_PER_SECF + i* 1.0/ FS) * 3.14152*2 * freq) + y;
       wb->data.push_back(x); 
     }
   } else if (noiseclass == SquareWave) {
@@ -169,7 +180,7 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
   } else if (noiseclass == BiModal) {
     for (int i = 0; i < N; i++) {
       float y = double(random()) / RAND_MAX - 0.5; 
-      float x = VSCALE * sin (float(i) / FS_ * 3.14152*2 * freq) + y;
+      float x = VSCALE * sin (float(i) / FS * 3.14152*2 * freq) + y;
       wb->data.push_back(x); 
     }
   }
@@ -184,9 +195,10 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
 
 void NoiseWave2::create_outstanding_preload_data()
 {
+  double FS = samplingrate; 
 
   const int BUFSIZE = 256; 
-  elements::timeid_t period_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
+  elements::timeid_t period_ns = long(round((1./FS)*elements::TIMEID_PER_SECF)); 
 
   if (remaining_preload_pos_ < 0) {
     elements::timeid_t endpos = remaining_preload_pos_ + BUFSIZE * period_ns; 
@@ -206,9 +218,11 @@ void NoiseWave2::create_outstanding_preload_data()
 
 void NoiseWave2::create_new_data(elements::timeid_t tid)
 {
+  double FS = samplingrate; 
+
   const int BUFSIZE = 128; 
   // integer fs
-  elements::timeid_t period_ns = long(round((1./FS_)*elements::TIMEID_PER_SECF)); 
+  elements::timeid_t period_ns = long(round((1./FS)*elements::TIMEID_PER_SECF)); 
 
 
   elements::timeid_t threshold = (period_ns) * BUFSIZE + lasttime_; 

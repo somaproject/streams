@@ -29,12 +29,16 @@ public:
   // emit updatedData
   elements::Property<float> amplitude; 
   
-  enum NoiseClass {WhiteNoise, NoisySine, SquareWave, BiModal}; 
+  enum NoiseClass {WhiteNoise, NoisySine, SquareWave, BiModal, Chirp}; 
   elements::Property<NoiseClass> noiseclass; 
 
   elements::Property<float> preload; // in minutes
 
   elements::Property<elements::timewindow_t> activetime; 
+
+  elements::Property<float> samplingrate; 
+  elements::Property<float> frequency; // frequency for parameters that involve a freq
+
 
   void process(elements::timeid_t currenttime); 
   
@@ -50,7 +54,6 @@ private:
   elements::SourcePad<WaveBuffer_t>::pSourcePad_t pSourcePad_; 
   
   elements::timeid_t lasttime_; 
-  float FS_; 
 
   class SentBufferWrapper {
   public:
