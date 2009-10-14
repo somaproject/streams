@@ -4,7 +4,7 @@
 #include <boost/shared_ptr.hpp>
 #include <elements/isourcepad.h>
 #include <elements/sinkpad.h>
-
+#include <elements/types.h>
 
 namespace elements {
 
@@ -22,12 +22,12 @@ namespace elements {
     static pSourcePad_t  createPad(std::string name) 
     {
       return pSourcePad_t(new SourcePad(name)); 
-
     }
-	      
+    
 
     void connect(pSinkPad_t sp) {
-      pSinks_.push_back(sp); 
+      pSinks_.push_back(sp); // these are the ones that get the dirty message
+      sp.set_src(this);       
     }
 
     void connect(pISinkPad_t tgt) {
@@ -35,56 +35,38 @@ namespace elements {
       connect(boost::dynamic_pointer_cast<sp_t>(tgt)); 
       
     }
+    void disconnect(pSinkPad_t sp) { 
+      pSinks_.erase(sp); 
+      sp.set_src(NULL); 
+    }
 
 
     std::string getName() { return name_;} 
 
-    void newData(timeid_t start, timeid_t end, BufferT B) {
-      pelt_t elt(new elt_t); 
-      elt->datum = B; 
-      elt->starttime = start; 
-      elt->endtime = end; 
-      elt->state = elt_t::DATA; 
 
-      BOOST_FOREACH(pSinkPad_t sink, pSinks_) {
-	sink->senddata(elt); 
-      }
+    /* Ugh, this returns the result in data so we can type-specialize
+     */ 
+    
+    void get_data(std::list<BufferT> & data,  const timewindow_t & tw) {
+      return owner_->get_src_data(data, id_, tw); 
     }
-
-    void reset() {
-      pelt_t elt(new elt_t); 
-      elt->starttime = 0; 
-      elt->endtime = 0; 
-      elt->state = elt_t::RESET; 
-      BOOST_FOREACH(pSinkPad_t sink, pSinks_) {
-	sink->sendmsg(RESET); 
-	sink->senddata(elt); 
-      }
-    }
-
-//     void newSequence(timeid_t t, BufferT B) {
-//       pelt_t elt(new elt_t); 
-//       elt->datum = B; 
-//       elt->time = t; 
-//       elt->state = elt_t::SEQUENCEHEAD; 
-
-//       BOOST_FOREACH(pSinkPad_t sink, pSinks_) {
-// 	sink->senddata(elt); 
-//       }
-//     }
     
   protected:
-    SourcePad(std::string name) :
-      name_(name) 
+    SourcePad(padid_t id, IElementSource<BufferT> * owner, std::string name) :
+      id_(id), 
+      owner_(owner),
+      name_(name)
     {
-
+      
 
     }
 
+    padid_t id_; 
+    IElementSource<BufferT> * owner_;
     std::string name_; 
-
     
     std::list<pSinkPad_t > pSinks_; 
+
 
     
   }; 

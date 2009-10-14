@@ -8,54 +8,51 @@
 #include "elementlist.h"
 
 namespace elements {
-  using namespace datastore; 
+using namespace datastore; 
 
-  template<class BufferT> 
-  class SinkPad : public ISinkPad {
-  public: 
+template<class BufferT>
+class ISource;
 
-    typedef boost::shared_ptr<SinkPad> pSinkPad_t; 
-
-    static pSinkPad_t createPad(std::string name) {
-      return pSinkPad_t(new SinkPad(name)); 
-    }
+template<class BufferT> 
+class SinkPad : public ISinkPad {
+public: 
+  
+  typedef boost::shared_ptr<SinkPad> pSinkPad_t; 
+  
+  static pSinkPad_t createPad(std::string name) {
+    return pSinkPad_t(new SinkPad(name)); 
+  }
+  
+  std::string getName() { return name_;} 
+  
+  void src_dirty(const timewindow_t & tw){
+    // the connected source says it's dirty
+    dirtyqueue_.send(tw); 
+  }
+  
+   std::list<BufferT> get_src_data(const timewindow_t & tw) {
+    return src_.get_data(tw); 
+  }
+  
+protected:
+  
+  SinkPad(std::string name) :
+    name_(name), 
+      connected_(false), 
+    src_(0)
+  {
     
-    std::string getName() { return name_;} 
-
-    void sendmsg(MESSAGES m)  {
-      commandqueue_.send(m); 
-    }
-    
-    void senddata(typename LinkElement<BufferT>::ptr_t data)  {
-      dataqueue_.send(data); 
-    }
-    
-  protected:
-
-    SinkPad(std::string name) :
-      name_(name)
-    {
-      
-    }
-    
-    std::string name_; 
-    
-    bool connected_; 
-
+  }
+  
+  std::string name_; 
+  
+  bool connected_; 
+  
   public:
-    commandqueue_t commandqueue_; 
-
-    typedef LinkElement<BufferT> elt_t; 
-    typedef boost::shared_ptr<elt_t> pelt_t; 
-    NaiveQueue<pelt_t> dataqueue_; 
-    
-  }; 
+  ISource<BufferT> * src_; 
+  NaiveQueue<timewindow_t> dirtyqueue_; 
   
-  
-
-
-
-
+}; 
 
 }
 

@@ -11,7 +11,7 @@ NoiseWave2::NoiseWave2(std::string name, bf::path scratch) :
   noiseclass(WhiteNoise),
   preload(0), 
   samplingrate(1000.), 
-  activetime(std::make_pair(0, 0)), 
+  activetime(elements::timewindow_t(0, 0)),
   pSourcePad_(createSourcePad<WaveBuffer_t>("default")), 
   frequency(1000.0),
   lasttime_(0)

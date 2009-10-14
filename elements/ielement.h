@@ -13,7 +13,7 @@ namespace elements {
     
     virtual pISourcePad_t getSourcePad(std::string name) = 0; 
     virtual pISinkPad_t getSinkPad(std::string name) = 0; 
-
+    
 
     //virtual void init_per_thread(size_t threadid) = 0; 
     /* 

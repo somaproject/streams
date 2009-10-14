@@ -24,15 +24,15 @@ add_library(sources
 
 target_link_libraries(sources
   streams_core
-  source_pamonitor
-  source_netdatawave
+#  source_pamonitor
+#  source_netdatawave
   ${GUIDEPS_LIBRARIES}
   ${GUIDEPS_LIBRARIES}
 
 )
 
-add_subdirectory(pamonitor)
-add_subdirectory(netdatawave)
+#add_subdirectory(pamonitor)
+#add_subdirectory(netdatawave)
   
 
   

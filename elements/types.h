@@ -19,7 +19,35 @@ const static double TIMEID_PER_SECF = 1000000000.0;
 
 ; 
 
-typedef std::pair<timeid_t, timeid_t> timewindow_t; 
+struct timewindow_t
+{
+public:
+  timewindow_t(timeid_t s, timeid_t e) :
+    start(s),
+    end(e)
+  {
+
+  }
+
+  timewindow_t() :
+    start(0),
+    end(0)
+  {
+
+  }
+  timeid_t start; 
+  timeid_t end; 
+}; 
+
+
+typedef size_t padid_t; 
+
+template<typename T> 
+class IElementSource
+{
+public:
+  virtual void get_src_data(std::list<T> &, padid_t, const timewindow_t &) = 0; 
+}; 
 
 } 
 
