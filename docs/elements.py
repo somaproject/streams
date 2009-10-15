@@ -6,6 +6,43 @@ import bisect
 The real question here is "what is the data structure that is returned by
 the query function?"
 
+What makes a data stream a data stream? What does our data look like?
+
+1. can packets overlap? Yes, slightly
+2. can two packets ever start at exactly the same time? no
+   so we could use packet start time as a GUID
+3. packets have time span, but can be of different lengths.
+
+A stream can have a series of packets at [0, 10], [15, 20], and
+that can be the totality of the available data for a packet range.
+
+Query supports range? We would like to have data such that we know
+we've seen all the data that's in a particular range.
+
+
+How do we detect boundaries? How do we glue received sequences together?
+
+1. perfectly-adjacent sequences are valid, that is, a sequence covering [0, 10] and [11, 20]
+2. overlap is also valid? That is, responders can send sequences that they have sent
+before.
+
+Query(t1, t2) --> returns available sequences that overlap t1, t2. 
+
+How do we handle buffers that are updating in time? For example, what if we are
+very slowly updating a packet?
+
+When would we want to do that?
+
+-----
+What happens when the source gets a packet with an overlapping ... something?
+
+buffer1: [0, 10]
+buffer2: [10, 20]
+
+but buffer2 could also be [1, 10]
+
+buffers have to be able to overlap
+
 """
 
 class TestSource(Source):
