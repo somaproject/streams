@@ -143,14 +143,45 @@ if so place that into a list of triggered events.
 More formal or general solution?
 =========================================
 
-We would like an element to be able to query it's upstream element
-for data, and have that upstream element be able to say with definitive
-certainty "here is the data for region X, and this will never change." 
-Then an upstream element can also send a "data is invalid" signal, which 
-takes place over _all_ of the data. that an element has seen up to this point. 
+Split time into periods indexed by t \in Z, the result of partitioning
+time up into T. 
+
+Assume we just compute a hash over T intervals that consists
+of an associative function of the data, h(d). Alternatively, we don't need
+to be associative, but can keep track of the to-be-hashed data in a 
+data structure. 
+
+H(T_i) =  h({d_i}) for d_i \in T_i
+
+
+Assume we keep a map of start_time, end_time, fingerprint, etc. 
+And we keep the same of the data we receive.
 
 
 
-What if we assume the following: 
+What does the Standard operation look like
+-------------------------------------------
 
-A "buffer" is an interval containing data between [t1, t2] (t1, t2 \in Z). 
+1. Vis: render time (t1, t2): 
+
+In a recursive manner,  vis attempts to figure out the region with "new data":
+   2. Vis: compute internal hash for (t1, t2) -- value equals Q1 
+   3. Vis: ask upstream to compute hash for (t1, t2): value equals Q2
+
+   ultimately, vis determines that there's probably new data in [t1a, t2a]
+
+Vis asks upstream for data in [t1a, t2a]:
+  1. this data is not currently in upstream's cache, so it adds it to 
+  the work queue, and will "get to it soon", under the expectation we're going to ask for
+  some of this again soon. We return what we currently can, which is a subset
+  of the data
+
+  2. We return the subset of the data that is in our cache. 
+
+How do we handle updates? That is, could we have a filter
+that returned the _number_ of samples in a window T1, t2? We can 
+if we also hash the results of the data...
+
+-------------------------------------------------------
+What does the pipeline look like? 
+

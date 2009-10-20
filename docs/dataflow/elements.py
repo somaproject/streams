@@ -53,74 +53,68 @@ class TestSource(Source):
     
     def __init__(self, name):
         Source.__init__(self, name)
-
-        self.source = self.createSource("default")
+        self.src_timetree = timetree.default()
+        
+        self.source = self.createSource("default", self.getSourceTree)
 
         self.data_times = []
         self.data = {}
 
-    def addData(self, t1, t2, data):
+        self.stepsize = 10
+
+    def getSourceTree(self):
+        return self.src_timetree
+
+
+    def generateData(self, t1, t2):
+        """
+        generate canonical, fake data from t1 to t2
+        """
+        d = np.arange(t1, t2, self.stepsize)
 
         b = Buffer(t1, t2)
-        b.data = data
+        b.data = d
 
         bisect.insort_left(self.data_times, t1)
+        
         self.data[t1] = b
-        
+
+        self.src_timetree.insert(t1, b)
+
+    def reset(self):
+        self.data_times = []
+        self.data = {}
+
+        self.src_timetree.clear()
 
 
-    def getData(self, padname, start, end):
+    def get_data(self, t1, t2):
         """
-        Returns the ordered list of data sequences requested
-        or some subset. 
+        Returns the available list of data
+        between t1 and t2
+
         """
-
-        if padname not in self.sourcepads:
-            raise AttributeError()
-
-        MAXSIZE = 20 # maximum number of elements / sequences to return
-
         results = []
-        
-        if padname == "default":
-            # right now, we search the list to construct a time-sequence
-            i = bisect.bisect_right(self.data_times, start)
+        i = bisect.bisect_left(self.data_times, t1)
+        while i < len(self.data_times) and self.data_times[i] <=t2 :
+            if self.data_times[i] >= t1:
+                results.append(self.data[self.data_times[i]])
 
-            while i < len(self.data_times):
-                buffer_start = self.data[t1].starttime
-                buffer_end = self.data[t1].endtime
-
-                if len(results) > 0:
-                    if buffer_start > results[-1].endtime + self.seqhold:
-                        # too big of a gap, this is cearly not a contiguous
-                        # segment
-
-                        
-                key = self.data_times[i]
-
-                if key > end:
-                    break
+        return results
 
 
-                if results == []:
-                    s = DataSequence(buffer_start, 0)
-                    results.append(s)
-
-                results[-1].endtime = buffer_end
-                if buffer_end > end:
-                    break
-                    
-                
-                i += 1
-                
-                
-            
-            
 class TestVis(Vis):
+    """
+    The test vis element keeps a cache of the data
+    that it has seen locally, as well as a matching
+    time-series cache.
+
+    """
 
     def __init__(self, name, renderengine):
         Vis.__init__(self,name)
         self.sink = self.createSink("default")
+        self.src_timetree = timetree.default()
 
         self.renderCache = {}
 

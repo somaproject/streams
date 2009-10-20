@@ -1,0 +1,359 @@
+Downloading/unpacking RBTree
+  Getting page http://pypi.python.org/simple/RBTree
+  URLs to search for versions for RBTree:
+  * http://pypi.python.org/simple/RBTree/
+  Getting page http://pypi.python.org/simple/RBTree/
+  Getting page http://darcs.objectrealms.net/darcsweb.cgi/rbtree
+  Could not fetch URL http://darcs.objectrealms.net/darcsweb.cgi/rbtree (from http://pypi.python.org/simple/rbtree): <urlopen error [Errno -2] Name or service not known>
+  Will skip URL http://darcs.objectrealms.net/darcsweb.cgi/rbtree when looking for download links for RBTree
+  Analyzing links from page http://pypi.python.org/simple/rbtree
+    Skipping link http://pypi.python.org/packages/2.4/r/rbtree/rbtree-0.7-py2.4-linux-i686.egg#md5=3c4312e7fef1ab48f666d0062ffc0c86 (from http://pypi.python.org/simple/rbtree); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/r/rbtree/rbtree-0.8.0.tar.gz#md5=6975331773f9d3e8bd5a24e547077347 (from http://pypi.python.org/simple/rbtree), version: 0.8.0
+    Skipping link http://pypi.python.org/packages/2.5/r/rbtree/rbtree-0.8.0-py2.5-linux-i686.egg#md5=99b6f4626dea76730c6fb53163a4ad6b (from http://pypi.python.org/simple/rbtree); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/r/rbtree/rbtree-0.7.tar.gz#md5=86d93a8866c65a1774bd6b84389d8909 (from http://pypi.python.org/simple/rbtree), version: 0.7
+    Skipping link http://darcs.objectrealms.net/darcsweb.cgi/rbtree (from http://pypi.python.org/simple/rbtree); not a file
+  Using version 0.8.0 (newest of versions: 0.8.0, 0.7)
+  Downloading rbtree-0.8.0.tar.gz
+  Downloading from URL http://pypi.python.org/packages/source/r/rbtree/rbtree-0.8.0.tar.gz#md5=6975331773f9d3e8bd5a24e547077347 (from http://pypi.python.org/simple/rbtree)
+  Running setup.py egg_info for package RBTree
+    running egg_info
+    creating pip-egg-info/rbtree.egg-info
+    writing pip-egg-info/rbtree.egg-info/PKG-INFO
+    writing top-level names to pip-egg-info/rbtree.egg-info/top_level.txt
+    writing dependency_links to pip-egg-info/rbtree.egg-info/dependency_links.txt
+    writing manifest file 'pip-egg-info/rbtree.egg-info/SOURCES.txt'
+    warning: manifest_maker: standard file '-c' not found
+    reading manifest file 'pip-egg-info/rbtree.egg-info/SOURCES.txt'
+    writing manifest file 'pip-egg-info/rbtree.egg-info/SOURCES.txt'
+  Source in /home/jonas/soma/build/RBTree has version 0.8.0, which satisfies requirement RBTree
+Installing collected packages: RBTree
+  Running setup.py install for RBTree
+    Running command /home/jonas/soma/bin/python -c "import setuptools; __file__='/home/jonas/soma/build/RBTree/setup.py'; execfile('/home/jonas/soma/build/RBTree/setup.py')" install --single-version-externally-managed --record /tmp/pip-oUmfFd-record/install-record.txt --install-headers /home/jonas/soma/lib/include
+    running install
+    running build
+    running build_ext
+    building 'rbtree' extension
+    creating build
+    creating build/temp.linux-x86_64-2.6
+    creating build/temp.linux-x86_64-2.6/src
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./src -I/usr/include/python2.6 -c src/rbtree_impl.c -o build/temp.linux-x86_64-2.6/src/rbtree_impl.o
+    src/rbtree_impl.c: In function ‘rbtree_dump_node’:
+    src/rbtree_impl.c:64: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:65: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:66: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c: In function ‘rbtree_do_del_slice’:
+    src/rbtree_impl.c:682: warning: unused variable ‘next’
+    src/rbtree_impl.c: In function ‘__dump’:
+    src/rbtree_impl.c:724: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:729: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:729: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:731: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:734: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:734: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:736: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c: In function ‘rbtree_validate’:
+    src/rbtree_impl.c:759: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:760: warning: cast from pointer to integer of different size
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./src -I/usr/include/python2.6 -c src/rbtree.c -o build/temp.linux-x86_64-2.6/src/rbtree.o
+    gcc: src/rbtree.c: No such file or directory
+    gcc: no input files
+    error: command 'gcc' failed with exit status 1
+    Complete output from command /home/jonas/soma/bin/python -c "import setuptools; __file__='/home/jonas/soma/build/RBTree/setup.py'; execfile('/home/jonas/soma/build/RBTree/setup.py')" install --single-version-externally-managed --record /tmp/pip-oUmfFd-record/install-record.txt --install-headers /home/jonas/soma/lib/include:
+    running install
+
+running build
+
+running build_ext
+
+building 'rbtree' extension
+
+creating build
+
+creating build/temp.linux-x86_64-2.6
+
+creating build/temp.linux-x86_64-2.6/src
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./src -I/usr/include/python2.6 -c src/rbtree_impl.c -o build/temp.linux-x86_64-2.6/src/rbtree_impl.o
+
+src/rbtree_impl.c: In function ‘rbtree_dump_node’:
+
+src/rbtree_impl.c:64: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:65: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:66: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c: In function ‘rbtree_do_del_slice’:
+
+src/rbtree_impl.c:682: warning: unused variable ‘next’
+
+src/rbtree_impl.c: In function ‘__dump’:
+
+src/rbtree_impl.c:724: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:729: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:729: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:731: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:734: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:734: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:736: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c: In function ‘rbtree_validate’:
+
+src/rbtree_impl.c:759: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:760: warning: cast from pointer to integer of different size
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./src -I/usr/include/python2.6 -c src/rbtree.c -o build/temp.linux-x86_64-2.6/src/rbtree.o
+
+gcc: src/rbtree.c: No such file or directory
+
+gcc: no input files
+
+error: command 'gcc' failed with exit status 1
+
+----------------------------------------
+Command /home/jonas/soma/bin/python -c "import setuptools; __file__='/home/jonas/soma/build/RBTree/setup.py'; execfile('/home/jonas/soma/build/RBTree/setup.py')" install --single-version-externally-managed --record /tmp/pip-oUmfFd-record/install-record.txt --install-headers /home/jonas/soma/lib/include failed with error code 1
+Exception information:
+Traceback (most recent call last):
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 295, in main
+    self.run(options, args)
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 481, in run
+    requirement_set.install(install_options)
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 2273, in install
+    requirement.install(install_options)
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 1700, in install
+    cwd=self.source_dir, filter_stdout=self._filter_install, show_stdout=False)
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 3855, in call_subprocess
+    % (command_desc, proc.returncode))
+InstallationError: Command /home/jonas/soma/bin/python -c "import setuptools; __file__='/home/jonas/soma/build/RBTree/setup.py'; execfile('/home/jonas/soma/build/RBTree/setup.py')" install --single-version-externally-managed --record /tmp/pip-oUmfFd-record/install-record.txt --install-headers /home/jonas/soma/lib/include failed with error code 1
+------------------------------------------------------------
+/home/jonas/soma/bin/pip run on Sun Oct 18 15:23:02 2009
+Downloading/unpacking rbtree
+  Getting page http://pypi.python.org/simple/rbtree
+  URLs to search for versions for rbtree:
+  * http://pypi.python.org/simple/rbtree/
+  Getting page http://pypi.python.org/simple/rbtree/
+  Getting page http://darcs.objectrealms.net/darcsweb.cgi/rbtree
+  Could not fetch URL http://darcs.objectrealms.net/darcsweb.cgi/rbtree (from http://pypi.python.org/simple/rbtree/): <urlopen error [Errno -2] Name or service not known>
+  Will skip URL http://darcs.objectrealms.net/darcsweb.cgi/rbtree when looking for download links for rbtree
+  Analyzing links from page http://pypi.python.org/simple/rbtree/
+    Skipping link http://pypi.python.org/packages/2.4/r/rbtree/rbtree-0.7-py2.4-linux-i686.egg#md5=3c4312e7fef1ab48f666d0062ffc0c86 (from http://pypi.python.org/simple/rbtree/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/r/rbtree/rbtree-0.8.0.tar.gz#md5=6975331773f9d3e8bd5a24e547077347 (from http://pypi.python.org/simple/rbtree/), version: 0.8.0
+    Skipping link http://pypi.python.org/packages/2.5/r/rbtree/rbtree-0.8.0-py2.5-linux-i686.egg#md5=99b6f4626dea76730c6fb53163a4ad6b (from http://pypi.python.org/simple/rbtree/); unknown archive format: .egg
+    Found link http://pypi.python.org/packages/source/r/rbtree/rbtree-0.7.tar.gz#md5=86d93a8866c65a1774bd6b84389d8909 (from http://pypi.python.org/simple/rbtree/), version: 0.7
+    Skipping link http://darcs.objectrealms.net/darcsweb.cgi/rbtree (from http://pypi.python.org/simple/rbtree/); not a file
+  Using version 0.8.0 (newest of versions: 0.8.0, 0.7)
+  Downloading rbtree-0.8.0.tar.gz
+  Downloading from URL http://pypi.python.org/packages/source/r/rbtree/rbtree-0.8.0.tar.gz#md5=6975331773f9d3e8bd5a24e547077347 (from http://pypi.python.org/simple/rbtree/)
+  Running setup.py egg_info for package rbtree
+    running egg_info
+    creating pip-egg-info/rbtree.egg-info
+    writing pip-egg-info/rbtree.egg-info/PKG-INFO
+    writing top-level names to pip-egg-info/rbtree.egg-info/top_level.txt
+    writing dependency_links to pip-egg-info/rbtree.egg-info/dependency_links.txt
+    writing manifest file 'pip-egg-info/rbtree.egg-info/SOURCES.txt'
+    warning: manifest_maker: standard file '-c' not found
+    reading manifest file 'pip-egg-info/rbtree.egg-info/SOURCES.txt'
+    writing manifest file 'pip-egg-info/rbtree.egg-info/SOURCES.txt'
+  Source in /home/jonas/soma/build/rbtree has version 0.8.0, which satisfies requirement rbtree
+Installing collected packages: rbtree
+  Running setup.py install for rbtree
+    Running command /home/jonas/soma/bin/python -c "import setuptools; __file__='/home/jonas/soma/build/rbtree/setup.py'; execfile('/home/jonas/soma/build/rbtree/setup.py')" install --single-version-externally-managed --record /tmp/pip-iqDkDK-record/install-record.txt --install-headers /home/jonas/soma/lib/include
+    running install
+    running build
+    running build_ext
+    building 'rbtree' extension
+    creating build
+    creating build/temp.linux-x86_64-2.6
+    creating build/temp.linux-x86_64-2.6/src
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./src -I/usr/include/python2.6 -c src/rbtree_impl.c -o build/temp.linux-x86_64-2.6/src/rbtree_impl.o
+    src/rbtree_impl.c: In function ‘rbtree_dump_node’:
+    src/rbtree_impl.c:64: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:65: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:66: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c: In function ‘rbtree_do_del_slice’:
+    src/rbtree_impl.c:682: warning: unused variable ‘next’
+    src/rbtree_impl.c: In function ‘__dump’:
+    src/rbtree_impl.c:724: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:729: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:729: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:731: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:734: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:734: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:736: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c: In function ‘rbtree_validate’:
+    src/rbtree_impl.c:759: warning: cast from pointer to integer of different size
+    src/rbtree_impl.c:760: warning: cast from pointer to integer of different size
+    gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./src -I/usr/include/python2.6 -c src/rbtree.c -o build/temp.linux-x86_64-2.6/src/rbtree.o
+    gcc: src/rbtree.c: No such file or directory
+    gcc: no input files
+    error: command 'gcc' failed with exit status 1
+    Complete output from command /home/jonas/soma/bin/python -c "import setuptools; __file__='/home/jonas/soma/build/rbtree/setup.py'; execfile('/home/jonas/soma/build/rbtree/setup.py')" install --single-version-externally-managed --record /tmp/pip-iqDkDK-record/install-record.txt --install-headers /home/jonas/soma/lib/include:
+    running install
+
+running build
+
+running build_ext
+
+building 'rbtree' extension
+
+creating build
+
+creating build/temp.linux-x86_64-2.6
+
+creating build/temp.linux-x86_64-2.6/src
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./src -I/usr/include/python2.6 -c src/rbtree_impl.c -o build/temp.linux-x86_64-2.6/src/rbtree_impl.o
+
+src/rbtree_impl.c: In function ‘rbtree_dump_node’:
+
+src/rbtree_impl.c:64: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:65: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:66: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c: In function ‘rbtree_do_del_slice’:
+
+src/rbtree_impl.c:682: warning: unused variable ‘next’
+
+src/rbtree_impl.c: In function ‘__dump’:
+
+src/rbtree_impl.c:724: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:729: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:729: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:731: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:734: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:734: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:736: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c: In function ‘rbtree_validate’:
+
+src/rbtree_impl.c:759: warning: cast from pointer to integer of different size
+
+src/rbtree_impl.c:760: warning: cast from pointer to integer of different size
+
+gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -fPIC -I./src -I/usr/include/python2.6 -c src/rbtree.c -o build/temp.linux-x86_64-2.6/src/rbtree.o
+
+gcc: src/rbtree.c: No such file or directory
+
+gcc: no input files
+
+error: command 'gcc' failed with exit status 1
+
+----------------------------------------
+Command /home/jonas/soma/bin/python -c "import setuptools; __file__='/home/jonas/soma/build/rbtree/setup.py'; execfile('/home/jonas/soma/build/rbtree/setup.py')" install --single-version-externally-managed --record /tmp/pip-iqDkDK-record/install-record.txt --install-headers /home/jonas/soma/lib/include failed with error code 1
+Exception information:
+Traceback (most recent call last):
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 295, in main
+    self.run(options, args)
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 481, in run
+    requirement_set.install(install_options)
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 2273, in install
+    requirement.install(install_options)
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 1700, in install
+    cwd=self.source_dir, filter_stdout=self._filter_install, show_stdout=False)
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 3855, in call_subprocess
+    % (command_desc, proc.returncode))
+InstallationError: Command /home/jonas/soma/bin/python -c "import setuptools; __file__='/home/jonas/soma/build/rbtree/setup.py'; execfile('/home/jonas/soma/build/rbtree/setup.py')" install --single-version-externally-managed --record /tmp/pip-iqDkDK-record/install-record.txt --install-headers /home/jonas/soma/lib/include failed with error code 1
+------------------------------------------------------------
+/home/jonas/soma/bin/pip run on Sun Oct 18 15:24:21 2009
+Downloading/unpacking sorteddict
+  Getting page http://pypi.python.org/simple/sorteddict
+  URLs to search for versions for sorteddict:
+  * http://pypi.python.org/simple/sorteddict/
+  Getting page http://pypi.python.org/simple/sorteddict/
+  Getting page http://www.qtrac.eu
+  Getting page http://www.qtrac.eu/sorteddict.py
+  Analyzing links from page http://pypi.python.org/simple/sorteddict/
+    Found link http://pypi.python.org/packages/source/s/sorteddict/sorteddict-1.2.0.tar.gz#md5=00a5984cbc138cb9f642cf1c5ec5b2af (from http://pypi.python.org/simple/sorteddict/), version: 1.2.0
+    Found link http://pypi.python.org/packages/source/s/sorteddict/sorteddict-1.2.1.tar.gz#md5=4ee7aefa76c71c0637ca608a6e48c478 (from http://pypi.python.org/simple/sorteddict/), version: 1.2.1
+    Found link http://pypi.python.org/packages/source/s/sorteddict/sorteddict-1.2.1.zip#md5=3ed249cbf7c1ae39ade7a41defb9b0b4 (from http://pypi.python.org/simple/sorteddict/), version: 1.2.1
+    Found link http://pypi.python.org/packages/source/s/sorteddict/sorteddict-1.2.0.zip#md5=1cc727b08fe16c498b243e09eccb0c5e (from http://pypi.python.org/simple/sorteddict/), version: 1.2.0
+    Found link http://pypi.python.org/packages/source/s/sorteddict/sorteddict-1.1.0.zip#md5=c0be050595779ef88ae324cfd3f99c3f (from http://pypi.python.org/simple/sorteddict/), version: 1.1.0
+    Found link http://pypi.python.org/packages/source/s/sorteddict/sorteddict-1.1.0.tar.gz#md5=d0933e4a6e7df1b1510d9d9c66dce5af (from http://pypi.python.org/simple/sorteddict/), version: 1.1.0
+    Skipping link http://www.qtrac.eu (from http://pypi.python.org/simple/sorteddict/); not a file
+    Skipping link http://www.qtrac.eu/sorteddict.py (from http://pypi.python.org/simple/sorteddict/); unknown archive format: .py
+  Analyzing links from page http://www.qtrac.eu
+    Skipping link http://www.qtrac.eu/style.css (from http://www.qtrac.eu); unknown archive format: .css
+    Skipping link http://www.qtrac.eu/favicon.png (from http://www.qtrac.eu); unknown archive format: .png
+    Skipping link http://www.qtrac.eu/marksummerfield.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link mailto:mark@qtrac.eu (from http://www.qtrac.eu); unknown archive format: .eu
+    Skipping link http://www.qtrac.eu/aqpbook.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/py3book.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/py3book1.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/pyqtbook.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/alt_key.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/diffpdf.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.froglogic.com (from http://www.qtrac.eu); not a file
+    Skipping link http://www.qtrac.eu/about.html (from http://www.qtrac.eu); unknown archive format: .html
+  Analyzing links from page http://www.qtrac.eu/sorteddict.py
+  Analyzing links from page http://www.qtrac.eu
+    Skipping link http://www.qtrac.eu/style.css (from http://www.qtrac.eu); unknown archive format: .css
+    Skipping link http://www.qtrac.eu/favicon.png (from http://www.qtrac.eu); unknown archive format: .png
+    Skipping link http://www.qtrac.eu/marksummerfield.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link mailto:mark@qtrac.eu (from http://www.qtrac.eu); unknown archive format: .eu
+    Skipping link http://www.qtrac.eu/aqpbook.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/py3book.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/py3book1.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/pyqtbook.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/alt_key.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/diffpdf.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.froglogic.com (from http://www.qtrac.eu); not a file
+    Skipping link http://www.qtrac.eu/about.html (from http://www.qtrac.eu); unknown archive format: .html
+  Analyzing links from page http://www.qtrac.eu/sorteddict.py
+  Analyzing links from page http://www.qtrac.eu
+    Skipping link http://www.qtrac.eu/style.css (from http://www.qtrac.eu); unknown archive format: .css
+    Skipping link http://www.qtrac.eu/favicon.png (from http://www.qtrac.eu); unknown archive format: .png
+    Skipping link http://www.qtrac.eu/marksummerfield.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link mailto:mark@qtrac.eu (from http://www.qtrac.eu); unknown archive format: .eu
+    Skipping link http://www.qtrac.eu/aqpbook.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/py3book.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/py3book1.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/pyqtbook.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/alt_key.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.qtrac.eu/diffpdf.html (from http://www.qtrac.eu); unknown archive format: .html
+    Skipping link http://www.froglogic.com (from http://www.qtrac.eu); not a file
+    Skipping link http://www.qtrac.eu/about.html (from http://www.qtrac.eu); unknown archive format: .html
+  Analyzing links from page http://www.qtrac.eu/sorteddict.py
+  Using version 1.2.1 (newest of versions: 1.2.1, 1.2.1, 1.2.0, 1.2.0, 1.1.0, 1.1.0)
+  Downloading sorteddict-1.2.1.tar.gz
+  Downloading from URL http://pypi.python.org/packages/source/s/sorteddict/sorteddict-1.2.1.tar.gz#md5=4ee7aefa76c71c0637ca608a6e48c478 (from http://pypi.python.org/simple/sorteddict/)
+  Running setup.py egg_info for package sorteddict
+    Traceback (most recent call last):
+      File "<string>", line 14, in <module>
+    IOError: [Errno 2] No such file or directory: '/home/jonas/soma/build/sorteddict/setup.py'
+    Complete output from command python setup.py egg_info:
+    Traceback (most recent call last):
+
+  File "<string>", line 14, in <module>
+
+IOError: [Errno 2] No such file or directory: '/home/jonas/soma/build/sorteddict/setup.py'
+
+----------------------------------------
+Command python setup.py egg_info failed with error code 1
+Exception information:
+Traceback (most recent call last):
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 295, in main
+    self.run(options, args)
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 479, in run
+    requirement_set.install_files(finder, force_root_egg_info=self.bundle)
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 1992, in install_files
+    req_to_install.run_egg_info()
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 1481, in run_egg_info
+    command_desc='python setup.py egg_info')
+  File "/home/jonas/soma/lib/python2.6/site-packages/pip-0.5.1-py2.6.egg/pip.py", line 3855, in call_subprocess
+    % (command_desc, proc.returncode))
+InstallationError: Command python setup.py egg_info failed with error code 1
