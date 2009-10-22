@@ -109,6 +109,14 @@ class TestVis(Vis):
     that it has seen locally, as well as a matching
     time-series cache.
 
+    Test vis does the following:
+    1. render (t1, t2)
+    2. this looks in the internal render cache, and then
+    also places a request into the process() method
+    to update the render cache if necessary
+
+    
+
     """
 
     def __init__(self, name, renderengine):
