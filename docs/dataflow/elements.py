@@ -44,6 +44,7 @@ but buffer2 could also be [1, 10]
 buffers have to be able to overlap
 
 """
+import numpy as np
 
 class TestSource(Source):
     """
@@ -55,7 +56,8 @@ class TestSource(Source):
         Source.__init__(self, name)
         self.src_timetree = timetree.default()
         
-        self.source = self.createSource("default", self.getSourceTree)
+        self.source = self.createSource("default", self.get_data,
+                                        self.getSourceTree)
 
         self.data_times = []
         self.data = {}
@@ -99,10 +101,36 @@ class TestSource(Source):
         while i < len(self.data_times) and self.data_times[i] <=t2 :
             if self.data_times[i] >= t1:
                 results.append(self.data[self.data_times[i]])
-
+            i += 1
         return results
 
 
+class TestWaveSource(Source):
+    pass
+
+
+class VisCache(object):
+
+    def __init__(self):
+        self.data = {}
+        self.times = []
+
+    def addData(self, t, data):
+        bisect.insort_left(self.times, t)
+        self.data[t] = data
+
+    def findData(self, t1, t2):
+        i = bisect.bisect(self.times, t1)
+
+        res = []
+        
+        while i < len(self.times) and self.times[i] < t2:
+            res.append(self.data[self.times[i]])
+
+            i += 1
+        return res
+
+    
 class TestVis(Vis):
     """
     The test vis element keeps a cache of the data
@@ -122,11 +150,14 @@ class TestVis(Vis):
     def __init__(self, name, renderengine):
         Vis.__init__(self,name)
         self.sink = self.createSink("default")
-        self.src_timetree = timetree.default()
+        self.timetree = timetree.default()
 
         self.renderCache = {}
 
         self.renderengine = renderengine
+
+        self.viscache = VisCache()
+        
 
     def reset(self):
         pass
@@ -141,28 +172,115 @@ class TestVis(Vis):
 
         # find all the gaps in our current rendering
 
-        gaplists = self.findGaps(t1, t2)
-
-        for g in gaplists:
-            r = self.sink.get(g)
-
-            self.add_sequence(r)
-
-        data = self.findData(t1, t2)
+        data = self.viscache.findData(t1, t2)
 
         for d in data:
             self.renderengine.render(d)
+        self.renderregion = (t1, t2)
+        
+    def process(self):
+        """
+        The primary render region loop
 
-
-    def findGaps(self, t1, t2):
+        1. find the top-level bin the region , and over each, compute
+        the hash, and compare.
+        
         """
 
-        Return all the gaps in our current cache between t1 and
-        t2; that is, all the places we don't currently think
-        we have data, but would like to
+        t1, t2 = self.renderregion
+
+        # this should be recursive, but remember our stack is very limited
+
+        startbin = self.timetree.get_bin(self.timetree.maxlevel, t1)
+        endbin = self.timetree.get_bin(self.timetree.maxlevel, t2)
+
+        difference = False
+        diffbins = []
+
+
+        for level in range(self.timetree.maxlevel, -1, -1):
+            difference = False
+            print "level =", level
+            
+            for bin_i in range(startbin, endbin +1):
+                myhash = self.timetree.get_hash(level, bin_i)
+                srchash = self.sink.src.get_time_hash(level, bin_i)
+
+                if myhash != srchash:
+                    if level == 0:
+                        diffbins.append(bin_i)
+                        difference = True
+                    else:
+                        sbs = self.timetree.get_sub_bins(level, bin_i)
+                        startbin = sbs[0]
+                        endbin = sbs[-1]
+                        difference = True
+                        
+                        break
+            if difference == False:
+                # there are no differences, break!
+                break
+        # startbin, endbin should now point
+
+        if difference:
+            t1, t2 = self.timetree.get_bin_range(0, diffbins[0])
+
+            print "requesting data", t1, t2
+            data = self.sink.src.get_data(t1, t2)
+            for d in data:
+                self.timetree.insert(d.starttime, d)
+                self.viscache.addData(d.starttime, d)
+                
+        
+
+
+class FIRFilter(Filter):
+
+    def __init__(self, length):
+        """
+        Compute the moving-window average of the filter for length N.
+
+        Since our architecture is primarially "pull", we don't do this
+        until we've received a query from upstream.
+        
+
+        we know that if we want LENGTH packets then we will need
+        to go back a certain amount of time in history
 
         """
+        
+        
+
+        self.sink = self.createSink("default")
+        self.sink_timetree = timetree.default()
+        
+        self.src_timetree = timetree.default()
+        self.source = self.createSource("default", self.get_data,
+                                        self.get_source_tree)
+
+    def get_source_tree(self):
+        return self.src_timetree
+
+    def get_data(self, t1, t2):
+        """
+        Returns the available list of data
+        between t1 and t2
+
+        """
+        results = []
+        i = bisect.bisect_left(self.data_times, t1)
+        while i < len(self.data_times) and self.data_times[i] <=t2 :
+            if self.data_times[i] >= t1:
+                results.append(self.data[self.data_times[i]])
+            i += 1
+        return results
 
 
-    
+    def process(self):
+        """
+        1. the input was a request for (t1, t2)
+        
+        2. do we have some existing subset of t1, t2 in our input queue ? 
 
+        """
+        

@@ -28,9 +28,11 @@ class TimeInterval(object):
         return self.end - self.start + 1
 
 class Buffer(object):
-    def __init__(self, starttime, endtime):
+    def __init__(self, starttime, endtime, data = None):
         self.starttime = starttime
         self.endtime = endtime
+        self.data = data
+        
 
     def getEndTime(self):
         return self.endtime
@@ -38,24 +40,38 @@ class Buffer(object):
     def __hash__(self):
         return hash(self.starttime) + hash(self.endtime)
 
-    
+class WaveBuffer(Buffer):
+    """
+    an approximation of the wavebuffer
+    """
+    def __init__(self, starttime, fs, data):
+        self.starttime = starttime
+        self.endtime = int((len(data) * 1. / fs) * 1e9)
+        self.fs = fs
+        self.data = data
+
+    def __hash__(self):
+        return hash(self.starttime) + hash(self.endtime) + hash(self.fs)
+
     
 class SourcePad(object):
-    def __init__(self, parent, src_tree_func):
+    def __init__(self, parent, get_data_func, src_tree_func):
+        self.parent = parent
+        self.get_data_fun = get_data_func
         self.src_tree_func = src_tree_func
 
     def get_time_hash(self, level, bin):
         return self.src_tree_func().get_hash(level, bin)
 
     def get_data(self, t1, t2):
-        return self.src.get_data(t1, t2)
+        return self.parent.get_data(t1, t2)
     
 
 class SinkPad(object):
     def __init__(self, parent):
 
         self.parent = parent
-        self.src == None
+        self.src = None
         
     def connect_to(self, src):
         self.src = src
@@ -67,8 +83,8 @@ class Element(object):
         self.sourcepads = {}
         self.sinkpads = {}
         
-    def createSource(self, name):
-        self.sourcepads[name] = SourcePad(self)
+    def createSource(self, name, datfunc, srctreefunc):
+        self.sourcepads[name] = SourcePad(self, datfunc, srctreefunc)
         return self.sourcepads[name]
     
     def createSink(self, name):

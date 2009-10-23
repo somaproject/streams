@@ -1,0 +1,6 @@
+How to test this? 
+
+1. instrument process, query framework
+2. how does the FIR filter work? Can it handle having the right
+amount of state? 
+

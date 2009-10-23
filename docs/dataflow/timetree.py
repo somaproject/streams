@@ -5,6 +5,7 @@ import zlib
 import bisect
 import struct
 
+import numpy as np
 
 def default():
     """
@@ -123,7 +124,8 @@ class TimeTree(object):
         """
         Return the current hash at this level
         """
-
+        assert level >= 0
+        
         if bin not in self.hashtree[level]:
             return None
         else:
@@ -193,7 +195,6 @@ class TimeTree(object):
 
             # now update the caches
             hash_to_zero = [0 if h == None else h for h in hashes]
-            print "At level = ", level, hash_to_zero
             h = self.compute_level_hash(hash_to_zero)
 
             self.hashtree[level][bin] = h
