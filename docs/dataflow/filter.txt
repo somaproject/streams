@@ -1,0 +1,14 @@
+This is very complex. 
+
+region (t1, t2)
+
+So this  means that we should try and get (t1, t2) into our cache. 
+
+1. what are we missing of this region that should already be in
+our cache? 
+
+2. what is the region over which we should calculate.... 
+
+3. We would love to have some sort of generic "stream computation"
+over  a finite region with fixed sampling rate. 
+
