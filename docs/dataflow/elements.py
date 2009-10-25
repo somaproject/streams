@@ -45,6 +45,7 @@ buffers have to be able to overlap
 
 """
 import numpy as np
+from map import TMap
 
 class TestSource(Source):
     """
@@ -105,9 +106,6 @@ class TestSource(Source):
         return results
 
 
-class TestWaveSource(Source):
-    pass
-
 
 class VisCache(object):
 
@@ -116,7 +114,8 @@ class VisCache(object):
         self.times = []
 
     def addData(self, t, data):
-        bisect.insort_left(self.times, t)
+        if t not in self.data:
+            bisect.insort_left(self.times, t)
         self.data[t] = data
 
     def findData(self, t1, t2):
@@ -144,7 +143,6 @@ class TestVis(Vis):
     to update the render cache if necessary
 
     
-
     """
 
     def __init__(self, name, renderengine):
@@ -173,7 +171,6 @@ class TestVis(Vis):
         # find all the gaps in our current rendering
 
         data = self.viscache.findData(t1, t2)
-
         for d in data:
             self.renderengine.render(d)
         self.renderregion = (t1, t2)
@@ -243,13 +240,10 @@ class FIRFilter(Filter):
         Since our architecture is primarially "pull", we don't do this
         until we've received a query from upstream.
         
-
         we know that if we want LENGTH packets then we will need
-        to go back a certain amount of time in history
+        to go back a certain amount of time in history.
 
         """
-        
-        
 
         self.sink = self.createSink("default")
         self.sink_timetree = timetree.default()
@@ -258,6 +252,12 @@ class FIRFilter(Filter):
         self.source = self.createSource("default", self.get_data,
                                         self.get_source_tree)
 
+        self.tmap_in = TMap()
+        self.tmap_out = TMap()
+        self.recent_request = None
+
+        self.delay = length
+        
     def get_source_tree(self):
         return self.src_timetree
 
@@ -267,14 +267,9 @@ class FIRFilter(Filter):
         between t1 and t2
 
         """
-        results = []
-        i = bisect.bisect_left(self.data_times, t1)
-        while i < len(self.data_times) and self.data_times[i] <=t2 :
-            if self.data_times[i] >= t1:
-                results.append(self.data[self.data_times[i]])
-            i += 1
-        return results
-
+        self.recent_request = (t1, t2)
+        return self.tmap_out(t1, t2)
+    
 
     def process(self):
         """
@@ -282,5 +277,28 @@ class FIRFilter(Filter):
         
         2. do we have some existing subset of t1, t2 in our input queue ? 
 
+        right now, we're just flying on heuristics
+
+        
         """
+
+        t1, t2 = self.recent_request
+        t1 = t1 - self.delay
+        
+        req_data = self.source.get_data(t1, t2)
+
+        for d in req_data:
+            self.tmap_in[d.starttime] = d
+
+        # now, compute over the input range
+
+        for d in self.tmap_in.range(t1, t2):
+            """
+            count the samples, and
+            if they exceed length, do the thing
+            """
+            
+            
+        
+        
         

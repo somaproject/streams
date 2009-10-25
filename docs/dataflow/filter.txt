@@ -4,11 +4,29 @@ region (t1, t2)
 
 So this  means that we should try and get (t1, t2) into our cache. 
 
-1. what are we missing of this region that should already be in
-our cache? 
+assume that (t1, t1') and (t2', t2) are in the cache but (t1', t2') 
+aren not. 1. How do we determine this? 
 
-2. what is the region over which we should calculate.... 
+Assume we know that our "delay" for this operation is T, so that we would
+need inputs for range (t1 - T, t2)
 
-3. We would love to have some sort of generic "stream computation"
-over  a finite region with fixed sampling rate. 
+We can query our local cache to see what the values of the inputs
+over that range are. 
+
+so, let's consider: 
+
+1. Find the region (t1 -T, t2) that we care about. 
+2. Does our timecache for this region match the src's timecache? 
+3. If not, get new data in until they match
+   FIXME: This means that we don't compute? 
+
+4. Consider all of the data we have in the interesting region. For
+each set of data that can be computed on: 
+   a. if it's in the cache, then whatever
+   b. if it's not in the cache, then compute it and stick in cache
+
+-----------------------------------------------------------------------
+It would be great to be able to ask a region "what is the region over
+t1, t2 where we don't match?" and get back the first N buckets where
+we don't match
 

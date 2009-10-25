@@ -148,7 +148,6 @@ class TimeTree(object):
 
         """
         i = bisect.bisect_left(self.times, t1)
-        print i
 
         res = []
         while i < len(self.times) and  self.times[i] >= t1:
@@ -158,6 +157,10 @@ class TimeTree(object):
     
         
     def insert(self, t, value):
+        """
+        right now, we assume that each value has a single start
+        time.
+        """
         if t in self.cache:
             if value in self.cache[t]:
                 # re-putting a value we already have, so nothing changes

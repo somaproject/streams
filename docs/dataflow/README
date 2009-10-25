@@ -4,3 +4,17 @@ How to test this?
 2. how does the FIR filter work? Can it handle having the right
 amount of state? 
 
+
+What is the right way to test this? What are we rendering
+at any given point in time? 
+
+Cycle: 
+1. render request
+2. process() each element
+
+
+What are the tests we want? 
+Filter test: we can update / generate new outputs if, and only if, we
+are aware of it
+
+Add rendering subrendering, etc. 
