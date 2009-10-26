@@ -70,7 +70,6 @@ class TimeTree(object):
             raise Exception()
         
 
-        l = (level + 1)
         if level == 0:
             g = self.granularity
         else:

@@ -45,8 +45,8 @@ target_link_libraries(streams_core
     ${GUIDEPS_LIBRARIES}
     ${SOMADEPS_LIBRARIES}
     ${BDB_LIBRARIES}
-    sources
-    vis
+#    sources
+#    vis
     json_spirit
 #    triggers
 #    filters
@@ -54,8 +54,8 @@ target_link_libraries(streams_core
 
 
 
-add_subdirectory(core)
-add_subdirectory(sources)
-add_subdirectory(triggers)
-add_subdirectory(vis)
+#add_subdirectory(core)
+#add_subdirectory(sources)
+#add_subdirectory(triggers)
+#add_subdirectory(vis)
 #add_subdirectory(filters)
