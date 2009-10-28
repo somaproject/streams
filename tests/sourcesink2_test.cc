@@ -21,15 +21,24 @@ void inccount()
 }
 
 
+struct TestSource: public IElementSource<int>
+{
+  
+  void get_src_data(std::list<int> &, padid_t, const timewindow_t &)  {
+    
+  }
+  
+};
+
 BOOST_AUTO_TEST_CASE(simpletest)
 {
   typedef SourcePad<int> source_t; 
   typedef SinkPad<int> sink_t; 
-
+  TestSource ts; 
   sink_t::pSinkPad_t pSinkPad = sink_t::createPad("testpad"); 
   BOOST_CHECK_EQUAL(pSinkPad->getName(), "testpad"); 
 
-  source_t::pSourcePad_t sp = source_t::createPad( "testpad"); 
+  source_t::pSourcePad_t sp = source_t::createPad(0, &ts, "testpad"); 
 
   sp->connect(pSinkPad); 
   

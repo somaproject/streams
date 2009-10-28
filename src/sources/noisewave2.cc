@@ -12,7 +12,7 @@ NoiseWave2::NoiseWave2(std::string name, bf::path scratch) :
   preload(0), 
   samplingrate(1000.), 
   activetime(elements::timewindow_t(0, 0)),
-  pSourcePad_(createSourcePad<WaveBuffer_t>("default")), 
+  pSourcePad_(createSourcePad<WaveBuffer_t>(0, this, "default")), 
   frequency(1000.0),
   lasttime_(0)
 {
@@ -298,4 +298,15 @@ void NoiseWave2::send_data()
     }
   }
   
+}
+
+void NoiseWave2::get_src_data(std::list<WaveBuffer_t> & outwb, padid_t id, 
+			      const timewindow_t & tw)
+{
+  // only one pad, so we ignore id
+
+  int MAXSEND = 100; 
+  
+
+
 }

@@ -45,7 +45,7 @@ target_link_libraries(streams_core
     ${GUIDEPS_LIBRARIES}
     ${SOMADEPS_LIBRARIES}
     ${BDB_LIBRARIES}
-#    sources
+    sources
 #    vis
     json_spirit
 #    triggers

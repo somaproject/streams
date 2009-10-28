@@ -10,8 +10,6 @@ namespace elements {
   {
   public:
     virtual std::string getName() = 0; 
-    virtual void src_dirty(const timewindow_t & tw) = 0; 
-    
 
   }; 
 

@@ -59,13 +59,13 @@ link_directories(
 #   spectvis_test.cc
 #   runner.cc)
 
-# add_executable(timedb_test
-#   timedb_test.cc
-#   runner.cc)
+add_executable(timedb_test
+  timedb_test.cc
+  runner.cc)
 
-# add_executable(timedb_cursor_test
-#   timedb_cursor_test.cc
-#   runner.cc)
+add_executable(timedb_cursor_test
+  timedb_cursor_test.cc
+  runner.cc)
 
 
 
@@ -73,27 +73,27 @@ link_directories(
 #   valgrind.cc
 # )
 
-# # next-generation sequence stuff
-# add_executable(sourcepad2_test
-#   sourcepad2_test.cc
-#   runner.cc)
+# next-generation sequence stuff
+add_executable(sourcepad2_test
+  sourcepad2_test.cc
+  runner.cc)
 
-# add_executable(sourcesink2_test
-#   sourcesink2_test.cc
-#   runner.cc)
+add_executable(sourcesink2_test
+  sourcesink2_test.cc
+  runner.cc)
 
-# add_executable(property_test
-#   property_test.cc
-#   runner.cc)
+add_executable(property_test
+  property_test.cc
+  runner.cc)
 
-# add_executable(noisewave2_test
-#   noisewave2_test.cc
-#   runner.cc)
+add_executable(noisewave2_test
+  noisewave2_test.cc
+  runner.cc)
 
-# add_executable(lrucache_test
-#   lrucache.cc
-#   runner.cc
-#   )
+add_executable(lrucache_test
+  lrucache.cc
+  runner.cc
+  )
 
 add_executable(timecache_test
   timecache_test.cc
@@ -135,12 +135,12 @@ set(testlist
 #   timedb_cursor_test
 
 
-#   sourcepad2_test
-#   sourcesink2_test
-#   property_test
-#   noisewave2_test
-#   lrucache_test
-  timecache_test
+sourcepad2_test
+sourcesink2_test
+property_test
+noisewave2_test
+lrucache_test
+timecache_test
 )
 
 
@@ -155,8 +155,8 @@ include_directories("${PROJECT_BINARY_DIR}/tests")
 foreach(testname ${testlist})
   
   target_link_libraries(${testname}
-    #streams_core
-    #elements
+    streams_core
+    elements
 
     ${Boost_LIBRARIES} 
     ${GUIDEPS_LIBRARIES}

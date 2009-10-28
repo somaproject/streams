@@ -39,6 +39,18 @@ public:
   timeid_t end; 
 }; 
 
+/* Hashes are of wrapped data? */ 
+
+template<T> 
+class DataWrapper
+{
+public:
+  timewindow_t time; 
+  boost::shared_ptr<T> data; 
+  hashid_t hid; 
+}; 
+
+
 
 typedef size_t padid_t; 
 
@@ -46,9 +58,12 @@ template<typename T>
 class IElementSource
 {
 public:
-  virtual void get_src_data(std::list<T> &, padid_t, const timewindow_t &) = 0; 
+  virtual void get_src_data(std::list<DataWrapper<T> > &, padid_t, const timewindow_t &) = 0; 
 }; 
 
-} 
+}
+
+
+
 
 #endif 

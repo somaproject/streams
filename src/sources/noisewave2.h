@@ -14,11 +14,30 @@
 
 namespace bf = boost::filesystem; 
 
-class NoiseWave2 : public SourceBase
+/*
+  NoiseWave is our generic test source element, and is capable
+  of generating a variety of noise data sets. It is
+  driven by process() to create new data, which is "canonical" 
+  or always-true data. We can also 
+  change the amount of "preloaded" data, and this new data
+  is generated at preload-init time. 
+
+  We have two places for our output data, data_ and preload_data. 
+
+  A change of preload causes a complete invalidation of the entire
+  stack, going forward. 
+
+  There's the assumption that 
+
+ */ 
+
+
+class NoiseWave2 : public SourceBase, 
+		   public elememnts::IElementSource<WaveBuffer_t>
 {
 public:
   static const std::string TYPENAME;
-
+  
   typedef elements::timeid_t timeid_t; 
 
   // this is just a prototype source
@@ -47,6 +66,9 @@ public:
       sv->visit(this); 
   }
 
+  void get_src_data(std::list<DataWrapper<WaveBuffer_t> > &, padid_t id, 
+		    const timewindow_t & tw); 
+
 
 private:
   typedef boost::shared_ptr<WaveBuffer_t> pWaveBuffer_t; 
@@ -55,47 +77,20 @@ private:
   
   elements::timeid_t lasttime_; 
 
-  class SentBufferWrapper {
-  public:
-    inline SentBufferWrapper(pWaveBuffer_t data) : 
-      data_(data),
-      sent_(false)
-    {
-    }
-
-    inline bool sent() { 
-      return sent_; 
-    }
-
-    inline void set_sent(bool s) { 
-      sent_ = s; 
-    }
-    
-    inline pWaveBuffer_t data() { 
-      return data_; 
-    }
-
-  private:
-    pWaveBuffer_t data_;     
-    bool sent_; 
-  }; 
-  typedef boost::shared_ptr<SentBufferWrapper> pSentBufferWrapper_t; 
-
-  
   typedef std::map<elements::timeid_t, pSentBufferWrapper_t> datamap_t; 
-
+  
   elements::timeid_t remaining_preload_pos_; 
   
   datamap_t preload_data_; 
   std::stack<datamap_t::iterator> preload_iters_;
-
+  
   datamap_t data_; 
   std::stack<datamap_t::iterator> data_iters_; 
-
+  
   void reset_preload_data(); 
   void reset_sent_flags(); 
   void send_reset_token(); 
-
+  
 
   std::pair<elements::timeid_t, pWaveBuffer_t> 
   createDataBuffer(elements::timeid_t starttime, elements::timeid_t endtime ); 
