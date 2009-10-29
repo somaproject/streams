@@ -72,6 +72,8 @@ private:
   intervals_t observed_intervals_; 
   
   size_t most_recent_series_; 
+  
+  std::set<timeid_t> debug_seen_times_; 
 
 };
 

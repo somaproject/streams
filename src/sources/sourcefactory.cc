@@ -25,10 +25,10 @@ pISource_t SourceFactory::create(std::string typname, pSourceState_t ss,
 // //     pNetDataRaw_t ndw(new NetDataRaw(defaultname, ss->timer, ss->netdatacache, 
 // // 				     ss->somanetcodec, scratchdir)); 
 // //     return ndw; 
-//   } else if (typname == PulseAudioMonitorWave::TYPENAME) {
-//     pPulseAudioMonitorWave_t ndw(new PulseAudioMonitorWave(defaultname,
-//  							   scratchdir)); 
-//     return ndw; 
+  } else if (typname == PulseAudioMonitorWave::TYPENAME) {
+    pPulseAudioMonitorWave_t ndw(new PulseAudioMonitorWave(defaultname,
+ 							   scratchdir)); 
+    return ndw; 
   };
   
   throw std::runtime_error("Unknown source type " + typname); 

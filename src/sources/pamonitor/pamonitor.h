@@ -28,10 +28,16 @@ public:
       sv->visit(this); 
   }
   
+  elements::datawindow_t<pWaveBuffer_t> get_src_data(const elements::timewindow_t & tw); 
+
+  size_t get_sequence() {
+    return 0; // only ever one sequence. 
+  }
+
 
 private:
 
-  elements::SourcePad<WaveBuffer_t>::pSourcePad_t pSourcePad_; 
+  elements::SourcePad<pWaveBuffer_t>::pSourcePad_t pSourcePad_; 
 
   //boost::ptr_list<WaveBuffer_t> dataList_; 
   double fs_;
@@ -44,6 +50,13 @@ private:
   PASource pasource_; 
   boost::posix_time::ptime start_time; 
   size_t samppos_; 
+
+  boost::shared_mutex data_mutex_;
+  typedef std::map<timeid_t, pWaveBuffer_t> datamap_t; 
+  datamap_t data_; 
+  
+  pWaveBuffer_t current_pwb_; 
+
 };
 
 typedef boost::shared_ptr<PulseAudioMonitorWave> pPulseAudioMonitorWave_t; 

@@ -273,8 +273,8 @@ void WaveVis2::process(elements::timeid_t t)
 				 most_recent_render_window_.end); 
   
   // heuristic to get "extra" time
-  elements::timeid_t pre_extratime = 500 * elements::TIMEID_MS; 
-  elements::timeid_t post_extratime = 500 * elements::TIMEID_MS; 
+  elements::timeid_t pre_extratime = 5 * elements::TIMEID_MS; 
+  elements::timeid_t post_extratime = 5 * elements::TIMEID_MS; 
   
   // find the part of the render interval we don't have
   intervals_t reqset; 
@@ -282,6 +282,8 @@ void WaveVis2::process(elements::timeid_t t)
   intervals_t not_seen_but_needed = reqset - observed_intervals_; 
   
   // FIXME: never request "too much", always look for small chunks
+  
+  int interval_cnt = 0; 
   
   BOOST_FOREACH(elements::timeinterval_t t_int, not_seen_but_needed) {
 
@@ -298,25 +300,40 @@ void WaveVis2::process(elements::timeid_t t)
 
     elements::timeinterval_t req_int(l, u); 
 
-    std::cout << "requesting interval " << req_int.as_string(); 
+//     std::cout << "requesting interval " << req_int.as_string(); 
     elements::datawindow_t<pWaveBuffer_t> datawindow = pSinkPad_->get_src_data(elements::timewindow_t(req_int.lower() - pre_extratime, 
 											    req_int.upper() + post_extratime)); 
-    std::cout << " and got back " << datawindow.interval.as_string() << std::endl; 
-    observed_intervals_ += datawindow.interval; 
+//     std::cout << " and got back " << datawindow.interval.as_string() << std::endl; 
     
     BOOST_FOREACH(pWaveBuffer_t wb, datawindow.data) {
-      renderall_.newSample(wb); 
-      BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
-	i.second->newSample(wb);
+      // DEBUG TEST
+      bool seen_before_debug = debug_seen_times_.find(wb->time) == debug_seen_times_.end(); 
+      bool in_interval(observed_intervals_.contains(wb->time)); 
+      assert(in_interval != seen_before_debug); 
+
+      debug_seen_times_.insert(wb->time); 
+      
+      if (!in_interval) { // this check is so that
+	// we don't waste time rendering things we've already seen. 
+	
+	renderall_.newSample(wb); 
+	BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
+	  i.second->newSample(wb);
+	}
       }
     }
-    
+
+    observed_intervals_ += datawindow.interval; 
+
+    interval_cnt++; 
   }
+  std::cout << "did that one with " << interval_cnt << " intervals" << std::endl; 
 }
 
 void WaveVis2::reset()
 {
   std::cout << "Beginning reset " << std::endl; 
+  debug_seen_times_.clear(); 
 
   observed_intervals_.clear(); 
   renderall_.reset(); 
