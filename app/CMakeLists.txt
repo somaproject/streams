@@ -27,8 +27,8 @@ set(app_widgets_SRCS
   noisewavewidget.cc
   pamonitorwidget.cc
   waveviswidget.cc
-  spectviswidget.cc
-  netdatawavewidget.cc
+  #spectviswidget.cc
+  #netdatawavewidget.cc
   #netdatarawwidget.cc
 )
 
@@ -38,8 +38,8 @@ add_library(app_widgets
 set(app_props_SRCS
   noisewaveproperty.cc
   wavevisproperty.cc
-  spectvisproperty.cc
-  netdatawaveproperty.cc
+  #spectvisproperty.cc
+  #netdatawaveproperty.cc
   #netdatarawproperty.cc
 )
 

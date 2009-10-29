@@ -5,9 +5,9 @@
 #include <sources/netdatawave/netdatawave.h>
 #include "noisewaveproperty.h"
 #include "wavevisproperty.h"
-#include "netdatawaveproperty.h"
-#include "netdatarawproperty.h"
-#include "spectvisproperty.h"
+// #include "netdatawaveproperty.h"
+// #include "netdatarawproperty.h"
+// #include "spectvisproperty.h"
 
 PropertyPaneManager::PropertyPaneManager(Gtk::Window & parent, 
 					 pSomaConfig_t sc) : 
@@ -134,10 +134,10 @@ PropertyPane * PropertyPaneManager::createPropPane(elements::IElement * elt)
     return new NoiseWaveProperty(pSomaConfig_); 
   } else if (dynamic_cast<WaveVis2*>(elt)) {
     return new WaveVisProperty(pSomaConfig_); 
-  } else if (dynamic_cast<SpectVis*>(elt)) {
-    return new SpectVisProperty(pSomaConfig_); 
-  } else if (dynamic_cast<NetDataWave*>(elt)) {
-    return new NetDataWaveProperty(pSomaConfig_); 
+//   } else if (dynamic_cast<SpectVis*>(elt)) {
+//     return new SpectVisProperty(pSomaConfig_); 
+//   } else if (dynamic_cast<NetDataWave*>(elt)) {
+//     return new NetDataWaveProperty(pSomaConfig_); 
 //   } else if (dynamic_cast<NetDataRaw*>(elt)) {
 //     return new NetDataRawProperty(pSomaConfig_); 
   } else {

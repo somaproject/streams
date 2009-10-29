@@ -6,12 +6,14 @@ const std::string WaveVis2::TYPENAME = "WaveVis2";
 
 WaveVis2::WaveVis2(std::string name, bf::path scratchdir):
   VisBase(name), 
-  pSinkPad_(createSinkPad<WaveBuffer_t>("default")),
+  pSinkPad_(createSinkPad<pWaveBuffer_t>("default")),
   pixelHeight_(100), 
   //  color(Gdk::Color::parse("red"))
   scale(0.0),
   scratchdir_(scratchdir / name),
-  renderall_(scratchdir_)
+  renderall_(scratchdir_), 
+  most_recent_render_window_(0, 0), 
+  most_recent_series_(0)
 {
   using namespace wavevis2; 
   for(int i = 0; i < 8; i++) { 
@@ -103,6 +105,8 @@ void WaveVis2::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
   }
 
   glPopMatrix(); 
+
+  most_recent_render_window_ = elements::timewindow_t(timeid_t1, timeid_t2); 
 
 }
 
@@ -255,64 +259,66 @@ void WaveVis2::setPixelHeight(int x) {
 
 void WaveVis2::process(elements::timeid_t t)
 {
-//   std::cout << " WaveVis2::process(elements::timeid_t t)" << std::endl;
   if(scale.pendingRequest()) {
-//     std::cout << "WaveVis2::process pending request scale" << std::endl;
     scale.set_value(scale.get_req_value()); 
   }
+  
+  if (most_recent_series_ != pSinkPad_->get_series()) {
+    reset(); 
+    most_recent_series_ = pSinkPad_->get_series(); 
+  }
+  
+//   std::cout << "most recent series = " << most_recent_series_ << std::endl; 
+  elements::timeinterval_t render_win_req( most_recent_render_window_.start,
+				 most_recent_render_window_.end); 
+  
+  // heuristic to get "extra" time
+  elements::timeid_t pre_extratime = 500 * elements::TIMEID_MS; 
+  elements::timeid_t post_extratime = 500 * elements::TIMEID_MS; 
+  
+  // find the part of the render interval we don't have
+  intervals_t reqset; 
+  reqset += render_win_req; 
+  intervals_t not_seen_but_needed = reqset - observed_intervals_; 
+  
+  // FIXME: never request "too much", always look for small chunks
+  
+  BOOST_FOREACH(elements::timeinterval_t t_int, not_seen_but_needed) {
 
-  int MAXCNT = 10; 
-  int cnt = 0; 
-  while (cnt < MAXCNT) {
-    {
+    timeid_t l = t_int.lower(); 
+    timeid_t u = t_int.upper(); 
+    
+    if (t_int.is_left(boost::itl::open_bounded)) {
+      l++; 
+    } 
 
-      if(pSinkPad_->commandqueue_.empty() == false) { 
-	elements::MESSAGES m = pSinkPad_->commandqueue_.get(); 
-	if (m == elements::RESET) { 
-	  while(pSinkPad_->dataqueue_.empty()	  ) {
-	    // consume remaining data until reset
-	    boost::shared_ptr<elements::LinkElement<WaveBuffer_t> > le = pSinkPad_->dataqueue_.get(); 
-	    if (le->state == 
-		elements::LinkElement<WaveBuffer_t>::RESET) {
-	      reset(); 
-	      break; 
-	    }
+    if (t_int.is_right(boost::itl::open_bounded)) {
+      u--; 
+    } 
 
-	  }
+    elements::timeinterval_t req_int(l, u); 
 
-	} else {
-
-	  std::cerr << "Unknown command?" << std::endl; 
-	}
-      }
-      
-      if(pSinkPad_->dataqueue_.empty()) {
-	break; 
-      }
-      boost::shared_ptr<elements::LinkElement<WaveBuffer_t> > le = pSinkPad_->dataqueue_.get(); 
-
-      if (le->state  
-	  == elements::LinkElement<WaveBuffer_t>::RESET) {
-
-	reset(); 
-      } else { 
-	
-	WaveBuffer_t wb = le->datum; 
- 	renderall_.newSample(wb); 
-	BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
-	  i.second->newSample(wb);
-	}
-
- 	cnt++; 
+    std::cout << "requesting interval " << req_int.as_string(); 
+    elements::datawindow_t<pWaveBuffer_t> datawindow = pSinkPad_->get_src_data(elements::timewindow_t(req_int.lower() - pre_extratime, 
+											    req_int.upper() + post_extratime)); 
+    std::cout << " and got back " << datawindow.interval.as_string() << std::endl; 
+    observed_intervals_ += datawindow.interval; 
+    
+    BOOST_FOREACH(pWaveBuffer_t wb, datawindow.data) {
+      renderall_.newSample(wb); 
+      BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
+	i.second->newSample(wb);
       }
     }
+    
   }
-  // FIXME: put in reset signal 
 }
 
 void WaveVis2::reset()
 {
   std::cout << "Beginning reset " << std::endl; 
+
+  observed_intervals_.clear(); 
   renderall_.reset(); 
   BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
     i.second->reset(); 

@@ -42,7 +42,7 @@ public:
   ~RenderDownSample(); 
 
   void renderStream(timeid_t t1, timeid_t t2, int pixels); 
-  void newSample( WaveBuffer_t & ); 
+  void newSample( pWaveBuffer_t  ); 
   void reset(); 
 
 

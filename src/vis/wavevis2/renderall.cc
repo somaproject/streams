@@ -68,13 +68,13 @@ RenderAll::RenderAll(bf::path scratch) :
 }
 
 
-void RenderAll::newSample(WaveBuffer_t & wb) {
+void RenderAll::newSample(pWaveBuffer_t pwb) {
   const int BUFSIZE = 4096; 
   char  buffer[BUFSIZE]; 
   
-  size_t len = waveBuffer_to_buffer(buffer, wb); 
+  size_t len = waveBuffer_to_buffer(buffer, *pwb); 
   
-  Dbt key(&wb.time, sizeof(wb.time));
+  Dbt key(&pwb->time, sizeof(pwb->time));
   Dbt data(buffer, len); 
   Dbc * cursorp; 
   db_->cursor(NULL, &cursorp,  DB_WRITECURSOR  ); 

@@ -77,7 +77,7 @@ RenderDownSample::RenderDownSample(timeid_t sampledur, size_t binsize,
 }
 
 
-void RenderDownSample::newSample(WaveBuffer_t & wb) {
+void RenderDownSample::newSample(pWaveBuffer_t pwb) {
   
   /* 
      We will need to entertain the hypothesis that
@@ -90,7 +90,7 @@ void RenderDownSample::newSample(WaveBuffer_t & wb) {
 
 
 
-  double period = 1/wb.samprate; 
+  double period = 1/pwb->samprate; 
   timeid_t period_ns = timeid_t(period * 1e9); 
 
   Dbc * cursorp; 
@@ -109,8 +109,8 @@ void RenderDownSample::newSample(WaveBuffer_t & wb) {
   typedef std::map<timeid_t, GLPointBuffer_t *> cachemap_t; 
   cachemap_t cachemaps; 
 
-  for (int sample_pos = 0; sample_pos < wb.data.size(); sample_pos++) { 
-    timeid_t sample_time = (period_ns * sample_pos) + wb.time; 
+  for (int sample_pos = 0; sample_pos < pwb->data.size(); sample_pos++) { 
+    timeid_t sample_time = (period_ns * sample_pos) + pwb->time; 
     
     timeid_t sample_time_bin = getBinStart(sample_time); 
     
@@ -160,7 +160,7 @@ void RenderDownSample::newSample(WaveBuffer_t & wb) {
     size_t pb_pos =  (sample_time - sample_time_bin) / sampledur_; 
     assert(pb_pos < GLPointBuffer_t::BUFFERN); 
     
-    pb->data[pb_pos].x = wb.data[sample_pos]; 
+    pb->data[pb_pos].x = pwb->data[sample_pos]; 
     if(pb_pos + 1 > pb->size) 
       pb->size = pb_pos +1; 
 

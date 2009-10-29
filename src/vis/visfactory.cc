@@ -17,10 +17,11 @@ pIVis_t VisFactory::create(std::string typname, bf::path scratchdir) {
 //     pWaveVis_t wv(new WaveVis(defaultname, scratchdir)); 
 //     return wv; 
 
-  if (typname == SpectVis::TYPENAME) {
-    pSpectVis_t sv(new SpectVis(defaultname, scratchdir)); 
-    return sv; 
-  }  else if (typname == WaveVis2::TYPENAME) {
+//   if (typname == SpectVis::TYPENAME) {
+//     pSpectVis_t sv(new SpectVis(defaultname, scratchdir)); 
+//     return sv; 
+//   }  else 
+    if (typname == WaveVis2::TYPENAME) {
     pWaveVis2_t wv(new WaveVis2(defaultname, scratchdir)); 
     return wv; 
   } else {

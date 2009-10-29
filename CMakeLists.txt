@@ -51,7 +51,7 @@ include_directories(itl.trunk/boost)
 include_directories(itl.trunk/)
 
 add_subdirectory(src)
-#add_subdirectory(app)
+add_subdirectory(app)
 add_subdirectory(tests)
 add_subdirectory(bench)
 add_subdirectory(json_spirit)

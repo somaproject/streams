@@ -19,6 +19,7 @@
 #include "renderdownsample.h"
 #include <elements/property.h>
 #include <boost/thread/shared_mutex.hpp>
+#include <boost/itl/interval_set.hpp>
 
 class WaveVis2; 
 
@@ -52,7 +53,7 @@ class WaveVis2 : public VisBase
   void process(elements::timeid_t tid); 
 
 private:
-  elements::SinkPad<WaveBuffer_t>::pSinkPad_t pSinkPad_; 
+  elements::SinkPad<pWaveBuffer_t>::pSinkPad_t pSinkPad_; 
 
 //   void newData(); 
 //   void invalidateData(); 
@@ -65,6 +66,12 @@ private:
   typedef std::map<timeid_t, wavevis2::RenderDownSample*> dsmap_t; 
   dsmap_t downsampledRenderers_; 
   void reset(); 
+  elements::timewindow_t most_recent_render_window_; 
+
+  typedef boost::itl::interval_set<timeid_t> intervals_t; 
+  intervals_t observed_intervals_; 
+  
+  size_t most_recent_series_; 
 
 };
 

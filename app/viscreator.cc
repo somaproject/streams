@@ -49,12 +49,12 @@ void VisCreator::visit(WaveVis2 * pwv)
 void VisCreator::visit(SpectVis * psv)
 {
   
-  SpectVisWidget * sv = new SpectVisWidget(psv, pipelineGUI_.getSomaConfig()); 
-  sv->setPropertyPaneManager(pipelineGUI_.getPropertyPaneManager()); 
+//   SpectVisWidget * sv = new SpectVisWidget(psv, pipelineGUI_.getSomaConfig()); 
+//   sv->setPropertyPaneManager(pipelineGUI_.getPropertyPaneManager()); 
   
-  // tell pipeline gui that there's a new source, and let it
-  // position appropriately
-  pipelineGUI_.addNewVis(sv); 
+//   // tell pipeline gui that there's a new source, and let it
+//   // position appropriately
+//   pipelineGUI_.addNewVis(sv); 
   
 
 }

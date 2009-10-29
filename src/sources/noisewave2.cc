@@ -18,7 +18,8 @@ NoiseWave2::NoiseWave2(std::string name, bf::path scratch) :
 					     boost::bind(&NoiseWave2::get_sequence, this))), 
   frequency(1000.0),
   lasttime_(0),
-  seqid_(0)
+  seqid_(0), 
+  remaining_preload_pos_(0)
 {
   
 }
@@ -72,12 +73,12 @@ void NoiseWave2::process(elements::timeid_t tid)
   if(preload.pendingRequest() ) {
     std::cout << "Changed preload value, resetting" << std::endl; 
     preload.set_value(preload.get_req_value()); 
+    remaining_preload_pos_ = - preload.get_req_value() * 60 * elements::TIMEID_SEC; 
     reset = true; 
   }
 
 
   if (reset) { 
-
     preload_data_.clear(); 
     seqid_++; 
   }
@@ -180,7 +181,6 @@ void NoiseWave2::create_outstanding_preload_data()
     
     std::pair<timeid_t, pWaveBuffer_t> newdata
       = createDataBuffer(remaining_preload_pos_, endpos); 
-    
 
     preload_data_.insert(std::make_pair(remaining_preload_pos_, newdata.second )); 
 
@@ -229,12 +229,25 @@ elements::datawindow_t<pWaveBuffer_t> NoiseWave2::get_src_data(const elements::t
   elements::datawindow_t<pWaveBuffer_t> wb; 
   wb.sequenceid = seqid_; 
   
-  if (remaining_preload_pos_ == 0) {
+  if (remaining_preload_pos_ >= 0) {
     // we're doing with preloading, so you can include the gap
     // 
     // fixme
     copy_data_map_range_to_output(preload_data_, tw.start, tw.end, wb); 
     copy_data_map_range_to_output(data_, tw.start, tw.end, wb); 
+
+    if (!wb.data.empty()) {
+      wb.interval = elements::timeinterval_t(tw.start, 
+					     wb.data.back()->time); 
+    } else {
+      /* we did the query and there was no data. At the very least, if
+	 this was a query of data before time zero, 
+	 then we know it was true
+      */ 
+      wb.interval = elements::timeinterval_t(tw.start, -1); 
+
+    }
+
 
   } else {
     /* 
@@ -266,13 +279,11 @@ elements::datawindow_t<pWaveBuffer_t> NoiseWave2::get_src_data(const elements::t
 				    wb); 
 
     }
+    if (!wb.data.empty()) {
+      wb.interval = elements::timeinterval_t(wb.data.front()->time, 
+					     wb.data.back()->time); 
+    }
   }
-    
-  if (!wb.data.empty()) {
-    wb.interval = elements::timeinterval_t(wb.data.front()->time, 
-					   wb.data.back()->time); 
-  }
-  
   return wb; 
   
 }

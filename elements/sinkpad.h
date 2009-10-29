@@ -25,6 +25,10 @@ public:
     return src_->get_data(tw); 
   }
 
+  size_t get_series() {
+    return src_->get_series(); 
+  }
+
   void set_src(SourcePad<BufferT> * sp) {
     src_ = sp; 
   }
