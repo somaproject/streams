@@ -3,7 +3,6 @@
 #include <boost/shared_ptr.hpp>
 
 #include <elements/commands.h> 
-#include <elements/elementlist.h>
 
 namespace elements { 
   class ISinkPad 

@@ -21,7 +21,6 @@ public:
   
   ~PulseAudioMonitorWave(); 
   
-
   void process(elements::timeid_t currenttime); 
 
   void accept(pISourceVisitor_t sv) { 

@@ -3,7 +3,8 @@
 
 #include <stdint.h>
 #include <utility>
-
+#include <list>
+#include <itl/interval.hpp>
 namespace elements {
 
 typedef int64_t timeid_t; 
@@ -17,7 +18,7 @@ static const timeid_t TIMEID_SEC = 1000000000;
 const static int64_t TIMEID_PER_SEC = 1000000000; 
 const static double TIMEID_PER_SECF = 1000000000.0; 
 
-; 
+typedef boost::itl::interval<timeid_t> timeinterval_t; 
 
 struct timewindow_t
 {
@@ -26,7 +27,7 @@ public:
     start(s),
     end(e)
   {
-
+    
   }
 
   timewindow_t() :
@@ -35,35 +36,29 @@ public:
   {
 
   }
+
   timeid_t start; 
   timeid_t end; 
+  
+  timeinterval_t interval() {
+    return timeinterval_t(start, end);     
+  }
+
 }; 
 
 /* Hashes are of wrapped data? */ 
 
-template<T> 
-class DataWrapper
+template<typename T> 
+struct datawindow_t
 {
-public:
-  timewindow_t time; 
-  boost::shared_ptr<T> data; 
-  hashid_t hid; 
+  size_t sequenceid; // change to signal reset. 
+  std::list<T> data; 
+  timeinterval_t interval; 
 }; 
-
-
 
 typedef size_t padid_t; 
 
-template<typename T> 
-class IElementSource
-{
-public:
-  virtual void get_src_data(std::list<DataWrapper<T> > &, padid_t, const timewindow_t &) = 0; 
-}; 
+
 
 }
-
-
-
-
 #endif 

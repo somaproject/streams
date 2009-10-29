@@ -20,25 +20,24 @@ void inccount()
   globalcount++; 
 }
 
+datawindow_t<int> get_data(const timewindow_t & tw) {
 
-struct TestSource: public IElementSource<int>
+}
+
+size_t get_seq()
 {
-  
-  void get_src_data(std::list<int> &, padid_t, const timewindow_t &)  {
-    
-  }
-  
-};
+
+}
+
 
 BOOST_AUTO_TEST_CASE(simpletest)
 {
   typedef SourcePad<int> source_t; 
   typedef SinkPad<int> sink_t; 
-  TestSource ts; 
   sink_t::pSinkPad_t pSinkPad = sink_t::createPad("testpad"); 
   BOOST_CHECK_EQUAL(pSinkPad->getName(), "testpad"); 
 
-  source_t::pSourcePad_t sp = source_t::createPad(0, &ts, "testpad"); 
+  source_t::pSourcePad_t sp = source_t::createPad("testpad", get_data, get_seq); 
 
   sp->connect(pSinkPad); 
   

@@ -1,0 +1,530 @@
+[/
+    Copyright (c) 2008-2009 Joachim Faulhaber
+
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+]
+
+[section Interface]
+
+Section *Interface* outlines types and functions
+of the *Itl*. Synoptical tables allow to review the overall structure of
+the libraries design and to focus on structural equalities and differences
+with the corresponding containers of the standard template library.
+
+
+[section Class templates]
+
+The next two tables give an overview over ['*set class templates*] of
+the itl and compares them to std::set. Included is the __itv__ class
+template, because an interval is considered to be a set as well. 
+
+[/              interval]
+[/          interval_set]
+[/ separate_interval_set]
+[/    split_interval_set]
+[/              itl::set]
+
+[table Set class templates
+[[group]        [template]       [instance parameters]]
+[[__itv__]      [__itv__]        [`<DomainT,Compare>`]]
+[[__itv_bsets__][__itv_set__]    [`<DomainT,Compare,Interval,Alloc>`]]
+[[]             [__sep_itv_set__][`<DomainT,Compare,Interval,Alloc>`]]
+[[]             [__spl_itv_set__][`<DomainT,Compare,Interval,Alloc>`]]
+[[__itl_set__]  [__itl_set__]    [`<DomainT,Compare,         Alloc>`]]
+[[=std::set=]   [`std::set`]     [`<_Key,  _Compare,        _Alloc>`]]
+]
+
+Templates and template parameters, given in the preceding table are 
+described in detail below.
+__Itv_bsets__ represent three
+class templates __itv_set__, __sep_itv_set__ and __spl_itv_set__
+that all have equal template parameters. 
+
+[table Parameters of set class templates
+[[]                   [type of elements][order of elements]    [type of intervals]                             [memory allocation]]
+[[template parameter] [`class`]  [`template <class>class`]     [`template <class, template<class>class> class`][`template <class>class`]]    
+[[__itv__]            [`DomainT`][`Compare = std::less`]       []                                              []]
+[[__itv_bsets__]      [`DomainT`][`Compare = std::less`]       [`Interval = itl::interval`]                    [`Alloc = std::alloc`]]
+[[__itl_set__]        [`DomainT`][`Compare = std::less`]       []                                              [`Alloc = std::alloc`]]
+[[template parameter] [`class`]  [`class`]                     [`class`]                                       [class]]
+[[=std::set=]         [`_Key`]   [`_Compare = std::less<_Key>`][]                                              [`Alloc = std::alloc<_Key>`]]
+]
+
+The next two tables give an overview over ['*map class templates*] of
+the itl and compares them to =std::map=. 
+
+[/       interval_map]
+[/ split_interval_map]
+[/           itl::map]
+
+[table map class templates
+[[group]        [template]       [instance parameters]]
+[[__itv_bmaps__][__itv_map__]    [`<DomainT,CodomainT,Traits,Compare,Combine,Section,Interval,Alloc>`]]
+[[]             [__spl_itv_map__][`<DomainT,CodomainT,Traits,Compare,Combine,Section,Interval,Alloc>`]]
+[[__itl_map__]  [__itl_map__]    [`<DomainT,CodomainT,Traits,Compare,Combine,Section,Alloc>`]]
+[[=std::map=]   [`std::map`]     [`<_Key,   _Data,          _Compare,               _Alloc>`]]
+]
+
+
+Templates and template parameters, given in the preceding table are 
+described in detail below.
+__Itv_bmaps__ represent two
+class templates __itv_map__ and __spl_itv_map__
+that all have equal template parameters.
+
+[table Parameters of map class templates
+[[]                   [elements][mapped values][traits]                      [order of elements]           [aggregation propagation]  [intersection propagation]     [type of intervals]                             [memory allocation]]
+[[template parameter] [`class`]  [`class`]     [`class`]                     [`template <class>class`]     [`template <class>class`]  [`template <class>class`]      [`template <class, template<class>class> class`][`template <class>class`]]    
+[[__itv_bmaps__]      [`DomainT`][`CodomainT`] [`Traits = neutron_absorber`] [`Compare = std::less`]       [`Combine = inplace_plus`] [`Section = itl::inplace_et`]  [`Interval = itl::interval`]                    [`Alloc = std::alloc`]]
+[[__itl_map__]        [`DomainT`][`CodomainT`] [`Traits = neutron_absorber`] [`Compare = std::less`]       [`Combine = inplace_plus`] [`Section = itl::inplace_et`]  [`Alloc = std::alloc`]]
+[[template parameter] [`class`]  [`class`]     []                            [`class`]                     []                         []                             []                                              [`class`]]
+[[=std::map=]         [`_Key`]   [`_Data`]     []                            [`_Compare = std::less<_Key>`][]                         []                             []                                              [`Alloc = std::alloc<_Key>`]]
+]
+
+Using the following placeholders,
+
+``
+D  := class DomainT,
+C  := class CodomainT,
+T  := class Traits,
+Cp := class Compare = std::less<DomainT>,
+cp := template<class D>class Compare = std::less,
+cb := template<class C>class Combine = itl::inplace_plus,
+s  := template<class C>class Section = itl::inplace_et,
+i  := template<class D,template<class>class cp>class Interval = itl::interval
+Ad := class Alloc = std::allocator<DomainT>
+Av := class Alloc = std::allocator<std::pair<DomainT,CodomainT> >
+a  := template<class>class Alloc = std::allocator
+``
+
+we arrive at a final synoptical matrix of class templates and their parameters.
+
+[pre
+interval     <D,       cp,             >
+interval_sets<D,       cp,        i, a >
+itl::set     <D,       cp,           a >
+std::set     <D,       Cp,           Ad>
+interval_maps<D, C, T, cp, cb, s, i, a >
+itl::map     <D, C, T, cp, cb, s,    a >
+std::map     <D, C     Cp,           Av>
+]
+
+The choice of parameters and their positions follow the std::containers
+as close a possible, so that usage of interval sets and maps does only
+require minimal additional knowledge.
+
+Additional knowledge is required when instantiating a comparison parameter
+`Compare` or an allocation parameter `Alloc`. In contrast to std::containers
+these have to be instantiated as templates, like e.g.
+``
+interval_set<string, german_compare>      sections; // 2nd parameter is a template
+std::set<string, german_compare<string> > words;    // 2nd parameter is a type
+``
+
+[endsect][/ Class templates]
+
+[section Required Concepts]
+
+There are uniform requirements for the template parameters 
+across *itl's* class templates. The template parameters can
+be grouped with respect to those requirements.
+
+[table 
+[[]                    [used in]             [Kind]        [Parameter]  [Instance]                     [Description] ]
+[[Domain order]        [`interval, Sets, Maps`][`typename`][`DomainT`]  []                             [For the type `DomainT` of key elements `...`]]
+[[]                    []                    [`template`]  [`Compare`]  [`Compare<DomainT>`]           [`...` there is an order `Compare`] ]
+[[Interval type]       [`interval_sets/maps`][`template`]  [`Interval`] [`Interval<DomainT,Compare>`]  [`...` the `Interval` parameter has to use the same element type and order. ] ]
+[[Codomain aggregation][`Maps`]              [`typename`]  [`CodomainT`][]                             [For the type `CodomainT` of associated values `...`]]
+[[]                    []                    [`template`]  [`Combine`]  [`Combine<CodomainT>`]         [`...` there is a binary functor `Combine<CodomainT>()` to combine them ] ]
+[[]                    []                    []            []           [`Inverse<Combine<CodomainT>>`][`...` and implicitly an `Inverse` functor to inversely combine them.  ] ]
+[[]                    []                    [`template`]  [`Section`]  [`Section<CodomainT>`]         [Intersection is propagated to CodomainT values via functor `Section<CodomainT>()`] ]
+[[Memory allocation]   [`Sets, Maps`]        [`template`]  [`Alloc`]    [`Alloc<`/various/`>`]         [An allocator can be chosen for memory allocation.]]
+]
+
+[/ table 
+[[Kind]      [Parameter]  [Condition]                              [Requirement]                                             ]
+[[`typename`][`DomainT`]  []                                       [`Regular<DomainT> && LessThanComparable<DomainT,Compare>` 
+                                                                    `&& (IsIncrementable<DomainT>||HasUnon<DomainT>)`] ]
+[[][]                     [`IsIntegral<DomainT>`]                  [`IsIncrementable<DomainT> && IsDecrementable<DomainT>`] ] 
+[[`typename`][`CodomainT`][`Combine` and `Inverse<Combine>` unused]         []]
+[[][]                     [only `Combine` used ]                   [`EqualityComparable<CodomainT> && Addable<CodomainT,Combine>`] ] 
+[[][]                     [also `Inverse<Combine>` used]           [`&& Subtractable<CodomainT,Inverse<Combine> >`] ] 
+[[`template`][`Compare`]  []                                       [`LessThanComparable<DomainT,Compare>`]                     ]
+[[`template`][`Combine`]  [only `Combine` used]                    [`Addable<CodomainT,Combine>`]] 
+[[][]                     [and `Inverse<Combine>` used]            [`&& Subtractable<CodomainT,Inverse<Combine> >`] ] 
+[[][]                     [`Section` used and `CodomainT` is a set][`Intersectable<CodomainT,Section>`] ] 
+]
+
+[h4 Requirements on DomainT]
+
+The next table gives an overview over the requirements for
+template parameter `DomainT`. Some requirements are dependent
+on /conditions/. Column /operators/ shows the operators and
+functions that are expected for `DomainT`, if the default order
+`Compare = std::less` is used.
+
+[table 
+[[Parameter]  [Condition]            [Operators]                     [Requirement]                                              ]
+[[`DomainT`]  []                     [`DomainT(), <`]                [`Regular<DomainT> && StrictWeakOrdering<DomainT,Compare>`]] 
+[[]           []                     [`++, unon<CodomainT>::value()`][`&& (IsIncrementable<DomainT>||HasUnon<DomainT>)`]        ]
+[[]           [`IsIntegral<DomainT>`][`++, --`]                      [`IsIncrementable<DomainT> && IsDecrementable<DomainT>`]   ] 
+]
+
+A domain type `DomainT` for intervals and interval containers
+has to satisfy the requirements of concept  
+[@http://www.generic-programming.org/languages/conceptcpp/issues/concepts-closed.html `Regular`]
+which
+implies among other properties the existence of a copy and
+a default constructor. In addition `IsIncrementable`
+*or* `HasUnon` is required for `DomainT`.
+In the *itl* we represent an empty interval by a closed
+interval `[b,a]` where `a < b` (here `<` represents `Compare<DomainT>()`). 
+To construct one of these empty intervals as default constructor
+for any type `DomainT` we choose `[1,0]`, where `0` is a null-value or `neutron`
+and `1` is a one-value or `unon`:
+`` 
+interval() := [unon<DomainT>::value(), neutron<DomainT>::value()] //pseudocode
+``
+`Neutrons` are implemented via call of the default constructor of
+`DomainT`. An `unon<T>::value()` is implemented 
+[classref boost::itl::unon by default] as a `neutron`, 
+that is incremented once. 
+``
+template <class Type> 
+inline Type unon<Type>::value(){ return succ(neutron<Type>::value()); };
+``
+So a type `DomainT` that is `incrementable` will
+also have an `unon`. If it does not, an `unon` can be provided.
+An `unon` can be any value, that is greater as the `neutron` value
+in the `Compare` order given.
+An example of a type, that has a `neutron` but no increment is
+`string`. So for `std::string` an unon is implemented like this:
+``
+// Smallest 'visible' string that is greater than the empty string.
+template <>    
+inline std::string unon<std::string>::value(){ return std::string(" "); };
+``
+
+Just as for the key type of std::sets and maps 
+template parameter `Compare`  is required to be a 
+[@http://en.wikipedia.org/wiki/Strict_weak_ordering strict weak ordering] on `DomainT`.
+
+Finally, if `DomainT` is an integral type, `DomainT` needs to
+be `incrementable` and `decrementable`. This [''bicrementability']
+needs to be implemented on the smallest possible unit of the
+integral type. This seems like being trivial but there are types like e.g.
+`boost::date_time::ptime`, that are integral in nature but do
+not provide the required in- and decrementation on the least incrementable unit.
+For __itl_itvs__ incementation and decementation is used
+for computations between open to closed interval borders like e.g.
+`[2,43) == [2,42]`. Such computations always need only
+one in- or decrementation, if `DomainT` is an integral type. 
+
+[h5 Requirements on Interval]
+
+Requirements on the `Interval` parameter are closely related to the 
+`DomainT` parameter. `template Interval` has two template parameters
+itself for an element type and a compare order and it is of course
+internally always instantiated as `Interval<DomainT,Compare>`.
+`Interval<DomainT,Compare>` then has to implement an order called
+`exclusive_less`. Two intervals `x, y` are exclusive_less 
+``x.exclusive_less(y)``
+if all `DomainT` elements of `x` are less than elements of `y` in the
+`Compare` order. 
+ 
+[table 
+[[Parameter]  [Operators]                     [Requirement]                                              ]
+[[`Interval`] [`exclusive_less`]              [`IsExclusiveLessComparable<Interval<DomainT,Compare> >`]   ] 
+]
+
+[h4 Requirements on CodomainT]
+
+Summarized in the next table are requirements for template parameter
+`CodomainT` of associated values for `Maps`. Again there are
+/conditions/ for some of the requirements. Column /operators/
+contains the operators and functions required for `CodomainT`, if we are
+using the default combiner `Combine = itl::inplace_plus`.
+
+[table 
+[[Parameter]  [Condition]                              [Operators]        [Requirement]                                 ]
+[[`CodomainT`][`add`, `subtract`, `intersect` unused]  [`CodomainT(), ==`][`Regular<CodomainT>` which implies]          ]
+[[]           []                                       []                 [`DefaultConstructible<CodomainT> && EqualityComparable<CodomainT>`]          ] 
+[[]           [only `add` used ]                       [`+=`]             [`&& Combinable<CodomainT,Combine>`]          ] 
+[[]           [... and also `subtract` used]           [`-=`]             [`&& Combinable<CodomainT,Inverse<Combine> >`]] 
+[[]           [`Section` used and `CodomainT` is a set][`&=`]             [`&& Intersectable<CodomainT,Section>`] ] 
+]
+
+The requirements on the type `CodomainT` of associated values for a __itl_map__ or __itv_map__
+depend on the usage of their aggregation functionality. If aggregation on overlap
+is never used, that is to say that none of the addition, subtraction and intersection
+operations (`+, +=, add`, `-, -=, subtract`, &, &=, add_intersection) are used on the 
+__itv_map__, then `CodomainT` only needs to be 
+[@http://www.generic-programming.org/languages/conceptcpp/issues/concepts-closed.html Regular].
+['*Regular*]
+object semantics implies `DefaultConstructible` and
+`EqualityComparable` which means it has 
+a default ctor `CodomainT()` and an `operator ==`.
+
+Use __itv_maps__ ['*without aggregation*], if the associated values are not 
+addable but still
+are attached to intervals so you want to use __itv_maps__ to handle them.
+As long as those values are added with `insert` and deleted with `erase` 
+__itv_maps__ will work fine with such values.
+
+If ['*only addition*] is used via __itv_map_s__ `+, +=` or `add` but no subtraction, 
+then `CodomainT` need to be `Combinable` for functor template `Combine`. That
+means in most cases when the default implementation `inplace_plus` for
+`Combine` is used, that `CodomainT` has to implement `operator +=`. 
+
+For associated value types, that are addable but not subtractable like 
+e.g. `std::string` it usually makes sense to use addition to combine values
+but the inverse combination is not desired.
+``
+interval_map<int,std::string> cat_map;
+cat_map += make_pair(interval<int>::rightopen(1,5),std::string("Hello"));
+cat_map += make_pair(interval<int>::rightopen(3,7),std::string(" world"));
+cout << "cat_map: " << cat_map << endl;
+//cat_map: {([1,3)->Hello)([3,5)->Hello world)([5,7)-> world)}
+``
+
+For ['complete aggregation functionality] an inverse aggregation functor on 
+a `Map`'s `CodomainT` is needed. The itl provides a 
+metafunction [classref boost::itl::inverse inverse] 
+for that purpose. Using the default
+`Combine = inplace_plus` that relies on the existence of `operator +=`
+on type `CodomainT` 
+metafunction [classref boost::itl::inverse inverse] 
+will infer [classref boost::itl::inplace_minus inplace_minus]
+as inverse functor, that requires `operator -=` on type `CodomainT`.
+
+In the itl's design we make the assumption,
+in particular for the default setting of parameters
+`Combine = `[classref boost::itl::inplace_minus inplace_plus],
+that type `CodomainT` has a neutral element or `neutron` 
+with respect to the `Combine` functor.
+
+
+[endsect][/ Required Concepts]
+
+
+[section Associated Types]
+
+In order to give an overview over ['*associated types*] the *itl* works
+with, we will apply abbreviations again that were introduced in the
+presentaiton of itl class templates,
+
+[pre
+interval     <D,       cp,             >
+interval_sets<D,       cp,        i, a >
+itl::set     <D,       cp,           a >
+std::set     <D,       Cp,           Ad>
+interval_maps<D, C, T, cp, cb, s, i, a >
+itl::map     <D, C, T, cp, cb, s,    a >
+std::map     <D, C     Cp,           Av>
+]
+
+where these placeholders were used:
+
+``
+D  := class DomainT,
+C  := class CodomainT,
+T  := class Traits,
+Cp := class Compare = std::less<DomainT>,
+cp := template<class D>class Compare = std::less,
+cb := template<class C>class Combine = itl::inplace_plus,
+s  := template<class C>class Section = itl::inplace_et,
+i  := template<class D,template<class>class cp>class Interval = itl::interval
+Ad := class Alloc = std::allocator<DomainT>
+Av := class Alloc = std::allocator<std::pair<DomainT,CodomainT> >
+a  := template<class>class Alloc = std::allocator
+``
+With some additions,
+``
+sz := template<class D>class size
+df := template<class D>class difference
+Xl := class ExclusiveLess = exclusive_less<Interval<DomainT,Compare> >
+inv:= template<class Combiner>class inverse
+(T,U) := std::pair<T,U> for typnames T,U
+``
+
+we can summarize the associated types as follows. 
+Again two additional columns for easy comparison with stl
+sets and maps are provided. 
+
+[table Itl Associated types
+[[Purpose][Aspect][Type][interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]                                                                                         
+[/[ ]             [ ]             [ ]                   [ ]      [ ]      [ ]       [ ]      [ ]      [ ]      [ ]]
+[/                                                     interval  itvset   itvmap  itl:set  itl:map  std:set  std:map]
+[[['*Data*]]     [__conceptual__][`domain_type`]       [`D`]    [`D`]    [`D`]     [`D`]    [`D`]    [ ]      [ ]]
+[[         ]     [              ][`codomain_type`]     [`D`]    [`D`]    [`C`]     [`D`]    [`C`]    [ ]      [ ]]
+[[         ]     [              ][`element_type`]      [`D`]    [`D`]  [`(D,C)`]   [`D`]  [`(D,C)`]  [ ]      [ ]]
+[[         ]     [              ][`segment_type`][`i<D,cp>`][`i<D,cp>`][`(i<D,cp>,C)`][ ]   [ ]      [ ]      [ ]]
+[[         ]     [['size]       ][`size_type`]       [`sz<D>`][`sz<D>`][`sz<D>`] [size_t]  [size_t]  [ ]      [ ]]
+[[         ]     [              ][`difference_type`] [`df<D>`][`df<D>`][`df<D>`] [size_t]  [size_t]  [ ]      [ ]]
+[[         ]     [             ][][interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]                                                                                         
+[[['*Data*]]     [__iterative__ ][`key_type`]          [`D`][`i<D,cp>`][`i<D,cp>`] [`D`]    [`D`]   [`D`]    [`D`]]
+[[         ]     [              ][`data_type`]         [`D`][`i<D,cp>`]   [`C`]    [`D`]    [`C`]   [`D`]    [`D`]]
+[[         ]     [              ][`value_type`]        [`D`][`i<D,cp>`][`(i<D,cp>,C)`][`D`][`(D,C)`][`D`]  [`(D,C)`]]
+[[         ]     [              ][`interval_type`] [`i<D,cp>`][`i<D,cp>`][`i<D,cp>`] [ ]     [ ]     [ ]       [ ]]
+[[         ]     [['allocation]][`allocator_type`] [ ][`a<i<D,cp>>`][`a<(i<D,cp>, C)>`][`a<D>`][`a<(D,C)>`][`Ad`][`Av`]]
+[[         ]     [             ][][interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]                                                                                         
+[[['*Ordering*]] [__conceptual__][`domain_compare`]  [`cp<D>`][`cp<D>`][`cp<D>`][`cp<D>`][`cp<D>`]    [ ]      [ ]]
+[[         ]     [__iterative__ ][`key_compare`]     [`cp<D>`]   [`Xl`]  [`Xl`] [`cp<D>`] [`cp<D>`] [`Cp`]  [`Cp`]]
+[[         ]     [              ][`interval_compare`]   [ ]      [`Xl`]  [`Xl`]     [ ]      [ ]      [ ]      [ ]]
+[[['*Aggregation*]][__conceptual__][`codomain_combine`] [ ]      [ ]    [`cb<C>`]   [ ]   [`cb<C>`]   [ ]      [ ]]
+[[         ]     [        ][`inverse_codomain_combine`] [ ]      [ ][`inv<cb<C>>`] [ ][`inv<cb<C>>`]  [ ]      [ ]]
+[[         ]     [        ]      [`codomain_intersect`] [ ]      [ ]     [`s<C>`]   [ ]    [`s<C>`]   [ ]      [ ]]
+[[         ]     [      ][`inverse_codomain_intersect`] [ ]      [ ] [`inv<s<C>>`]  [ ][`inv<s<C>>`]  [ ]      [ ]]
+]
+
+
+[endsect][/ Associated Types]
+
+[section Function Synopsis]
+
+In this section a single ['*matrix*] is given, that shows all ['*functions*]
+with shared names and identical or analogous semantics and their 
+polymorphical overloads across the class templates of the *itl*.
+Associated are the corresponding functions of the *stl* for easy
+comparison. In order to achieve a concise representation, a series
+of ['*placeholders*] are used throughout the function matrix.
+
+The ['*placeholder's*] purpose is to express the polymorphic
+usage of the functions. The ['*first column*] of the function matrix
+contains the signatures of the functions. Within these
+signatures `T` denotes a container type and `J` and `P`
+polymorphic argument and result types.
+
+Within the body of the matrix, sets of *boldface* placeholders denote
+the sets of possible instantiations for a polymorphic
+placeholder `P`. For instance __eiS denotes that for the
+argument type `P`, an element __e, an interval __i or an interval_set __S
+can be instantiated. 
+
+If the polymorphism can not be described in this way, only the ['*number*] of
+overloaded implementations for the function of that row is shown.
+
+[table 
+[[Placeholder]                  [Argument types]          [Description]]
+[[`T`                         ] []                        [a container type]]             
+[[`P`                         ] []                        [polymorphical container argument type]]             
+[[`J`                         ] []                        [polymorphical iterator type]]
+[[`V`                         ] []                        [various types `V`, that do dot fall in the categories above]]             
+[[1,2,...                     ] []                        [number of implementations for this function]]             
+[[A                           ] []                        [implementation generated by compilers]]             
+[[[#element_type]         [*e]] [T::element_type]         [the element type of __itv_sets__ or __itl_sets__]]
+[[[#interval_type]        [*i]] [T::segment_type]         [the segment type of of __itv_sets__]]
+[[[#itl_set_type]         [*s]] [__itl_set__]             [itl's set type]]
+[[[#interval_set_types]   [*S]] [interval_sets]           [one of the interval set types]]
+[[[#element_mapping_type] [*b]] [T::element_type]         [type of __itv_map_s__ or __itl_map_s__ element value pairs]]
+[[[#interval_mapping_type][*p]] [T::segment_type]         [type of __itv_map_s__ interval value pairs]]
+[[[#itl_map_type]         [*m]] [__itl_map__]             [itl's map type]]
+[[[#interval_map_types]   [*M]] [interval_maps]           [one of the interval map types]]
+]
+
+[/ memberref boost::itl::set::iterative_size `iterative_size`]
+
+[table Itl Interfaces
+[[T]      [interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]                                                                                         
+[/                                           interval  itvset   itvmap  itl:set  itl:map  std:set  std:map]
+[[__biLConsCopyDest__]                         [ ]       [ ]      [ ]     [ ]      [ ]      [ ]      [ ]]
+[[`T::T()`]                                    [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`T::T(const P&)`]                            [A]   [__eiS]  [__bpM]     [1]      [1]      [1]      [1]]
+[/ FYI [`T::T(...)`]                                 [3]       [ ]      [ ]     [3]      [3]      [3]      [3]]
+[[`T& T::operator=(const P&)`]                 [A]     [__S]    [__M]     [1]      [1]      [1]      [1]]
+[[`void T::swap(T&)`]                          [ ]       [1]      [1]     [1]      [1]      [1]      [1]]
+
+[[__biLContainedness__]       [interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]
+[[`void T::clear()`]                           [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`bool T::empty()const`]                      [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`bool T::contains(const P&)const`]         [__ei]  [__eiS][__eiS __bpM][__es]   [__bm]    [ ]      [ ]]
+[[`bool T::contained_in(const P&)const`]      [__i]     [__S]    [__M]    [1]      [1]      [ ]      [ ]]
+
+[[__biLEquivsOrderings__][interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]
+[[`bool operator == (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`bool operator != (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`bool operator <  (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`bool operator >  (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`bool operator <= (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`bool operator >= (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`bool is_element_equal(const T&, const P&)`] [ ]     [__S]    [__M]     [1]      [1]      [ ]      [ ]]
+[[`bool is_element_less(const T&, const P&)`]  [ ]     [__S]    [__M]     [1]      [1]      [ ]      [ ]]
+[[`bool is_element_greater(const T&, const P&)`][ ]    [__S]    [__M]     [1]      [1]      [ ]      [ ]]
+[[`bool is_protonic_equal(const T&, const P&)`][ ]       [ ]    [__M]     [ ]      [1]      [ ]      [ ]]
+
+[[__biLSize__]                    [interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]
+[[`size_type T::size()const`]                  [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`size_type T::cardinality()const`]           [1]       [1]      [1]     [1]      [1]      [ ]      [ ]]
+[[`difference_type T::length()const`]          [1]       [1]      [1]     [ ]      [ ]      [ ]      [ ]]
+[[`size_t T::iterative_size()const`]           [ ]       [1]      [1]     [1]      [1]      [ ]      [ ]]
+[[`size_t T::interval_count()const`]           [ ]       [1]      [1]     [ ]      [ ]      [ ]      [ ]]
+
+[[__biLRange__]                                [ ]       [ ]      [ ]     [ ]      [ ]      [ ]      [ ]]
+[[`interval<domain_type> hull(const T&)`]      [ ]       [1]      [1]     [ ]      [ ]      [ ]      [ ]]
+[[`domain_type T::lower()const`]               [1]       [1]      [1]     [ ]      [ ]      [ ]      [ ]]
+[[`domain_type T::upper()const`]               [1]       [1]      [1]     [ ]      [ ]      [ ]      [ ]]
+[[`domain_type T::first()const`]               [1]       [1]      [1]     [ ]      [ ]      [ ]      [ ]]
+[[`domain_type T::last()const`]                [1]       [1]      [1]     [ ]      [ ]      [ ]      [ ]]
+
+[[__biLSelection__]                            [ ]       [ ]      [ ]     [ ]      [ ]      [ ]      [ ]]
+[[`J T::find(const domain_type&)`]             [ ]       [1]      [1]     [2]      [2]      [2]      [2]]
+[[`codomain_type& operator[] (const domain_type&)`][ ]    [ ]      []     [ ]      [1]      [ ]      [1]]
+[[`codomain_type operator() (const domain_type&)const`][ ][ ]     [1]     [ ]      [1]      [ ]      [ ]]
+
+[[__biLAddition__]                [interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]
+[[`T& T::add(const P&)`]                       [ ]     [__ei]    [__bp]   [__e]   [__b]     [ ]      [ ]]
+[[`T& operator +=(T&, const P&)`]              [ ]     [__eiS]   [__bpM]  [__es]  [__bm]    [ ]      [ ]]
+[[`T operator + (T, const P&)`\n`T operator + (const P&, T)`]
+                                               [ ]     [__eiS]   [__bpM]  [__es]  [__bm]    [ ]      [ ]]
+[[`T& operator |=(      T&, const P&)`]        [ ]     [__eiS]   [__bpM]  [__es]  [__bm]    [ ]      [ ]]
+[[`T operator | (T, const P&)`\n`T operator | (const P&, T)`]
+                                               [ ]     [__eiS]   [__bpM]  [__es]  [__bm]    [ ]      [ ]]
+[[__biLSubtraction__]                            [ ]       [ ]      [ ]     [ ]      [ ]      [ ]      [ ]]
+[[`T& T::subtract(const P&)`]                  [ ]     [__ei]    [__bp]   [__e]   [__b]     [ ]      [ ]]
+[[`T& operator -=(      T&, const P&)`]        [ ]    [__eiS][__eiS __bpM][__es]  [__bm]    [ ]      [ ]]
+[[`T  operator - (T, const P&)`]               [ ]    [__eiS][__eiS __bpM][__es]  [__bm]    [ ]      [ ]]
+
+[[__biLInsertion__]      [interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]
+[[`V T::insert(const P&)`]                     [ ]     [__ei]    [__bp]   [__e]    [__b]    [__e]    [__b]]
+[[`T& insert(T&, const P&)`]                   [ ]    [__eiS]   [__bpM]   [__es]   [__bm]    [ ]      [ ] ]
+[[`T& T::set(const P&)`]                       [ ]       [ ]     [__bp]   [ ]      [1]       [ ]      [ ] ]
+
+[[__biLErasure__]                              [ ]       [ ]      [ ]     [ ]      [ ]      [ ]      [ ]]
+[[`T& T::erase(const P&)`]                     [ ]    [__ei ] [__ei __bp] [__e]    [__bp]   [__e]    [__e]]
+[[`T& erase(T&, const P&)`]                    [ ]    [__eiS][__eiS __bpM][__es]   [__bm]   [ ]      [ ] ]
+[[`void T::erase(iterator)`]                   [ ]       [1]      [1]     [1]      [1]      [1]      [1] ]
+[[`void T::erase(iterator,iterator)`]          [ ]       [1]      [1]     [1]      [1]      [1]      [1] ]
+
+[[__biLIntersection__]  [interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]
+[[`void T::add_intersection(T&, const P&)const`][ ]   [__eiS][__eiS __bpM][ ]     [ ]       [ ]      [ ]]
+[[`T& operator &=(T&, const P&)`]              [__i]  [__eiS][__eiS __bpM][__es]  [__bm]    [ ]      [ ]]
+[[`T  operator & (T, const P&)`\n`T  operator & (const P&, T)`] 
+                                               [__i]  [__eiS][__eiS __bpM][__es]  [__bm]    [ ]      [ ]]
+[[`bool intersects(const T&, const P&)`]       [__i]  [__eiS][__eiS __bpM][__es]  [__bm]    [ ]      [ ]]
+                                               
+[[__biLSymmetricDifference__]                  [ ]       [ ]      [ ]     [ ]      [ ]      [ ]      [ ]]
+[[`T& T::flip(const P&)`]                      [ ]     [__ei]    [__bp]   [__e]   [__b]     [ ]      [ ]]
+[[`T& operator ^=(T&, const P&)`]              [ ]    [__eiS]    [__bpM]  [__es]  [__bm]    [ ]      [ ]]
+[[`T  operator ^ (T, const P&)`\n`T  operator ^ (const P&, T)`]        
+                                               [ ]    [__eiS]    [__bpM]  [__es]  [__bm]    [ ]      [ ]]
+[[__biLIteratorRelated__] [interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]
+[[`J T::begin()`]                              [ ]       [2]      [2]     [2]      [2]      [2]      [2]]
+[[`J T::end()`]                                [ ]       [2]      [2]     [2]      [2]      [2]      [2]]
+[[`J T::rbegin()`]                             [ ]       [2]      [2]     [2]      [2]      [2]      [2]]
+[[`J T::rend()`]                               [ ]       [2]      [2]     [2]      [2]      [2]      [2]]
+[[`J T::lower_bound(const key_value&)`]        [ ]       [2]      [2]     [2]      [2]      [2]      [2]]
+[[`J T::upper_bound(const key_value&)`]        [ ]       [2]      [2]     [2]      [2]      [2]      [2]]
+[[`pair<J,J> T::equal_range(const key_value&)`][ ]       [2]      [2]     [2]      [2]      [2]      [2]]
+
+[[__biLStreaming__]      [interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map][std::set][std::map]]
+[[`std::basic_ostream operator << (basic_ostream&, const T&)`]      
+                                               [1]       [1]      [1]     [1]      [1]      [1]      [1]]
+[[`std::string T::as_string()`]                [1]       [1]      [1]     [1]      [1]      [ ]      [ ]]
+]
+
+[endsect][/ Function Synopsis]
+
+[endsect][/ Interface]
+

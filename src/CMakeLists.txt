@@ -55,7 +55,7 @@ target_link_libraries(streams_core
 
 
 #add_subdirectory(core)
-#add_subdirectory(sources)
+add_subdirectory(sources)
 #add_subdirectory(triggers)
 #add_subdirectory(vis)
 #add_subdirectory(filters)

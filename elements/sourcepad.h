@@ -9,6 +9,7 @@
 
 namespace elements {
 
+
   template<class BufferT>
   class SourcePad : public ISourcePad 
   {
@@ -17,16 +18,17 @@ namespace elements {
 
   public:
     typedef boost::shared_ptr<SourcePad> pSourcePad_t; 
+    typedef boost::function<datawindow_t<BufferT> (const timewindow_t &)> get_data_func_t; 
+    typedef boost::function<size_t ()> get_reset_func_t; 
 
-    static pSourcePad_t  createPad(padid_t id, IElementSource<BufferT> * owner, 
-				   std::string name) 
+    static pSourcePad_t  createPad(std::string name, 
+				   get_data_func_t gf, get_reset_func_t rf ) 
     {
-      return pSourcePad_t(new SourcePad(id, owner, name)); 
+      return pSourcePad_t(new SourcePad(name, gf, rf)); 
     }
     
 
     void connect(pSinkPad_t sp) {
-      pSinks_.push_back(sp); // these are the ones that get the dirty message
       sp->set_src(this);       
     }
 
@@ -37,7 +39,6 @@ namespace elements {
     }
 
     void disconnect(pSinkPad_t sp) { 
-      pSinks_.erase(sp); 
       sp.set_src(NULL); 
     }
     
@@ -46,43 +47,28 @@ namespace elements {
     /* Ugh, this returns the result in data so we can type-specialize
      */ 
     
-    void get_data(std::list<BufferT> & data,  const timewindow_t & tw) {
-      return owner_->get_src_data(data, id_, tw); 
+    datawindow_t<BufferT> get_data(const timewindow_t & tw) {
+      return getdatafunc_(tw); 
     }
-    
-    void timecache_insert(timeid_t tid, timecache_t::datahash_t h) {
-      // FIXME: mutex-protect
-      src_timecache_.insert(tid, h); 
-    }
+    size_t get_series() {
 
-    void timecache_reset() {
-      src_timecache_.clear(); 
-    }
-
-    timecache_t::levelhash_t timecache_get_hash(size_t level, bucketid_t bid)
-    {
-      src_timecache_.get_hash(level, bid); 
+      return getresetfunc_();
     }
     
   protected:
-    SourcePad(padid_t id, IElementSource<BufferT> * owner, std::string name) :
-      id_(id), 
-      owner_(owner),
-      name_(name), 
-      src_timecache_(100000000, 4, 8)
+    SourcePad(std::string name, get_data_func_t gf, get_reset_func_t rf) :
+      name_(name),
+      getdatafunc_(gf),
+      getresetfunc_(rf)
     {
       
 
     }
 
     padid_t id_; 
-    IElementSource<BufferT> * owner_;
     std::string name_; 
-    
-    std::list<pSinkPad_t > pSinks_; 
-
-    timecache_t src_timecache_; 
-    
+    get_data_func_t getdatafunc_; 
+    get_reset_func_t getresetfunc_; 
   }; 
 
 

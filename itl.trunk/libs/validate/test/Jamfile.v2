@@ -1,0 +1,52 @@
+# (C) Copyright 2008-2009: Joachim Faulhaber
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+# bring in rules for testing
+import testing ;
+import feature ;
+
+project
+    : requirements
+      <library>/boost/test//boost_unit_test_framework
+      <library>/boost/date_time//boost_date_time
+      <link>static
+      <include>../../..
+      <include>$(BOOST_ROOT)
+    ;
+
+test-suite "itl"
+    : 
+      # msvc9 compilation time: 0:38  
+      [ run test_val_relations_/test_val_relations.cpp ../src/gentor/gentorprofile.cpp ]
+      
+      # msvc9 compilation time: 1:01  
+      [ run test_set_copy_conformity_/test_set_copy_conformity.cpp ../src/gentor/gentorprofile.cpp ]
+      
+      # msvc9 compilation time: 1:03  
+      [ run test_map_copy_conformity_/test_map_copy_conformity.cpp ../src/gentor/gentorprofile.cpp ]
+      
+      # msvc9 compilation time: 1:28  
+      [ run test_itl_set_/test_itl_set.cpp ../src/gentor/gentorprofile.cpp ]
+      
+      # msvc9 compilation time: 1:35  
+      [ run test_collector_/test_collector.cpp ../src/gentor/gentorprofile.cpp ]
+      
+      # msvc9 compilation time:   
+      [ run test_bit_collector_/test_bit_collector.cpp ../src/gentor/gentorprofile.cpp ]
+      
+      # msvc9 compilation time: 1:42  
+      [ run test_unsigned_quantifier_/test_unsigned_quantifier.cpp ../src/gentor/gentorprofile.cpp ]
+      
+      # msvc9 compilation time:  
+      [ run test_set_order_/test_set_order.cpp ../src/gentor/gentorprofile.cpp ]
+      
+      # msvc9 compilation time:  
+      # [ run test_map_order_/test_map_order.cpp ../src/gentor/gentorprofile.cpp ]
+            
+      # msvc9 compilation time:  
+      # [ run test_itl_morphic_/test_itl_morphic.cpp ../src/gentor/gentorprofile.cpp ]
+      
+      # msvc9 compilation time: 2:36  
+      # [ run test_signed_quantifier_/test_signed_quantifier.cpp ../src/gentor/gentorprofile.cpp ]
+    ;

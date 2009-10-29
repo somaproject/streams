@@ -13,23 +13,20 @@ BOOST_AUTO_TEST_SUITE(SourcePad2Test);
 
 using namespace elements; 
 
-struct TestSource: public IElementSource<int>
-{
-  
-  void get_src_data(std::list<int> &, padid_t, const timewindow_t &)  {
-    
+datawindow_t<int> get_data(const timewindow_t & tw) {
 
-  }
+}
 
+size_t get_seq() {
 
-};
+}
+
 
 BOOST_AUTO_TEST_CASE(simpletest)
 {
   typedef SourcePad<int> SP; 
-  TestSource tc; 
 
-  SP::pSourcePad_t sp = SP::createPad(0, &tc, "Hello world"); 
+  SP::pSourcePad_t sp = SP::createPad("Hello world", get_data, get_seq ); 
   
   BOOST_CHECK_EQUAL(sp->getName(), "Hello world"); 
   

@@ -17,9 +17,12 @@ namespace elements {
     
     template<class BufferT> 
     typename SourcePad<BufferT>::pSourcePad_t 
-    createSourcePad(std::string name)  {
+    createSourcePad(std::string name, 
+		    typename SourcePad<BufferT>::get_data_func_t df, 
+		    typename SourcePad<BufferT>::get_reset_func_t rf)  {
+      
       typename SourcePad<BufferT>::pSourcePad_t pad = 
-	SourcePad<BufferT>::createPad(name); 
+	SourcePad<BufferT>::createPad(name, df, rf); 
       pSourcePads_.insert(std::make_pair(name, pad)); 
       return pad; 
     }

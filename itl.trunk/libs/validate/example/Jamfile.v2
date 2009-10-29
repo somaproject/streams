@@ -1,0 +1,126 @@
+# (C) Copyright 2008-2009: Joachim Faulhaber
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+obj gentorprofile.obj : ../src/gentor/gentorprofile.cpp ;
+
+exe labat_single
+    :
+        labat_single_/labat_single.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+   
+# msvc9 compilation time: 0:38  
+exe labat_val_relations
+    :
+        labat_val_relations_/labat_val_relations.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+
+# msvc9 compilation time: 1:01  
+exe labat_set_copy_conformity
+    :
+        set_copy_conformity_/labat_set_copy_conformity.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+
+# msvc9 compilation time: 1:03  
+exe labat_map_copy_conformity
+    :
+        map_copy_conformity_/labat_map_copy_conformity.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+
+# msvc9 compilation time: 1:28  
+exe labat_itl_set
+    :
+        labat_itl_set_/labat_itl_set.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+   
+# msvc9 compilation time: 1:35   
+exe labat_collector
+    :
+        labat_collector_/labat_collector.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+   
+# msvc9 compilation time: 1:42
+exe labat_unsigned_quantifier
+    :
+        labat_unsigned_quantifier_/labat_unsigned_quantifier.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+   
+# msvc9 compilation time: 1:56   
+exe labat_bit_collector
+    :
+        labat_bit_collector_/labat_bit_collector.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+   
+# msvc9 compilation time: 2:17   
+exe labat_itl_morphic
+    :
+        labat_itl_morphic_/labat_itl_morphic.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+   
+# msvc9 compilation time: 2:36
+exe labat_signed_quantifier
+    :
+        labat_signed_quantifier_/labat_signed_quantifier.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+   
+# msvc9 compilation time: 3:43   
+exe labat_itl_order
+    :
+        labat_itl_order_/labat_itl_order.cpp
+		gentorprofile.obj
+		/boost/date_time//boost_date_time
+    :
+        <include>../../..
+        <include>$(BOOST_ROOT)
+    ;
+   

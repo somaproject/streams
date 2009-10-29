@@ -59,13 +59,13 @@ link_directories(
 #   spectvis_test.cc
 #   runner.cc)
 
-add_executable(timedb_test
-  timedb_test.cc
-  runner.cc)
+# add_executable(timedb_test
+#   timedb_test.cc
+#   runner.cc)
 
-add_executable(timedb_cursor_test
-  timedb_cursor_test.cc
-  runner.cc)
+# add_executable(timedb_cursor_test
+#   timedb_cursor_test.cc
+#   runner.cc)
 
 
 
@@ -82,23 +82,23 @@ add_executable(sourcesink2_test
   sourcesink2_test.cc
   runner.cc)
 
-add_executable(property_test
-  property_test.cc
-  runner.cc)
+# add_executable(property_test
+#   property_test.cc
+#   runner.cc)
 
 add_executable(noisewave2_test
   noisewave2_test.cc
   runner.cc)
 
-add_executable(lrucache_test
-  lrucache.cc
-  runner.cc
-  )
+# add_executable(lrucache_test
+#   lrucache.cc
+#   runner.cc
+#   )
 
-add_executable(timecache_test
-  timecache_test.cc
-  runner.cc
-  )
+# add_executable(timecache_test
+#   timecache_test.cc
+#   runner.cc
+#   )
 
 
 # target_link_libraries(runtest
@@ -137,10 +137,10 @@ set(testlist
 
 sourcepad2_test
 sourcesink2_test
-property_test
+#property_test
 noisewave2_test
-lrucache_test
-timecache_test
+#lrucache_test
+#timecache_test
 )
 
 

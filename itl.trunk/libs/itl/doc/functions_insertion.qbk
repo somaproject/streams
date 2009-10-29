@@ -1,0 +1,129 @@
+[/
+    Copyright (c) 2008-2009 Joachim Faulhaber
+
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+]
+
+
+[/ //= Insertion ===================================================================]
+[section Insertion]
+
+[section Synopsis][/ Insertion]
+
+[table
+[[['*Insertion*]][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map]  ]
+[[`T& T::insert(const P&)`]        [__ei]      [__bp]       [__e]      [__b]      ]
+[[`T& insert(T&, const P&)`]      [__eiS]     [__bpM]       [__es]     [__bm]     ]
+[[`T& T::set(const P&)`]             [ ]       [__bp]       [ ]        [__b]      ]
+]
+
+[h5 Insertion]
+
+The effects of ['*insertion*] implemented by `insert` and ['*addition*]
+implemented by `add` and `operator +=` are identical for all Set-types of
+the *itl*.
+
+For Map-types, `insert` provides the *stl* semantics of insertion in
+contrast to `add` and `operator +=`, that implement a generalized addition,
+that performs aggregations if key values collide or key intervals overlap.
+`insert` on Maps does not alter a maps content at the points, where
+the keys of the object to inserted overlap or collide with keys that
+are already in the map. 
+
+
+[h5 Setting values]
+
+Overwriting values using `operator[]` like in
+``
+my_map[key] = new_value;
+``
+is not provided for __itv_maps__ because an `operator[]` is not 
+implemented for them. As a substitute a function
+`T& T::set(const P&)` can be used to achieve the same effect:
+``
+my_map.set(make_pair(overwrite_this, new_value));
+``
+
+[endsect][/ Synopsis Insertion]
+
+[section Insertion]
+
+``
+// overload table for member function
+T& T::insert(const P&)
+
+insert | e i b p    
+-------+--------
+   s   | s
+   m   |     m
+   S   |   S         
+   M   |       M    
+``
+
+[table Time Complexity for member function insert on itl containers
+[[`T& T::insert(const P&)`]    [__ch_dom_t__][__ch_itv_t__][__ch_dom_mp_t__][__ch_itv_mp_t__]]
+[[__itl_set__]                 [__Olgn__] []          []        []          ]
+[[__itl_map__]                 []         []          [__Olgn__][]          ]
+[[__itv_set__\n__sep_itv_set__][__Olgn__] [__a_Olgn__][]        []          ]
+[[__spl_itv_set__]             [__Olgn__] [__On__]    []        []          ]
+[[__itv_map__\n__spl_itv_map__][]         []          [__Olgn__][__On__]    ]
+]
+
+``
+// overload tables for function
+T& insert(T&, const P&)
+
+element containers:     interval containers:  
+insert | e b s m        insert | e i b p S M    
+-------+--------        -------+------------    
+    s  | s   s              S  | S S     S       
+    m  |   m   m            M  |     M M   M    
+``
+
+
+[table Time Complexity for inplace insertion on element containers
+[[`T& insert(T& y, const P& x)`][__ch_dom_t__][__ch_dom_mp_t__][__ch_itv_sets__][__ch_itv_maps__]]
+[[__itl_set__]                    [__Olgn__]    []               [__Om__]         []               ]
+[[__itl_map__]                    []            [__Olgn__]       []               [__Om__]         ]
+]
+
+Time complexity characteristics of inplace insertion for interval containers
+is given by this table.
+
+[table Time Complexity for inplace insertion on interval containers
+[[`T& insert(T& y, const P& x)`][][__ch_dom_t__][__ch_itv_t__][__ch_dom_mp_t__][__ch_itv_mp_t__][__ch_itv_sets__][__ch_itv_maps__]]
+[[interval_sets][__itv_set__\n__sep_itv_set__][__Olgn__] [__a_Olgn__][]        []        [__Omlgnpm__]    []               ]
+[[]             [__spl_itv_set__]             [__Olgn__] [__On__]    []        []        [__Omlgnpm__]    []               ]
+[[interval_maps][]                            []         []          [__Olgn__][__On__]  []               [__Omlgnpm__]    ]
+]
+
+[endsect][/ Insertion]
+
+
+
+[section Setting values]
+
+``
+// overload table for member function
+T& T::set(const P&)
+
+set | b p     
+----+----	  
+m   | m		  
+M   |   M      
+``
+
+[table Time Complexity for member function `set`
+[[`T& set(T&, const P&)`] [domain_mapping_type] [interval_mapping_type] ]
+[[itl::map]               [__Olgn__]            [ ]                     ]
+[[interval_maps]          []                    [__a_Olgn__]            ]
+]
+
+[endsect][/ Set]
+
+
+[endsect][/ Insertion]
+
+

@@ -1,0 +1,122 @@
+[/
+    Copyright (c) 2008-2009 Joachim Faulhaber
+
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+]
+
+
+[/ //= Containedness ===================================================================]
+[section Containedness]
+
+[table
+[[['*Containedness*]]       [interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map]  ]
+[[`void T::clear()`]                           [1]       [1]      [1]     [1]      [1]      ]
+[[`bool T::empty()const`]                      [1]       [1]      [1]     [1]      [1]      ]
+[[`bool T::contains(const P&)const`]         [__ei]  [__eiS][__eiS __bpM][__es]   [__bm]    ]
+[[`bool T::contained_in(const P&)const`]      [__i]     [__S]    [__M]    [1]      [1]      ]
+]
+
+This group of functions refers to ['*contain*]edness which should 
+be fundamental to ['*contain*]ers. The function `contains`
+is overloaded. It covers different kinds of containedness:
+Containedness of elements, segments, and sub containers.
+
+[table
+[[['*Containedness*]]                         [ /O(...)/ ][Description ]  ]
+[[`void T::clear()`]                          [__On__][All content is removed from the container.]  ]
+[[`bool T::empty()const`]                     [__O1__][Returns `true`, if the container is empty, `false` otherwise.]      ]
+[[`bool T::contains(const P& sub)const`]      [[link complexities_contains ['see below]]]
+                                                      [Returns `true`, if `*this` container contains object `sub`.]    ]
+[[`bool T::contained_in(const P& super)const`][__Omlgn__][Returns `true`, if `*this` is contained in object `super`.]     ]
+[[ ]                                          [where] [ /n/` = this->iterative_size()`]     ]
+[[ ]                                          [     ] [ /m/` = super.iterative_size()`]     ]
+]
+
+``
+// overload tables for 
+bool T::contains(const P& src)
+
+element containers:     interval containers:  
+contains| e b s m       contains| e i b p S M    
+--------+--------       --------+------------    
+  s     | 1   1           S     | 1 1     1       
+  m     | 1 1 1 1         M     | 1 1 1 1 1 1    
+``
+
+The overloads of `bool T::contains(const P& src)` cover various kinds
+of containedness. We can group them into a part (1) that checks
+if an element, a segment or a container /of same kinds/ is contained in
+an element or interval container
+
+``
+// (1) containedness of elements, segments or containers of same kind
+contains| e b s m       contains| e i b p S M    
+--------+--------       --------+------------    
+  s     | 1   1           S     | 1 1     1       
+  m     |   1   1         M     |     1 1   1    
+``
+
+and another part (2) that checks the containedness of 
+/key objects/, which can be /elements/ an /intervals/ or a /sets/.
+
+``
+// (2) containedness of key objects.
+contains| e b s m       contains| e i b p S M    
+--------+--------       --------+------------    
+  s     | 1   1           S     | 1 1     1       
+  m     | 1   1           M     | 1 1     1      
+``
+
+For type *m* = __itl_map__, 
+a key element (*m*`::domain_type`) and an __itl_set__ 
+(*m*`::set_type`) can be a ['*key object*].
+
+For an interval map type *M*, 
+a key element (*M*`::domain_type`), 
+an interval (*M*`::interval_type`) and an 
+['*interval set*], can be ['*key objects*]. 
+
+[#complexities_contains] Complexity characteristics for function
+`bool T::contains(const P& sub)const`
+are given by the next tables where 
+``
+n = this->iterative_size();
+m = sub.iterative_size(); //if P is a container type
+``
+
+[table Time Complexity for function contains on element containers
+[[`bool T::contains(const P& sub)const`][__ch_dom_t__][__ch_dom_mp_t__][__ch_itl_set__][__ch_itl_map__]]
+[[__itl_set__]                          [__Olgn__]    []               [__Omlgn__]     []              ]
+[[__itl_map__]                          [__Olgn__]    [__Olgn__]       [__Omlgn__]     [__Omlgn__]     ]
+]
+
+
+[table Time Complexity for function contains on interval containers
+[[`bool T::contains(const P& sub)const`][][__ch_dom_t__][__ch_itv_t__][__ch_dom_mp_t__][__ch_itv_mp_t__][__ch_itv_sets__][__ch_itv_maps__]]
+[[interval_sets]             [__itv_set__][__Olgn__]    [__Olgn__]    []               []               [__Omlgn__]      []               ]
+[[]     [__sep_itv_set__\n__spl_itv_set__][__Olgn__]    [__On__  ]    []               []               [__Omlgn__]      []               ]
+[[interval_maps]             [__itv_map__][__Olgn__]    [__Olgn__]    [__Olgn__]       [__Olgn__]       [__Omlgn__]      [__Omlgn__]      ]
+[[]                      [__spl_itv_map__][__Olgn__]    [__On__  ]    [__Olgn__]       [__On__]         [__Omlgn__]      [__Omlgn__]      ]
+]
+
+All tests of containedness of containers in containers
+``
+bool T::contains(const P& sub_container)const
+bool T::contained_in(const P& super_container)const
+``
+are of ['*loglinear*] time: __Omlgn__. 
+If both containers have same iterative_sizes so that /m = n/
+we have the worst case ( __Onlgn__ ).
+There is an alternative implementation that has a ['*linear*]
+complexity of __Onpm__. 
+The loglinear implementation has been chosen,
+because it can be faster, if the container argument is
+small. In this case the loglinear implementation approaches
+logarithmic behavior, whereas the linear implementation
+stays linear.
+
+[endsect][/ Containedness]
+
+

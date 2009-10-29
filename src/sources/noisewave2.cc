@@ -1,5 +1,6 @@
 #include "noisewave2.h"
 #include <iostream>
+#include <boost/bind.hpp>
 #include <gtkmm.h>
 #include <stdlib.h>
 
@@ -9,14 +10,17 @@ NoiseWave2::NoiseWave2(std::string name, bf::path scratch) :
   SourceBase(name), 
   amplitude(1.0), 
   noiseclass(WhiteNoise),
-  preload(0), 
+  preload(0.0), 
   samplingrate(1000.), 
   activetime(elements::timewindow_t(0, 0)),
-  pSourcePad_(createSourcePad<WaveBuffer_t>(0, this, "default")), 
+  pSourcePad_(createSourcePad<pWaveBuffer_t>("default", 
+					     boost::bind(&NoiseWave2::get_src_data, this, _1), 
+					     boost::bind(&NoiseWave2::get_sequence, this))), 
   frequency(1000.0),
-  lasttime_(0)
+  lasttime_(0),
+  seqid_(0)
 {
-
+  
 }
 
 NoiseWave2::~NoiseWave2()
@@ -73,11 +77,9 @@ void NoiseWave2::process(elements::timeid_t tid)
 
 
   if (reset) { 
-    reset_preload_data(); 
-    reset_sent_flags(); // warning, might take a very long time
-    send_reset_token(); 
-    
-    data_iters_ = std::stack<datamap_t::iterator>(); 
+
+    preload_data_.clear(); 
+    seqid_++; 
   }
 
   // always generate the new data
@@ -85,41 +87,14 @@ void NoiseWave2::process(elements::timeid_t tid)
   
   create_outstanding_preload_data(); 
   
-  // now, what to send? this is actually an easy part? 
-  send_preload(); 
-  send_data(); 
 
 }
 
-void NoiseWave2::reset_preload_data()
+size_t NoiseWave2::get_sequence()
 {
-  std::cout << "RESETTING PRELOAD DATA" << std::endl; 
-  preload_iters_ = std::stack<datamap_t::iterator>(); 
-  preload_data_.clear(); 
-  remaining_preload_pos_ = -int(preload) * 60 * elements::TIMEID_PER_SEC; 
+  return seqid_; 
+
 }
-
-void NoiseWave2::reset_sent_flags()
-{
- 
-  BOOST_FOREACH(datamap_t::value_type & x, data_) 
-    {
-      x.second->set_sent(false);       
-    }
-  
-  BOOST_FOREACH(datamap_t::value_type & x, preload_data_) 
-    {
-      x.second->set_sent(false); 
-    }
-}
-
-void NoiseWave2::send_reset_token()
-{
-  pSourcePad_->reset(); 
-  
-}
-
-
 
 std::pair<elements::timeid_t, pWaveBuffer_t> 
 NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t endtime )
@@ -206,9 +181,8 @@ void NoiseWave2::create_outstanding_preload_data()
     std::pair<timeid_t, pWaveBuffer_t> newdata
       = createDataBuffer(remaining_preload_pos_, endpos); 
     
-    pSentBufferWrapper_t sb(new SentBufferWrapper(newdata.second)); 
 
-    preload_data_.insert(std::make_pair(remaining_preload_pos_, sb)); 
+    preload_data_.insert(std::make_pair(remaining_preload_pos_, newdata.second )); 
 
     remaining_preload_pos_ += newdata.first; 
     
@@ -230,83 +204,97 @@ void NoiseWave2::create_new_data(elements::timeid_t tid)
     std::pair<timeid_t, pWaveBuffer_t> newdata
       = createDataBuffer(lasttime_, threshold); 
     
-    pSentBufferWrapper_t sb(new SentBufferWrapper(newdata.second)); 
 
-    data_.insert(std::make_pair(lasttime_, sb)); 
+    data_.insert(std::make_pair(lasttime_, newdata.second)); 
     
     // now actually send? 
 
-    pSourcePad_->newData(lasttime_, lasttime_+ newdata.first, 
-			 *(sb->data())); // FIXME double-copy? 
-    sb->set_sent(true); 
     
     lasttime_ += newdata.first; 
     threshold = (period_ns) * BUFSIZE + lasttime_;      
   }
-  
-
 
 }
 
-void NoiseWave2::send_preload()
+elements::datawindow_t<pWaveBuffer_t> NoiseWave2::get_src_data(const elements::timewindow_t & tw)
 {
-  int sendcnt = 0; 
-  int MAXSEND = 10; 
-  // this is the stupidest policy ever
-  BOOST_FOREACH(datamap_t::value_type & v, preload_data_) {
-    if(!(v.second->sent())) {
-      // send the data 
-      v.second->set_sent(true); 
-      sendcnt++; 
-      
-      pWaveBuffer_t wb = v.second->data(); 
-      pSourcePad_->newData(wb->time, 
-			   wb->time + (wb->samprate * wb->data.size()) *
-			   elements::TIMEID_PER_SEC, 
-			   *wb);
-      
+  /* 
+     The heuristics here are actually a bit tricky, because we can
+     only send one interval's worth of data, and of course, we need to
+     do it consistently.
+     
+     
+  */ 
+
+  elements::datawindow_t<pWaveBuffer_t> wb; 
+  wb.sequenceid = seqid_; 
+  
+  if (remaining_preload_pos_ == 0) {
+    // we're doing with preloading, so you can include the gap
+    // 
+    // fixme
+    copy_data_map_range_to_output(preload_data_, tw.start, tw.end, wb); 
+    copy_data_map_range_to_output(data_, tw.start, tw.end, wb); 
+
+  } else {
+    /* 
+       We're still preloading, so if the interval contains time < 0, 
+       then we need to do some work. 
+    */ 
+
+    bool do_positive = false; 
+    
+    if(tw.start >= 0) { 
+      // only positive
+      do_positive = true; 
+    } else if (tw.end < 0) { 
+      //only negative, thus preload
+      do_positive = false; 
+    } else { 
+      // randomly pick 
+      if(double(rand())/RAND_MAX > 0.5) {
+	do_positive = true; 
+      }
+    }
+    
+    
+    if (do_positive) { 
+      copy_data_map_range_to_output(data_, tw.start, tw.end, 
+				    wb); 
+    } else { 
+      copy_data_map_range_to_output(preload_data_, tw.start, tw.end, 
+				    wb); 
 
     }
-    if (sendcnt == MAXSEND) {
-      break; 
+  }
+    
+  if (!wb.data.empty()) {
+    wb.interval = elements::timeinterval_t(wb.data.front()->time, 
+					   wb.data.back()->time); 
+  }
+  
+  return wb; 
+  
+}
+
+void NoiseWave2::copy_data_map_range_to_output(datamap_t & dm, 
+					       timeid_t start, timeid_t end,
+					       elements::datawindow_t<pWaveBuffer_t> & wb) {
+  if (dm.empty()) {
+    return; 
+  }
+  datamap_t::iterator i = dm.lower_bound(start); 
+    
+  if (i != dm.begin()) {
+    i--; 
+  }
+  
+  
+
+  for (i; ((i != dm.end() ) and (i->first <= end)); ++i) {
+    if (i->first >= start) {
+      wb.data.push_back(i->second); 
     }
   }
   
-
-}
-
-
-void NoiseWave2::send_data()
-{
-  int sendcnt = 0; 
-  int MAXSEND = 10; 
-  // this is the stupidest policy ever
-  BOOST_FOREACH(datamap_t::value_type & v, data_) {
-    if(!(v.second->sent())) {
-      // send the data 
-      v.second->set_sent(true); 
-      sendcnt++; 
-      pWaveBuffer_t wb = v.second->data(); 
-      pSourcePad_->newData(wb->time, 
-			   wb->time + (wb->samprate * wb->data.size()) *
-			   elements::TIMEID_PER_SEC, 
-			   *wb);
-
-    }
-    if (sendcnt == MAXSEND) {
-      break; 
-    }
-  }
-  
-}
-
-void NoiseWave2::get_src_data(std::list<WaveBuffer_t> & outwb, padid_t id, 
-			      const timewindow_t & tw)
-{
-  // only one pad, so we ignore id
-
-  int MAXSEND = 100; 
-  
-
-
 }

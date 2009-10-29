@@ -18,22 +18,20 @@ namespace bf = boost::filesystem;
   NoiseWave is our generic test source element, and is capable
   of generating a variety of noise data sets. It is
   driven by process() to create new data, which is "canonical" 
-  or always-true data. We can also 
-  change the amount of "preloaded" data, and this new data
-  is generated at preload-init time. 
+  or always-true data.
 
   We have two places for our output data, data_ and preload_data. 
 
   A change of preload causes a complete invalidation of the entire
   stack, going forward. 
 
-  There's the assumption that 
+  NosieWave2 has a process method that gets called periodically
+  on a glib timeout to push data into the output queue. 
 
  */ 
 
 
-class NoiseWave2 : public SourceBase, 
-		   public elememnts::IElementSource<WaveBuffer_t>
+class NoiseWave2 : public SourceBase 
 {
 public:
   static const std::string TYPENAME;
@@ -66,40 +64,36 @@ public:
       sv->visit(this); 
   }
 
-  void get_src_data(std::list<DataWrapper<WaveBuffer_t> > &, padid_t id, 
-		    const timewindow_t & tw); 
+  elements::datawindow_t<pWaveBuffer_t> get_src_data(const elements::timewindow_t & tw); 
+  size_t get_sequence(); 
 
 
 private:
-  typedef boost::shared_ptr<WaveBuffer_t> pWaveBuffer_t; 
   
-  elements::SourcePad<WaveBuffer_t>::pSourcePad_t pSourcePad_; 
+  elements::SourcePad<pWaveBuffer_t>::pSourcePad_t pSourcePad_; 
   
   elements::timeid_t lasttime_; 
 
-  typedef std::map<elements::timeid_t, pSentBufferWrapper_t> datamap_t; 
+  typedef std::map<elements::timeid_t, pWaveBuffer_t> datamap_t; 
   
   elements::timeid_t remaining_preload_pos_; 
   
   datamap_t preload_data_; 
-  std::stack<datamap_t::iterator> preload_iters_;
-  
   datamap_t data_; 
-  std::stack<datamap_t::iterator> data_iters_; 
-  
-  void reset_preload_data(); 
-  void reset_sent_flags(); 
-  void send_reset_token(); 
-  
 
   std::pair<elements::timeid_t, pWaveBuffer_t> 
   createDataBuffer(elements::timeid_t starttime, elements::timeid_t endtime ); 
 
-  void create_outstanding_preload_data();
+  void create_outstanding_preload_data(); 
   void create_new_data(elements::timeid_t tid);
   
-  void send_preload(); 
-  void send_data(); 
+  size_t seqid_; 
+
+
+  void copy_data_map_range_to_output(datamap_t & dm, 
+				     timeid_t start, timeid_t end,
+				     elements::datawindow_t<pWaveBuffer_t> & wb); 
+  
 };
 
 typedef boost::shared_ptr<NoiseWave2> pNoiseWave2_t; 

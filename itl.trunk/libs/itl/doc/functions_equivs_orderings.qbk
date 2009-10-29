@@ -1,0 +1,114 @@
+[/
+    Copyright (c) 2008-2009 Joachim Faulhaber
+
+    Distributed under the Boost Software License, Version 1.0.
+    (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+]
+
+
+[/ //= Equivalences and Orderings ===================================================]
+[section Equivalences and Orderings]
+
+[section Synopsis][/ Equivalences and Orderings]
+
+[table
+[[['*Equivalences and Orderings*]][interval][__ch_itv_sets__][__ch_itv_maps__][itl::set][itl::map]]
+[[['Lexicographical Ordering]]                 [ ]       [ ]      [ ]     [ ]      [ ]   ]
+[[`bool operator == (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]   ]
+[[`bool operator != (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]   ]
+[[`bool operator <  (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]   ]
+[[`bool operator >  (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]   ]
+[[`bool operator <= (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]   ]
+[[`bool operator >= (const T&, const T&)`]     [1]       [1]      [1]     [1]      [1]   ]
+[[['Sequential Element Ordering]]              [ ]       [ ]      [ ]     [ ]      [ ]   ]
+[[`bool is_element_equal(const T&, const P&)`] [ ]     [__S]    [__M]     [1]      [1]   ]
+[[`bool is_element_less(const T&, const P&)`]  [ ]     [__S]    [__M]     [1]      [1]   ]
+[[`bool is_element_greater(const T&, const P&)`][ ]    [__S]    [__M]     [1]      [1]   ]
+[[['Protonic Equality]]                        [ ]       [ ]      [ ]     [ ]      [ ]   ]
+[[`bool is_protonic_equal(const T&, const P&)`][ ]       [ ]    [__M]     [ ]      [1]   ]
+]
+
+
+[endsect][/ Synopsis Equivalences and Orderings]
+
+
+[section Lexicographical Ordering][/ Equivalences and Orderings]
+
+All common equality and compare operators are defined for
+all objects of the *itl*. For all *itl* containers
+equality and compare operators implement lexicographical
+equality and lexicographical comparison, that depends on
+the equality of template parameter `Compare`.
+
+Equality and compare operators are defined for all *itl*
+objects but there are no overloads between different types.
+
+Containers of different segmentation are different,
+even if their elements are the same:
+``
+split_interval_set<time> w1, w2; //Pseudocode
+w1 = {[Mon       ..       Sun)}; //split_interval_set containing a week
+w2 = {[Mon .. Fri)[Sat .. Sun)}; //Same week split in work and week end parts.
+w1 == w2;                        //false: Different segmentation
+is_element_equal(w1,w2);         //true:  Same elements contained  
+``   
+
+[*Complexity] is ['*linear*] in the `iterative_size` of the shorter
+container to compare.
+
+[endsect][/ Lexicographical Ordering; Equivalences and Orderings]
+
+
+[/ ----------------------------------------------------------------------------]
+
+[section Sequential Element Ordering][/ Equivalences and Orderings]
+
+The ['*Sequential Element Ordering*] abstracts from the way in which
+elements of interval containers are clustered into intervals:
+it's ['*segmentation*].
+
+So these equality and compare operations can be applied within
+interval container types. The admissible type combinations are summarized
+in the next overload table.
+
+``
+// overload tables for
+bool is_element_equal  (const T&, const P&)
+bool is_element_less   (const T&, const P&)
+bool is_element_greater(const T&, const P&)
+
+element containers:     interval containers:  
+T\P| s m                T\P| S1 S2 S3 M1 M3    
+---+----                ---+---------------    
+s  | 1                  S1 | 1  1  1    
+m  |   1                S2 | 1  1  1    
+                        S3 | 1  1  1
+                        M1 |          1  1
+                        M3 |          1  1
+``
+
+For element containers lexicographical equality and
+sequential element equality are identical.
+
+The *complexity* of sequential element comparison functions
+is ['*linear*] in the `iterative_size` of the larger
+container.
+
+[endsect]
+
+[section Protonic Equality][/ Equivalences and Orderings]
+
+['*Protonic Equality*] is an equality predicate that is available
+for __itl_maps__ and __itv_maps__. It yields true, if
+two maps are sequential element equal except for value
+pairs whose associated values are neutral elements.
+
+[*Complexity] is linear in the `iterative_size` of the
+larger container to compare.
+
+[endsect]
+
+[endsect][/ Equivalences and Orderings]
+
+
