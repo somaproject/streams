@@ -40,10 +40,10 @@ void SourceCreator::visit(NoiseWave2 * nw)
 void SourceCreator::visit(NetDataWave * nd)
 {
 
-//   NetDataWaveWidget * ndw(new NetDataWaveWidget(nd, pipelineGUI_.getSomaConfig())); 
-//   ndw->setPropertyPaneManager(pipelineGUI_.getPropertyPaneManager()); 
+  NetDataWaveWidget * ndw(new NetDataWaveWidget(nd, pipelineGUI_.getSomaConfig())); 
+  ndw->setPropertyPaneManager(pipelineGUI_.getPropertyPaneManager()); 
 
-//   pipelineGUI_.addNewSource(ndw); 
+  pipelineGUI_.addNewSource(ndw); 
   
 
 }

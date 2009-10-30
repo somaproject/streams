@@ -10,7 +10,6 @@
 
 #include "timer.h" 
 
-#include <core/queueview.h>
 #include <elements/property.h>
 
 #include <sources/sourcebase.h>
@@ -72,23 +71,26 @@ public:
   std::list<samprate_t> getAvailableSampRates(); 
   elements::Property<uint32_t> filterid; 
   std::list<std::pair<uint32_t, std::string> > getAvailableFilterIDs(); 
+
+  elements::datawindow_t<pWaveBuffer_t> get_src_data(const elements::timewindow_t & tw); 
+  size_t get_sequence(); 
+
   
 private:
-  elements::SourcePad<WaveBuffer_t>::pSourcePad_t  pSourcePad_; 
-  
   pTimer_t pTimer_; 
   pNetworkDataCache_t pNetDataCache_; 
+
+  elements::SourcePad<pWaveBuffer_t>::pSourcePad_t  pSourcePad_; 
+  
   pISomaNetCodec_t pNetCodec_; 
   void nextData(); 
   void timeUpdate(streamtime_t t); 
 
   sigc::connection dataConn_; 
   
-  core::IQueueView<WaveBuffer_t>::ptr pDataQueueView_; 
   
   void setSrc(datasource_t src); 
   void reconnectSource(datasource_t src); 
-  datasource_t src_; 
 
   void reconnectPropertyProxies(); 
 
@@ -111,6 +113,7 @@ private:
 
 
   static const int CONTCHAN = 4; 
+  size_t seqid_; 
 
 }; 
 

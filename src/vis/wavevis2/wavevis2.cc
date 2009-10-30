@@ -327,7 +327,7 @@ void WaveVis2::process(elements::timeid_t t)
 
     interval_cnt++; 
   }
-  std::cout << "did that one with " << interval_cnt << " intervals" << std::endl; 
+
 }
 
 void WaveVis2::reset()

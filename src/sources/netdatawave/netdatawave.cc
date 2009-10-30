@@ -11,7 +11,9 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
   SourceBase(name), 
   pTimer_(timer), 
   pNetDataCache_(ndc), 
-  pSourcePad_(createSourcePad<WaveBuffer_t>("default")), 
+  pSourcePad_(createSourcePad<pWaveBuffer_t>("default", 
+					    boost::bind(&NetDataWave::get_src_data, this, _1), 
+					    boost::bind(&NetDataWave::get_sequence, this))),
   pNetCodec_(pnc), 
   src(1), 
   srcnotify_(new netdatawave::PropertyNotify()), 
@@ -21,7 +23,8 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
   selchan(0), 
   // dsp proxy properties: 
   sampratenum(std::make_pair(0, 0)), 
-  filterid(0)
+  filterid(0),
+  seqid_(0)
 {
 
   src.add_watcher(srcnotify_); 
@@ -37,8 +40,6 @@ NetDataWave::NetDataWave(std::string name, pTimer_t timer,
 
 
   datasource_t newsrc = src.get_req_value(); 
-  pDataQueueView_ = pNetDataCache_->getNetWaveSource(newsrc); 
-  pSourcePad_->reset(); 
   src.set_value(newsrc); // will then trigger out-of-band signal
   Glib::signal_timeout().connect(sigc::mem_fun(*this, 
 					       &NetDataWave::on_check_property_change), 
@@ -97,29 +98,10 @@ void NetDataWave::process(elements::timeid_t tid)
 
   if (src.pendingRequest() ) { 
     datasource_t newsrc = src.get_req_value(); 
-    pDataQueueView_ = pNetDataCache_->getNetWaveSource(newsrc); 
-    pSourcePad_->reset(); 
-
     src.set_value(newsrc); // will then trigger out-of-band signal
-
+    seqid_++; 
   } 
 
-  int MAXCNT = 30; 
-  int cnt = 0; 
-  while (cnt < MAXCNT) {
-    if (!pDataQueueView_->empty()) { 
-      // send the datum
-//       pSourcePad_->newData(lasttime_, lasttime_+ newdata.first, 
-// 			   *(sb->data())); // FIXME double-copy? 
-      WaveBuffer_t  wb = pDataQueueView_->front(); 
-      pSourcePad_->newData(wb.time, wb.time + timeid_t((1./wb.samprate)*wb.data.size()*1e9), 
-			   wb); 
-      pDataQueueView_->pop(); 
-    } else {
-      break; 
-    }
-    cnt++; 
-  }
   
 
 }
@@ -189,3 +171,19 @@ std::list<datasource_t> NetDataWave::getAvailableSources()
   return srcs; 
 
 }
+
+
+elements::datawindow_t<pWaveBuffer_t> NetDataWave::get_src_data(const elements::timewindow_t & tw)
+{
+  datasource_t src_now = src; // atomic get of source
+  // now just get the data
+  return pNetDataCache_->getNetWaveData(src_now, tw); 
+
+}
+
+size_t NetDataWave::get_sequence()
+{
+  return seqid_; 
+
+}
+
