@@ -41,7 +41,7 @@ NetworkDataCache::~NetworkDataCache()
 
 elements::datawindow_t<pWaveBuffer_t> NetworkDataCache::getNetWaveData(datasource_t n, elements::timewindow_t tw)
 {
-  std::cout << "NetworkDataCache::getNetWaveSource(datasource_t n =" << n << std::endl;
+  //  std::cout << "NetworkDataCache::getNetWaveSource(datasource_t n =" << n << std::endl;
   boost::mutex::scoped_lock  lock(mutex_);
   
   elements::datawindow_t<pWaveBuffer_t> wb; 

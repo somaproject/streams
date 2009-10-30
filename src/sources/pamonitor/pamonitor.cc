@@ -117,8 +117,8 @@ elements::datawindow_t<pWaveBuffer_t> PulseAudioMonitorWave::get_src_data(const 
     wb.interval = elements::timeinterval_t(starttime, 
 					   wb.data.back()->time); 
   }
-  std::cout << "requested " << start << " " << end << " and are retruning" 
-	    << wb.interval.as_string() << " of size " << wb.data.size() << std::endl; 
+//   std::cout << "requested " << start << " " << end << " and are retruning" 
+// 	    << wb.interval.as_string() << " of size " << wb.data.size() << std::endl; 
   return wb; 
 }
 
