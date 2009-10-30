@@ -82,7 +82,7 @@ elements::datawindow_t<pWaveBuffer_t>
 NetworkDataCache::getNetRawData(datasource_t n, elements::timewindow_t tw)
 {
 
-  std::cout << "NetworkDataCache::getNetRawSource(datasource_t n =" << n << std::endl;
+  // std::cout << "NetworkDataCache::getNetRawSource(datasource_t n =" << (int)n << std::endl;
   boost::mutex::scoped_lock  lock(mutex_);
 
   elements::datawindow_t<pWaveBuffer_t> wb; 
