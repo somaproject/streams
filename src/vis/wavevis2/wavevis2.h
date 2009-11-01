@@ -20,6 +20,7 @@
 #include <elements/property.h>
 #include <boost/thread/shared_mutex.hpp>
 #include <boost/itl/interval_set.hpp>
+#include "rendertest.h"
 
 class WaveVis2; 
 
@@ -49,6 +50,7 @@ class WaveVis2 : public VisBase
 
   //  elements::Property<Gdk::Color> color; 
   elements::Property<float> scale; 
+  elements::Property<bool> renderMode; 
   
   void process(elements::timeid_t tid); 
 
@@ -63,6 +65,7 @@ private:
   bf::path scratchdir_; 
 
   wavevis2::RenderAll renderall_; 
+  wavevis2::RenderTest renderTest_; 
   typedef std::map<timeid_t, wavevis2::RenderDownSample*> dsmap_t; 
   dsmap_t downsampledRenderers_; 
   void reset(); 

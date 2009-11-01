@@ -6,12 +6,18 @@ WaveVisProperty::WaveVisProperty(pSomaConfig_t sc) :
   scaleFrame_("Vertical Scale"), 
   scaleLabel_("per pixel"), 
   scaleComboBox_(), 
+  renderFrame_("Rendering properties"),
+  renderLabel_("Render enable"),
+  renderModeToggle_("Enabled"),
   pSomaConfig_(sc)
 {
-  pack_start(scaleFrame_); 
+  pack_start(box_); 
+  box_.pack_start(scaleFrame_); 
   scaleFrame_.add(scaleHBox_); 
   scaleHBox_.pack_start(scaleComboBox_);
   scaleHBox_.pack_start(scaleLabel_); 
+
+  
   PropertyWidgets::ComboBox<float>::possiblevalues_t vals; 
   vals.push_back(std::make_pair("1 uV", 1e-6)); 
   vals.push_back(std::make_pair("2 uV", 2e-6)); 
@@ -21,11 +27,19 @@ WaveVisProperty::WaveVisProperty(pSomaConfig_t sc) :
   vals.push_back(std::make_pair("50 uV", 50e-6)); 
   vals.push_back(std::make_pair("100 uV", 100e-6)); 
   vals.push_back(std::make_pair("1 mV", 1e-3)); 
+  vals.push_back(std::make_pair("5 mV", 5e-3)); 
   vals.push_back(std::make_pair("10 mV", 10e-3)); 
+  vals.push_back(std::make_pair("50 mV", 50e-3)); 
   vals.push_back(std::make_pair("100 mV", 100e-3)); 
   vals.push_back(std::make_pair("1 V", 1.0)); 
 
   scaleComboBox_.setPossibleValues(vals); 
+
+  box_.pack_start(renderFrame_);
+  renderFrame_.add(renderHBox_); 
+  renderHBox_.pack_start(renderLabel_); 
+  renderHBox_.pack_start(renderModeToggle_); 
+
 }
 
 WaveVisProperty::~WaveVisProperty()
@@ -43,6 +57,7 @@ bool WaveVisProperty::addElement(elements::IElement * elt)
   }
   
   scaleComboBox_.addProperty(&ws->scale); 
+  renderModeToggle_.addProperty(&ws->renderMode); 
   return true; 
 }
 
@@ -53,6 +68,7 @@ bool WaveVisProperty::delElement(elements::IElement * elt)
     return false; 
   }
 
+  renderModeToggle_.delProperty(&ws->renderMode); 
   scaleComboBox_.delProperty(&ws->scale); 
   return true; 
 }

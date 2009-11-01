@@ -144,7 +144,8 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
       //float y = double(random()) / RAND_MAX - 0.5; 
       //float x = VSCALE * sin (float(i) / FS * 3.14152*2 * freq) + y;
       float x; 
-      if ((((starttime + i * period_ns ) / 1000000) % 2) == 0) {
+      //if ((((starttime + i * period_ns ) / 1000000) % 2) == 0) {
+      if(i %2 == 0) { 
 	x = VSCALE/2; 
       } else {
 

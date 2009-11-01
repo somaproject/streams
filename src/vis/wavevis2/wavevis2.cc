@@ -10,8 +10,10 @@ WaveVis2::WaveVis2(std::string name, bf::path scratchdir):
   pixelHeight_(100), 
   //  color(Gdk::Color::parse("red"))
   scale(0.0),
+  renderMode(false), 
   scratchdir_(scratchdir / name),
   renderall_(scratchdir_), 
+  renderTest_(scratchdir_), 
   most_recent_render_window_(0, 0), 
   most_recent_series_(0)
 {
@@ -89,21 +91,22 @@ void WaveVis2::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
   timeid_t timeid_t1 = timeid_t(t1 * 1e9); 
   timeid_t timeid_t2 = timeid_t(t2 * 1e9); 
 
-  if (windowsize_ns < 500000000) { 
-//     std::cout << "Rendering with renderall" << std::endl;
+  if (renderMode) { 
     renderall_.renderStream(timeid_t1, timeid_t2, pixels); 
   } else { 
-    if (!downsampledRenderers_.empty()) { 
-      dsmap_t::iterator lb = downsampledRenderers_.upper_bound(windowsize_ns); 
-      if (lb == downsampledRenderers_.end())  { 
-	lb--; 
-      }
-      //     std::cout << "rendering with window = " << windowsize_ns 
-      // 	      << " and iterator = " << lb->first << std::endl;
-      lb->second->renderStream(timeid_t1, timeid_t2, pixels); 
-    }
+    renderTest_.renderStream(timeid_t1, timeid_t2, pixels); 
+//   } else { 
+// //     if (!downsampledRenderers_.empty()) { 
+// //       dsmap_t::iterator lb = downsampledRenderers_.upper_bound(windowsize_ns); 
+// //       if (lb == downsampledRenderers_.end())  { 
+// // 	lb--; 
+// //       }
+// //       //     std::cout << "rendering with window = " << windowsize_ns 
+// //       // 	      << " and iterator = " << lb->first << std::endl;
+// //       lb->second->renderStream(timeid_t1, timeid_t2, pixels); 
+// //     }
+//   }
   }
-
   glPopMatrix(); 
 
   most_recent_render_window_ = elements::timewindow_t(timeid_t1, timeid_t2); 
@@ -263,6 +266,10 @@ void WaveVis2::process(elements::timeid_t t)
     scale.set_value(scale.get_req_value()); 
   }
   
+  if(renderMode.pendingRequest()) {
+    renderMode.set_value(renderMode.get_req_value()); 
+  }
+  
   if (most_recent_series_ != pSinkPad_->get_series()) {
     reset(); 
     most_recent_series_ = pSinkPad_->get_series(); 
@@ -305,6 +312,8 @@ void WaveVis2::process(elements::timeid_t t)
 											    req_int.upper() + post_extratime)); 
 //     std::cout << " and got back " << datawindow.interval.as_string() << std::endl; 
     
+
+    renderTest_.newDataWindow(datawindow); 
     BOOST_FOREACH(pWaveBuffer_t wb, datawindow.data) {
       // DEBUG TEST
       bool seen_before_debug = debug_seen_times_.find(wb->time) == debug_seen_times_.end(); 
@@ -317,6 +326,7 @@ void WaveVis2::process(elements::timeid_t t)
 	// we don't waste time rendering things we've already seen. 
 	
 	renderall_.newSample(wb); 
+
 	BOOST_FOREACH(dsmap_t::value_type & i, downsampledRenderers_) {
 	  i.second->newSample(wb);
 	}

@@ -33,21 +33,13 @@ public:
 
 
 private:
-  DbEnv dbEnv_; 
-  
-  Db * db_; 
 
   void renderGLPointBuffer(timeid_t origintime, 
 			  GLPointBuffer_t * bufptr); 
 
-  typedef boost::shared_lock<boost::shared_mutex> shared_lock_t; 
-  typedef boost::upgrade_lock<boost::shared_mutex> upgrade_lock_t; 
-  typedef boost::upgrade_to_unique_lock<boost::shared_mutex> up_unique_lock_t; 
+  typedef  std::map<timeid_t, pWaveBuffer_t> datamap_t; 
+  datamap_t data_; 
 
-  boost::shared_mutex truncate_mutex_; 
-  
-  size_t waveBuffer_to_buffer(char * dest, const WaveBuffer_t & wb); 
-  WaveBuffer_t waveBuffer_from_buffer(char *, size_t len); 
 
   
 }; 

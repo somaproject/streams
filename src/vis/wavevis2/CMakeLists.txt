@@ -12,6 +12,8 @@ include_directories(${SOMADEPS_INCLUDE_DIRS})
 set(wave_vis2_SRCS
   wavevis2.cc 
   renderall.cc
+  rendertest.cc
+  downsample.cc
   renderdownsample.cc
 
 )
