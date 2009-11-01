@@ -24,9 +24,12 @@ private:
   PropertyWidgets::ComboBox<float> scaleComboBox_;
   
   Gtk::Frame renderFrame_; 
+  Gtk::VBox renderVBox_; 
+
   Gtk::Label renderLabel_; 
   Gtk::HBox renderHBox_; 
   PropertyWidgets::ToggleButton renderModeToggle_; 
+  PropertyWidgets::ToggleButton renderAllDataToggle_; 
 
   
   pSomaConfig_t pSomaConfig_; 

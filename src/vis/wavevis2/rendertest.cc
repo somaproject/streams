@@ -5,7 +5,8 @@
 namespace wavevis2 {
 
 
-RenderTest::RenderTest(bf::path scratch) 
+RenderTest::RenderTest(bf::path scratch, int scale) :
+  scale_(scale)
 {
   
 }
@@ -28,6 +29,12 @@ void RenderTest::renderStream(timeid_t t1, timeid_t t2, int pixels)
       mmi--; 
     }
   
+  glColor4f(1.0, 0.0, 0.0, 1.0); 
+  GLint vals[2]; 
+  glGetIntegerv(GL_POLYGON_MODE, vals); 
+
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); 
+  
   for(mmi; (mmi != minmaxmap_.end()) and (mmi->first < t2); mmi++) {
     // quads!
     
@@ -42,9 +49,10 @@ void RenderTest::renderStream(timeid_t t1, timeid_t t2, int pixels)
     
     pMinMaxVector_t mmv = mmi->second; 
     glTranslatef(double(mmi->second->start - t1)/1e9, 0, 0); 
-
+    //glLineWidth(1.0)n
     glColor4f(1.0, 1.0, 1.0, 1.0); 
-    glBegin(GL_QUAD_STRIP);
+    //glBegin(GL_POINTS);
+    glBegin(GL_QUAD_STRIP); 
     
     for(int i = 0; i < mmv->times.size(); i++) { 
       glVertex2f(mmv->times[i], mmv->mins[i]); 
@@ -55,6 +63,8 @@ void RenderTest::renderStream(timeid_t t1, timeid_t t2, int pixels)
     glPopMatrix(); 
     
   }
+  glPolygonMode(GL_FRONT, vals[0]); 
+  glPolygonMode(GL_BACK, vals[1]); 
   
 }
 
@@ -66,11 +76,10 @@ void RenderTest::reset() {
 
 void RenderTest::newDataWindow(const elements::datawindow_t<pWaveBuffer_t> & datawindow ) 
 {
-  const int DSFACTOR = 10; 
   BOOST_FOREACH(pWaveBuffer_t wb, datawindow.data) {
     if (data_.find(wb->time) == data_.end()) { 
       data_.insert(std::make_pair(wb->time, wb)); 
-      pMinMaxVector_t mmv = downsample_minmax_1(wb); 
+      pMinMaxVector_t mmv = downsample_minmax_var(wb, scale_); 
       minmaxmap_.insert(std::make_pair(wb->time, mmv)); 
     }
   }

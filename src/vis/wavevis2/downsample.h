@@ -24,6 +24,7 @@ struct MinMaxVector
 typedef boost::shared_ptr<MinMaxVector> pMinMaxVector_t; 
 
 pMinMaxVector_t downsample_minmax_1(pWaveBuffer_t wb); 
+pMinMaxVector_t downsample_minmax_var(pWaveBuffer_t wb, int scale); 
 
 
 }

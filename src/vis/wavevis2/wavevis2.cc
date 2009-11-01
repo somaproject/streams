@@ -11,9 +11,10 @@ WaveVis2::WaveVis2(std::string name, bf::path scratchdir):
   //  color(Gdk::Color::parse("red"))
   scale(0.0),
   renderMode(false), 
+  renderAllData(false),
   scratchdir_(scratchdir / name),
   renderall_(scratchdir_), 
-  renderTest_(scratchdir_), 
+  renderTest_(scratchdir_, 40), 
   most_recent_render_window_(0, 0), 
   most_recent_series_(0)
 {
@@ -91,9 +92,10 @@ void WaveVis2::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
   timeid_t timeid_t1 = timeid_t(t1 * 1e9); 
   timeid_t timeid_t2 = timeid_t(t2 * 1e9); 
 
-  if (renderMode) { 
+  if (renderAllData) { 
     renderall_.renderStream(timeid_t1, timeid_t2, pixels); 
-  } else { 
+  }
+  if (renderMode) { 
     renderTest_.renderStream(timeid_t1, timeid_t2, pixels); 
 //   } else { 
 // //     if (!downsampledRenderers_.empty()) { 
@@ -268,6 +270,10 @@ void WaveVis2::process(elements::timeid_t t)
   
   if(renderMode.pendingRequest()) {
     renderMode.set_value(renderMode.get_req_value()); 
+  }
+  
+  if(renderAllData.pendingRequest()) {
+    renderAllData.set_value(renderAllData.get_req_value()); 
   }
   
   if (most_recent_series_ != pSinkPad_->get_series()) {

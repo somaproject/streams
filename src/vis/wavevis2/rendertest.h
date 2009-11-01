@@ -20,7 +20,7 @@ class RenderTest : public IRenderer
      
   */
 public:
-  RenderTest(bf::path scratchdir); 
+  RenderTest(bf::path scratchdir, int scale); 
   ~RenderTest(); 
 
   void renderStream(timeid_t t1, timeid_t t2, int pixels); 
@@ -51,6 +51,7 @@ private:
   typedef std::map<timeid_t, pMinMaxVector_t> minmaxmap_t; 
   minmaxmap_t minmaxmap_; 
 
+  int scale_; 
 
 }; 
 

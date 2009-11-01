@@ -51,6 +51,7 @@ class WaveVis2 : public VisBase
   //  elements::Property<Gdk::Color> color; 
   elements::Property<float> scale; 
   elements::Property<bool> renderMode; 
+  elements::Property<bool> renderAllData; 
   
   void process(elements::timeid_t tid); 
 
