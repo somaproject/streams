@@ -42,6 +42,7 @@ StreamRenderWin::StreamRenderWin(pVisControl_t pvc) :
   add_events(Gdk::BUTTON1_MOTION_MASK    |
 	     Gdk::BUTTON2_MOTION_MASK    |
 	     Gdk::BUTTON3_MOTION_MASK    | 
+	     Gdk::POINTER_MOTION_MASK | 
 	     Gdk::SCROLL_MASK |
 	     Gdk::BUTTON_PRESS_MASK      |
 	     Gdk::BUTTON_RELEASE_MASK  | 
@@ -244,7 +245,7 @@ void StreamRenderWin::renderTimeTicks(float T1, float T2)
       
       timeformat % (t / scaletextdiv) % scaletext; 
       std::string timestr = timeformat.str(); 
-      //timeGLstring_.drawWorldText(t -  T1, 10.0, timestr, 15.0); 
+      timeGLstring_.drawWorldText(t -  T1, 10.0, timestr, 15.0); 
 
       
     }
@@ -406,6 +407,7 @@ bool StreamRenderWin::on_button_press_event(GdkEventButton* event)
 {
 //   m_BeginX = event->x;
 //   m_BeginY = event->y;
+  std::cout << "on_button_press_event" << std::endl; 
   if (event->type == GDK_BUTTON_PRESS)  
     {
       lastX_ = event->x; 
@@ -491,6 +493,7 @@ bool StreamRenderWin::on_scroll_event(GdkEventScroll* event)
 }
 bool StreamRenderWin::on_motion_notify_event(GdkEventMotion* event)
 {
+
 
   float x = event->x;
   float y = event->y;
