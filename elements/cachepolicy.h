@@ -1,7 +1,7 @@
 #ifndef __ELEMENTS_CACHE_POLICY_H__
 #define __ELEMENTS_CACHE_POLICY_H__
 
-#import <elements/timecache.h>
+#include <elements/timecache.h>
 
 namespace elements
 {
