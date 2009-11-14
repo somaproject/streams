@@ -17,7 +17,7 @@ StreamRenderWin::StreamRenderWin(pVisControl_t pvc) :
   zoomLevel_(1.0),
   s1fact_(2), 
   pVisControl_(pvc), 
-  timeGLstring_("sans", false, CENTER, BASELINE),
+  timeGLstring_("Sans", false, CENTER, BASELINE),
   viewType_(STRIPCHART)
 {
 
@@ -62,7 +62,7 @@ StreamRenderWin::StreamRenderWin(pVisControl_t pvc) :
   Glib::signal_timeout().connect(sigc::mem_fun(*this,
 					       &StreamRenderWin::invalidateCallback), 
 				 20);
-  
+  std::cout << "StreamRenderWin done constructing" << std::endl; 
 }
 
 StreamRenderWin::~StreamRenderWin()
@@ -102,22 +102,22 @@ void StreamRenderWin::on_realize()
 //   shaders.push_back(fshdr); 
 //   gpuProgGradient_ = createGPUProgram(shaders); 
 
-  // create font display lists
-  fontListBase_ = glGenLists(128); 
-  Pango::FontDescription font_desc("bitstream vera sans mono"); 
-  Glib::RefPtr<Pango::Font> font =
-    Gdk::GL::Font::use_pango_font(font_desc, 0, 128, fontListBase_);
-  if (!font)
-    {
-      std::cerr << "*** Can't load font "
-                << std::endl;
-      Gtk::Main::quit();
-    }
+  // // create font display lists
+  // fontListBase_ = glGenLists(128); 
+  // Pango::FontDescription font_desc("bitstream vera sans mono"); 
+  // Glib::RefPtr<Pango::Font> font =
+  //   Gdk::GL::Font::use_pango_font(font_desc, 0, 128, fontListBase_);
+  // if (!font)
+  //   {
+  //     std::cerr << "*** Can't load font "
+  //               << std::endl;
+  //     Gtk::Main::quit();
+  //   }
   
-  Pango::FontMetrics font_metrics = font->get_metrics();
+  // Pango::FontMetrics font_metrics = font->get_metrics();
 
-  fontHeight_ = font_metrics.get_ascent() + font_metrics.get_descent();
-  fontHeight_ = PANGO_PIXELS(fontHeight_);
+  // fontHeight_ = font_metrics.get_ascent() + font_metrics.get_descent();
+  // fontHeight_ = PANGO_PIXELS(fontHeight_);
 
   updateViewingWindow(true); 
 
@@ -244,7 +244,7 @@ void StreamRenderWin::renderTimeTicks(float T1, float T2)
       
       timeformat % (t / scaletextdiv) % scaletext; 
       std::string timestr = timeformat.str(); 
-      timeGLstring_.drawWorldText(t -  T1, 10.0, timestr, 15.0); 
+      //timeGLstring_.drawWorldText(t -  T1, 10.0, timestr, 15.0); 
 
       
     }
