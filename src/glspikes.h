@@ -4,6 +4,7 @@
 #include <GL/gl.h>
 #include <vector>
 #include <list>
+#include <stdint.h>
 
 enum GLChan_t {CHANX, CHANY, CHANA, CHANB}; 
 
