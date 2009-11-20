@@ -29,6 +29,7 @@ private:
   Gtk::Label renderLabel_; 
   Gtk::HBox renderHBox_; 
   PropertyWidgets::ToggleButton renderModeToggle_; 
+  PropertyWidgets::ToggleButton renderMode2Toggle_; 
   PropertyWidgets::ToggleButton renderAllDataToggle_; 
 
   

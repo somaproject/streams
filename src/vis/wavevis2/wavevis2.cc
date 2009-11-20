@@ -11,10 +11,12 @@ WaveVis2::WaveVis2(std::string name, bf::path scratchdir):
   //  color(Gdk::Color::parse("red"))
   scale(0.0),
   renderMode(false), 
+  renderMode2(false), 
   renderAllData(false),
   scratchdir_(scratchdir / name),
   renderall_(scratchdir_), 
-  renderTest_(scratchdir_, 40), 
+  renderTest_(scratchdir_, 100), 
+  renderTest2_(1*elements::TIMEID_SEC), 
   most_recent_render_window_(0, 0), 
   most_recent_series_(0)
 {
@@ -97,6 +99,11 @@ void WaveVis2::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
   }
   if (renderMode) { 
     renderTest_.renderStream(timeid_t1, timeid_t2, pixels); 
+  }
+  
+  if (renderMode2) { 
+    renderTest2_.renderStream(timeid_t1, timeid_t2, pixels); 
+  }
 //   } else { 
 // //     if (!downsampledRenderers_.empty()) { 
 // //       dsmap_t::iterator lb = downsampledRenderers_.upper_bound(windowsize_ns); 
@@ -108,7 +115,7 @@ void WaveVis2::renderStream(streamtime_t t1, streamtime_t t2, int pixels)
 // //       lb->second->renderStream(timeid_t1, timeid_t2, pixels); 
 // //     }
 //   }
-  }
+  
   glPopMatrix(); 
 
   most_recent_render_window_ = elements::timewindow_t(timeid_t1, timeid_t2); 
@@ -272,6 +279,10 @@ void WaveVis2::process(elements::timeid_t t)
     renderMode.set_value(renderMode.get_req_value()); 
   }
   
+  if(renderMode2.pendingRequest()) {
+    renderMode2.set_value(renderMode2.get_req_value()); 
+  }
+  
   if(renderAllData.pendingRequest()) {
     renderAllData.set_value(renderAllData.get_req_value()); 
   }
@@ -320,6 +331,7 @@ void WaveVis2::process(elements::timeid_t t)
     
 
     renderTest_.newDataWindow(datawindow); 
+    renderTest2_.newDataWindow(datawindow); 
     BOOST_FOREACH(pWaveBuffer_t wb, datawindow.data) {
       // DEBUG TEST
       bool seen_before_debug = debug_seen_times_.find(wb->time) == debug_seen_times_.end(); 

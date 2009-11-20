@@ -118,6 +118,10 @@ add_executable(noisewave2_test
   
 #   )
 
+add_executable(fixeddownsample_test
+  fixeddownsample_test.cc
+  runner.cc)
+
 
 
 set(testlist 
@@ -141,6 +145,7 @@ sourcesink2_test
 noisewave2_test
 #lrucache_test
 #timecache_test
+fixeddownsample_test
 )
 
 

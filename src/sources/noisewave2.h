@@ -46,7 +46,7 @@ public:
   // emit updatedData
   elements::Property<float> amplitude; 
   
-  enum NoiseClass {WhiteNoise, NoisySine, SquareWave, BiModal, Chirp}; 
+  enum NoiseClass {WhiteNoise, NoisySine, SquareWave, BiModal, Chirp, CarrierSine}; 
   elements::Property<NoiseClass> noiseclass; 
 
   elements::Property<float> preload; // in minutes

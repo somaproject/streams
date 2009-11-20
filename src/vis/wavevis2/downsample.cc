@@ -10,7 +10,7 @@ pMinMaxVector_t downsample_minmax_1(pWaveBuffer_t wb)
   mmv->end = wb->time + timeid_t(1.0/double(wb->samprate) *wb->data.size() * 1e9);
 
   mmv->minval = std::numeric_limits<float>::max(); 
-  mmv->maxval = std::numeric_limits<float>::min(); 
+  mmv->maxval = -std::numeric_limits<float>::max(); 
   BOOST_FOREACH(float x, wb->data) {
     if(mmv->minval > x) { 
       mmv->minval = x; 
@@ -24,7 +24,7 @@ pMinMaxVector_t downsample_minmax_1(pWaveBuffer_t wb)
 
   float time = 0; 
   float min = std::numeric_limits<float>::max(); 
-  float max = std::numeric_limits<float>::min(); 
+  float max = -std::numeric_limits<float>::max(); 
 
   int ds = 20; 
   for(int i = 0; i < wb->data.size(); i++) { 
@@ -41,7 +41,7 @@ pMinMaxVector_t downsample_minmax_1(pWaveBuffer_t wb)
       mmv->maxs.push_back(max); 
       mmv->times.push_back(1.0/double(wb->samprate) * i); 
       min = std::numeric_limits<float>::max(); 
-      max = std::numeric_limits<float>::min(); 
+      max = -std::numeric_limits<float>::max(); 
     }
   }
   if (mmv->times.size() > 1) {
@@ -62,7 +62,7 @@ pMinMaxVector_t downsample_minmax_var(pWaveBuffer_t wb, int scale)
   mmv->end = wb->time + timeid_t(1.0/double(wb->samprate) *wb->data.size() * 1e9);
 
   mmv->minval = std::numeric_limits<float>::max(); 
-  mmv->maxval = std::numeric_limits<float>::min(); 
+  mmv->maxval = -std::numeric_limits<float>::max(); 
   BOOST_FOREACH(float x, wb->data) {
     if(mmv->minval > x) { 
       mmv->minval = x; 
@@ -76,7 +76,7 @@ pMinMaxVector_t downsample_minmax_var(pWaveBuffer_t wb, int scale)
 
   float time = 0; 
   float min = std::numeric_limits<float>::max(); 
-  float max = std::numeric_limits<float>::min(); 
+  float max = -std::numeric_limits<float>::max(); 
 
   int ds = scale; 
   for(int i = 0; i < wb->data.size(); i++) { 
@@ -89,11 +89,12 @@ pMinMaxVector_t downsample_minmax_var(pWaveBuffer_t wb, int scale)
     }
 
     if((i % ds == 0) or (i == wb->data.size()-1)) { 
+
       mmv->mins.push_back(min); 
       mmv->maxs.push_back(max); 
       mmv->times.push_back(1.0/double(wb->samprate) * i); 
       min = std::numeric_limits<float>::max(); 
-      max = std::numeric_limits<float>::min(); 
+      max = -std::numeric_limits<float>::max(); 
     }
   }
   if (mmv->times.size() > 1) {

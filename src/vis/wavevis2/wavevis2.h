@@ -21,6 +21,8 @@
 #include <boost/thread/shared_mutex.hpp>
 #include <boost/itl/interval_set.hpp>
 #include "rendertest.h"
+#include "fixeddownsample.h"
+
 
 class WaveVis2; 
 
@@ -51,6 +53,7 @@ class WaveVis2 : public VisBase
   //  elements::Property<Gdk::Color> color; 
   elements::Property<float> scale; 
   elements::Property<bool> renderMode; 
+  elements::Property<bool> renderMode2; 
   elements::Property<bool> renderAllData; 
   
   void process(elements::timeid_t tid); 
@@ -67,6 +70,8 @@ private:
 
   wavevis2::RenderAll renderall_; 
   wavevis2::RenderTest renderTest_; 
+  wavevis2::FixedDownSample renderTest2_; 
+
   typedef std::map<timeid_t, wavevis2::RenderDownSample*> dsmap_t; 
   dsmap_t downsampledRenderers_; 
   void reset(); 

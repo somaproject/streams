@@ -160,6 +160,18 @@ NoiseWave2::createDataBuffer(elements::timeid_t starttime, elements::timeid_t en
       float x = VSCALE * sin (float(i) / FS * 3.14152*2 * freq) + y;
       wb->data.push_back(x); 
     }
+  } else if (noiseclass == CarrierSine) {
+    // A very slow 0.1 hz sine wave with a 100 Hz sine on top of it
+    
+    for (int i = 0; i < N; i++) {
+      double slow_freq = 0.1; 
+      double fast_freq = 100.0; 
+
+      double slow_x = VSCALE * sin ((starttime/elements::TIMEID_PER_SECF + i* 1.0/ FS) * 3.14152*2 * slow_freq);
+      double fast_x = VSCALE * sin ((starttime/elements::TIMEID_PER_SECF + i* 1.0/ FS) * 3.14152*2 * fast_freq) * 0.05;
+
+      wb->data.push_back(slow_x + fast_x); 
+    }
   }
   
   //

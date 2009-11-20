@@ -9,6 +9,7 @@ WaveVisProperty::WaveVisProperty(pSomaConfig_t sc) :
   renderFrame_("Rendering properties"),
   renderLabel_("Render enable"),
   renderModeToggle_("Enabled"),
+  renderMode2Toggle_("Render Mode 2"),
   renderAllDataToggle_("Render All Data"),
   pSomaConfig_(sc)
 {
@@ -41,6 +42,7 @@ WaveVisProperty::WaveVisProperty(pSomaConfig_t sc) :
   renderVBox_.pack_start(renderHBox_); 
   renderHBox_.pack_start(renderLabel_); 
   renderHBox_.pack_start(renderModeToggle_); 
+  renderHBox_.pack_start(renderMode2Toggle_); 
   renderVBox_.pack_start(renderAllDataToggle_); 
 
 }
@@ -61,6 +63,7 @@ bool WaveVisProperty::addElement(elements::IElement * elt)
   
   scaleComboBox_.addProperty(&ws->scale); 
   renderModeToggle_.addProperty(&ws->renderMode); 
+  renderMode2Toggle_.addProperty(&ws->renderMode2); 
   renderAllDataToggle_.addProperty(&ws->renderAllData); 
   return true; 
 }
@@ -73,6 +76,7 @@ bool WaveVisProperty::delElement(elements::IElement * elt)
   }
 
   renderAllDataToggle_.delProperty(&ws->renderAllData); 
+  renderMode2Toggle_.delProperty(&ws->renderMode2); 
   renderModeToggle_.delProperty(&ws->renderMode); 
   scaleComboBox_.delProperty(&ws->scale); 
   return true; 

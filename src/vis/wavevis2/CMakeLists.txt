@@ -15,6 +15,7 @@ set(wave_vis2_SRCS
   rendertest.cc
   downsample.cc
   renderdownsample.cc
+  fixeddownsample.cc
 
 )
 add_library(vis_wave2

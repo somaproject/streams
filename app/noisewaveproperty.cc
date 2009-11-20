@@ -21,6 +21,7 @@ NoiseWaveProperty::NoiseWaveProperty(pSomaConfig_t sc) :
   vals.push_back( std::make_pair("square wave", NoiseWave2::SquareWave)); 
   vals.push_back( std::make_pair("bimodal", NoiseWave2::BiModal)); 
   vals.push_back( std::make_pair("chirp", NoiseWave2::Chirp)); 
+  vals.push_back( std::make_pair("carrier sine", NoiseWave2::CarrierSine)); 
 
   noiseClassComboBox_.setPossibleValues(vals); 
   
