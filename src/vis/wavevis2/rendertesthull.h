@@ -1,5 +1,5 @@
-#ifndef __VIS_WAVEVIS2_RENDERTEST_H__
-#define __VIS_WAVEVIS2_RENDERTEST_H__
+#ifndef __VIS_WAVEVIS2_RENDERTESTHULL_H__
+#define __VIS_WAVEVIS2_RENDERTESTHULL_H__
 
 #include <boost/itl/interval_set.hpp>
 #include <map>
@@ -11,12 +11,12 @@
 namespace wavevis2 { 
 
 
-class RenderTest : public IRenderer
+class RenderTestHull : public IRenderer
 {
 
 public:
-  RenderTest(bf::path scratchdir, int scale); 
-  ~RenderTest(); 
+  RenderTestHull(bf::path scratchdir, int scale); 
+  ~RenderTestHull(); 
 
   void renderStream(timeid_t t1, timeid_t t2, int pixels); 
   void newDataWindow(const elements::datawindow_t<pWaveBuffer_t> & ); 

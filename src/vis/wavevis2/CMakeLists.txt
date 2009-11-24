@@ -16,7 +16,7 @@ set(wave_vis2_SRCS
   downsample.cc
   renderdownsample.cc
   fixeddownsample.cc
-
+  rendertesthull.cc
 )
 add_library(vis_wave2
   ${wave_vis2_SRCS}

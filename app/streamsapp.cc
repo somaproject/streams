@@ -5,7 +5,7 @@
 #include <cmath>
 #include <set>
 #include <assert.h>
-
+#include <boost/format.hpp>
 #include <stdlib.h>
 #include <gtkmm.h>
 
@@ -57,10 +57,9 @@ StreamsApp::StreamsApp(pSourceState_t pss, bf::path scratchdir) :
   streamWin_.set_size_request(1300, 1000); 
   //triggerWin_.set_size_request(150, 1000); 
   // status componnets
-  hBoxStatus_.pack_start(statusProgressBar_); 
-  statusProgressBar_.set_size_request(100, 0); 
 
-  hBoxStatus_.pack_start(statusBar_); 
+  hBoxStatus_.pack_start(timeLabel_); 
+  timeLabel_.set_size_request(100, -1); 
   hBoxStatus_.pack_start(trackLive_); 
   hBoxStatus_.pack_start(liveModeCombo_); 
   liveModeCombo_.append_text("manual"); 
@@ -253,6 +252,8 @@ StreamsApp::~StreamsApp()
 
 void StreamsApp::setTime(streamtime_t time)
 {
+  timeLabel_.set_text(boost::str(boost::format("Soma Time: %d") % time)); 
+
   streamWin_.setCurrentTime(time); 
 }
 

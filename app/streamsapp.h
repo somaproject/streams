@@ -55,9 +55,9 @@ protected:
   Gtk::VBox  vBoxMain_; 
   Gtk::HBox  hBoxMain_; 
   Gtk::HBox  hBoxStatus_; 
+  Gtk::Label timeLabel_; 
   Gtk::VBox  vBoxStreamStatus_; 
   Gtk::Widget* pMenuBar_; 
-  Gtk::Statusbar statusBar_; 
   PropertyWidgets::ToggleButton trackLive_; 
   Gtk::ComboBoxText liveModeCombo_; 
   Gtk::ProgressBar statusProgressBar_; 

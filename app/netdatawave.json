@@ -3,7 +3,7 @@
     "elements" : { 
           "first" : {"type" : "source",
                        "class" : "NetDataWave",
-		       "config" : {"preload" : 100}}, 
+		       "config" : {"preload" : 0}}, 
           "second" : {"type" : "vis",
                       "class" : "WaveVis2"}}, 
     "connections" : [["first", "default", "second", "default"]]
