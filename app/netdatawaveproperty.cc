@@ -3,18 +3,37 @@
 #include <boost/format.hpp>
 
 NetDataWaveProperty::NetDataWaveProperty(pSomaConfig_t sc) : 
-  pSomaConfig_(sc),
-  hpfCheckBox_("High Pass Filter Enable")
+  sourceFrame_("Acq Data Source Properties"), 
+  gainLabel_("gain"), 
+  hpfCheckBox_("High Pass Filter Enable"),
+  filterFrame_("Filter Properties"), 
+  pSomaConfig_(sc)
 {
   pack_start(sourceComboBox_);
-  pack_start(gainComboBox_);
-  pack_start(hpfCheckBox_); 
+  pack_start(sourceFrame_); 
+  
+  sourceFrame_.add(sourceVBox_); 
+  gainHBox_.pack_start(gainLabel_); 
+  gainHBox_.pack_start(gainComboBox_); 
+  sourceVBox_.pack_start(gainHBox_);
+  sourceVBox_.pack_start(hpfCheckBox_);
+ 
+
+  pack_start(filterFrame_); 
+
 
   // set possible values
   
   PropertyWidgets::ComboBox<int>::possiblevalues_t vals; 
   vals.push_back(std::make_pair("0", 0)); 
   vals.push_back(std::make_pair("100", 100));
+  vals.push_back(std::make_pair("200", 200));
+  vals.push_back(std::make_pair("500", 500));
+  vals.push_back(std::make_pair("1000", 1000));
+  vals.push_back(std::make_pair("2000", 2000));
+  vals.push_back(std::make_pair("5000", 5000));
+  vals.push_back(std::make_pair("10000", 10000));
+
 
   gainComboBox_.setPossibleValues(vals); 
 

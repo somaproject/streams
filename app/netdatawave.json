@@ -7,6 +7,113 @@
           "second" : {"type" : "vis",
                       "class" : "WaveVis2"}}, 
     "connections" : [["first", "default", "second", "default"]]
+},
+{ "name" : "pipeline02",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+},
+{ "name" : "pipeline03",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+},
+{ "name" : "pipeline04",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}
+,
+{ "name" : "pipeline05",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}
+,
+{ "name" : "pipeline06",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}
+,
+{ "name" : "pipeline07",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}
+,
+{ "name" : "pipeline08",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}
+,
+{ "name" : "pipeline09",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}
+,
+{ "name" : "pipeline10",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}
+,
+{ "name" : "pipeline11",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
+}
+,
+{ "name" : "pipeline12",
+    "elements" : { 
+          "first" : {"type" : "source",
+                       "class" : "NetDataWave",
+		       "config" : {"preload" : 0}}, 
+          "second" : {"type" : "vis",
+                      "class" : "WaveVis2"}}, 
+    "connections" : [["first", "default", "second", "default"]]
 }
 ]
 

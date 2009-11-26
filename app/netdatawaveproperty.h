@@ -16,12 +16,23 @@ public:
   
   virtual bool addElement(elements::IElement * elt); 
   virtual bool delElement(elements::IElement * elt); 
+  inline std::string name() { 
+    return "Network Data Wave Source"; 
+  }
 
 private: 
+
   PropertyWidgets::ComboBox<datasource_t> sourceComboBox_; 
+
+  Gtk::Frame sourceFrame_; 
+  Gtk::VBox sourceVBox_; 
+  Gtk::HBox gainHBox_; 
+  Gtk::Label gainLabel_; 
   PropertyWidgets::ComboBox<int > gainComboBox_; 
   PropertyWidgets::CheckBox hpfCheckBox_; 
-
+  
+  Gtk::Frame filterFrame_; 
+  
   pSomaConfig_t pSomaConfig_; 
 
 };

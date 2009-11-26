@@ -2,7 +2,8 @@
 #include "somanetcodec.h"
 
 SomaNetCodec::SomaNetCodec(pNetworkInterface_t pni) :
-  pNetwork_(pni)
+  pNetwork_(pni), 
+  lastsomatime_(0)
 {
   
   Glib::signal_io().connect(sigc::mem_fun(*this, &SomaNetCodec::dataRXCallback), 
@@ -12,7 +13,7 @@ SomaNetCodec::SomaNetCodec(pNetworkInterface_t pni) :
 			    pNetwork_->getEventFifoPipe(), Glib::IO_IN); 
 
   // create the data wave codecs
-  for(int i = 0; i < 64; i++) { // FIXME : extract out constant
+  for(int i = 0; i < MAXDATASRC; i++) { // FIXME : extract out constant
     dspStateProxies_.push_back(new somadspio::StateProxy(datasource_t(i), 
 							sigc::mem_fun(*this, 
 								      &SomaNetCodec::sendEvents), 5)); 
@@ -104,15 +105,21 @@ void SomaNetCodec::parseEvent(const Event_t & evt)
       stime = stime << 16; 
       stime |= evt.data[2]; 
       
-      signalTimeUpdate_.emit(stime); 
-      BOOST_FOREACH(somadspio::StateProxy & sp, dspStateProxies_) 
+      if (stime > (SOMATIME_DELAY + lastsomatime_)) 
 	{
-	  sp.setTime(stime); 
+	  signalTimeUpdate_.emit(stime); 
+	  BOOST_FOREACH(somadspio::StateProxy & sp, dspStateProxies_) 
+	    {
+	      sp.setTime(stime); 
+	    }
+	  lastsomatime_ = stime; 
+
 	}
       
     } else {
     // state-proxy-related event
-    if ((evt.src >= 8 and evt.src <= (64+8))) { 
+    if ((evt.src >= 8 and evt.src <= (MAXDATASRC+8))) { 
+      std::cout << "received event from " << (int) evt.src << std::endl;
       dspStateProxies_[evt.src - 8].newEvent(evt); 
     }
     

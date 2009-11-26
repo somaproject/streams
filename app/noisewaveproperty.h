@@ -15,6 +15,9 @@ public:
   virtual bool addElement(elements::IElement * elt); 
   virtual bool delElement(elements::IElement * elt); 
 
+  inline std::string name() { 
+    return "Noise Wave Source"; 
+  }
 private: 
   Gtk::Frame frame_; 
   Gtk::VBox propbox_; 

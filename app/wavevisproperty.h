@@ -15,6 +15,11 @@ public:
   virtual bool addElement(elements::IElement * elt); 
   virtual bool delElement(elements::IElement * elt); 
 
+  inline std::string name() { 
+    return "Wave Vis"; 
+  }
+
+
 private: 
   Gtk::VBox box_; 
 

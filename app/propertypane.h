@@ -43,6 +43,7 @@ class PropertyPane : public Gtk::VBox
 public:
   virtual bool addElement(elements::IElement * elt) = 0; 
   virtual bool delElement(elements::IElement * elt) = 0; 
+  virtual std::string name() = 0; 
 private:
 
   PropertyPane * createPropPane(elements::IElement * elt); 

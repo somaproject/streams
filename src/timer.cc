@@ -46,7 +46,7 @@ void Timer::updateSomaTime(somatime_t newsomatime)
   currentStreamTime_ = somaTimeToStreamTime(currentSomaTime_); 
   currentExpTime_ = somaTimeToExpTime(currentSomaTime_); 
   {
-    boost::unique_lock<boost::shared_mutex> lock(currentTimeID_mutex_); 
+    //boost::unique_lock<boost::shared_mutex> lock(currentTimeID_mutex_); 
     currentTimeID_ = somaTimeToTimeID(currentSomaTime_); 
   }
   streamTimeSignal_.emit(currentStreamTime_); 
@@ -79,7 +79,7 @@ streamtime_t Timer::getStreamTime()
 
 timeid_t Timer::getTimeID()
 {
-  boost::unique_lock<boost::shared_mutex> lock(currentTimeID_mutex_); 
+  //  boost::unique_lock<boost::shared_mutex> lock(currentTimeID_mutex_); 
   return currentTimeID_; 
 }
 

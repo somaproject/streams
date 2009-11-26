@@ -46,8 +46,14 @@ private:
   // ideally we'd fracture this out, but whatever, there are really only a few
   // data types
   
+  static const int MAXDATASRC=64; 
+
   boost::ptr_vector<somadspio::StateProxy> dspStateProxies_; 
 
+  // time subsampler
+  static const somatime_t SOMATIME_DELAY = 1000; 
+  somatime_t lastsomatime_; 
+  
 }; 
 
 typedef boost::shared_ptr<SomaNetCodec> pSomaNetCodec_t; 

@@ -34,7 +34,8 @@ StreamsApp::StreamsApp(pSourceState_t pss, bf::path scratchdir) :
   trackLive_("Track Live"), 
   ppm_(*this, pSomaConfig_), 
   pmg_(pPipelineManager_, pSomaConfig_, vBoxPipelines_, ppm_), 
-  testLabel_("Hello world")
+  testLabel_("Hello world"),
+  timeLabel_("SomaTime", Gtk::ALIGN_LEFT)
   //triggerWin_(pPipelineManager_)  
 {
   
@@ -54,7 +55,7 @@ StreamsApp::StreamsApp(pSourceState_t pss, bf::path scratchdir) :
   hBoxMain_.pack_start(streamWin_, true, true); 
   trackLive_.addProperty(&(streamWin_.trackLive)); 
   //hBoxMain_.pack_start(triggerWin_, true, true); 
-  streamWin_.set_size_request(1300, 1000); 
+  streamWin_.set_size_request(1000, 700); 
   //triggerWin_.set_size_request(150, 1000); 
   // status componnets
 

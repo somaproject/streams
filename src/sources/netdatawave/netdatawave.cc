@@ -111,7 +111,7 @@ void NetDataWave::reconnectSource(datasource_t src)
   /*
     Called when the underlying source we're connected to changes. It
     necessitates a reconnection to all of the somadspio sources. 
-    
+    g
   */ 
   if(gainconn_) 
     gainconn_.disconnect(); 
@@ -175,7 +175,6 @@ std::list<datasource_t> NetDataWave::getAvailableSources()
 
 elements::datawindow_t<pWaveBuffer_t> NetDataWave::get_src_data(const elements::timewindow_t & tw)
 {
-  std::cout << "NetDataWave::get_src_data" << std::endl;
   datasource_t src_now = src; // atomic get of source
   // now just get the data
   return pNetDataCache_->getNetWaveData(src_now, tw); 

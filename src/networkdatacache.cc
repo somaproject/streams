@@ -74,8 +74,8 @@ elements::datawindow_t<pWaveBuffer_t> NetworkDataCache::getNetWaveData(datasourc
     // return null data 
     waveDataEnabled_[n] = true; 
   } 
-  std::cout << "NetworkDataCache returning "
-	    << wb.interval.lower() << " " << wb.interval.upper() << std::endl; 
+//   std::cout << "NetworkDataCache returning "
+// 	    << wb.interval.lower() << " " << wb.interval.upper() << std::endl; 
   return wb;
     
 }

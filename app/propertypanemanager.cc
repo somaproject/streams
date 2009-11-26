@@ -106,6 +106,7 @@ void PropertyPaneManager::removeElement(elements::IElement * elt)
 	proppane_ = createPropPane(*ei); 
 	window_.add(*proppane_); 
 	window_.show_all(); 
+	window_.set_title(proppane_->name()); 
       } else {
 	if(not inConflict_) {
 	  bool success = proppane_->addElement(*ei); 
