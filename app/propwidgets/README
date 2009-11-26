@@ -1,0 +1,7 @@
+Radio button
+----------------
+
+We create a collection of radio buttons, and add them to a
+radio button controller. It takes in a value type, and lets
+you switch between them
+

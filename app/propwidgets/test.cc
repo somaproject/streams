@@ -10,6 +10,7 @@
 #include "combobox.h"
 #include "label.h"
 #include "hscale.h"
+#include "radiogroup.h"
 
 class HelloWorld : public Gtk::Window
 {
@@ -49,6 +50,20 @@ protected:
   elements::Property<int> comboIntProp1_; 
   elements::Property<int> comboIntProp2_; 
 
+  // radio widget test
+  elements::Property<int> propRadioTest_; 
+
+  Gtk::RadioButton radio1_; 
+  Gtk::RadioButton radio2_; 
+  Gtk::RadioButton radio3_; 
+  Gtk::RadioButton radio4_; 
+  PropertyWidgets::RadioGroupManager<int> radioGroupManager_; 
+  Gtk::Frame radioFrame_; 
+  Gtk::VBox radioVBox_; 
+  PropertyWidgets::ComboBox<int> radioComboBox_; 
+  
+
+
 };
 
 std::string floatformat1(float x,  PropertyWidgets::Label<float>::State s)
@@ -68,7 +83,14 @@ HelloWorld::HelloWorld()
     prop1scale_(0.0, 100.0, 1.0), 
     m_button(adjustment_),   // creates a new button with label "Hello World".
     comboIntProp1_(1),
-    comboIntProp2_(1)
+    comboIntProp2_(1),
+    propRadioTest_(1),  
+    radio1_("radio 1"), 
+    radio2_("radio 2"), 
+    radio3_("radio 3"), 
+    radio4_("radio 4"), 
+    radioFrame_("Radio example")
+    
 {
   // Sets the border width of the window.
   set_border_width(10);
@@ -112,6 +134,25 @@ HelloWorld::HelloWorld()
   prop1scale_.addProperty(&prop1_);
 
   box_.pack_start(comboBox_); 
+
+  box_.pack_start(radioFrame_); 
+  radioFrame_.add(radioVBox_); 
+  radioVBox_.pack_start(radio1_); 
+  radioVBox_.pack_start(radio2_); 
+  radioVBox_.pack_start(radio3_); 
+  radioVBox_.pack_start(radio4_); 
+
+  radioVBox_.pack_start(radioComboBox_); 
+
+  radioGroupManager_.addRadioButton(1, &radio1_); 
+  radioGroupManager_.addRadioButton(2, &radio2_); 
+  radioGroupManager_.addRadioButton(3, &radio3_); 
+  radioGroupManager_.addRadioButton(4, &radio4_); 
+
+  radioGroupManager_.addProperty(&propRadioTest_); 
+
+  radioComboBox_.addProperty(&propRadioTest_); 
+  radioComboBox_.setPossibleValues(vals); 
 
   // The final step is to display this newly created widget...
   show_all(); 
@@ -158,6 +199,11 @@ bool HelloWorld::idle_property_update()
   if(comboIntProp2_.pendingRequest() ) {
     comboIntProp2_.set_value(comboIntProp2_.get_req_value()); 
   }
+
+  if(propRadioTest_.pendingRequest() ) { 
+    propRadioTest_.set_value(propRadioTest_.get_req_value());     
+  }
+
   return true;
 
 }
