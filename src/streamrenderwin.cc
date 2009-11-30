@@ -7,9 +7,9 @@
 StreamRenderWin::StreamRenderWin(pVisControl_t pvc) : 
   decayRange_(100), 
   cutoffPos_(0), 
-  trackLive(false), 
   viewT1_(0.0), 
   viewT2_(1.0), 
+  viewTimeWidth_(viewT2_ - viewT1_), 
   viewX1_(-1000.0), 
   viewX2_(00.0),
   selT1_(0.0), 
@@ -18,7 +18,7 @@ StreamRenderWin::StreamRenderWin(pVisControl_t pvc) :
   s1fact_(2), 
   pVisControl_(pvc), 
   timeGLstring_("Sans", false, CENTER, BASELINE),
-  viewType_(STRIPCHART)
+  viewType(MANUAL)
 {
 
   Glib::RefPtr<Gdk::GL::Config> glconfig;
@@ -136,6 +136,9 @@ void StreamRenderWin::updateViewingWindow(bool reset = false)
     viewT1_ = 0.0; 
     viewT2_ = 1.0; 
   }
+
+  viewTimeWidth_ = viewT2_ - viewT1_; 
+
   viewX1_ = 0; 
   viewX2_ = get_height(); 
   glOrtho(0, viewT2_-viewT1_, viewX1_, viewX2_, -3, 3); 
@@ -411,7 +414,7 @@ bool StreamRenderWin::on_button_press_event(GdkEventButton* event)
   if (event->type == GDK_BUTTON_PRESS)  
     {
       lastX_ = event->x; 
-      trackLive = false; 
+      viewType.set_value(MANUAL); 
     } 
 
   // don't block
@@ -550,13 +553,6 @@ bool StreamRenderWin::invalidateCallback() {
   
 }
 
-void StreamRenderWin::setViewType(ViewTypes val)
-{
-  std::cout << "Setting view type" << std::endl;
-  viewType_ = val; 
-  invalidate(); 
-
-}
 
 void StreamRenderWin::setCurrentTime(streamtime_t time)
 {
@@ -569,21 +565,24 @@ void StreamRenderWin::setCurrentTime(streamtime_t time)
   float twidth = viewT2_ - viewT1_; 
   
   // update tracklive
-  if (trackLive.pendingRequest()) {
-    trackLive.set_value(trackLive.get_req_value()); 
+  if (viewType.pendingRequest()) {
+    viewType.set_value(viewType.get_req_value()); 
   }
 
-  if (trackLive) { 
-    if (viewType_ == STRIPCHART ) {
+  if (viewType == STRIPCHART ) {
       //    if (currentTime_ > viewT2_) {
       // this is the sweep-view
       viewT1_ = currentTime_ - twidth;
       viewT2_ = currentTime_;
       invalidate();
       //    }
+    
+  } else if (viewType == OVERWRITE) {
+
+  } else { // assume manual 
+    if ((currentTime_ < viewT2_) and (currentTime_ > viewT1_)) {
+      invalidate(); 
     }
-  } else if ((currentTime_ < viewT2_) and (currentTime_ > viewT1_)) {
-    invalidate(); 
   } 
   
   

@@ -52,11 +52,11 @@ public:
   { 
     get_window()->process_updates(false); 
   }
-  elements::Property<bool> trackLive;
+  //elements::Property<bool> trackLive;
+  elements::Property<ViewTypes>  viewType; 
   void invalidate(); 
   void invalidate2(); 
   void setCurrentTime(streamtime_t time); 
-  void setViewType(ViewTypes val); 
 protected:
   
   // signal handlers:
@@ -88,12 +88,15 @@ protected:
   int cutoffPos_; 
 
   float viewT1_, viewT2_, viewX1_, viewX2_; 
+  float viewTimeWidth_; 
+  float overwriteViewT1a_, overwriteViewT2a_, 
+    overwriteViewT1b_, overwriteViewT2b_; 
+
   float selT1_, selT2_; 
   
   float zoomLevel_; 
   int s1fact_; 
   
-  ViewTypes viewType_; 
   pVisControl_t  pVisControl_; 
   
   float currentTime_; 

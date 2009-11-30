@@ -31,7 +31,6 @@ StreamsApp::StreamsApp(pSourceState_t pss, bf::path scratchdir) :
   pPipelineManager_(new PipelineManager(scratchdir)), 
   pSomaConfig_(new SomaConfig), 
   streamWin_(pPipelineManager_), 
-  trackLive_("Track Live"), 
   ppm_(*this, pSomaConfig_), 
   pmg_(pPipelineManager_, pSomaConfig_, vBoxPipelines_, ppm_), 
   testLabel_("Hello world"),
@@ -53,7 +52,7 @@ StreamsApp::StreamsApp(pSourceState_t pss, bf::path scratchdir) :
   hBoxMain_.pack_start(vBoxPipelines_); 
   //vBoxPipelines_.pack_start(testLabel_); 
   hBoxMain_.pack_start(streamWin_, true, true); 
-  trackLive_.addProperty(&(streamWin_.trackLive)); 
+  viewTypeCombo_.addProperty(&(streamWin_.viewType)); 
   //hBoxMain_.pack_start(triggerWin_, true, true); 
   streamWin_.set_size_request(1000, 700); 
   //triggerWin_.set_size_request(150, 1000); 
@@ -61,12 +60,14 @@ StreamsApp::StreamsApp(pSourceState_t pss, bf::path scratchdir) :
 
   hBoxStatus_.pack_start(timeLabel_); 
   timeLabel_.set_size_request(100, -1); 
-  hBoxStatus_.pack_start(trackLive_); 
-  hBoxStatus_.pack_start(liveModeCombo_); 
-  liveModeCombo_.append_text("manual"); 
-  liveModeCombo_.append_text("stripchart"); 
-  liveModeCombo_.append_text("overwrite"); 
-  
+  hBoxStatus_.pack_start(viewTypeCombo_); 
+
+  PropertyWidgets::ComboBox<ViewTypes>::possiblevalues_t  vals; 
+  vals.push_back(std::make_pair("manual", MANUAL)); 
+  vals.push_back(std::make_pair("stripchart", STRIPCHART)); 
+  vals.push_back(std::make_pair("overwrite", OVERWRITE)); 
+		 
+  viewTypeCombo_.setPossibleValues(vals); 
 
   show_all(); 
 

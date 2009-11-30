@@ -28,7 +28,7 @@
 #include "pipelinemanagergui.h"
 #include "propertypanemanager.h" 
 #include "somaconfig.h"
-#include "propwidgets/togglebutton.h"
+#include "propwidgets/combobox.h"
 
 namespace bf = boost::filesystem; 
 
@@ -58,8 +58,10 @@ protected:
   Gtk::Label timeLabel_; 
   Gtk::VBox  vBoxStreamStatus_; 
   Gtk::Widget* pMenuBar_; 
-  PropertyWidgets::ToggleButton trackLive_; 
-  Gtk::ComboBoxText liveModeCombo_; 
+
+  PropertyWidgets::ComboBox<ViewTypes> viewTypeCombo_; 
+
+  //Gtk::ComboBoxText liveModeCombo_; 
   Gtk::ProgressBar statusProgressBar_; 
   Gtk::VBox vBoxPipelines_; 
   PropertyPaneManager ppm_; 
