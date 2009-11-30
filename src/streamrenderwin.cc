@@ -270,7 +270,7 @@ bool StreamRenderWin::on_configure_event(GdkEventConfigure* event)
   gldrawable->wait_gdk(); 
   glDrawBuffer(GL_BACK); 
 
-  updateViewingWindow(); 
+  //updateViewingWindow(); 
 
   glClearColor(0.0, 0.0, 0.0, 1.0); 
   glClear(GL_COLOR_BUFFER_BIT | GL_ACCUM_BUFFER_BIT ); 
@@ -293,54 +293,137 @@ bool StreamRenderWin::on_expose_event(GdkEventExpose* event)
   if (!gldrawable->gl_begin(get_gl_context()))
     return false;
 
-  updateViewingWindow(); 
-  glClearColor(0.0, 0.0, 0.0, 1.0); 
-  glClear(GL_COLOR_BUFFER_BIT | GL_ACCUM_BUFFER_BIT ); 
+  if(viewType == MANUAL or viewType == STRIPCHART) { 
+    updateViewingWindow(); 
+    glClearColor(0.0, 0.0, 0.0, 1.0); 
+    glClear(GL_COLOR_BUFFER_BIT | GL_ACCUM_BUFFER_BIT ); 
+    
+    int N = 10000000; 
+    
+    renderTimeTicks(viewT1_, viewT2_); 
+    
+    
+    std::list<pIVis_t>::iterator pwd; 
+    
+    int pixwidth = get_width(); 
+    // get the windows own allocation and use that
+    
+    Gdk::Rectangle myalloc = get_allocation(); 
+    int posaccum = 0; 
+    std::list<pIVis_t> vl = pVisControl_->getVisList(); 
+    for (pwd = vl.begin(); pwd != vl.end();  pwd++)
+      {
+	int height =  (*pwd)->getPixelHeight(); 
+	float pos = - (height/2 + posaccum) + 
+	  myalloc.get_height() + myalloc.get_y(); 
+	glPushMatrix(); 
+	glTranslatef(0.0f, pos, 0.0); 
+	(*pwd)->renderStream(viewT1_, viewT2_, pixwidth); 
+	glPopMatrix(); 
+	posaccum += height; 
+      }
+    
+    
+    // render selection
+    glColor4f(0.2, 0.2, 1.0, 0.5); 
+    
+    glBegin(GL_POLYGON); 
+    glVertex2f(selT1_ - viewT1_, viewX1_); 
+    glVertex2f(selT1_ - viewT1_, viewX2_); 
+    glVertex2f(selT2_ - viewT1_, viewX2_); 
+    glVertex2f(selT2_ - viewT1_, viewX1_); 
+    glEnd(); 
+    
+    //   // render current position
+    renderCurrentTimeCursor(); 
+  } else if (viewType == OVERWRITE) { 
 
-  int N = 10000000; 
-  
-  renderTimeTicks(viewT1_, viewT2_); 
+    glLoadIdentity(); 
 
+    
+    viewX1_ = 0; 
+    viewX2_ = get_height(); 
 
-  std::list<pIVis_t>::iterator pwd; 
-  
-  int pixwidth = get_width(); 
-  // get the windows own allocation and use that
-  
-  Gdk::Rectangle myalloc = get_allocation(); 
-  int posaccum = 0; 
-  std::list<pIVis_t> vl = pVisControl_->getVisList(); 
-  for (pwd = vl.begin(); pwd != vl.end();  pwd++)
-    {
-      int height =  (*pwd)->getPixelHeight(); 
-      float pos = - (height/2 + posaccum) + 
-	myalloc.get_height() + myalloc.get_y(); 
-      glPushMatrix(); 
-      glTranslatef(0.0f, pos, 0.0); 
-      (*pwd)->renderStream(viewT1_, viewT2_, pixwidth); 
-      glPopMatrix(); 
-      posaccum += height; 
-    }
+    unsigned int pixel_width = get_width(); 
+    
+    assert(currentTime_ > viewT1_); 
+    float t1_is, t2_is; 
+    
+    // proportion: how far along the time axis is; 
+    float proportion = (currentTime_ - viewT1_) / viewTimeWidth_; 
+    unsigned int first_seg_pixel_width = proportion * pixel_width; 
+    unsigned int second_seg_pixel_width = pixel_width - first_seg_pixel_width; 
+    
+    
+    glViewport(0, 0, first_seg_pixel_width, get_height());
+    glOrtho(0, currentTime_ - viewT1_, viewX1_, viewX2_, -3, 3); 
+    t1_is = viewT1_; 
+    t2_is = currentTime_; 
+    
 
+  //viewChanged_ = false; 
+    
+//     glViewport(first_seg_pixel_width, 0, pixel_width, get_height());
+//     glOrtho(0, viewTimeWidth_ - (currentTime_ - viewT1_), viewX1_, viewX2_, -3, 3); 
+//     t1_is = currentTime_ - viewTimeWidth_; 
+//     t2_is = zero_is + (viewTimeWidth_ - (currentTime_ - viewT1_)); 
+			      
 
-  // render selection
-  glColor4f(0.2, 0.2, 1.0, 0.5); 
-
-  glBegin(GL_POLYGON); 
-  glVertex2f(selT1_ - viewT1_, viewX1_); 
-  glVertex2f(selT1_ - viewT1_, viewX2_); 
-  glVertex2f(selT2_ - viewT1_, viewX2_); 
-  glVertex2f(selT2_ - viewT1_, viewX1_); 
-  glEnd(); 
-
-//   // render current position
-  renderCurrentTimeCursor(); 
-  
+  }
   // Swap buffers.
   gldrawable->swap_buffers();
   gldrawable->gl_end();
-
+  
   return true;
+}
+
+
+void StreamRenderWin::renderRegion(float t1, float t2)
+{
+
+    glClearColor(0.0, 0.0, 0.0, 1.0); 
+    glClear(GL_COLOR_BUFFER_BIT | GL_ACCUM_BUFFER_BIT ); 
+    
+    int N = 10000000; 
+    
+    renderTimeTicks(t1, t2); 
+    
+    
+    std::list<pIVis_t>::iterator pwd; 
+    
+    int pixwidth = get_width(); 
+    // get the windows own allocation and use that
+    
+    Gdk::Rectangle myalloc = get_allocation(); 
+    int posaccum = 0; 
+    std::list<pIVis_t> vl = pVisControl_->getVisList(); 
+    for (pwd = vl.begin(); pwd != vl.end();  pwd++)
+      {
+	int height =  (*pwd)->getPixelHeight(); 
+	float pos = - (height/2 + posaccum) + 
+	  myalloc.get_height() + myalloc.get_y(); 
+	glPushMatrix(); 
+	glTranslatef(0.0f, pos, 0.0); 
+	(*pwd)->renderStream(t1, t2, pixwidth); 
+	glPopMatrix(); 
+	posaccum += height; 
+      }
+    
+    
+    // render selection
+    glColor4f(0.2, 0.2, 1.0, 0.5); 
+    
+    glBegin(GL_POLYGON); 
+    glVertex2f(selT1_ - t1, viewX1_); 
+    glVertex2f(selT1_ - t1, viewX2_); 
+    glVertex2f(selT2_ - t1, viewX2_); 
+    glVertex2f(selT2_ - t1, viewX1_); 
+    glEnd(); 
+    
+    //   // render current position
+    renderCurrentTimeCursor(); 
+
+
 }
 
 bool StreamRenderWin::on_map_event(GdkEventAny* event)
@@ -354,7 +437,7 @@ bool StreamRenderWin::on_map_event(GdkEventAny* event)
 
   glClear(GL_COLOR_BUFFER_BIT | GL_ACCUM_BUFFER_BIT ); 
   
-  updateViewingWindow(); 
+  //updateViewingWindow(); 
 
   gldrawable->wait_gl(); 
   //gldrawable->wait_gdk(); 
@@ -578,6 +661,9 @@ void StreamRenderWin::setCurrentTime(streamtime_t time)
       //    }
     
   } else if (viewType == OVERWRITE) {
+    if (time > (viewT1_ + viewTimeWidth_) ) { 
+      viewT1_ += viewTimeWidth_;       
+    }
 
   } else { // assume manual 
     if ((currentTime_ < viewT2_) and (currentTime_ > viewT1_)) {

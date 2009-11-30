@@ -32,7 +32,10 @@ class StreamRenderWin : public Gtk::GL::DrawingArea
 {
   /* 
      
-     StreamRenderWin has a viewT1 and a viewT2 which 
+     StreamRenderWin has three modes: 
+     MANUAL / STRIPCHART : use viewT1_, viewT2_; 
+     OVERWRITE : render from overwriteT1_
+
      define the time window we are looking at in streamtimes. 
      
      However, we are actually always plotting openGL starting with 
@@ -89,8 +92,6 @@ protected:
 
   float viewT1_, viewT2_, viewX1_, viewX2_; 
   float viewTimeWidth_; 
-  float overwriteViewT1a_, overwriteViewT2a_, 
-    overwriteViewT1b_, overwriteViewT2b_; 
 
   float selT1_, selT2_; 
   
@@ -107,6 +108,9 @@ protected:
   int fontHeight_; 
   
   GLString timeGLstring_; 
+
+  renderRegion(float t1, float t2); 
+
 };
 
 #endif //STREAMRENDERWIN_H
