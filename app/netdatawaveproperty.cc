@@ -7,7 +7,12 @@ NetDataWaveProperty::NetDataWaveProperty(pSomaConfig_t sc) :
   gainLabel_("gain"), 
   hpfCheckBox_("High Pass Filter Enable"),
   filterFrame_("Filter Properties"), 
-  pSomaConfig_(sc)
+  pSomaConfig_(sc),
+  channel1_("Chan 1"),
+  channel2_("Chan 2"), 
+  channel3_("chan 3"), 
+  channel4_("chan 4"), 
+  channelC_("chan C")
 {
   pack_start(sourceComboBox_);
   pack_start(sourceFrame_); 
@@ -17,7 +22,20 @@ NetDataWaveProperty::NetDataWaveProperty(pSomaConfig_t sc) :
   gainHBox_.pack_start(gainComboBox_); 
   sourceVBox_.pack_start(gainHBox_);
   sourceVBox_.pack_start(hpfCheckBox_);
- 
+  sourceVBox_.pack_start(chanHBox_); 
+  
+  chanHBox_.pack_start(channel1_); 
+  chanHBox_.pack_start(channel2_); 
+  chanHBox_.pack_start(channel3_); 
+  chanHBox_.pack_start(channel4_); 
+  chanHBox_.pack_start(channelC_); 
+
+  channelRadioGroup_.addRadioButton(0, &channel1_); 
+  channelRadioGroup_.addRadioButton(1, &channel2_); 
+  channelRadioGroup_.addRadioButton(2, &channel3_); 
+  channelRadioGroup_.addRadioButton(3, &channel4_); 
+  channelRadioGroup_.addRadioButton(4, &channelC_); 
+
 
   pack_start(filterFrame_); 
 
@@ -65,8 +83,9 @@ bool NetDataWaveProperty::addElement(elements::IElement * elt)
   sourceComboBox_.setPossibleValues(vals); 
   sourceComboBox_.addProperty(&ws->src); 
 
+  channelRadioGroup_.addProperty(&ws->selchan); 
 
-  std::cout << "Gain combo box adding property" << std::endl;
+
   gainComboBox_.addProperty(&ws->gain); 
   hpfCheckBox_.addProperty(&ws->hpfen);   
 
@@ -79,9 +98,11 @@ bool NetDataWaveProperty::delElement(elements::IElement * elt)
   if (ws == NULL) {
     return false; 
   }
-  sourceComboBox_.delProperty(&ws->src); 
-  gainComboBox_.delProperty(&ws->gain); 
+
   hpfCheckBox_.delProperty(&ws->hpfen);   
+  gainComboBox_.delProperty(&ws->gain); 
+  channelRadioGroup_.delProperty(&ws->selchan); 
+  sourceComboBox_.delProperty(&ws->src); 
 
   return true; 
 }

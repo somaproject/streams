@@ -119,7 +119,6 @@ void SomaNetCodec::parseEvent(const Event_t & evt)
     } else {
     // state-proxy-related event
     if ((evt.src >= 8 and evt.src <= (MAXDATASRC+8))) { 
-      std::cout << "received event from " << (int) evt.src << std::endl;
       dspStateProxies_[evt.src - 8].newEvent(evt); 
     }
     

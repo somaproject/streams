@@ -65,6 +65,13 @@ bool NetDataWave::on_check_property_change()
       hpfen_pending_req_known_ = true; 
     }
   }
+  if(selchan.pendingRequest()) {
+    if(!selchan_pending_req_known_) { 
+      // unknown, so we should attempt to set the property 
+      pNetCodec_->getDSPStateProxy(src).acqdatasrc.setChanSel(selchan.get_req_value()); 
+      selchan_pending_req_known_ = true; 
+    }
+  }
   return true; 
 }
 
@@ -127,8 +134,16 @@ void NetDataWave::reconnectSource(datasource_t src)
 									  sigc::mem_fun(*this, 
 											&NetDataWave::on_hpfen_update)); 
   
+  if(selchanconn_) 
+    selchanconn_.disconnect(); 
+  
+  selchanconn_ = pNetCodec_->getDSPStateProxy(src).acqdatasrc.chansel().connect(
+									  sigc::mem_fun(*this, 
+											&NetDataWave::on_selchan_update)); 
+  
   gain_pending_req_known_ = false; 
   hpfen_pending_req_known_ = false; 
+  selchan_pending_req_known_ = false; 
 
   gain.set_value(pNetCodec_->getDSPStateProxy(src).acqdatasrc.getGain(CONTCHAN)); 
 
@@ -152,6 +167,13 @@ void NetDataWave::on_hpfen_update(int x, bool y) {
     hpfen_pending_req_known_ = false; 
     hpfen.set_value(y); 
   }
+}
+
+void NetDataWave::on_selchan_update(int x) {
+  std::cout << "Setting selchan update to " << x << std::endl;
+  selchan_pending_req_known_ = false; 
+  selchan.set_value(x); 
+  
 }
 
 void NetDataWave::reconnectPropertyProxies()

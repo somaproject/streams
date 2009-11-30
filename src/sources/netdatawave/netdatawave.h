@@ -112,6 +112,11 @@ private:
   void on_hpfen_update(int, bool);
 
 
+  sigc::connection selchanconn_; 
+  bool selchan_pending_req_known_;
+  void on_selchan_update(int);
+
+
   static const int CONTCHAN = 4; 
   size_t seqid_; 
 

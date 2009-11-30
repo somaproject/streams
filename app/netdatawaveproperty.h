@@ -6,6 +6,7 @@
 #include <propwidgets/spinbutton.h>
 #include <propwidgets/combobox.h>
 #include <propwidgets/checkbox.h>
+#include <propwidgets/radiogroup.h>
 #include "somaconfig.h"
 
 
@@ -34,6 +35,17 @@ private:
   Gtk::Frame filterFrame_; 
   
   pSomaConfig_t pSomaConfig_; 
+
+  Gtk::RadioButton channel1_; 
+  Gtk::RadioButton channel2_; 
+  Gtk::RadioButton channel3_; 
+  Gtk::RadioButton channel4_; 
+  Gtk::RadioButton channelC_; 
+  
+  Gtk::HBox chanHBox_; 
+  
+  PropertyWidgets::RadioGroupManager<int> channelRadioGroup_; 
+  
 
 };
 
