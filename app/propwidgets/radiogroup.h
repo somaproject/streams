@@ -145,7 +145,8 @@ private:
     if (st == NORMAL) statestring = "NORMAL"; 
     if (st == PENDING) statestring = "PENDING"; 
     if (st == CONFLICTED) statestring = "CONFLICTED"; 
-    
+    std::cout << "radio group setstate = " << statestring
+	      << " value = " << value_ << std::endl; 
 
     if (st == NORMAL) {
       BOOST_FOREACH(t v, rbmap_) {
@@ -177,6 +178,8 @@ private:
   }
 
   void on_button_toggled(valuetype_t v) {
+    if (inSetState_)
+      return; 
     // called when any button changes
     std::cout << "button was toggled" << std::endl; 
     // is this a set-to

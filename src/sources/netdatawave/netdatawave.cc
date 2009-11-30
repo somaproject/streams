@@ -147,6 +147,11 @@ void NetDataWave::reconnectSource(datasource_t src)
 
   gain.set_value(pNetCodec_->getDSPStateProxy(src).acqdatasrc.getGain(CONTCHAN)); 
 
+  hpfen.set_value(pNetCodec_->getDSPStateProxy(src).acqdatasrc.getHPFen(CONTCHAN)); 
+
+
+  selchan.set_value(pNetCodec_->getDSPStateProxy(src).acqdatasrc.getChanSel()); 
+
 //   sigc::mem_fun(pNetCodec_->getDSPStateProxy(src_).acqdatasrc,
 // 		&AcqDataSource::setGain); 
 

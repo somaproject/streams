@@ -11,8 +11,7 @@ NetDataWaveProperty::NetDataWaveProperty(pSomaConfig_t sc) :
   channel1_("Chan 1"),
   channel2_("Chan 2"), 
   channel3_("chan 3"), 
-  channel4_("chan 4"), 
-  channelC_("chan C")
+  channel4_("chan 4")
 {
   pack_start(sourceComboBox_);
   pack_start(sourceFrame_); 
@@ -28,13 +27,11 @@ NetDataWaveProperty::NetDataWaveProperty(pSomaConfig_t sc) :
   chanHBox_.pack_start(channel2_); 
   chanHBox_.pack_start(channel3_); 
   chanHBox_.pack_start(channel4_); 
-  chanHBox_.pack_start(channelC_); 
 
   channelRadioGroup_.addRadioButton(0, &channel1_); 
   channelRadioGroup_.addRadioButton(1, &channel2_); 
   channelRadioGroup_.addRadioButton(2, &channel3_); 
   channelRadioGroup_.addRadioButton(3, &channel4_); 
-  channelRadioGroup_.addRadioButton(4, &channelC_); 
 
 
   pack_start(filterFrame_); 
